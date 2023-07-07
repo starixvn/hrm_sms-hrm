@@ -108,7 +108,7 @@
             return Json(requests);
         }
 
-        private static IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
+        public IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
         {
             var deparments = new List<Department>();
             foreach (var item in details)

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33424.131
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33801.447
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}"
 EndProject
@@ -31,10 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.Site", "Fanex.N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SonarQube", "SonarQube", "{B7FAF5FF-B092-4847-98E4-3FC0141FD0A8}"
 	ProjectSection(SolutionItems) = preProject
-		SonarQube\SMSHRMCSharp.ruleset = SonarQube\SMSHRMCSharp.ruleset
 		SonarQube\smshrm_css_settings.json = SonarQube\smshrm_css_settings.json
 		SonarQube\smshrm_js_settings.json = SonarQube\smshrm_js_settings.json
 		SonarQube\smshrm_ts_settings.json = SonarQube\smshrm_ts_settings.json
+		SonarQube\SMSHRMCSharp.ruleset = SonarQube\SMSHRMCSharp.ruleset
 		SonarQube\SolutionBinding.sqconfig = SonarQube\SolutionBinding.sqconfig
 		SonarQube\sonar.settings.json = SonarQube\sonar.settings.json
 		SonarQube\smshrm\CSharp\SonarLint.xml = SonarQube\smshrm\CSharp\SonarLint.xml
@@ -43,6 +43,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NexHR.MailDeliver", "Fanex.NexHR.MailDeliver\Fanex.NexHR.MailDeliver.csproj", "{085EB762-ECDD-4F5F-9F63-93D6FB6EAE08}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRM.Letstalk.Core", "HRM.Letstalk.Core\HRM.Letstalk.Core.csproj", "{F57BC2A2-BFA1-49C0-AE61-5432948DB735}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{84112782-012F-4308-A033-BF5C6F1D6C47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GO", "GO", "{4DAEF40C-4E6A-4FC6-8809-B3D4E5985ED9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GO.Website.UnitTests", "GO.Website.UnitTests\GO.Website.UnitTests.csproj", "{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -168,6 +174,18 @@ Global
 		{F57BC2A2-BFA1-49C0-AE61-5432948DB735}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F57BC2A2-BFA1-49C0-AE61-5432948DB735}.Release|x86.ActiveCfg = Release|Any CPU
 		{F57BC2A2-BFA1-49C0-AE61-5432948DB735}.Release|x86.Build.0 = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Debug|x86.Build.0 = Debug|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,11 +201,13 @@ Global
 		{089B8314-1793-403B-ADA8-E83E842C275E} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
 		{405929F6-B1DC-49E5-B936-E342B36C87ED} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
 		{F57BC2A2-BFA1-49C0-AE61-5432948DB735} = {5F490EB2-2747-4165-A0D0-6F920A02A7F0}
+		{4DAEF40C-4E6A-4FC6-8809-B3D4E5985ED9} = {84112782-012F-4308-A033-BF5C6F1D6C47}
+		{9E6A59F2-8554-4C6B-96D7-2CA31CD9B86C} = {4DAEF40C-4E6A-4FC6-8809-B3D4E5985ED9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
 		SolutionGuid = {B18C2D6B-E5BD-4918-B5BE-13471712599F}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
 	EndGlobalSection
 	GlobalSection(JSLint) = preSolution
 		SolutionConfigurationLocation = JSLintOptions.xml
