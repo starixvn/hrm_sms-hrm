@@ -1,6 +1,7 @@
 ﻿namespace GO.Admin.Website.Filters
 {
     using System;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core;
@@ -10,7 +11,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class GOPermissionAttribute : Attribute, IAsyncAuthorizationFilter
     {
         private readonly IUserControlSession session;
@@ -42,18 +43,35 @@
             }
             else
             {
-                if (!session.HasPermissionOnFunction(FunctionKey, Policy))
+                await CheckUserPermissionAsync(context);
+            }
+        }
+
+        private async Task CheckUserPermissionAsync(AuthorizationFilterContext context)
+        {
+            var attributes = context.ActionDescriptor.FilterDescriptors.Where(x => x.Filter is GOPermissionAttribute)
+                    .Select(x => x.Filter as GOPermissionAttribute).ToList();
+            bool hasPermission = false;
+
+            foreach (var attribute in attributes)
+            {
+                if (session.HasPermissionOnFunction(attribute.FunctionKey, attribute.Policy))
                 {
-                    if (IsAjaxRequest(context.HttpContext.Request))
-                    {
-                        var response = context.HttpContext.Response;
-                        response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                        await response.WriteAsync("<center><b>Access denied!</b></center>");
-                    }
-                    else
-                    {
-                        context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
-                    }
+                    hasPermission = true;
+                }
+            }
+
+            if (!hasPermission)
+            {
+                if (IsAjaxRequest(context.HttpContext.Request))
+                {
+                    var response = context.HttpContext.Response;
+                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                    await response.WriteAsync("<center><b>Access denied!</b></center>");
+                }
+                else
+                {
+                    context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
                 }
             }
         }
