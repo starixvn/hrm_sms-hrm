@@ -15,7 +15,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("ManpowerForecast/AnnualRequest/[action]/{id?}")]
-    [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_AnnualRequest, Policy = Policy.Host)]
     public class AnnualRequestController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -29,6 +28,7 @@
             this.manpowerForecastService = manpowerForecastService;
         }
 
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> Create()
         {
             var units = await manpowerForecastService.GetUnitByUserIdAsync(userControlSession.UserId);
@@ -36,6 +36,7 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
         {
             (var period, var details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
@@ -44,12 +45,14 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateAnnualManpowerForecastRequestParam param)
         {
             CommandResult commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
             return Json(commandResult);
         }
 
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
         public IActionResult MyRequest()
         {
             return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
@@ -61,6 +64,7 @@
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
         public async Task<IActionResult> GetMyRequest()
         {
             var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
@@ -68,7 +72,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAnnualRequestById(int requestId)
+        public async Task<IActionResult> GetById(int requestId)
         {
             var request = await manpowerForecastService.GetAnnualRequestByIdAsync(requestId);
             if(request is null)
@@ -80,12 +84,14 @@
             return Json(new { request, departments});
         }
 
+        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
         public IActionResult MemberRequest()
         {
             return View("~/Views/Manpower/AnnualRequest/MemberRequest.cshtml");
         }
 
         [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
         public async Task<IActionResult> GetMemberRequests([FromBody] GetMemberAnnualManpowerForecastRequestCriteria criteria)
         {
             criteria.UserId = userControlSession.UserId;
@@ -94,7 +100,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAnnualRequestByPeriodId([FromBody] GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
+        public async Task<IActionResult> GetByPeriodId([FromBody] GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
         {
             var requests = await manpowerForecastService.GetAnnualRequestByPeriodIdAsync(criteria);
             return Json(requests);

@@ -3,9 +3,10 @@
     public static class FunctionKey
     {
         public const string ManpowerReport = "ManpowerReport";
-        public const string Manpower_EmployeeManagement = "Manpower_EmployeeManagement";
-        public const string Manpower_PeriodManagement = "Manpower_Period";
-        public const string Manpower_FlowManagement = "Manpower_FlowManagement";
-        public const string ManpowerForecast_AnnualRequest = "ManpowerForecast-AnnualRequest";
+        public const string ManpowerForecast_EmployeeManagement = "ManpowerForecast_EmployeeManagement";
+        public const string ManpowerForecast_PeriodManagement = "ManpowerForecast_PeriodManagement";
+        public const string ManpowerForecast_FlowManagement = "ManpowerForecast_FlowManagement";
+        public const string MyAnnualManpowerForecastRequestForm = "MyAnnualManpowerForecastRequestForm";
+        public const string MemberAnnualManpowerForecastRequestForm = "MemberAnnualManpowerForecastRequestForm";
     }
 }

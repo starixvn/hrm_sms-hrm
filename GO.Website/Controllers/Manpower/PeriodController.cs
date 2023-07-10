@@ -14,7 +14,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("Manpower/Period/[action]/{id?}")]
-    [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Read)]
+    [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_PeriodManagement, Policy = Policy.Read)]
     public class PeriodController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -30,13 +30,13 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
             return View("~/Views/Manpower/Period/Index.cshtml", isHost);
         }
 
         public IActionResult Detail(int id)
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
             ViewBag.periodId = id;
             return View("~/Views/Manpower/Period/Detail.cshtml", isHost);
         }
@@ -66,7 +66,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreatePeriodCommand command)
         {
             command.SettingXml = command.Settings != null && command.Settings.Any() ? command.Settings.ToXML().ToString() : string.Empty;
@@ -78,7 +78,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdatePeriodCommand command)
         {
             command.SettingXml = command.Settings != null && command.Settings.Any() ? command.Settings.ToXML().ToString() : string.Empty;
@@ -89,7 +89,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusPeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
@@ -99,7 +99,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_PeriodManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_PeriodManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Delete([FromBody] DeletePeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

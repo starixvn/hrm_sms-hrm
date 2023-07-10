@@ -13,7 +13,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("Manpower/Employee/[action]")]
-    [GOPermission(FunctionKey = FunctionKey.Manpower_EmployeeManagement, Policy = Policy.Read)]
+    [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_EmployeeManagement, Policy = Policy.Read)]
     public class EmployeeController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -29,7 +29,7 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_EmployeeManagement, Policy.Host);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_EmployeeManagement, Policy.Host);
             return View("~/Views/Manpower/Employee/Index.cshtml", isHost);
         }
 
@@ -48,7 +48,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_EmployeeManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_EmployeeManagement, Policy = Policy.Host)]
         public async Task<IActionResult> UpdateExclude([FromBody] UpdateExcludedEmployeeCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;

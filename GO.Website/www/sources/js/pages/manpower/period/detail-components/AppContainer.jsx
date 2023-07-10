@@ -16,7 +16,7 @@ export default class AppContainer extends PureComponent {
 
     getAnnualRequestByPeriodId = async () => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetAnnualRequestByPeriodId');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetByPeriodId');
         const params = { periodId: window.periodId };
         await DataService.postDataAsync(url, params).then(response => {
             this.setState({

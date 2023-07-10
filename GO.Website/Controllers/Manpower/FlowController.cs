@@ -15,7 +15,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [Route("Manpower/Flow/[action]")]
-    [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Read)]
+    [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_FlowManagement, Policy = Policy.Read)]
     public class FlowController : BaseController
     {
         private readonly IUserControlSession userControlSession;
@@ -31,7 +31,7 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_FlowManagement, Policy.Host);
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_FlowManagement, Policy.Host);
             return View("~/Views/Manpower/Flow/Index.cshtml", isHost);
         }
 
@@ -59,7 +59,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_FlowManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateFlowParam param)
         {
             var command = new UpdateFlowCommand
@@ -74,7 +74,7 @@
         }
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.Manpower_FlowManagement, Policy = Policy.Host)]
+        [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_FlowManagement, Policy = Policy.Host)]
         public async Task<IActionResult> Delete([FromBody] DeleteFlowCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
