@@ -30,7 +30,7 @@
             var controller = GetController();
             var expected = fixture.Create<bool>();
 
-            userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host).Returns(expected);
+            userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host).Returns(expected);
 
             //Act
             var result = controller.Index();
@@ -50,7 +50,7 @@
             var id = fixture.Create<int>();
             var expected = fixture.Create<bool>();
 
-            userControlSession.HasPermissionOnFunction(FunctionKey.Manpower_PeriodManagement, Policy.Host).Returns(expected);
+            userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host).Returns(expected);
 
             //Act
             var result = controller.Detail(id);
@@ -132,11 +132,49 @@
         }
 
         [Fact]
+        public async Task Create_WhenCalledSettingsNull_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var command = fixture.Create<CreatePeriodCommand>();
+            command.Settings = null;
+            var expected = fixture.Create<CommandResult>();
+
+            baseService.ExecuteNonQueryAsync(command).Returns(expected);
+
+            //Act
+
+            var result = await controller.Create(command);
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            Assert.Equal(expected, jsonResult.Value);
+        }
+
+        [Fact]
         public async Task Update_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
             var command = fixture.Create<UpdatePeriodCommand>();
+            var expected = fixture.Create<CommandResult>();
+
+            baseService.ExecuteNonQueryAsync(command).Returns(expected);
+
+            //Act
+
+            var result = await controller.Update(command);
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            Assert.Equal(expected, jsonResult.Value);
+        }
+
+        [Fact]
+        public async Task Update_WhenCalledSettingNull_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var command = fixture.Create<UpdatePeriodCommand>();
+            command.Settings = null;
             var expected = fixture.Create<CommandResult>();
 
             baseService.ExecuteNonQueryAsync(command).Returns(expected);

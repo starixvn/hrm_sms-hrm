@@ -6,7 +6,6 @@
     using GO.Website.Controllers.Manpower;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models.Manpower;
-    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
     using GO.Website.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -14,7 +13,6 @@
     using NSubstitute;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -133,7 +131,7 @@
         }
 
         [Fact]
-        public async Task GetAnnualRequestById_WhenCalled_ReturnExpectedNotFound()
+        public async Task GetById_WhenCalled_ReturnExpectedNotFound()
         {
             // Arrange
             var controller = GetController();
@@ -149,12 +147,81 @@
         }
 
         [Fact]
-        public async Task GetAnnualRequestById_WhenCalled_ReturnExpectedData()
+        public async Task GetById_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
             var requestId = fixture.Create<int>();
             var request = fixture.Create<AnnualManpowerForecastRequest>();
+            manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
+
+            //Act
+            var result = await controller.GetById(requestId);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
+            Assert.Equal(request, actualRequest);
+        }
+
+        [Fact]
+        public async Task GetById_WhenCalledUnitHead_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var requestId = fixture.Create<int>();
+            var id = fixture.Create<int>();
+            var request = fixture.Create<AnnualManpowerForecastRequest>();
+            request.Creator.CreatorId = id;
+            userControlSession.UserId = id;
+            request.CurrentProcessId = PeriodProcess.UnitHead;
+
+            manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
+
+            //Act
+            var result = await controller.GetById(requestId);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
+            Assert.Equal(request, actualRequest);
+        }
+
+        [Fact]
+        public async Task GetById_WhenCalledVerify_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var requestId = fixture.Create<int>();
+            var id = fixture.Create<int>();
+            var request = fixture.Create<AnnualManpowerForecastRequest>();
+            request.Verifier.UserId = id;
+            userControlSession.UserId = id;
+            request.CurrentProcessId = PeriodProcess.Verify;
+
+            manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
+
+            //Act
+            var result = await controller.GetById(requestId);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
+            Assert.Equal(request, actualRequest);
+        }
+
+        [Fact]
+        public async Task GetById_WhenCalledApprove_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var requestId = fixture.Create<int>();
+            var id = fixture.Create<int>();
+            var request = fixture.Create<AnnualManpowerForecastRequest>();
+            request.Approver.UserId = id;
+            userControlSession.UserId = id;
+            request.CurrentProcessId = PeriodProcess.Approve;
+
             manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
 
             //Act
@@ -199,7 +266,7 @@
         }
 
         [Fact]
-        public async Task GetAnnualRequestByPeriodId_WhenCalled_ReturnExpectedData()
+        public async Task GetByPeriodId_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
