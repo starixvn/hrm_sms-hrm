@@ -32,13 +32,16 @@ const annualRequestSlice = createSlice({
             };
         },
         setDepartments: (state, action) => {
-
-          //  state.departments = action.payload;
-
             const departments = [];
             action.payload.map(item => {
-                if (departments.indexOf(item.departmentName) === -1) {
-                    const sections = action.payload.find(x => x.departmentName === item.departmentName);
+                if (departments.findIndex(x => x.departmentName === item.departmentName) === -1) {
+                    const sections = [];
+                    action.payload.map(detail => {
+                        if (detail.departmentName === item.departmentName && 
+                            sections.findIndex(section => section === detail.sectionName) === -1) {
+                            sections.push(detail.sectionName);
+                        }
+                    });
                     departments.push({
                         departmentName: item.departmentName,
                         sections: sections

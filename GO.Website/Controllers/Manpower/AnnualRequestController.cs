@@ -40,8 +40,7 @@
         public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
         {
             (var period, var details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
-            var departments = GetDepartments(details);
-            return Json(new { period, departments, details });
+            return Json(new { period, details });
         }
 
         [HttpPost]
@@ -80,8 +79,7 @@
                 return NotFound();
             }
             request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
-            var departments = GetDepartments(request.Details);
-            return Json(new { request, departments});
+            return Json(new { request });
         }
 
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
@@ -112,25 +110,6 @@
             command.ModifiedBy = userControlSession.UserId;
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestAsync(command);
             return Json(requests);
-        }
-
-        private static IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
-        {
-            var deparments = new List<Department>();
-            foreach (var item in details)
-            {
-                var IsValidDepartment = deparments.Where(x => x.DepartmentName == item.DepartmentName).ToList();
-                if (!IsValidDepartment.Any())
-                {
-                    deparments.Add(new Department()
-                    {
-                        DepartmentName = item.DepartmentName,
-                        Sections = details.Where(x => x.DepartmentName == item.DepartmentName)
-                                          .Select(y => y.SectionName).Distinct().ToList()
-                    });
-                }
-            }
-            return deparments;
         }
 
         private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request) 

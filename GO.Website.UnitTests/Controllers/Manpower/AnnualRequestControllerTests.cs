@@ -142,7 +142,7 @@
             manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
 
             //Act
-            var result = await controller.GetAnnualRequestById(requestId);
+            var result = await controller.GetById(requestId);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);
@@ -158,7 +158,7 @@
             manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
 
             //Act
-            var result = await controller.GetAnnualRequestById(requestId);
+            var result = await controller.GetById(requestId);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
@@ -209,7 +209,7 @@
             manpowerForecastService.GetAnnualRequestByPeriodIdAsync(criteria).Returns(request);
 
             //Act
-            var result = await controller.GetAnnualRequestByPeriodId(criteria);
+            var result = await controller.GetByPeriodId(criteria);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);

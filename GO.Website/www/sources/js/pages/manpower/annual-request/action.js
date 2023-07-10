@@ -23,7 +23,7 @@ const getDataForCreateAnnualRequest = unitName => async dispatch => {
         dispatch(setAnnualRequestFormDetails(response.data.details));
         dispatch(setCompanies(response.data.details));
         dispatch(setJobLevels(response.data.details));
-        dispatch(setDepartments(response.data.departments));
+        dispatch(setDepartments(response.data.details));
     }).then(() => Site.unblockUI());
 };
 
@@ -48,7 +48,7 @@ const getAnnualRequestById = requestId => async dispatch => {
         dispatch(setAnnualRequestFormDetails(response.data.request.details));
         dispatch(setCompanies(response.data.request.details));
         dispatch(setJobLevels(response.data.request.details));
-        dispatch(setDepartments(response.data.departments));
+        dispatch(setDepartments(response.data.request.details));
         dispatch(setUnitSelected({
             value: response.data.request.details[0].unitName,
             label: response.data.request.details[0].unitName
