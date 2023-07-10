@@ -79,7 +79,7 @@
             {
                 return NotFound();
             }
-            request.IsEdit = IsEditRequest(request);
+            request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
             var departments = GetDepartments(request.Details);
             return Json(new { request, departments});
         }
@@ -114,7 +114,7 @@
             return Json(requests);
         }
 
-        public IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
+        private static IList<Department> GetDepartments(IEnumerable<AnnualManpowerForecastRequestDetail> details)
         {
             var deparments = new List<Department>();
             foreach (var item in details)
@@ -133,23 +133,11 @@
             return deparments;
         }
 
-        public bool IsEditRequest(AnnualManpowerForecastRequest request)
-        {
-            if (request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead) {
-                return true;
-            }
-
-            if (request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify)
-            {
-                return true;
-            }
-
-            if (request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request) 
+            => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
+        private bool IsEditIntoVerify(AnnualManpowerForecastRequest request)
+           => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify;
+        private bool IsEditIntoApprove(AnnualManpowerForecastRequest request)
+           => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve;
     }
 }

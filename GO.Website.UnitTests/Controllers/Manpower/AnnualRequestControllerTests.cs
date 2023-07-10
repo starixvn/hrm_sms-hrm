@@ -159,7 +159,6 @@
 
             //Act
             var result = await controller.GetAnnualRequestById(requestId);
-            request.IsEdit = controller.IsEditRequest(request);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
@@ -187,7 +186,7 @@
             var controller = GetController();
             var criteria = fixture.Create<GetMemberAnnualManpowerForecastRequestCriteria>();
             userControlSession.UserId = fixture.Create<int>();
-            var request = fixture.Create<IEnumerable<MemberAnnualManpowerForecastRequest>>();
+            var request = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
 
             manpowerForecastService.GetMemberAnnualRequestAsync(criteria).Returns(request);
 
@@ -235,124 +234,6 @@
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
             Assert.Equal(expected, jsonResult.Value);
-        }
-
-        [Fact]
-        public void GetDepartments_WhenCalled_ReturnExpectedData()
-        {
-            // Arrange
-            var controller = GetController();
-            var details = new List<AnnualManpowerForecastRequestDetail>{ 
-                new AnnualManpowerForecastRequestDetail
-                {
-                    DepartmentName = "department1",
-                    SectionName = "section1"
-                },
-                new AnnualManpowerForecastRequestDetail
-                {
-                    DepartmentName = "department1",
-                    SectionName = "section2"
-                },
-                new AnnualManpowerForecastRequestDetail
-                {
-                    DepartmentName = "department2",
-                    SectionName = "section1"
-                }
-            };
-
-            var expected = new List<Department> { 
-                new Department
-                {
-                    DepartmentName = "department1",
-                    Sections = new List<string>{ "section1", "section2" }
-                },
-                new Department
-                {
-                    DepartmentName = "department2",
-                    Sections = new List<string>{ "section1" }
-                }
-            };
-
-            //Act
-            var result = controller.GetDepartments(details);
-
-            // Assert
-            Assert.Equal(expected.First().DepartmentName, result.First().DepartmentName);
-            Assert.Equal(expected.First().Sections, result.First().Sections);
-            Assert.Equal(expected.Last().DepartmentName, result.Last().DepartmentName);
-            Assert.Equal(expected.Last().Sections, result.Last().Sections);
-        }
-
-        [Fact]
-        public void IsEditRequest_UnitHead_WhenCalled_ReturnTrue()
-        {
-            // Arrange
-            var controller = GetController();
-            var userId = fixture.Create<int>();
-            userControlSession.UserId = userId;
-            var request = new AnnualManpowerForecastRequest
-            {
-                Creator = new EmployeeInfo
-                {
-                    CreatorId = userId
-                },
-                CurrentProcessId = PeriodProcess.UnitHead
-            };
-
-            //Act
-            var result = controller.IsEditRequest(request);
-
-            // Assert
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void IsEditRequest_Verify_WhenCalled_ReturnTrue()
-        {
-            // Arrange
-            var controller = GetController();
-            var userId = fixture.Create<int>();
-            userControlSession.UserId = userId;
-            var request = new AnnualManpowerForecastRequest
-            {
-                VerifierId = userId,
-                Creator = new EmployeeInfo
-                {
-                    CreatorId = userId
-                },
-                CurrentProcessId = PeriodProcess.Verify
-            };
-
-            //Act
-            var result = controller.IsEditRequest(request);
-
-            // Assert
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void IsEditRequest_Approve_WhenCalled_ReturnTrue()
-        {
-            // Arrange
-            var controller = GetController();
-            var userId = fixture.Create<int>();
-            userControlSession.UserId = userId;
-            var request = new AnnualManpowerForecastRequest
-            {
-                VerifierId = userId,
-                ApproverId = userId,
-                Creator = new EmployeeInfo
-                {
-                    CreatorId = userId
-                },
-                CurrentProcessId = PeriodProcess.Approve
-            };
-
-            //Act
-            var result = controller.IsEditRequest(request);
-
-            // Assert
-            Assert.True(result);
         }
 
         #region helper

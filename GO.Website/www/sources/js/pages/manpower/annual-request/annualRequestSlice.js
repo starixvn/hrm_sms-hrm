@@ -32,7 +32,20 @@ const annualRequestSlice = createSlice({
             };
         },
         setDepartments: (state, action) => {
-            state.departments = action.payload;
+
+          //  state.departments = action.payload;
+
+            const departments = [];
+            action.payload.map(item => {
+                if (departments.indexOf(item.departmentName) === -1) {
+                    const sections = action.payload.find(x => x.departmentName === item.departmentName);
+                    departments.push({
+                        departmentName: item.departmentName,
+                        sections: sections
+                    });
+                }
+            });
+            state.departments = departments;
         },
         setPeriod: (state, action) => {
             state.period = action.payload;
