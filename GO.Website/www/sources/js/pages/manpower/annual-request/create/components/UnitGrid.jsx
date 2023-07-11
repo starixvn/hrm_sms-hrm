@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { ActionCreators } from '../action';
+import { ActionCreators } from '../../action';
 import LangHelper from '@jsroot/common/langHelper';
 
 const UnitGrid = ({ departments, jobLevels, unitSelected }) => {

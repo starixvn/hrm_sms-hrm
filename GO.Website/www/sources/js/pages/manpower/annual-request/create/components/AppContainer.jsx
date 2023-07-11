@@ -7,10 +7,10 @@ import UnitGrid from './UnitGrid';
 import Filter from './Filter';
 import CompanyGrid from './CompanyGrid';
 
-import { ActionCreators } from '../action';
+import { ActionCreators } from '../../action';
 import LangHelper from '@jsroot/common/langHelper';
 
-const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnualRequest, createAnnualRequest, unitSelected, setUnitSelected }) => {
+const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, createAnnualRequest, unitSelected, setUnitSelected }) => {
     useEffect(() => {
         if (window.units.length > 1) {
             setUnitSelected({ value: window.units[0], label: window.units[0] });
@@ -20,7 +20,7 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
 
     const handleSubmit = () => {
         const details = [];
-        annualRequestFormDetails.map(itemDetail => {
+        requestDetails.map(itemDetail => {
             if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
                 details.push(itemDetail);
             }
@@ -48,7 +48,7 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
                 window.units.length > 1 &&
                 <Filter />
             }
-            <div className={`request-form ${window.units.length > 1 ? 'height-filter' : 'height-none-filter'}`}>
+            <div className={`request-form ${window.units.length > 1 ? 'has-filter' : ''}`}>
                 <div className="manpower-forecast row">
                     <div className="col-unit">
                         <UnitGrid />
@@ -61,6 +61,9 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
             <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleSubmit}>
                 {LangHelper.getResource('Submit')}
             </Button>
+            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
+                {LangHelper.getResource('Back')}
+            </Button>
         </div>
     );
 };
@@ -68,8 +71,8 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { period, annualRequestFormDetails, getDataForCreateAnnualRequest, unitSelected, setUnitSelected } = state;
-    return { period, annualRequestFormDetails, getDataForCreateAnnualRequest, unitSelected, setUnitSelected };
+    const { period, requestDetails, getDataForCreateAnnualRequest, unitSelected, setUnitSelected } = state;
+    return { period, requestDetails, getDataForCreateAnnualRequest, unitSelected, setUnitSelected };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

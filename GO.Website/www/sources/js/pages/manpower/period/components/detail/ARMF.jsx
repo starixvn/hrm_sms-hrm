@@ -5,12 +5,32 @@ import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/reac
 
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
+import DataService from '@jsroot/common/dataService';
 import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
 export default class DataGrid extends PureComponent {
-    componentDidMount() {
-        this.props.getAnnualRequestByPeriodId();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            requests: null
+        };
     }
+
+    componentDidMount() {
+        this.getAnnualRequestByPeriodId();
+    }
+
+    getAnnualRequestByPeriodId = async () => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetByPeriodId');
+        const params = { periodId: window.periodId };
+        await DataService.postDataAsync(url, params).then(response => {
+            this.setState({
+                requests: response.data
+            });
+        }).then(() => Site.unblockUI());
+    };
 
     buildHeader = () => {
         return (
@@ -44,9 +64,9 @@ export default class DataGrid extends PureComponent {
     };
 
     buildBody = () => {
-        const gridData = this.props.gridData;
-        if (gridData.length > 0) {
-            return gridData.map((item, index) =>
+        const requests = this.state.requests;
+        if (requests.length > 0) {
+            return requests.map((item, index) =>
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
                     <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
@@ -79,23 +99,21 @@ export default class DataGrid extends PureComponent {
     };
 
     render() {
-        if (!this.props.gridData) {
+        if (!this.state.requests) {
             return null;
         }
 
         return (
-            <div>
-                <Table
-                    minWidth={720}
-                    maxWidth={document.getElementById('detail-app-container').clientWidth}
-                    autoWidth
-                    header={this.buildHeader()}
-                    body={this.buildBody()}
-                    isPaging={false}
-                    containerPadding={0}
-                    adjustedHeight={10}
-                />
-            </div>
+            <Table
+                minWidth={720}
+                maxWidth={document.getElementById('detail-app-container').clientWidth}
+                autoWidth
+                header={this.buildHeader()}
+                body={this.buildBody()}
+                isPaging={false}
+                containerPadding={0}
+                adjustedHeight={10}
+            />
         );
     }
 }

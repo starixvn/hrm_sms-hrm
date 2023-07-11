@@ -16,7 +16,7 @@ const annualRequestSlice = createSlice({
             statusId: null,
             isEdit: false
         },
-        annualRequestFormDetails: [],
+        requestDetails: [],
         jobLevels: []
     },
     reducers: {
@@ -24,9 +24,6 @@ const annualRequestSlice = createSlice({
             state.request = {
                 requestId: action.payload.requestId,
                 currentProcessId: action.payload.currentProcessId,
-                verifierId: action.payload.verifierId,
-                approverId: action.payload.approverId,
-                creator: action.payload.creator,
                 statusId: action.payload.statusId,
                 isEdit: action.payload.isEdit
             };
@@ -56,16 +53,16 @@ const annualRequestSlice = createSlice({
         setUnitSelected: (state, action) => {
             state.unitSelected = action.payload;
         },
-        addAnnualRequestFormDetailsItem: (state, action) => {
+        addRequestDetailsItem: (state, action) => {
             const { param } = action.payload;
             const ColumnExpatAddition = 'expatAddition', ColumnLocalAddition = 'localAddition', ColumnTotalAddition = 'totalAddition';
-            const index = state.annualRequestFormDetails.findIndex(x => x.unitName === param.unitName && x.departmentName === param.departmentName
+            const index = state.requestDetails.findIndex(x => x.unitName === param.unitName && x.departmentName === param.departmentName
                 && x.sectionName === param.sectionName && x.jobLevel === param.jobLevel && x.companyName === param.companyName);
-            if (index >= 0 && index <= state.annualRequestFormDetails.length) {
-                state.annualRequestFormDetails[index][param.columnName] = param.value;
-                const expatAddition = state.annualRequestFormDetails[index][ColumnExpatAddition];
-                const localAddition = state.annualRequestFormDetails[index][ColumnLocalAddition];
-                state.annualRequestFormDetails[index][ColumnTotalAddition] = expatAddition + localAddition;
+            if (index >= 0 && index <= state.requestDetails.length) {
+                state.requestDetails[index][param.columnName] = param.value;
+                const expatAddition = state.requestDetails[index][ColumnExpatAddition];
+                const localAddition = state.requestDetails[index][ColumnLocalAddition];
+                state.requestDetails[index][ColumnTotalAddition] = expatAddition + localAddition;
             }
         },
         setCompanies: (state, action) => {
@@ -86,8 +83,8 @@ const annualRequestSlice = createSlice({
             });
             state.jobLevels = jobLevels;
         },
-        setAnnualRequestFormDetails: (state, action) => {
-            state.annualRequestFormDetails = action.payload;
+        setRequestDetails: (state, action) => {
+            state.requestDetails = action.payload;
         }
     }
 });
@@ -101,8 +98,8 @@ export const {
     setCompanies,
     setJobLevels,
     setUnitSelected,
-    setAnnualRequestFormDetails,
-    addAnnualRequestFormDetailsItem
+    setRequestDetails,
+    addRequestDetailsItem
 } = actions;
 
 export default reducer;

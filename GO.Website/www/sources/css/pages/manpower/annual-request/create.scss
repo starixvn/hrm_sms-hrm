@@ -11,6 +11,11 @@
     margin-top: 10px;
     width: fit-content;
     max-width: 100%;
+    max-height: 80vh;
+
+    &.has-filter {
+        max-height: 70vh;
+    }
 }
 
 .filter {
@@ -40,18 +45,6 @@
     .react-select__menu {
         z-index: 3;
     }
-}
-
-.height-none-filter {
-    max-height: 81.5vh;
-}
-
-.height-detail {
-    max-height: 80.5vh;
-}
-
-.height-filter {
-    max-height: 73.5vh;
 }
 
 .inValidPeriod {

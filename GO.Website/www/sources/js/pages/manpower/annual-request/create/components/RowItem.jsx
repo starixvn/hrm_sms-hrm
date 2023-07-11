@@ -2,15 +2,15 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { ActionCreators } from '../action';
+import { ActionCreators } from '../../action';
 
 import { ManpowerFlow } from '@jsroot/common/constants';
 
-const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addAnnualRequestFormDetailsItem, isTableTotal, request }) => {
+const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem, isTableTotal, request }) => {
     const MaxAdditionalInput = 100;
     const checkZero = number => number !== 0 ? number : '';
     const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
-    const handleAddAnnualRequestFormDetailsItem = (value, columnName) => {
+    const handleAddRequestDetailsItem = (value, columnName) => {
         const param = {
             unitName: itemDetail.unitName,
             departmentName: itemDetail.departmentName,
@@ -20,7 +20,7 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
             columnName: columnName,
             value: (value === '' || value < 0) ? 0 : checkMaxInput(value)
         };
-        addAnnualRequestFormDetailsItem({ param });
+        addRequestDetailsItem({ param });
     };
 
     const renderTotalDetail = () => {
@@ -77,7 +77,7 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                     {
                         (!isDetail || (isDetail && request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead)) && 
                         <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
-                            onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
+                            onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
                             value={checkZero(itemDetail.expatAddition)}></input>
                     }
                 </td>
@@ -89,7 +89,7 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                         (!isDetail || (isDetail && request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead)) && 
                         <input className="input-add" type="number"
                             min={0} max={MaxAdditionalInput}
-                            onChange={e => handleAddAnnualRequestFormDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
+                            onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
                             value={checkZero(itemDetail.localAddition)}></input>
                     }
                 </td>

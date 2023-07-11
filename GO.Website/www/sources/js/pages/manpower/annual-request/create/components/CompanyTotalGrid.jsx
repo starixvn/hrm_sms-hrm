@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 
-const CompanyGrid = ({ period, departments, annualRequestFormDetails, jobLevels, unitSelected }) => {
+const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelected }) => {
     const renderJoblevel = (itemDepartment, itemSection) => {
         const bodyJobLevel = [];
         let totalSection = {
@@ -20,7 +20,7 @@ const CompanyGrid = ({ period, departments, annualRequestFormDetails, jobLevels,
                 expatAddition: 0, localAddition: 0, totalAddition: 0,
                 expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
-            annualRequestFormDetails.map(itemDetail => {
+            requestDetails.map(itemDetail => {
                 if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
                     itemDetail.sectionName === itemSection && itemDetail.jobLevel === itemJobLevel) {
                     totalJoblevel = {
@@ -160,8 +160,8 @@ const CompanyGrid = ({ period, departments, annualRequestFormDetails, jobLevels,
 };
 
 const mapStateToProps = state => {
-    const { period, departments, annualRequestFormDetails, jobLevels, unitSelected } = state;
-    return { period, departments, annualRequestFormDetails, jobLevels, unitSelected };
+    const { period, departments, requestDetails, jobLevels, unitSelected } = state;
+    return { period, departments, requestDetails, jobLevels, unitSelected };
 };
 
 export default connect(mapStateToProps, null)(CompanyGrid);

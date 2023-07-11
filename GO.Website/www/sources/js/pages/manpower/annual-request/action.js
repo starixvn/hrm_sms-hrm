@@ -9,8 +9,8 @@ import {
     setCompanies,
     setJobLevels,
     setUnitSelected,
-    setAnnualRequestFormDetails,
-    addAnnualRequestFormDetailsItem
+    setRequestDetails,
+    addRequestDetailsItem
 } from './annualRequestSlice';
 
 import LangHelper from '@jsroot/common/langHelper';
@@ -20,7 +20,7 @@ const getDataForCreateAnnualRequest = unitName => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetDataForCreateAnnualRequest?UnitName=' + unitName);
     await DataService.postDataAsync(url, unitName).then(response => {
         dispatch(setPeriod(response.data.period));
-        dispatch(setAnnualRequestFormDetails(response.data.details));
+        dispatch(setRequestDetails(response.data.details));
         dispatch(setCompanies(response.data.details));
         dispatch(setJobLevels(response.data.details));
         dispatch(setDepartments(response.data.details));
@@ -45,7 +45,7 @@ const getAnnualRequestById = requestId => async dispatch => {
     await DataService.postDataAsync(url, requestId).then(response => {
         dispatch(setRequest(response.data.request));
         dispatch(setPeriod(response.data.request.period));
-        dispatch(setAnnualRequestFormDetails(response.data.request.details));
+        dispatch(setRequestDetails(response.data.request.details));
         dispatch(setCompanies(response.data.request.details));
         dispatch(setJobLevels(response.data.request.details));
         dispatch(setDepartments(response.data.request.details));
@@ -75,8 +75,8 @@ export const ActionCreators = {
     setCompanies,
     setJobLevels,
     setUnitSelected,
-    setAnnualRequestFormDetails,
-    addAnnualRequestFormDetailsItem,
+    setRequestDetails,
+    addRequestDetailsItem,
     getDataForCreateAnnualRequest,
     createAnnualRequest,
     getAnnualRequestById,

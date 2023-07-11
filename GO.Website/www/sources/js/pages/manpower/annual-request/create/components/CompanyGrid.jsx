@@ -5,10 +5,10 @@ import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 import CompanyTotalGrid from './CompanyTotalGrid';
 
-const CompanyGrid = ({ isDetail, period, departments, companies, annualRequestFormDetails, unitSelected }) => {
+const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails, unitSelected }) => {
     const renderSectionNoneData = (itemDepartment, itemSection) => {
         const bodyJobLevel = [];
-        annualRequestFormDetails.map(itemDetail => {
+        requestDetails.map(itemDetail => {
             if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
                 itemDetail.sectionName === itemSection) {
                 bodyJobLevel.push(<RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
@@ -47,7 +47,7 @@ const CompanyGrid = ({ isDetail, period, departments, companies, annualRequestFo
             expatAddition: 0, localAddition: 0, totalAddition: 0,
             expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
-        annualRequestFormDetails.map(itemDetail => {
+        requestDetails.map(itemDetail => {
             if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
                 itemDetail.sectionName === itemSection && itemDetail.companyName === company) {
                 bodyJobLevel.push(
@@ -131,23 +131,23 @@ const CompanyGrid = ({ isDetail, period, departments, companies, annualRequestFo
         return body;
     };
 
-    const isExistCompany = company => annualRequestFormDetails.find(x => x.unitName === unitSelected.value
-                                                                                && x.companyName === company) != null ? true : false;
+    const isExistCompany = company => requestDetails.find(x => x.unitName === unitSelected.value
+        && x.companyName === company) != null ? true : false;
 
-    const isExistDepartment = (company, itemDepartment) => annualRequestFormDetails.find(x => x.departmentName === itemDepartment.departmentName
-                                                                                && x.companyName === company) != null ? true : false;
+    const isExistDepartment = (company, itemDepartment) => requestDetails.find(x => x.departmentName === itemDepartment.departmentName
+        && x.companyName === company) != null ? true : false;
 
-    const isExistSection = (company, itemSection) => annualRequestFormDetails.find(x => x.sectionName === itemSection
-                                                                                && x.companyName === company) != null ? true : false;
+    const isExistSection = (company, itemSection) => requestDetails.find(x => x.sectionName === itemSection
+        && x.companyName === company) != null ? true : false;
 
     const renderBodyTable = company => {
         const body = [];
         if (isExistCompany(company)) {
             body.push(renderDepartment(company));
-        }
-        else {
+        } else {
             body.push(renderUnitNoneData());
         }
+
         return body;
     };
 
@@ -194,8 +194,8 @@ const CompanyGrid = ({ isDetail, period, departments, companies, annualRequestFo
 };
 
 const mapStateToProps = state => {
-    const { period, departments, companies, annualRequestFormDetails, unitSelected } = state;
-    return { period, departments, companies, annualRequestFormDetails, unitSelected };
+    const { period, departments, companies, requestDetails, unitSelected } = state;
+    return { period, departments, companies, requestDetails, unitSelected };
 };
 
 export default connect(mapStateToProps, null)(CompanyGrid);

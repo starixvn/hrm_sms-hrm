@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
 
-import UnitGrid from '../../annual-request/components/UnitGrid';
-import CompanyGrid from '../../annual-request/components/CompanyGrid';
-import { ActionCreators } from '../../annual-request/action';
+import UnitGrid from '../../create/components/UnitGrid';
+import CompanyGrid from '../../create/components/CompanyGrid';
+import { ActionCreators } from '../../action';
 
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
 const AppContainer = ({ getAnnualRequestById,
     request,
-    annualRequestFormDetails,
+    requestDetails,
     period,
     unitSelected,
     createAnnualRequest,
@@ -32,6 +32,7 @@ const AppContainer = ({ getAnnualRequestById,
     const isReset = () => (request.isEdit &&
         ((request.currentProcessId === ManpowerFlow.Approver && AnnualManpowerForecastRequestStatus.Approved === request.statusId) ||
             (request.currentProcessId === ManpowerFlow.Verifier && AnnualManpowerForecastRequestStatus.Verified === request.statusId))) ? true : false;
+
     const getStatus = () => {
         let status = '';
         switch (request.statusId) {
@@ -49,7 +50,7 @@ const AppContainer = ({ getAnnualRequestById,
     };
     const handleSubmit = () => {
         const details = [];
-        annualRequestFormDetails.map(itemDetail => {
+        requestDetails.map(itemDetail => {
             if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
                 details.push(itemDetail);
             }
@@ -87,9 +88,6 @@ const AppContainer = ({ getAnnualRequestById,
         setRequest({
             requestId: request.requestId,
             currentProcessId: request.currentProcessId,
-            verifierId: request.verifier.userId,
-            approverId: request.approver.userId,
-            creator: request.creator,
             statusId: statusId,
             isEdit: request.isEdit
         });
@@ -101,7 +99,7 @@ const AppContainer = ({ getAnnualRequestById,
                 <span className="status">{LangHelper.getResource('Status') + ': '}</span>
                 <span className="bold">{getStatus()}</span>
             </div>
-            <div className="request-form height-filter">
+            <div className="request-form has-filter">
                 <div className="manpower-forecast row">
                     <div className="col-unit">
                         <UnitGrid />
@@ -145,8 +143,8 @@ const AppContainer = ({ getAnnualRequestById,
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { getAnnualRequestById, request, annualRequestFormDetails, period, unitSelected, createAnnualRequest, updateStatus, setRequest } = state;
-    return { getAnnualRequestById, request, annualRequestFormDetails, period, unitSelected, createAnnualRequest, updateStatus, setRequest };
+    const { getAnnualRequestById, request, requestDetails, period, unitSelected, createAnnualRequest, updateStatus, setRequest } = state;
+    return { getAnnualRequestById, request, requestDetails, period, unitSelected, createAnnualRequest, updateStatus, setRequest };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import Layout from '@jsroot/components/Layout';
 import AppContainer from './components/AppContainer';
-import annualRequestSlice from '../annual-request/annualRequestSlice';
+import annualRequestSlice from '../annualRequestSlice';
 
 const store = configureStore({
     reducer: annualRequestSlice
