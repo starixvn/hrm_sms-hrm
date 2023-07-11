@@ -1,14 +1,11 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using GO.Admin.Website.Filters;
     using GO.Core.Models;
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models.Manpower;
-    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -72,13 +69,14 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetById(int requestId)
+        public async Task<IActionResult> GetById(int id)
         {
-            var request = await manpowerForecastService.GetAnnualRequestByIdAsync(requestId);
-            if(request is null)
+            var request = await manpowerForecastService.GetAnnualRequestByIdAsync(id);
+            if (request is null)
             {
                 return NotFound();
             }
+
             request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
             return Json(new { request });
         }
@@ -114,10 +112,12 @@
             return Json(requests);
         }
 
-        private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request) 
+        private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request)
             => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
+
         private bool IsEditIntoVerify(AnnualManpowerForecastRequest request)
            => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify;
+
         private bool IsEditIntoApprove(AnnualManpowerForecastRequest request)
            => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve;
     }

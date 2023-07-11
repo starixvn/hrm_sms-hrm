@@ -47,7 +47,7 @@
     Update: '',
     Section: 'Section',
     SiteName: 'Site Name',
-    CreateSuccessfully: 'Create request successfully!',
+    CreateSuccessfully: 'Create successfully!',
     Save: 'Save',
     Status: 'Status',
     Successfully: ' Successfully!',
@@ -59,5 +59,6 @@
     ToDate: 'To Date',
     Total: 'Total',
     UnitHead: 'Unit Head',
+    UpdateSuccessfully: 'Update successfully!',
     Verifier: 'Verifier'
 };

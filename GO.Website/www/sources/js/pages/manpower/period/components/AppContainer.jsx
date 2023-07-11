@@ -25,12 +25,10 @@ export default class AppContainer extends Component {
             },
             gridData: null,
             createModalDialog: { show: false },
-            commandResult: null,
             updateModalDialog: {
                 show: false,
                 data: null
             },
-            updateResult: null,
             deleteModalDialog: {
                 show: false,
                 name: '',
@@ -70,16 +68,14 @@ export default class AppContainer extends Component {
         const url = Site.resolveClientUrl('Manpower/Period/Create');
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
+                toast.success(LangHelper.getResource('CreateSuccessfully'));
+
                 this.setState({
-                    commandResult: null,
                     createModalDialog: { show: false }
                 });
-                toast.success('Create successfully!');
                 this.getPeriods(this.state.filter);
             } else {
-                this.setState({
-                    commandResult: response.data
-                });
+                toast.error(response.data.message);
             }
         }).then(() => Site.unblockUI());
     };
@@ -104,16 +100,14 @@ export default class AppContainer extends Component {
         const url = Site.resolveClientUrl('Manpower/Period/Update');
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
+                toast.success(LangHelper.getResource('UpdateSuccessfully'));
+
                 this.setState({
-                    updateResult: null,
                     updateModalDialog: { show: false }
                 });
-                toast.success('Update successfully!');
                 this.getPeriods(this.state.filter);
             } else {
-                this.setState({
-                    updateResult: response.data
-                });
+                toast.error(response.data.message);
             }
         }).then(() => Site.unblockUI());
     };
@@ -164,7 +158,7 @@ export default class AppContainer extends Component {
     };
 
     render() {
-        const { filter, gridData, createModalDialog, updateModalDialog, commandResult, deleteModalDialog } = this.state;
+        const { filter, gridData, createModalDialog, updateModalDialog, deleteModalDialog } = this.state;
         return (
             <div className="manpower-period">
                 <Filter
@@ -184,14 +178,13 @@ export default class AppContainer extends Component {
                     createModalDialog.show &&
                     <Create onSubmit={this.createPeriod}
                         onClose={this.handleCloseCreateModalDialog}
-                        commandResult={commandResult}
                     />
                 }
                 {
                     updateModalDialog.show &&
                     <Update onSubmit={this.updatePeriod}
                         onClose={this.handleCloseUpdateModalDialog}
-                        period={updateModalDialog.data} commandResult={commandResult}
+                        period={updateModalDialog.data}
                     />
                 }
                 {

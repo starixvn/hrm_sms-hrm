@@ -17,6 +17,7 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
             getDataForCreateAnnualRequest(window.units[0]);
         }
     }, []);
+
     const handleSubmit = () => {
         const details = [];
         annualRequestFormDetails.map(itemDetail => {
@@ -32,38 +33,35 @@ const AppContainer = ({ period, annualRequestFormDetails, getDataForCreateAnnual
         };
         createAnnualRequest(param);
     };
+
+    if (period == null) {
+        return (
+            <div className="breadcrumb inValidPeriod">
+                <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
+            </div>
+        );
+    }
+
     return (
-        <>
+        <div>
             {
-                period != null &&
-                <div>
-                    {
-                        window.units.length > 1 &&
-                        <Filter />
-                    }
-                    <div className={`request-form ${window.units.length > 1 ? 'height-filter' : 'height-none-filter'}`}>
-                        <div className="manpower-forecast row">
-                            
-                            <div className="col-unit">
-                                <UnitGrid />
-                            </div>
-                            <div className="col-company">
-                                <CompanyGrid />
-                            </div>
-                        </div>
+                window.units.length > 1 &&
+                <Filter />
+            }
+            <div className={`request-form ${window.units.length > 1 ? 'height-filter' : 'height-none-filter'}`}>
+                <div className="manpower-forecast row">
+                    <div className="col-unit">
+                        <UnitGrid />
                     </div>
-                    <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleSubmit}>
-                        {LangHelper.getResource('Submit')}
-                    </Button>
+                    <div className="col-company">
+                        <CompanyGrid />
+                    </div>
                 </div>
-            }
-            {
-                period == null &&
-                <div className="breadcrumb inValidPeriod">
-                    <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
-                </div>
-            }
-        </>
+            </div>
+            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleSubmit}>
+                {LangHelper.getResource('Submit')}
+            </Button>
+        </div>
     );
 };
 

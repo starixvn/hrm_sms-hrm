@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 
 import FormikErrorMessage from '@jsroot/components/FormikErrorMessage';
 import DatePicker from '@jsroot/components/date-picker/index';
-import ResponseMessage from '@jsroot/components/ResponseMessage';
 import { validateFormik } from '../common.functions';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow } from '@jsroot/common/constants';
@@ -46,15 +45,10 @@ export default class Create extends Component {
         setFieldValue,
         handleSubmit
     }) => {
-        const commandResult = this.props.commandResult;
         return (
             <Form noValidate onSubmit={handleSubmit}>
                 <Modal.Body>
                     <FormikErrorMessage className="summary-errors" touched={touched} errors={errors} fieldNames={Object.keys(values)} />
-                    {
-                        commandResult &&
-                        <ResponseMessage isSuccessful={commandResult.isSuccessful} message={commandResult.message} />
-                    }
                     <Form.Group as={Row}>
                         <Form.Label column sm="4" md="3" className="required" htmlFor="name">
                             {LangHelper.getResource('Name')}

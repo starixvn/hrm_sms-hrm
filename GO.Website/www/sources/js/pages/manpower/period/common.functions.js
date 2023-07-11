@@ -48,6 +48,7 @@ export const validateFormik = values => {
         values.toDateVerifier < values.toDateUnitHead) {
         errors.verifier = LangHelper.getResource('ErrorVerifyDateRange')
     }
+
     if (values.fromDateApprover < values.fromDateVerifier ||
         values.toDateApprover < values.toDateVerifier) {
         errors.approver = LangHelper.getResource('ErrorApproveDateRange')

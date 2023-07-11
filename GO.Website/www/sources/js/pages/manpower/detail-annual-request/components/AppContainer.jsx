@@ -113,29 +113,29 @@ const AppContainer = ({ getAnnualRequestById,
             </div>
             {
                 isSubmit() &&
-                <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleSubmit}>
+                <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleSubmit}>
                     {LangHelper.getResource('Submit')}
                 </Button>
             }
             {
                 idVerify() &&
-                <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleUpdateStatus}>
+                <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleUpdateStatus}>
                     {LangHelper.getResource('Verify')}
                 </Button>
             }
             {
                 isApprove() &&
-                <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleUpdateStatus}>
+                <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleUpdateStatus}>
                     {LangHelper.getResource('Approve')}
                 </Button>
             }
             {
                 isReset() &&
-                <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={handleResetStatus} >
+                <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleResetStatus} >
                     {LangHelper.getResource('Reset')}
                 </Button>
             }
-            <Button variant="primary" size="sm" className="mr-3 btn--submit" onClick={() => history.back()} >
+            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
                 {LangHelper.getResource('Back')}
             </Button>
         </div>
