@@ -1,0 +1,35 @@
+﻿namespace GO.Website.UnitTests.Criteria.Report
+{
+    using GO.Website.Criteria.Report;
+    using Xunit;
+
+    public class GetManpowerReportCriteriaTests
+    {
+        [Fact]
+        public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
+        {
+            // Arrange
+            var criteria = new GetManpowerReportCriteria();
+            var expected = "Report_Manpower_Get";
+
+            // Act
+            var actual = criteria.GetSettingKey();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void IsValid_WhenCalled_ReturnTrue()
+        {
+            // Arrange
+            var criteria = new GetManpowerReportCriteria();
+
+            // Act
+            var actual = criteria.IsValid();
+
+            // Assert
+            Assert.True(actual);
+        }
+    }
+}

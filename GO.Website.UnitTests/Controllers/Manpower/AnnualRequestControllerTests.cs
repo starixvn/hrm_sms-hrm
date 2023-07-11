@@ -20,7 +20,7 @@
     {
         private IUserControlSession userControlSession;
         private IManpowerForecastService manpowerForecastService;
-        private readonly Fixture fixture = new Fixture();
+        private readonly Fixture fixture = new();
 
         [Fact]
         public async Task Create_WhenCalled_ReturnExpectedViewData()
