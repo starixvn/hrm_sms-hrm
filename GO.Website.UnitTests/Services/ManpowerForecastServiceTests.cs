@@ -81,12 +81,12 @@
             expectedPrevforecasts.First().JobLevel = "test";
 
             var criteria = new GetDataForCreateAnnualManpowerForecastRequestCriteria();
-            var criteria2 = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
             baseService.FetchMultipleAsync<ManpowerPeriod, AnnualManpowerForecastRequestDetail>
                 (Arg.Do<GetDataForCreateAnnualManpowerForecastRequestCriteria>(x => criteria = x)).Returns(
                 new ValueTuple<IEnumerable<ManpowerPeriod>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedPeriod, expectedDetails)); ;
-            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteria2 = x)).Returns(expectedPrevforecasts);
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
             //Act
             var actual = await service.GetDataForCreateAnnualRequestAsync(userId, unitName);
 
@@ -141,10 +141,10 @@
             var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
 
             var criteria = new GetAnnualManpowerForecastRequestByIdCriteria();
-            var criteria2 = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
             manpowerForecastRepository.GetAnnualRequestByIdAsync(Arg.Do<GetAnnualManpowerForecastRequestByIdCriteria>(x => criteria = x)).Returns(expectedAnnualManpowerForecastRequest);
-            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteria2 = x)).Returns(expectedPrevforecasts);
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
            
             //Act
             var actual = await service.GetAnnualRequestByIdAsync(requestId);
@@ -169,10 +169,10 @@
             expectedPrevforecasts.First().JobLevel = "test";
 
             var criteria = new GetAnnualManpowerForecastRequestByIdCriteria();
-            var criteria2 = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
             manpowerForecastRepository.GetAnnualRequestByIdAsync(Arg.Do<GetAnnualManpowerForecastRequestByIdCriteria>(x => criteria = x)).Returns(expectedAnnualManpowerForecastRequest);
-            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteria2 = x)).Returns(expectedPrevforecasts);
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
 
             //Act
             var actual = await service.GetAnnualRequestByIdAsync(requestId);
