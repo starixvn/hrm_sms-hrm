@@ -14,9 +14,9 @@ const cssPaths = {
     manpower_employee_index: ['./www/sources/css/pages/manpower/employee.scss'],
     manpower_period_index: ['./www/sources/css/pages/manpower/period/index.scss'],
     manpower_flow_index: ['./www/sources/css/pages/manpower/flow.scss'],
-    manpower_forecast_my_annual_request: ['./www/sources/css/pages/manpower/annual-request/my-request.scss'],
-    manpower_forecast_member_annual_request: ['./www/sources/css/pages/manpower/annual-request/member-request.scss'],
-    manpower_forecast_annual_request_create: ['./www/sources/css/pages/manpower/annual-request/create.scss'],
+    annual_manpower_forecast_request_mypage: ['./www/sources/css/pages/manpower/annual-request/my-request.scss'],
+    annual_manpower_forecast_request_memberpage: ['./www/sources/css/pages/manpower/annual-request/member-request.scss'],
+    annual_manpower_forecast_request_create: ['./www/sources/css/pages/manpower/annual-request/create.scss'],
     manpower_period_detail: ['./www/sources/css/pages/manpower/period/detail.scss']
 };
 
@@ -32,11 +32,11 @@ const scriptPaths = {
     manpower_employee_index: ['./www/sources/js/pages/manpower/employee/index.js'],
     manpower_period_index: ['./www/sources/js/pages/manpower/period/index.js'],
     manpower_flow_index: ['./www/sources/js/pages/manpower/flow/index.js'],
-    manpower_forecast_my_annual_request: ['./www/sources/js/pages/manpower/my-annual-request/index.js'],
-    manpower_forecast_member_annual_request: ['./www/sources/js/pages/manpower/member-annual-request/index.js'],
-    manpower_forecast_annual_request_create: ['./www/sources/js/pages/manpower/annual-request/create/index.js'],
-    manpower_forecast_annual_request_detail: ['./www/sources/js/pages/manpower/annual-request/detail/index.js'],
-    manpower_period_detail: ['./www/sources/js/pages/manpower/period/detail.js']
+    manpower_period_detail: ['./www/sources/js/pages/manpower/period/detail.js'],
+    annual_manpower_forecast_request_mypage: ['./www/sources/js/pages/manpower/annual-request/my-request/index.js'],
+    annual_manpower_forecast_request_memberpage: ['./www/sources/js/pages/manpower/annual-request/member-request/index.js'],
+    annual_manpower_forecast_request_create: ['./www/sources/js/pages/manpower/annual-request/create/index.js'],
+    annual_manpower_forecast_request_detail: ['./www/sources/js/pages/manpower/annual-request/detail/index.js']
 };
 
 module.exports = {

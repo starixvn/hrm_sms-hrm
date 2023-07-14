@@ -71,7 +71,7 @@ export default class AppContainer extends Component {
                 <thead>
                     <tr>
                         <td>#</td>
-                        <td>Site Name</td>
+                        <td>{LangHelper.getResource('Company')}</td>
                         <td>{LangHelper.getResource('Code')}</td>
                         <td>{LangHelper.getResource('Nickname')}</td>
                         <td>{LangHelper.getResource('FullName')}</td>
@@ -89,7 +89,7 @@ export default class AppContainer extends Component {
                         emps.map((emp, index) =>
                             <tr key={`${emp.siteName}-${emp.nickname}`}>
                                 <td className="text-center">{index + 1}</td>
-                                <td>{emp.siteName}</td>
+                                <td>{emp.companyName}</td>
                                 <td>{emp.code}</td>
                                 <td>{emp.nickname}</td>
                                 <td>{emp.fullName}</td>
