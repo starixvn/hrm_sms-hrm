@@ -10,7 +10,11 @@ import {
     setJobLevels,
     setUnitSelected,
     setRequestDetails,
-    addRequestDetailsItem
+    addRequestDetailsItem,
+    setSubmitModalDialog,
+    setVerifyModalDialog,
+    setApproveModalDialog,
+    setResetModalDialog
 } from './annualRequestSlice';
 
 import LangHelper from '@jsroot/common/langHelper';
@@ -77,6 +81,10 @@ export const ActionCreators = {
     setUnitSelected,
     setRequestDetails,
     addRequestDetailsItem,
+    setSubmitModalDialog,
+    setVerifyModalDialog,
+    setApproveModalDialog,
+    setResetModalDialog,
     getDataForCreateAnnualRequest,
     createAnnualRequest,
     getAnnualRequestById,

@@ -16,6 +16,10 @@ const annualRequestSlice = createSlice({
             statusId: null,
             isEdit: false
         },
+        submitModalDialog: false,
+        verifyModalDialog: false,
+        approveModalDialog: false,
+        resetModalDialog: false,
         requestDetails: [],
         jobLevels: []
     },
@@ -85,6 +89,18 @@ const annualRequestSlice = createSlice({
         },
         setRequestDetails: (state, action) => {
             state.requestDetails = action.payload;
+        },
+        setSubmitModalDialog: (state, action) => {
+            state.submitModalDialog = action.payload;
+        },
+        setVerifyModalDialog: (state, action) => {
+            state.verifyModalDialog = action.payload;
+        },
+        setApproveModalDialog: (state, action) => {
+            state.approveModalDialog = action.payload;
+        },
+        setResetModalDialog: (state, action) => {
+            state.resetModalDialog = action.payload;
         }
     }
 });
@@ -99,7 +115,11 @@ export const {
     setJobLevels,
     setUnitSelected,
     setRequestDetails,
-    addRequestDetailsItem
+    addRequestDetailsItem,
+    setSubmitModalDialog,
+    setVerifyModalDialog,
+    setApproveModalDialog,
+    setResetModalDialog
 } = actions;
 
 export default reducer;

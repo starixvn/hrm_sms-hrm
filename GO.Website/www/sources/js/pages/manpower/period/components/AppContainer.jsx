@@ -191,7 +191,7 @@ export default class AppContainer extends Component {
                     deleteModalDialog.show &&
                     <SweetModalDialog
                         title={LangHelper.getResource('Confirmation')}
-                        contents={<div>Are you sure you want to delete flow of <strong>{deleteModalDialog.name}</strong>?</div>}
+                        contents={<div>Are you sure you want to delete period of <strong>{deleteModalDialog.name}</strong>?</div>}
                         buttons={[
                             <Button variant="primary" size="sm" key="ok"
                                 onClick={this.deletePeriod}
