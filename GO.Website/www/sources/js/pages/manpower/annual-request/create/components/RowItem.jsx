@@ -20,7 +20,7 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
             columnName: columnName,
             value: (value === '' || value < 0) ? 0 : checkMaxInput(value)
         };
-        addRequestDetailsItem({ param });
+        addRequestDetailsItem(param);
     };
 
     const renderTotalDetail = () => {

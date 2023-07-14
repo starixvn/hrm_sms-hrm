@@ -48,13 +48,15 @@
     }
 }
 
-.inValidPeriod {
+.out-of-time-request {
     margin-top: 10px;
-
-    .inValidPeriod-item {
-        width: 100%;
-        text-align: center;
-    }
+    background-color: #dfe2e4;
+    padding: 0.4rem 1.3rem;
+    color: #FD5F00;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .manpower-forecast {
@@ -62,36 +64,42 @@
     margin-right: 0;
     margin-left: 0;
 
+    .table {
+        thead {
+            position: -webkit-sticky;
+            position: sticky;
+            top: -1px;
+
+            tr {
+                box-shadow: inset 0 1px 0 #b7b7b7, inset 0 -1px 0 #b7b7b7;
+
+                th {
+                    border-left-color: #b7b7b7 !important;
+                    width: max-content;
+                    color: #2c2c2c;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    height: 25px;
+                    text-align: center;
+                    background: unset;
+                    padding: 2px 5px;
+                    width: max-content;
+                }
+            }
+        }
+    }
+
     .col-company {
         display: flex;
 
         .table-company {
             width: 650px;
             margin-right: 20px;
-
-            th {
-                border-left-color: #b7b7b7 !important;
-                width: max-content;
-                color: black;
-            }
-
-            thead tr {
-                box-shadow: 0 0 0 0.5px #a7a6a6;
-            }
-
-            td {
-                height: 25px;
-                text-align: center;
-                color: black !important;
-                background: unset;
-                padding: 2px 5px !important;
-                width: max-content;
-            }
-
-            thead {
-                position: sticky;
-                top: -1px;
-            }
 
             .input-add {
                 height: 20px;
@@ -122,42 +130,31 @@
     .col-unit {
         width: 450px;
         margin-right: 20px;
+        position: -webkit-sticky;
         position: sticky;
         left: 0px;
-        background: white;
-        z-index: 2;
+        background: #fff;
+        z-index: 1;
 
         .table-unit {
-            th {
-                background: #FFD966 !important;
-                color: black !important;
-                border-left-color: #b7b7b7 !important;
-                height: 111px;
-                width: max-content;
-                position: sticky;
-                top: -1px;
-            }
-
-            td {
-                height: 25px;
-                text-align: center;
-                color: black !important;
-                background: unset !important;
-                padding: 2px 5px !important;
-                width: max-content;
+            thead {
+                th {
+                    background: #FFD966;
+                    height: 111px;
+                }
             }
 
             .jobLevel {
                 width: 18%;
-                background: #FFE699 !important;
+                background: #FFE699;
             }
 
             .data-unit {
-                background: #FFE699 !important;
+                background: #FFE699;
             }
 
             .data-section {
-                background: #FFF2CC !important;
+                background: #FFF2CC;
             }
         }
     }
@@ -169,7 +166,7 @@
             }
 
             .highlight {
-                background: #e2f0d9 !important;
+                background: #e2f0d9;
             }
         }
 
@@ -179,7 +176,7 @@
             }
 
             .highlight {
-                background: #bdd7ee !important;
+                background: #bdd7ee;
             }
         }
 
@@ -189,7 +186,7 @@
             }
 
             .highlight {
-                background: #fbe5d6 !important;
+                background: #fbe5d6;
             }
         }
 
@@ -199,7 +196,7 @@
             }
 
             .highlight {
-                background: #d0cece !important;
+                background: #d0cece;
             }
         }
 
@@ -209,7 +206,7 @@
             }
 
             .highlight {
-                background: #dae3f3 !important;
+                background: #dae3f3;
             }
         }
     }

@@ -38,8 +38,8 @@ const annualRequestSlice = createSlice({
                 if (departments.findIndex(x => x.departmentName === item.departmentName) === -1) {
                     const sections = [];
                     action.payload.map(detail => {
-                        if (detail.departmentName === item.departmentName && 
-                            sections.findIndex(section => section === detail.sectionName) === -1) {
+                        if (detail.departmentName === item.departmentName
+                            && sections.findIndex(section => section === detail.sectionName) === -1) {
                             sections.push(detail.sectionName);
                         }
                     });
@@ -58,15 +58,16 @@ const annualRequestSlice = createSlice({
             state.unitSelected = action.payload;
         },
         addRequestDetailsItem: (state, action) => {
-            const { param } = action.payload;
-            const ColumnExpatAddition = 'expatAddition', ColumnLocalAddition = 'localAddition', ColumnTotalAddition = 'totalAddition';
-            const index = state.requestDetails.findIndex(x => x.unitName === param.unitName && x.departmentName === param.departmentName
-                && x.sectionName === param.sectionName && x.jobLevel === param.jobLevel && x.companyName === param.companyName);
-            if (index >= 0 && index <= state.requestDetails.length) {
-                state.requestDetails[index][param.columnName] = param.value;
-                const expatAddition = state.requestDetails[index][ColumnExpatAddition];
-                const localAddition = state.requestDetails[index][ColumnLocalAddition];
-                state.requestDetails[index][ColumnTotalAddition] = expatAddition + localAddition;
+            const { companyName, unitName, departmentName, sectionName, jobLevel, columnName, value } = action.payload;
+
+            const index = state.requestDetails.findIndex(x => x.unitName === unitName && x.departmentName === departmentName
+                && x.sectionName === sectionName && x.jobLevel === jobLevel && x.companyName === companyName);
+            if (index >= 0) {
+                state.requestDetails[index][columnName] = value;
+
+                const expatAddition = state.requestDetails[index]['expatAddition'];
+                const localAddition = state.requestDetails[index]['localAddition'];
+                state.requestDetails[index]['totalAddition'] = expatAddition + localAddition;
             }
         },
         setCompanies: (state, action) => {

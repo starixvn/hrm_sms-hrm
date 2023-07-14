@@ -34,10 +34,12 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, c
         createAnnualRequest(param);
     };
 
+    const handleBack = () => history.back();
+
     if (period == null) {
         return (
-            <div className="breadcrumb inValidPeriod">
-                <span className="breadcrumb-item active inValidPeriod-item">{LangHelper.getResource('InValidPeriod')}</span>
+            <div className="out-of-time-request">
+                Out of time to create Annual Manpower Forecast Request Form!
             </div>
         );
     }
@@ -61,7 +63,7 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, c
             <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleSubmit}>
                 {LangHelper.getResource('Submit')}
             </Button>
-            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
+            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleBack} >
                 {LangHelper.getResource('Back')}
             </Button>
         </div>

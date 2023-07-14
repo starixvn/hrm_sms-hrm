@@ -47,15 +47,17 @@ const getAnnualRequestById = requestId => async dispatch => {
     Site.blockUI();
     const url = Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/GetById/${requestId}`);
     await DataService.postDataAsync(url, requestId).then(response => {
-        dispatch(setRequest(response.data.request));
-        dispatch(setPeriod(response.data.request.period));
-        dispatch(setRequestDetails(response.data.request.details));
-        dispatch(setCompanies(response.data.request.details));
-        dispatch(setJobLevels(response.data.request.details));
-        dispatch(setDepartments(response.data.request.details));
+        const { request } = response.data;
+
+        dispatch(setRequest(request));
+        dispatch(setPeriod(request.period));
+        dispatch(setRequestDetails(request.details));
+        dispatch(setCompanies(request.details));
+        dispatch(setJobLevels(request.details));
+        dispatch(setDepartments(request.details));
         dispatch(setUnitSelected({
-            value: response.data.request.details[0].unitName,
-            label: response.data.request.details[0].unitName
+            value: request.details[0].unitName,
+            label: request.details[0].unitName
         }));
     }).then(() => Site.unblockUI());
 };
