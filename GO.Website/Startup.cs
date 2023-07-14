@@ -131,6 +131,9 @@ namespace GO.Website
             var apiSiteSettings = Configuration.GetSection("ApiSiteSettings").Get<List<ApiSiteSetting>>();
             services.AddSingleton(apiSiteSettings);
 
+            var mailConfigs = Configuration.GetSection("MailConfigs").Get<MailConfigs>();
+            services.AddSingleton(mailConfigs);
+
             RegisterDI(services);
 
             services.AddSignalR(hubOptions =>
@@ -198,6 +201,7 @@ namespace GO.Website
             services.AddSingleton<IManpowerForecastRepository, ManpowerForecastRepository>();
 
             services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IBaseMailService, BaseMailService>();
             services.AddSingleton<IExportExcelService, ExportExcelService>();
             services.AddSingleton<IUnitHeadService, UnitHeadService>();
             services.AddSingleton<ITodolistService, TodolistService>();

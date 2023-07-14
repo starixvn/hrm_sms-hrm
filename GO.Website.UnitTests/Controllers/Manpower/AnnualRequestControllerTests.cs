@@ -197,7 +197,7 @@
             var request = fixture.Create<AnnualManpowerForecastRequest>();
             request.Verifier.UserId = id;
             userControlSession.UserId = id;
-            request.CurrentProcessId = PeriodProcess.Verify;
+            request.CurrentProcessId = PeriodProcess.Verifier;
 
             manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
 
@@ -220,7 +220,7 @@
             var request = fixture.Create<AnnualManpowerForecastRequest>();
             request.Approver.UserId = id;
             userControlSession.UserId = id;
-            request.CurrentProcessId = PeriodProcess.Approve;
+            request.CurrentProcessId = PeriodProcess.Approver;
 
             manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
 

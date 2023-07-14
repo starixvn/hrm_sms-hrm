@@ -12,6 +12,10 @@
     <Function Name="360 Degree Feedback">
         <Setting Key="GO_GetTodolistByUserId" SpName="GO_GetTodolistByUserId" DbName="bodb_360DegreeFeedback" Plain="0" />
     </Function>
+    <Function Name="Mail Record">
+        <Setting Key="MailRecord_Insert" SpName="MailRecord_Insert" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="MailError_Insert" SpName="MailError_Insert" DbName="bodb_IUC" Plain="0" />
+    </Function>
     <Function Name="Manpower">
         <Setting Key="HRM_Employee_Search" SpName="HRM_Employee_Search" DbName="bodb_IUC" Plain="0" />
 

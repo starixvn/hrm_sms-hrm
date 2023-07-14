@@ -116,9 +116,9 @@
             => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
 
         private bool IsEditIntoVerify(AnnualManpowerForecastRequest request)
-           => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verify;
+           => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verifier;
 
         private bool IsEditIntoApprove(AnnualManpowerForecastRequest request)
-           => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approve;
+           => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approver;
     }
 }
