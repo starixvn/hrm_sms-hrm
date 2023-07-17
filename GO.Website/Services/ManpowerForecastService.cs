@@ -7,7 +7,9 @@
     using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Criteria.Manpower;
+    using GO.Website.Criteria.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower;
+    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
     using GO.Website.Repositories;
 
@@ -115,6 +117,20 @@
                 UnitName = param.UnitName,
                 DetailXml = param.Details != null && param.Details.Any() ? param.Details.ToXML().ToString() : string.Empty,
                 CreatedBy = userId
+            };
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
+        public async Task<CommandResult> UpdateAnnualRequestAsync(int userId, UpdateAnnualManpowerForecastRequestParam param)
+        {
+            var command = new UpdateAnnualManpowerForecastRequestCommand
+            {
+                PeriodId = param.PeriodId,
+                UnitName = param.UnitName,
+                DetailXml = param.Details != null && param.Details.Any() ? param.Details.ToXML().ToString() : string.Empty,
+                RequestId = param.RequestId,
+                StatusId = param.StatusId,
+                ModifiedBy = userId
             };
             return await baseService.ExecuteNonQueryAsync(command);
         }

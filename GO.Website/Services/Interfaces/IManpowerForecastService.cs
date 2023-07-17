@@ -5,6 +5,7 @@
     using GO.Core.Models;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models.Manpower;
+    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
 
     public interface IManpowerForecastService
@@ -22,6 +23,7 @@
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria);
 
         Task<CommandResult> CreateAnnualRequestAsync(int userId, CreateAnnualManpowerForecastRequestParam param);
+        Task<CommandResult> UpdateAnnualRequestAsync(int userId, UpdateAnnualManpowerForecastRequestParam param);
 
         Task<CommandResult> UpdateStatusAnnualRequestAsync(UpdateStatusAnnualManpowerForecastRequestCommand command);
     }

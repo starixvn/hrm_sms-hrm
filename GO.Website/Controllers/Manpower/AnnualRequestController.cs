@@ -6,6 +6,7 @@
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Models.Manpower;
+    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -45,6 +46,14 @@
         public async Task<IActionResult> Create([FromBody] CreateAnnualManpowerForecastRequestParam param)
         {
             CommandResult commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
+            return Json(commandResult);
+        }
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
+        public async Task<IActionResult> Update([FromBody] UpdateAnnualManpowerForecastRequestParam param)
+        {
+            CommandResult commandResult = await manpowerForecastService.UpdateAnnualRequestAsync(userControlSession.UserId, param);
             return Json(commandResult);
         }
 

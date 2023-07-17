@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../../action';
 
-import { ManpowerFlow } from '@jsroot/common/constants';
+import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
 const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem, isTableTotal, request }) => {
     const MaxAdditionalInput = 100;
@@ -61,6 +61,12 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
         );
     };
 
+    const isSubmit = () => (request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead) ? true : false;
+    const isVerify = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
+        request.statusId === AnnualManpowerForecastRequestStatus.Pending) ? true : false;
+    const isApprove = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
+        request.statusId === AnnualManpowerForecastRequestStatus.Verified) ? true : false;
+
     const renderDetail = () => {
         return (
             <tr>
@@ -72,10 +78,10 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                 <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
                     {
-                        isDetail && !request.isEdit && checkZero(itemDetail.expatAddition)
+                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && checkZero(itemDetail.expatAddition)
                     }
                     {
-                        (!isDetail || (isDetail && request.isEdit)) && 
+                        (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
                         <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
                             value={checkZero(itemDetail.expatAddition)}></input>
@@ -83,10 +89,10 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                 </td>
                 <td>
                     {
-                        isDetail && !request.isEdit && checkZero(itemDetail.localAddition)
+                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && checkZero(itemDetail.localAddition)
                     }
                     {
-                        (!isDetail || (isDetail && request.isEdit)) && 
+                        (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
                         <input className="input-add" type="number"
                             min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'localAddition')}

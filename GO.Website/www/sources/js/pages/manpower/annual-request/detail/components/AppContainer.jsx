@@ -26,7 +26,8 @@ const AppContainer = ({ getAnnualRequestById,
     submitModalDialog,
     verifyModalDialog,
     approveModalDialog,
-    resetModalDialog}) => {
+    resetModalDialog,
+    updateAnnualRequest}) => {
     useEffect(() => {
         if (window.requestId != null) {
             getAnnualRequestById(window.requestId);
@@ -34,10 +35,10 @@ const AppContainer = ({ getAnnualRequestById,
     }, []);
 
     const isSubmit = () => (request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead) ? true : false;
-    const idVerify = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
-        AnnualManpowerForecastRequestStatus.Pending === request.statusId) ? true : false;
+    const isVerify = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
+        request.statusId === AnnualManpowerForecastRequestStatus.Pending) ? true : false;
     const isApprove = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
-        AnnualManpowerForecastRequestStatus.Verified === request.statusId) ? true : false;
+        request.statusId === AnnualManpowerForecastRequestStatus.Verified) ? true : false;
     const isReset = () => (request.isEdit &&
         ((request.currentProcessId === ManpowerFlow.Approver && AnnualManpowerForecastRequestStatus.Approved === request.statusId) ||
             (request.currentProcessId === ManpowerFlow.Verifier && AnnualManpowerForecastRequestStatus.Verified === request.statusId))) ? true : false;
@@ -74,13 +75,23 @@ const AppContainer = ({ getAnnualRequestById,
         setSubmitModalDialog(false);
     };
 
-    const handleUpdateStatus = () => {
+    const handleUpdateRequest = () => {
+        const details = [];
+        requestDetails.map(itemDetail => {
+            if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
+                details.push(itemDetail);
+            }
+        });
         const param = {
+            PeriodId: period.periodId,
+            Details: details,
+            UnitName: unitSelected.value,
             RequestId: request.requestId,
             StatusId: request.statusId + 1,
             MethodName: 'Update '
         };
-        updateStatus(param);
+       
+        updateAnnualRequest(param);
         handleRequest(request.statusId + 1);
         setVerifyModalDialog(false);
         setApproveModalDialog(false);
@@ -129,7 +140,7 @@ const AppContainer = ({ getAnnualRequestById,
                 </Button>
             }
             {
-                idVerify() &&
+                isVerify() &&
                 <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => setVerifyModalDialog(true)}>
                     {LangHelper.getResource('Verify')}
                 </Button>
@@ -173,7 +184,7 @@ const AppContainer = ({ getAnnualRequestById,
                     contents={<div>Are you sure you want to <strong>verify</strong> this request?</div>}
                     buttons={[
                         <Button variant="primary" size="sm" key="ok"
-                            onClick={handleUpdateStatus}
+                            onClick={handleUpdateRequest}
                         >
                             {LangHelper.getResource('OK')}
                         </Button>,
@@ -193,7 +204,7 @@ const AppContainer = ({ getAnnualRequestById,
                     contents={<div>Are you sure you want to <strong>approve</strong> this request?</div>}
                     buttons={[
                         <Button variant="primary" size="sm" key="ok"
-                            onClick={handleResetStatus}
+                            onClick={handleUpdateRequest}
                         >
                             {LangHelper.getResource('OK')}
                         </Button>,
@@ -251,7 +262,8 @@ const mapStateToProps = state => {
         submitModalDialog,
         verifyModalDialog,
         approveModalDialog,
-        resetModalDialog    } = state;
+        resetModalDialog,
+        updateAnnualRequest} = state;
     return {
         getAnnualRequestById,
         request,
@@ -268,7 +280,8 @@ const mapStateToProps = state => {
         submitModalDialog,
         verifyModalDialog,
         approveModalDialog,
-        resetModalDialog    };
+        resetModalDialog,
+        updateAnnualRequest};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
