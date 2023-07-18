@@ -46,7 +46,7 @@ const createAnnualRequest = params => async dispatch => {
 const getAnnualRequestById = requestId => async dispatch => {
     Site.blockUI();
     const url = Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/GetById/${requestId}`);
-    await DataService.postDataAsync(url, requestId).then(response => {
+    await DataService.postDataAsync(url).then(response => {
         const { request } = response.data;
 
         dispatch(setRequest(request));

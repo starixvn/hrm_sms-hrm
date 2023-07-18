@@ -51,7 +51,7 @@
     "dependencies": {
         "@microsoft/signalr": "^5.0.16",
         "@reduxjs/toolkit": "^1.9.5",
-        "axios": "^0.23.0",
+        "axios": "^1.4.0",
         "bootstrap": "^4.5.0",
         "crypto-js": "^4.0.0",
         "dayjs": "^1.11.7",

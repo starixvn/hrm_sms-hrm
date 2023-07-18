@@ -27,7 +27,7 @@ const AppContainer = ({ getAnnualRequestById,
     verifyModalDialog,
     approveModalDialog,
     resetModalDialog,
-    updateAnnualRequest}) => {
+    updateAnnualRequest }) => {
     useEffect(() => {
         if (window.requestId != null) {
             getAnnualRequestById(window.requestId);
@@ -58,6 +58,7 @@ const AppContainer = ({ getAnnualRequestById,
         }
         return status;
     };
+
     const handleSubmit = () => {
         const details = [];
         requestDetails.map(itemDetail => {
@@ -90,7 +91,7 @@ const AppContainer = ({ getAnnualRequestById,
             StatusId: request.statusId + 1,
             MethodName: 'Update '
         };
-       
+
         updateAnnualRequest(param);
         handleRequest(request.statusId + 1);
         setVerifyModalDialog(false);
@@ -117,8 +118,12 @@ const AppContainer = ({ getAnnualRequestById,
         });
     };
 
+    if (request === null) {
+        return null;
+    }
+
     return (
-        <div>
+        <>
             <div className="filter">
                 <span className="status">{LangHelper.getResource('Status') + ': '}</span>
                 <span className="bold">{getStatus()}</span>
@@ -240,7 +245,7 @@ const AppContainer = ({ getAnnualRequestById,
             <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
                 {LangHelper.getResource('Back')}
             </Button>
-        </div>
+        </>
     );
 };
 
@@ -263,7 +268,7 @@ const mapStateToProps = state => {
         verifyModalDialog,
         approveModalDialog,
         resetModalDialog,
-        updateAnnualRequest} = state;
+        updateAnnualRequest } = state;
     return {
         getAnnualRequestById,
         request,
@@ -281,7 +286,8 @@ const mapStateToProps = state => {
         verifyModalDialog,
         approveModalDialog,
         resetModalDialog,
-        updateAnnualRequest};
+        updateAnnualRequest
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

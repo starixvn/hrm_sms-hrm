@@ -7,15 +7,7 @@ const annualRequestSlice = createSlice({
         unitSelected: { value: null, label: null },
         departments: [],
         companies: [],
-        request: {
-            requestId: null,
-            currentProcessId: null,
-            verifierId: null,
-            approverId: null,
-            creator: null,
-            statusId: null,
-            isEdit: false
-        },
+        request: null,
         submitModalDialog: false,
         verifyModalDialog: false,
         approveModalDialog: false,
