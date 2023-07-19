@@ -1,5 +1,6 @@
 ﻿namespace GO.Website.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -70,6 +71,31 @@
                     }
 
                     return request;
+                }
+            }
+        }
+
+        public async Task<ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>> GetAllAnnualRequestByPeriodIdAsync(ICriteria criteria)
+        {
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var multi = await db.QueryMultipleAsync(criteria))
+                {
+                    var annualManpowerForecastRequests = multi.Read<AnnualManpowerForecastRequest, ManpowerPeriod, EmployeeInfo, EmployeeInfo, EmployeeInfo, AnnualManpowerForecastRequest>(
+                        (req, period, creator, verifier, approver) =>
+                        {
+                            req.Period = period;
+                            req.Creator = creator;
+                            req.Verifier = verifier;
+                            req.Approver = approver;
+
+                            return req;
+                        },
+                        splitOn: "PeriodId, CreatorId, VerifierId, ApproverId").ToList();
+
+                    var annualManpowerForecastRequestDetails = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
+
+                    return (annualManpowerForecastRequests, annualManpowerForecastRequestDetails);
                 }
             }
         }

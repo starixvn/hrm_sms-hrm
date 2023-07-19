@@ -12,8 +12,7 @@ import {
     setRequestDetails,
     addRequestDetailsItem,
     setSubmitModalDialog,
-    setVerifyModalDialog,
-    setApproveModalDialog,
+    setverifyApproveModalDialog,
     setResetModalDialog
 } from './annualRequestSlice';
 
@@ -96,8 +95,7 @@ export const ActionCreators = {
     setRequestDetails,
     addRequestDetailsItem,
     setSubmitModalDialog,
-    setVerifyModalDialog,
-    setApproveModalDialog,
+    setverifyApproveModalDialog,
     setResetModalDialog,
     getDataForCreateAnnualRequest,
     createAnnualRequest,

@@ -104,6 +104,34 @@
             return request;
         }
 
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(int periodId, string unitType)
+        {
+            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria
+            {
+                PeriodId = periodId,
+                UnitType = unitType
+            };
+            var (requests, details) = await manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(criteria);
+            foreach(var request in requests)
+            {
+                request.Details = details.Where(x => x.PeriodId == request.Period.PeriodId && x.RequestId == request.RequestId).ToList();
+                IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(request.Period.PeriodId);
+                foreach (var detail in request.Details)
+                {
+                    var prevforecast = prevforecasts.FirstOrDefault(x => x.SiteId == detail.SiteId && x.SectionId == detail.SectionId && x.JobLevel == detail.JobLevel);
+                    if (prevforecast != null)
+                    {
+                        detail.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
+                        detail.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
+                        detail.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
+                        detail.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatApprovedHeadcount;
+                    }
+                }
+            }
+
+            return requests;
+        }
+
         public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
         {
             return await manpowerForecastRepository.GetAnnualRequestByPeriodIdAsync(criteria);

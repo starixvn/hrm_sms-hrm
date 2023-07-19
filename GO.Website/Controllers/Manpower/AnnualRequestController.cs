@@ -81,6 +81,7 @@
         public async Task<IActionResult> GetById(int id)
         {
             var request = await manpowerForecastService.GetAnnualRequestByIdAsync(id);
+            var request2 = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(15, "SU");
             if (request is null)
             {
                 return NotFound();
