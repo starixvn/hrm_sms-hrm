@@ -68,6 +68,14 @@
                     if (request != null)
                     {
                         request.Details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
+                        request.LogDetails = multi.Read<AnnualManpowerForecastRequestDetail, EmployeeInfo, AnnualManpowerForecastRequestDetail>(
+                            (log, modifiedBy) =>
+                            {
+                                log.ModifiedBy = modifiedBy;
+
+                                return log;
+                            },
+                            splitOn: "ModifiedBy").ToList();
                     }
 
                     return request;

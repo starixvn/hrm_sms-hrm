@@ -10,7 +10,8 @@ import CompanyGrid from './CompanyGrid';
 import { ActionCreators } from '../../action';
 import LangHelper from '@jsroot/common/langHelper';
 
-const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, createAnnualRequest, unitSelected, setUnitSelected }) => {
+const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest,
+    createAnnualRequest, unitSelected, setUnitSelected }) => {
     useEffect(() => {
         if (window.units.length > 1) {
             setUnitSelected({ value: window.units[0], label: window.units[0] });
@@ -26,10 +27,10 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, c
             }
         });
         const param = {
-            PeriodId: period.periodId,
-            Details: details,
-            UnitName: unitSelected.value,
-            MethodName: 'Create '
+            periodId: period.periodId,
+            details: details,
+            unitName: unitSelected.value,
+            methodName: 'Create '
         };
         createAnnualRequest(param);
     };

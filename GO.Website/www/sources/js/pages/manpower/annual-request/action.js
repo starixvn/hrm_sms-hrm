@@ -10,10 +10,12 @@ import {
     setJobLevels,
     setUnitSelected,
     setRequestDetails,
+    setLogDetails,
     addRequestDetailsItem,
     setSubmitModalDialog,
     setverifyApproveModalDialog,
-    setResetModalDialog
+    setResetModalDialog,
+    setLogDetailModalDialog
 } from './annualRequestSlice';
 
 import LangHelper from '@jsroot/common/langHelper';
@@ -35,7 +37,7 @@ const createAnnualRequest = params => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/Create');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success(params.MethodName + LangHelper.getResource('Successfully'));
+            toast.success(params.methodName + LangHelper.getResource('Successfully'));
         } else {
             toast.error(response.data.message);
         }
@@ -51,6 +53,7 @@ const getAnnualRequestById = requestId => async dispatch => {
         dispatch(setRequest(request));
         dispatch(setPeriod(request.period));
         dispatch(setRequestDetails(request.details));
+        dispatch(setLogDetails(request.logDetails));
         dispatch(setCompanies(request.details));
         dispatch(setJobLevels(request.details));
         dispatch(setDepartments(request.details));
@@ -66,7 +69,7 @@ const updateStatus = params => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatus');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success(params.MethodName + LangHelper.getResource('Successfully'));
+            toast.success(params.methodName + LangHelper.getResource('Successfully'));
         } else {
             toast.error(response.data.message);
         }
@@ -78,7 +81,7 @@ const updateAnnualRequest = params => async dispatch => {
     const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/Update');
     await DataService.postDataAsync(url, params).then(response => {
         if (response.data.isSuccessful) {
-            toast.success(params.MethodName + LangHelper.getResource('Successfully'));
+            toast.success(params.methodName + LangHelper.getResource('Successfully'));
         } else {
             toast.error(response.data.message);
         }
@@ -101,5 +104,6 @@ export const ActionCreators = {
     createAnnualRequest,
     getAnnualRequestById,
     updateStatus,
-    updateAnnualRequest
+    updateAnnualRequest,
+    setLogDetailModalDialog
 };

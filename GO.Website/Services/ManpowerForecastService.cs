@@ -153,10 +153,8 @@
         {
             var command = new UpdateAnnualManpowerForecastRequestCommand
             {
-                PeriodId = param.PeriodId,
-                UnitName = param.UnitName,
-                DetailXml = param.Details != null && param.Details.Any() ? param.Details.ToXML().ToString() : string.Empty,
                 RequestId = param.RequestId,
+                DetailXml = param.Details != null && param.Details.Any() ? param.Details.ToXML().ToString() : string.Empty,
                 StatusId = param.StatusId,
                 ModifiedBy = userId
             };

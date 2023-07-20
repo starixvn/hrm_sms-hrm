@@ -209,5 +209,43 @@
                 background: #dae3f3;
             }
         }
+
+        &-total-add {
+            position: relative;
+
+            .fa-info-circle {
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                font-size: 10px;
+                color: #2e6da4;
+                cursor: pointer;
+                z-index: 1;
+            }
+        }
+    }
+}
+
+.view-log-modal-dialog {
+    .modal-dialog {
+        max-width: 600px;
+    }
+
+    .modal-body {
+        max-height: 500px;
+        overflow: auto;
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            background-color: #eaecef;
+            border: 1px solid #dbdbdb;
+            margin-bottom: 1rem;
+            padding: 8px;
+        }
+
+        .table {
+            table-layout: auto;
+        }
     }
 }

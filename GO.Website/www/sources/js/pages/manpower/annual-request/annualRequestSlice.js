@@ -12,7 +12,13 @@ const annualRequestSlice = createSlice({
         verifyApproveModalDialog: false,
         resetModalDialog: false,
         requestDetails: [],
-        jobLevels: []
+        logDetails: [],
+        jobLevels: [],
+        logDetailModalDialog: {
+            show: false,
+            logs: [],
+            requestDetail: null
+        }
     },
     reducers: {
         setRequest: (state, action) => {
@@ -82,6 +88,9 @@ const annualRequestSlice = createSlice({
         setRequestDetails: (state, action) => {
             state.requestDetails = action.payload;
         },
+        setLogDetails: (state, action) => {
+            state.logDetails = action.payload;
+        },
         setSubmitModalDialog: (state, action) => {
             state.submitModalDialog = action.payload;
         },
@@ -90,6 +99,9 @@ const annualRequestSlice = createSlice({
         },
         setResetModalDialog: (state, action) => {
             state.resetModalDialog = action.payload;
+        },
+        setLogDetailModalDialog: (state, action) => {
+            state.logDetailModalDialog = action.payload;
         }
     }
 });
@@ -104,10 +116,12 @@ export const {
     setJobLevels,
     setUnitSelected,
     setRequestDetails,
+    setLogDetails,
     addRequestDetailsItem,
     setSubmitModalDialog,
     setverifyApproveModalDialog,
-    setResetModalDialog
+    setResetModalDialog,
+    setLogDetailModalDialog
 } = actions;
 
 export default reducer;

@@ -183,11 +183,14 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
                 </table>
             );
         });
+
         if (companies.length > 1) {
             tables.push(<CompanyTotalGrid key="renderCompanyTotalGrid" />);
         }
+
         return tables;
     };
+
     return (
         <>{renderTable()}</>
     );

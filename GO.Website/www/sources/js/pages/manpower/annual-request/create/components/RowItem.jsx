@@ -3,13 +3,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../../action';
-
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
-const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem, isTableTotal, request }) => {
+const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem,
+    isTableTotal, request, logDetails, setLogDetailModalDialog }) => {
     const MaxAdditionalInput = 100;
+
     const checkZero = number => number !== 0 ? number : '';
+
     const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
+
     const handleAddRequestDetailsItem = (value, columnName) => {
         const param = {
             unitName: itemDetail.unitName,
@@ -26,16 +29,16 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
     const renderTotalDetail = () => {
         return (
             <tr>
-                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatCurrentHeadcount)}</td>
-                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.localCurrentHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatCurrentHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localCurrentHeadcount)}</td>
                 <td className="highlight">{checkZero(total.totalCurrentHeadcount)}</td>
-                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatApprovedHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatApprovedHeadcount)}</td>
                 <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localApprovedHeadcount)}</td>
                 <td className="highlight">{checkZero(total.totalApprovedHeadcount)}</td>
-                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatAddition)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatAddition)}</td>
                 <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localAddition)}</td>
                 <td className="highlight">{checkZero(total.totalAddition)}</td>
-                <td className={`${isTableTotal? '' : 'highlight'}`}>{checkZero(total.expatForecastHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatForecastHeadcount)}</td>
                 <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localForecastHeadcount)}</td>
                 <td className="highlight">{checkZero(total.totalForecastHeadcount)}</td>
             </tr>
@@ -67,7 +70,23 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
     const isApprove = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
         request.statusId === AnnualManpowerForecastRequestStatus.Verified) ? true : false;
 
+    const handleShowLogModalDialog = () => {
+        const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
+            && log.unitName === itemDetail.unitName && log.departmentName === itemDetail.departmentName
+            && log.sectionName === itemDetail.sectionName && log.jobLevel === itemDetail.jobLevel);
+
+        setLogDetailModalDialog({
+            show: true,
+            requestDetail: itemDetail,
+            logs
+        });
+    };
+
     const renderDetail = () => {
+        const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
+            && log.unitName === itemDetail.unitName && log.departmentName === itemDetail.departmentName
+            && log.sectionName === itemDetail.sectionName && log.jobLevel === itemDetail.jobLevel);
+
         return (
             <tr>
                 <td>{checkZero(itemDetail.expatCurrentHeadcount)}</td>
@@ -99,7 +118,12 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
                             value={checkZero(itemDetail.localAddition)}></input>
                     }
                 </td>
-                <td className="highlight">{checkZero(itemDetail.totalAddition)}</td>
+                <td className="highlight">
+                    <div className="company-total-add">
+                        {checkZero(itemDetail.totalAddition)}
+                        {!isTableTotal && logs.length > 1 && <span className="fa fa-info-circle" onClick={handleShowLogModalDialog} />}
+                    </div>
+                </td>
                 <td>{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
                 <td>{checkZero(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
                 <td className="highlight">{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
@@ -122,11 +146,12 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
         </>
     );
 };
+
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
-    const { request } = state;
-    return { request };
+    const { request, logDetails, logDetailModalDialog } = state;
+    return { request, logDetails, logDetailModalDialog };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RowItem);

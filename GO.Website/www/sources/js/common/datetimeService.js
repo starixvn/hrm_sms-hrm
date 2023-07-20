@@ -3,6 +3,7 @@
 const ShortDateFormat = 'MMM DD, YYYY';
 const ShortDateTimeFormat = 'MMM DD, YYYY hh:mm A';
 const LongDateTimeFormat = 'MMM DD, YYYY hh:mm:ss A';
+const ClientTimezone = 7;
 
 export default class DateTimeService {
     static toShortDateFormat(date) {
@@ -15,5 +16,10 @@ export default class DateTimeService {
 
     static toLongDateTimeFormat(date) {
         return dayjs(date).format(LongDateTimeFormat);
+    }
+
+    static toClientTimezone(date) {
+        console.log(dayjs(date), dayjs(date, LongDateTimeFormat));
+        return dayjs(date, LongDateTimeFormat).add(ClientTimezone, 'hour');
     }
 }

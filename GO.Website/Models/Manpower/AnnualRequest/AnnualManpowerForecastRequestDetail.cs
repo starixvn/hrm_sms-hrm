@@ -62,5 +62,11 @@
 
         [XmlIgnore]
         public int TotalAddition => LocalAddition + ExpatAddition;
+
+        [XmlIgnore]
+        public EmployeeInfo ModifiedBy { get; set; }
+
+        [XmlIgnore]
+        public DateTime ModifiedDate { get; set; }
     }
 }

@@ -6,8 +6,9 @@ import { Button } from 'react-bootstrap';
 import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import UnitGrid from '../../create/components/UnitGrid';
 import CompanyGrid from '../../create/components/CompanyGrid';
-import { ActionCreators } from '../../action';
+import LogModalDialog from './LogModalDialog';
 
+import { ActionCreators } from '../../action';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
 
@@ -25,7 +26,9 @@ const AppContainer = ({ getAnnualRequestById,
     submitModalDialog,
     verifyApproveModalDialog,
     resetModalDialog,
-    updateAnnualRequest }) => {
+    updateAnnualRequest,
+    logDetailModalDialog
+}) => {
     useEffect(() => {
         if (window.requestId != null) {
             getAnnualRequestById(window.requestId);
@@ -65,10 +68,10 @@ const AppContainer = ({ getAnnualRequestById,
             }
         });
         const param = {
-            PeriodId: period.periodId,
-            Details: details,
-            UnitName: unitSelected.value,
-            MethodName: 'Update '
+            periodId: period.periodId,
+            details: details,
+            unitName: unitSelected.value,
+            methodName: 'Update '
         };
         createAnnualRequest(param);
         setSubmitModalDialog(false);
@@ -82,12 +85,10 @@ const AppContainer = ({ getAnnualRequestById,
             }
         });
         const param = {
-            PeriodId: period.periodId,
-            Details: details,
-            UnitName: unitSelected.value,
-            RequestId: request.requestId,
-            StatusId: request.statusId + 1,
-            MethodName: 'Update '
+            requestId: request.requestId,
+            details: details,
+            statusId: request.statusId + 1,
+            methodName: 'Update '
         };
 
         updateAnnualRequest(param);
@@ -97,9 +98,9 @@ const AppContainer = ({ getAnnualRequestById,
 
     const handleResetStatus = () => {
         const param = {
-            RequestId: request.requestId,
-            StatusId: request.statusId - 1,
-            MethodName: 'Reset '
+            requestId: request.requestId,
+            statusId: request.statusId - 1,
+            methodName: 'Reset '
         };
         updateStatus(param);
         handleRequest(request.statusId - 1);
@@ -219,6 +220,10 @@ const AppContainer = ({ getAnnualRequestById,
                     onClose={() => setResetModalDialog(false)}
                 />
             }
+            {
+                logDetailModalDialog.show &&
+                <LogModalDialog />
+            }
             <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
                 {LangHelper.getResource('Back')}
             </Button>
@@ -243,7 +248,9 @@ const mapStateToProps = state => {
         submitModalDialog,
         verifyApproveModalDialog,
         resetModalDialog,
-        updateAnnualRequest } = state;
+        updateAnnualRequest,
+        logDetailModalDialog
+    } = state;
     return {
         getAnnualRequestById,
         request,
@@ -259,7 +266,8 @@ const mapStateToProps = state => {
         submitModalDialog,
         verifyApproveModalDialog,
         resetModalDialog,
-        updateAnnualRequest
+        updateAnnualRequest,
+        logDetailModalDialog
     };
 };
 

@@ -15,6 +15,7 @@
         public ManpowerPeriod Period { get; set; }
 
         public IList<AnnualManpowerForecastRequestDetail> Details { get; set; }
+        public IList<AnnualManpowerForecastRequestDetail> LogDetails { get; set; }
 
         public EmployeeInfo Creator { get; set; }
         public EmployeeInfo Verifier { get; set; }
