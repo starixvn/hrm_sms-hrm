@@ -56,7 +56,7 @@
                         item.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
                         item.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
                         item.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
-                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatApprovedHeadcount;
+                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatAddition;
                     }
                 }
             }
@@ -96,7 +96,7 @@
                         item.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
                         item.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
                         item.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
-                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatApprovedHeadcount;
+                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatAddition;
                     }
                 }
             }
@@ -104,27 +104,23 @@
             return request;
         }
 
-        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(int periodId, string unitType)
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
         {
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria
-            {
-                PeriodId = periodId,
-                UnitType = unitType
-            };
             var (requests, details) = await manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(criteria);
             foreach(var request in requests)
             {
-                request.Details = details.Where(x => x.PeriodId == request.Period.PeriodId && x.RequestId == request.RequestId).ToList();
-                IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(request.Period.PeriodId);
+                request.Details = details.Where(x => x.RequestId == request.RequestId).ToList();
+                IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(criteria.PeriodId);
                 foreach (var detail in request.Details)
                 {
-                    var prevforecast = prevforecasts.FirstOrDefault(x => x.SiteId == detail.SiteId && x.SectionId == detail.SectionId && x.JobLevel == detail.JobLevel);
+                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && x.UnitName == detail.UnitName 
+                                                            && x.DepartmentName == detail.DepartmentName && x.SectionId == detail.SectionId).ToList();
                     if (prevforecast != null)
                     {
-                        detail.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
-                        detail.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
-                        detail.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
-                        detail.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatApprovedHeadcount;
+                        detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);
+                        detail.ExpatCurrentHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount);
+                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
+                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
                     }
                 }
             }

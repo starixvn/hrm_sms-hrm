@@ -5,6 +5,7 @@
     using GO.Core.Models;
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
+    using GO.Website.Criteria.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Services;
@@ -31,6 +32,12 @@
         {
             var units = await manpowerForecastService.GetUnitByUserIdAsync(userControlSession.UserId);
             return View("~/Views/Manpower/AnnualRequest/Create.cshtml", units);
+        }
+
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
+        public IActionResult Summary()
+        {
+            return View("~/Views/Manpower/AnnualRequest/Summary.cshtml");
         }
 
         [HttpPost]
@@ -81,13 +88,24 @@
         public async Task<IActionResult> GetById(int id)
         {
             var request = await manpowerForecastService.GetAnnualRequestByIdAsync(id);
-            var request2 = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(15, "SU");
             if (request is null)
             {
                 return NotFound();
             }
 
             request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
+            return Json(new { request });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllByPeriodId([FromBody] GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
+        {
+            criteria.UserId = userControlSession.UserId;
+            var request = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria);
+            if (request is null)
+            {
+                return NotFound();
+            }
             return Json(new { request });
         }
 

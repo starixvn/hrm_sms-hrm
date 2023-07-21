@@ -4,6 +4,7 @@
 
     public class GetAllAnnualManpowerForecastRequestByPeriodIdCriteria : CriteriaBase
     {
+        public int UserId { get; set; }
         public int PeriodId { get; set; }
         public string UnitType { get; set; }
 

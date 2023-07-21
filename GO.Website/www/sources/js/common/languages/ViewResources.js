@@ -56,6 +56,7 @@
     Update: 'Update',
     UpdateSuccessfully: 'Update successfully!',
     Username: 'Username',
+    UnitType: 'Unit Type',
     Verifier: 'Verifier',
     Verify: 'Verify'
 };

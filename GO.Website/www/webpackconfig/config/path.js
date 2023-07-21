@@ -17,7 +17,8 @@ const cssPaths = {
     annual_manpower_forecast_request_mypage: ['./www/sources/css/pages/manpower/annual-request/my-request.scss'],
     annual_manpower_forecast_request_memberpage: ['./www/sources/css/pages/manpower/annual-request/member-request.scss'],
     annual_manpower_forecast_request_create: ['./www/sources/css/pages/manpower/annual-request/create.scss'],
-    manpower_period_detail: ['./www/sources/css/pages/manpower/period/detail.scss']
+    manpower_period_detail: ['./www/sources/css/pages/manpower/period/detail.scss'],
+    annual_manpower_forecast_request_summary: ['./www/sources/css/pages/manpower/annual-request/summary.scss']
 };
 
 const scriptPaths = {
@@ -36,7 +37,8 @@ const scriptPaths = {
     annual_manpower_forecast_request_mypage: ['./www/sources/js/pages/manpower/annual-request/my-request/index.js'],
     annual_manpower_forecast_request_memberpage: ['./www/sources/js/pages/manpower/annual-request/member-request/index.js'],
     annual_manpower_forecast_request_create: ['./www/sources/js/pages/manpower/annual-request/create/index.js'],
-    annual_manpower_forecast_request_detail: ['./www/sources/js/pages/manpower/annual-request/detail/index.js']
+    annual_manpower_forecast_request_detail: ['./www/sources/js/pages/manpower/annual-request/detail/index.js'],
+    annual_manpower_forecast_request_summary: ['./www/sources/js/pages/manpower/annual-request/summary/index.js']
 };
 
 module.exports = {

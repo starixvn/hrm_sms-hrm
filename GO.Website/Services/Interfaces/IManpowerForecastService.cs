@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using GO.Core.Models;
     using GO.Website.Criteria.Manpower;
+    using GO.Website.Criteria.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
@@ -19,7 +20,7 @@
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(GetMemberAnnualManpowerForecastRequestCriteria criteria);
 
         Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(int requestId);
-        Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(int periodId, string unitType);
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria);
 
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria);
 
