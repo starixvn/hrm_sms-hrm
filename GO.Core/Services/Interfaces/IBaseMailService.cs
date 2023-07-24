@@ -1,7 +1,7 @@
-﻿namespace GO.Website.Services
+﻿namespace GO.Core.Services
 {
     using System.Threading.Tasks;
-    using GO.Website.Models;
+    using GO.Core.Models;
 
     public interface IBaseMailService
     {

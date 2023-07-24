@@ -15,6 +15,7 @@
     using GO.AutoJobs.Models.UserSite;
     using GO.AutoJobs.Services;
     using GO.AutoJobs.Workers;
+    using GO.Core.Models;
     using GO.Core.Repository;
     using GO.Core.Services;
     using Microsoft.AspNetCore.Builder;
@@ -97,6 +98,9 @@
             services.AddSingleton(configuration);
             services.AddHttpClient();
 
+            var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
             var jobSettings = configuration.GetSection("JobSettings").Get<List<JobSettings>>();
             services.AddSingleton(jobSettings);
 
@@ -108,6 +112,9 @@
 
             var copyUserToAnotherSiteSettings = configuration.GetSection("CopyUserToAnotherSiteSettings").Get<List<CopyUserToAnotherSiteSetting>>();
             services.AddSingleton(copyUserToAnotherSiteSettings);
+
+            var mailConfigs = configuration.GetSection("MailConfigs").Get<MailConfigs>();
+            services.AddSingleton(mailConfigs);
         }
 
         private static void AddDependencyInjection(IServiceCollection services)
@@ -116,11 +123,13 @@
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IBaseMailService, BaseMailService>();
 
             services.AddSingleton<INexHrmService, NexHrmService>();
             services.AddSingleton<ISyncDataFromDBService, SyncDataFromDBService>();
             services.AddSingleton<IHrppUnitHeadService, HrppUnitHeadService>();
             services.AddSingleton<IUserSiteService, UserSiteService>();
+            services.AddSingleton<IManpowerForecastService, ManpowerForecastService>();
         }
 
         private static void AddWorker(IServiceCollection services)
@@ -137,6 +146,7 @@
 
             services.AddHostedService<HrppUnitHeadInfoWorker>();
             services.AddHostedService<HrppUnitHeadScheduleWorker>();
+            services.AddHostedService<ManpowerForecastWorker>();
 
             services.AddHostedService<CopyUserToAnotherSiteWorker>();
         }

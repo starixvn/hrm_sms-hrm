@@ -16,5 +16,7 @@
         public const string SyncUnitHeadScheduleFromHRPP = "SyncUnitHeadScheduleFromHRPP";
 
         public const string CopyUserToAnotherSite = "CopyUserToAnotherSite";
+
+        public const string ManpowerForecast = "ManpowerForecast";
     }
 }

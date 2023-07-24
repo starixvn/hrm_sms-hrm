@@ -13,6 +13,9 @@
     <None Remove="appsettings.json" />
     <None Remove="appsettings.PROD.json" />
     <None Remove="App_Data\SpNames.xml" />
+    <None Remove="EmailTemplates\ManpowerForecast\NotiStartToApprover.txt" />
+    <None Remove="EmailTemplates\ManpowerForecast\NotiStartToUnitHead.txt" />
+    <None Remove="EmailTemplates\ManpowerForecast\NotiStartToVerifier.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +27,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\SpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ManpowerForecast\NotiStartToApprover.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ManpowerForecast\NotiStartToUnitHead.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ManpowerForecast\NotiStartToVerifier.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

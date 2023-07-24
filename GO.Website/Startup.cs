@@ -14,6 +14,7 @@ namespace GO.Website
     using Fanex.Logging.Extensions.AspNetCore;
     using Fanex.Logging.Extensions.Database;
     using Fanex.Logging.Sentry;
+    using GO.Core.Models;
     using GO.Core.Repository;
     using GO.Core.Services;
     using GO.Website.Constants;

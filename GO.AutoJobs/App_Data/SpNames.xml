@@ -35,4 +35,7 @@
     <Function Name="UserSite">
         <Setting Key="AutoJob_UserSite_CopyToAnotherSite" SpName="AutoJob_UserSite_CopyToAnotherSite" DbName="bodb_IUC" Plain="0" />
     </Function>
+    <Function Name="Manpower forecast">
+        <Setting Key="AutoJob_ManpowerForecast_GetDataToSendNotification" SpName="AutoJob_ManpowerForecast_GetDataToSendNotification" DbName="bodb_IUC" Plain="0" />
+    </Function>
 </Functions>

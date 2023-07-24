@@ -1,13 +1,11 @@
-﻿namespace GO.Website.Services
+﻿namespace GO.Core.Services
 {
     using System;
     using System.IO;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
+    using GO.Core.Criteria.MailRecord;
     using GO.Core.Models;
-    using GO.Core.Services;
-    using GO.Website.Criteria.MailRecord;
-    using GO.Website.Models;
     using MailKit.Net.Smtp;
     using MailKit.Security;
     using MimeKit;
@@ -101,8 +99,6 @@
         {
             var command = new InsertMailRecordCommand
             {
-                PeriodId = email.PeriodId,
-                UserId = email.UserId,
                 MailTo = email.MailTo,
                 Subject = email.Subject,
                 Body = email.Body
@@ -114,8 +110,6 @@
         {
             var command = new InsertMailErrorCommand
             {
-                PeriodId = email.PeriodId,
-                UserId = email.UserId,
                 MailTo = email.MailTo,
                 Subject = email.Subject,
                 Body = email.Body,

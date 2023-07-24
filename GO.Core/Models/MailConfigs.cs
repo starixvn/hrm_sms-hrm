@@ -1,4 +1,4 @@
-﻿namespace GO.Website.Models
+﻿namespace GO.Core.Models
 {
     using MimeKit;
 
