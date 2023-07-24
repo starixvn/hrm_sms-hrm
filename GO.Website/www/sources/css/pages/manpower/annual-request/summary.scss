@@ -1,7 +1,21 @@
-@import '../../../abstracts/mixins';
+@import "~react-toastify/dist/ReactToastify.css";
 @import '../../../components/buttons';
+@import '../../../components/react-grid/react-grid';
 @import '../../../components/tables';
-@import '../../../components/react-select';
 @import '../../../components/form-filter';
 @import '../../../components/forms';
-@import '../../../components/icons';
+@import '../../../components/react-select';
+@import '../../../components/modal';
+
+
+table {
+    width: auto !important;
+
+    td {
+        text-align: center;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+}

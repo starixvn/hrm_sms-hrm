@@ -162,6 +162,11 @@
             return await baseService.ExecuteNonQueryAsync(command);
         }
 
+        public async Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command)
+        {
+            return await baseService.ExecuteNonQueryAsync(command);
+        }
+
         public async Task<IEnumerable<AnnualManpowerForecastRequestDetail>> GetPreviousApprovedManpowerForecastAsync(int periodId)
         {
             var criteria = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria

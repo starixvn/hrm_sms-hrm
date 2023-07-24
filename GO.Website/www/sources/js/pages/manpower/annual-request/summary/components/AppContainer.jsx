@@ -1,10 +1,12 @@
 ﻿import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Filter from './Filter';
 import DataGrid from './DataGrid';
 
 import DataService from '@jsroot/common/dataService';
 import Site from '@jsroot/common/site';
+import LangHelper from '@jsroot/common/langHelper';
 
 const AppContainer = () => {
     const [periodSelected, setPeriodSelected] = useState(null);
@@ -34,6 +36,7 @@ const AppContainer = () => {
         });
         setUnitTypes(unitTypes);
     }
+
     const getMemberRequests = async params => {
         Site.blockUI();
         const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetAllByPeriodId');
@@ -42,6 +45,18 @@ const AppContainer = () => {
             setRequests(response.data.request);
             getCompanies(response.data.request);
             getUnitTypes(response.data.request);
+        }).then(() => Site.unblockUI());
+    };
+
+    const updateStatus = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatusByPeriodId');
+        await DataService.postDataAsync(url, params).then(response => {
+            if (response.data.isSuccessful) {
+                toast.success(params.methodName + LangHelper.getResource('Successfully'));
+            } else {
+                toast.error(response.data.message);
+            }
         }).then(() => Site.unblockUI());
     };
 
@@ -58,7 +73,7 @@ const AppContainer = () => {
 
     return (
         <div className="manpower-forecast my-annual-request">
-            <Filter periods={periods} onSubmit={getMemberRequests} />
+            <Filter periods={periods} onSubmit={getMemberRequests} requests={requests} updateStatus={updateStatus} />
             <DataGrid requests={requests} companies={companies} unitTypes={unitTypes} periodSelected={periodSelected}/>
         </div>
     );

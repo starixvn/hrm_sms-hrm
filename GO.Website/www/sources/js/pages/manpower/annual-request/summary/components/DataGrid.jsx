@@ -6,43 +6,44 @@ import LangHelper from '@jsroot/common/langHelper';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const maxStep = 4;
-    const renderFirstHeader = () => {
+    const checkZero = number => number !== 0 ? number : '';
+    const renderFirstRowHeader = () => {
         const year = periodSelected.year;
         return (
-            <tr>
-                <th colWidth={3} rowSpan={3} colSpan={2}>{LangHelper.getResource('Unit')}</th>
-                <th colWidth={3} rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
-                <th colWidth={3} rowSpan={3}>{LangHelper.getResource('Section')}</th>
-                <th colWidth={3} colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Manpower Headcount (Current)')}</th>
-                <th colWidth={3} colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Approved Forecast Headcount')}</th>
-                <th colWidth={3} colSpan={3 * companies.length + 1}>{LangHelper.getResource('Additional Headcount')}</th>
-                <th colWidth={3} colSpan={3 * companies.length + 1}>{(year + 1) + LangHelper.getResource(' Manpower Headcount (Forecast)')}</th>
+            <tr key="first-row-header">
+                <th rowSpan={3} colSpan={2}>{LangHelper.getResource('Unit')}</th>
+                <th rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
+                <th rowSpan={3}>{LangHelper.getResource('Section')}</th>
+                <th colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Manpower Headcount (Current)')}</th>
+                <th colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Approved Forecast Headcount')}</th>
+                <th colSpan={3 * companies.length + 1}>{LangHelper.getResource('Additional Headcount')}</th>
+                <th colSpan={3 * companies.length + 1}>{(year + 1) + LangHelper.getResource(' Manpower Headcount (Forecast)')}</th>
             </tr>);
     }
 
-    const renderSecondHeader = () => {
+    const renderSecondRowHeader = () => {
         const headerHeadcount = [];
         for (let step = 0; step < maxStep; step++) {
             companies.map((item, index) => {
                 if ((index + 1) === companies.length) {
-                    headerHeadcount.push(<th colWidth={3} colSpan={3}>{item}</th>,
-                        <th colWidth={3} rowSpan={2}>{LangHelper.getResource('Grand Total')}</th>);
+                    headerHeadcount.push(<th key={item + step} colSpan={3}>{item}</th>,
+                        <th key={'Grand Total' + item + step} rowSpan={2}>{LangHelper.getResource('Grand Total')}</th>);
                 }
                 else {
-                    headerHeadcount.push(<th colWidth={3} colSpan={3}>{item}</th>);
+                    headerHeadcount.push(<th key={item + step} colSpan={3}>{item}</th>);
                 }
             });
         }
         return headerHeadcount;
     }
 
-    const renderThirdHeader = () => {
+    const renderThirdRowHeader = () => {
         const headerDataHeadcount = [];
         for (let step = 0; step < maxStep; step++) {
             companies.map((item, index) => {
-                headerDataHeadcount.push(<th colWidth={3}>{LangHelper.getResource('Local')}</th>,
-                    <th colWidth={3}>{LangHelper.getResource('Expat')}</th>,
-                    <th colWidth={3}>{LangHelper.getResource('Total')}</th>)
+                headerDataHeadcount.push(<th key={item + step + 'Local'} >{LangHelper.getResource('Local')}</th>,
+                    <th key={item + step + 'Expat'}>{LangHelper.getResource('Expat')}</th>,
+                    <th key={item + step + 'Total'}>{LangHelper.getResource('Total')}</th>)
             });
         }
         return headerDataHeadcount;
@@ -50,30 +51,34 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
     const buildHeader = () => {
         const row = [];
-        row.push(renderFirstHeader())
-        row.push(<tr>
-            {renderSecondHeader()}
+        row.push(renderFirstRowHeader())
+        row.push(<tr key="second-row-header">
+            {renderSecondRowHeader()}
         </tr>);
-        row.push(<tr>
-            {renderThirdHeader()}
+        row.push(<tr key="third-row-header">
+            {renderThirdRowHeader()}
         </tr>);
         return row;
     };
 
+    const getSection = (request, detaildepartment)  => {
+        const sections = [];
+        request.details.map(detail => {
+            if (detail.departmentName === detaildepartment.departmentName
+                && sections.findIndex(section => section === detail.sectionName) === -1) {
+                sections.push(detail.sectionName);
+            }
+        });
+        return sections;
+    }
+
     const getDepartment = request => {
         const departments = [];
-        request.details.map(item => {
-            if (departments.findIndex(x => x.departmentName === item.departmentName) === -1) {
-                const sections = [];
-                request.details.map(detail => {
-                    if (detail.departmentName === item.departmentName
-                        && sections.findIndex(section => section === detail.sectionName) === -1) {
-                        sections.push(detail.sectionName);
-                    }
-                });
+        request.details.map(detail => {
+            if (departments.findIndex(x => x.departmentName === detail.departmentName) === -1) {
                 departments.push({
-                    departmentName: item.departmentName,
-                    sections: sections
+                    departmentName: detail.departmentName,
+                    sections: getSection(request, detail)
                 });
             }
         });
@@ -84,18 +89,26 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const row = [];
         let grandtotal = 0;
         companies.map(company => {
+            let checkNone = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalCurrentHeadcount;
+                    checkNone++;
                     row.push(
-                        <td>{detail.localCurrentHeadcount}</td>,
-                        <td>{detail.expatCurrentHeadcount}</td>,
-                        <td>{detail.totalCurrentHeadcount}</td>)
+                        <td>{checkZero(detail.localCurrentHeadcount)}</td>,
+                        <td>{checkZero(detail.expatCurrentHeadcount)}</td>,
+                        <td>{checkZero(detail.totalCurrentHeadcount)}</td>);
                 }
             });
+            if (checkNone === 0) {
+                row.push(
+                    <td></td>,
+                    <td></td>,
+                    <td></td>);
+            }
         });
-        row.push(<td>{grandtotal}</td>)
+        row.push(<td>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -103,17 +116,25 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const row = [];
         let grandtotal = 0;
         companies.map(company => {
+            let checkNone = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
                     detail.sectionName === section && company === detail.companyName) {
-                        grandtotal += detail.totalApprovedHeadcount;
-                        row.push(<td>{detail.localApprovedHeadcount}</td>,
-                            <td>{detail.expatApprovedHeadcount}</td>,
-                            <td>{detail.totalApprovedHeadcount}</td>)
+                    grandtotal += detail.totalApprovedHeadcount;
+                    checkNone++;
+                    row.push(<td>{checkZero(detail.localApprovedHeadcount)}</td>,
+                        <td>{checkZero(detail.expatApprovedHeadcount)}</td>,
+                        <td>{checkZero(detail.totalApprovedHeadcount)}</td>)
                 }
             });
+            if (checkNone === 0) {
+                row.push(
+                    <td></td>,
+                    <td></td>,
+                    <td></td>);
+            }
         });
-        row.push(<td>{grandtotal}</td>)
+        row.push(<td>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -121,17 +142,25 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const row = [];
         let grandtotal = 0;
         companies.map(company => {
+            let checkNone = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
                     detail.sectionName === section && company === detail.companyName) {
-                        grandtotal += detail.totalAddition;
-                        row.push(<td>{detail.localAddition}</td>,
-                            <td>{detail.expatAddition}</td>,
-                            <td>{detail.totalAddition}</td>)
+                    grandtotal += detail.totalAddition;
+                    checkNone++;
+                    row.push(<td>{checkZero(detail.localAddition)}</td>,
+                        <td>{checkZero(detail.expatAddition)}</td>,
+                        <td>{checkZero(detail.totalAddition)}</td>)
                 }
             });
+            if (checkNone === 0) {
+                row.push(
+                    <td></td>,
+                    <td></td>,
+                    <td></td>);
+            }
         });
-        row.push(<td>{grandtotal}</td>)
+        row.push(<td>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -139,23 +168,31 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const row = [];
         let grandtotal = 0;
         companies.map(company => {
+            let checkNone = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
                     detail.sectionName === section && company === detail.companyName) {
-                        grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
-                        row.push(<td>{detail.localApprovedHeadcount + detail.localAddition}</td>,
-                            <td>{detail.expatApprovedHeadcount + detail.expatAddition}</td>,
-                            <td>{detail.totalApprovedHeadcount + detail.totalAddition}</td>)
+                    grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
+                    checkNone++;
+                    row.push(<td>{checkZero(detail.localApprovedHeadcount + detail.localAddition)}</td>,
+                        <td>{checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}</td>,
+                        <td>{checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}</td>)
                 }
             });
+            if (checkNone === 0) {
+                row.push(
+                    <td></td>,
+                    <td></td>,
+                    <td></td>);
+            }
         });
-        row.push(<td>{grandtotal}</td>)
+        row.push(<td>{checkZero(grandtotal)}</td>)
         return row;
     };
 
     const renderSection = (deparment, request) => {
         const sectionRow = [];
-        let rowSpanDeparment = 1;
+        let rowSpanDeparment = 2;
         deparment.sections.map(section => {
             rowSpanDeparment++;
             const headcountRow = [];
@@ -164,8 +201,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             headcountRow.push(renderAdditionalHeadcount(request, deparment, section));
             headcountRow.push(renderForecastHeadcount(request, deparment, section));
             sectionRow.push(
-                <tr>
-                    <td>{section}</td>
+                <tr key={request.unitName + deparment.departmentName + section}>
+                    <td className="text-left">{section}</td>
                     {headcountRow}
                 </tr>
             );
@@ -173,28 +210,271 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return {sectionRow, rowSpanDeparment};
     };
 
+    const renderTotalCurrentHeadcountDepartment = (request, deparment) => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            let local = 0;
+            let expat = 0;
+            request.details.map(detail => {
+                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
+                    company === detail.companyName) {
+                    local += detail.localCurrentHeadcount;
+                    expat += detail.expatCurrentHeadcount;
+                }
+            });
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const renderTotalApprovedForecastHeadcountDepartment = (request, deparment) => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            let local = 0;
+            let expat = 0;
+            request.details.map(detail => {
+                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
+                    company === detail.companyName) {
+                    local += detail.localApprovedHeadcount;
+                    expat += detail.expatApprovedHeadcount;
+                }
+            });
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const renderTotalAdditionalHeadcountDepartment = (request, deparment) => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            let local = 0;
+            let expat = 0;
+            request.details.map(detail => {
+                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
+                    company === detail.companyName) {
+                    local += detail.localAddition;
+                    expat += detail.expatAddition;
+                }
+            });
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const renderTotalForecastHeadcountDepartment = (request, deparment) => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            let local = 0;
+            let expat = 0;
+            request.details.map(detail => {
+                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName &&
+                    company === detail.companyName) {
+                    local += detail.localApprovedHeadcount + detail.localAddition;
+                    expat += detail.expatApprovedHeadcount + detail.expatAddition;
+                }
+            });
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const renderTotalHeadcountDepartment = (request, deparment) => {
+        const totalHeadcountDepartmentRow = [];
+        totalHeadcountDepartmentRow.push(renderTotalCurrentHeadcountDepartment(request, deparment));
+        totalHeadcountDepartmentRow.push(renderTotalApprovedForecastHeadcountDepartment(request, deparment));
+        totalHeadcountDepartmentRow.push(renderTotalAdditionalHeadcountDepartment(request, deparment));
+        totalHeadcountDepartmentRow.push(renderTotalForecastHeadcountDepartment(request, deparment));
+        return <tr key={'Total Headcount' + request.unitName + deparment.departmentName}>
+            <td className="text-left">Total Headcount</td>
+            {totalHeadcountDepartmentRow}
+        </tr>;
+    }
+
+    const calculaTotalCurrentHeadcountUnitType = (company, unitType) => {
+        let local = 0;
+        let expat = 0;
+        requests.map(request => {
+            if (unitType === request.unitName.slice(0, 2)) {
+                request.details.map(detail => {
+                    if (company === detail.companyName) {
+                        local += detail.localCurrentHeadcount;
+                        expat += detail.expatCurrentHeadcount;
+                    }
+                });
+            }
+        });
+        return { local, expat };
+    }
+
+    const renderTotalCurrentHeadcountUnitType = unitType => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            const { local, expat } = calculaTotalCurrentHeadcountUnitType(company, unitType);
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const calculaTotalApprovedHeadcountUnitType = (company, unitType) => {
+        let local = 0;
+        let expat = 0;
+        requests.map(request => {
+            if (unitType === request.unitName.slice(0, 2)) {
+                request.details.map(detail => {
+                    if (company === detail.companyName) {
+                        local += detail.localApprovedHeadcount;
+                        expat += detail.expatApprovedHeadcount;
+                    }
+                });
+            }
+        });
+        return { local, expat };
+    }
+
+    const renderTotalApprovedForecastHeadcountUnitType = unitType => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            const { local, expat } = calculaTotalApprovedHeadcountUnitType(company, unitType);
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const calculaTotalAdditionalHeadcountUnitType = (company, unitType) => {
+        let local = 0;
+        let expat = 0;
+        requests.map(request => {
+            if (unitType === request.unitName.slice(0, 2)) {
+                request.details.map(detail => {
+                    if (company === detail.companyName) {
+                        local += detail.localAddition;
+                        expat += detail.expatAddition;
+                    }
+                });
+            }
+        });
+        return { local, expat };
+    }
+
+    const renderTotalAdditionalHeadcountUnitType = unitType => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            const { local, expat } = calculaTotalAdditionalHeadcountUnitType(company, unitType);
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const calculaTotalForecastHeadcountUnitType = (company, unitType) => {
+        let local = 0;
+        let expat = 0;
+        requests.map(request => {
+            if (unitType === request.unitName.slice(0, 2)) {
+                request.details.map(detail => {
+                    if (company === detail.companyName) {
+                        local += detail.localApprovedHeadcount + detail.localAddition;
+                        expat += detail.expatApprovedHeadcount + detail.expatAddition;
+                    }
+                });
+            }
+        });
+        return { local, expat };
+    }
+
+
+    const renderTotalForecastHeadcountUnitType = unitType => {
+        const row = [];
+        let grandtotal = 0;
+        companies.map(company => {
+            const { local, expat } = calculaTotalForecastHeadcountUnitType(company, unitType);
+            row.push(
+                <td>{checkZero(local)}</td>,
+                <td>{checkZero(expat)}</td>,
+                <td>{checkZero(local + expat)}</td>);
+            grandtotal += local + expat;
+        });
+        row.push(<td>{checkZero(grandtotal)}</td>)
+        return row;
+    };
+
+    const renderTotalHeadcountUnitType = unitType => {
+        const totalHeadcountRow = [];
+        totalHeadcountRow.push(renderTotalCurrentHeadcountUnitType(unitType));
+        totalHeadcountRow.push(renderTotalApprovedForecastHeadcountUnitType(unitType));
+        totalHeadcountRow.push(renderTotalAdditionalHeadcountUnitType(unitType));
+        totalHeadcountRow.push(renderTotalForecastHeadcountUnitType(unitType));
+        return <tr key={'Total Headcount ' + unitType}>
+            <td colSpan={4}>Total Headcount ( {unitType} )</td>
+            {totalHeadcountRow}
+        </tr>;
+    }
+
     const renderDeparment = request => {
         const deparments = getDepartment(request);
-        let rowSpanUnit = 3;
+        let rowSpanUnit = 1;
         const departmentRow = [];
 
         deparments.map(deparment => {
             const { sectionRow, rowSpanDeparment } = renderSection(deparment, request)
-            rowSpanUnit += (rowSpanDeparment - 1) ;
-            departmentRow.push(<tr><td rowSpan={rowSpanDeparment}>{deparment.departmentName}</td></tr>);
+            const totalHeadcountDepartmentRow = renderTotalHeadcountDepartment(request, deparment);
+            rowSpanUnit += rowSpanDeparment;
+            departmentRow.push(<tr key={request.unitName + deparment.departmentName }><td rowSpan={rowSpanDeparment}>{deparment.departmentName}</td></tr>);
             departmentRow.push(sectionRow);
+            departmentRow.push(totalHeadcountDepartmentRow);
         });
         return {departmentRow, rowSpanUnit}; 
     };
 
     const renderUnit = unitType =>{
-        let rowSpanUnitType = 5;
+        let rowSpanUnitType = 1;
         const unitRow = [];
         requests.map(request => {
             if (unitType === request.unitName.slice(0, 2)) {
                 const {departmentRow, rowSpanUnit} = renderDeparment(request);
                 rowSpanUnitType += rowSpanUnit;
-                unitRow.push(<tr><td rowSpan={rowSpanUnit}>{request.unitName}</td></tr>);
+                unitRow.push(<tr key={request.unitName}><td rowSpan={rowSpanUnit}>{request.unitName}</td></tr>);
                 unitRow.push(departmentRow);
             }               
         });
@@ -205,8 +485,10 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const row = [];
         unitTypes.map(unitType => {
             const {unitRow, rowSpanUnitType} = renderUnit(unitType);
-            row.push(<tr><td rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
+            const totalHeadcountUnitType = renderTotalHeadcountUnitType(unitType);
+            row.push(<tr key={unitType}><td rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
             row.push(unitRow);
+            row.push(totalHeadcountUnitType);
         });
         return row;
     };

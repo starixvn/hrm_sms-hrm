@@ -140,6 +140,16 @@
             return Json(requests);
         }
 
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
+        public async Task<IActionResult> UpdateStatusByPeriodId([FromBody] UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command)
+        {
+            command.ModifiedBy = userControlSession.UserId;
+            var requests = await manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command);
+            return Json(requests);
+        }
+
         private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request)
             => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
 

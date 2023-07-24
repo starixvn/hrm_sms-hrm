@@ -1,11 +1,36 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
-import LangHelper from '@jsroot/common/langHelper';
 
-const Filter = ({ periods, onSubmit }) => {
+import SweetModalDialog from '@jsroot/components/SweetModalDialog';
+import LangHelper from '@jsroot/common/langHelper';
+import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
+
+const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     const [period, setPeriod] = useState(null);
+    const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
+    const [resetModalDialog, setResetModalDialog] = useState(false);
     const [unitType, setUnitType] = useState({ value: null, label: 'PU - BU' });
+
+    const getActionDialog = () => {
+        var action = '';
+        if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
+            && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1) {
+            action =  'Verify';
+        }
+        if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
+            && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1) {
+            action = 'Approve';
+        }
+        return action;
+    }
+
+    const isVerify = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
+        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1 ? true : false;
+    const isApprove = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
+        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1 ? true : false;
+
+    const isReset = () => requests.length > 0 && !isVerify() && !isApprove() ? true : false;
 
     useEffect(() => {
         if (periods.length > 0) {
@@ -47,6 +72,32 @@ const Filter = ({ periods, onSubmit }) => {
         { value: 'SU', label: 'SU' }
     ];
 
+    const handleUpdateRequest = () => {
+        const param = {
+            periodId: period.value,
+            unitType: unitType.value,
+            statusId: requests[0].currentProcessId,
+            methodName: 'Update '
+        };
+        setVerifyApproveModalDialog(false);
+        updateStatus(param);
+        const params = getParams();
+        onSubmit(params);
+    };
+
+    const handleResetStatus = () => {
+        const param = {
+            periodId: period.value,
+            unitType: unitType.value,
+            statusId: requests[0].currentProcessId - 1,
+            methodName: 'Update '
+        };
+        setResetModalDialog(false);
+        updateStatus(param);
+        const params = getParams();
+        onSubmit(params);
+    };
+
     return (
         <Form className="form-filter" onSubmit={handleSubmit}>
             <Form.Row bsPrefix="form-row">
@@ -70,6 +121,70 @@ const Filter = ({ periods, onSubmit }) => {
                         {LangHelper.getResource('Submit')}
                     </Button>
                 </Form.Group>
+                {
+                    isVerify() &&
+                    <Form.Group>
+                        <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
+                            {LangHelper.getResource('Verify')}
+                        </Button>
+                    </Form.Group>
+                }
+                {
+                    isApprove() &&
+                    <Form.Group>
+                        <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
+                            {LangHelper.getResource('Approve')}
+                        </Button>
+                    </Form.Group>
+                }
+                {
+                    isReset() &&
+                    <Form.Group>
+                        <Button variant="primary" size="sm" className="mr-3" onClick={() => setResetModalDialog(true)}>
+                            {LangHelper.getResource('Reset')}
+                        </Button>
+                    </Form.Group>
+                }
+                {
+                    verifyApproveModalDialog &&
+                    <SweetModalDialog
+                        title={LangHelper.getResource('Confirmation')}
+                        contents={<div>Are you sure you want to <strong>{getActionDialog()}</strong> all request?</div>}
+                        buttons={[
+                            <Button variant="primary" size="sm" key="ok"
+                                onClick={handleUpdateRequest}
+                            >
+                                {LangHelper.getResource('OK')}
+                            </Button>,
+                            <Button variant="secondary" size="sm" key="cancel"
+                                onClick={() => setVerifyApproveModalDialog(false)}
+                            >
+                                {LangHelper.getResource('Cancel')}
+                            </Button>
+                        ]}
+                        onClose={() => setVerifyApproveModalDialog(false)}
+                    />
+                }
+                {
+                    resetModalDialog &&
+                    <SweetModalDialog
+                        title={LangHelper.getResource('Confirmation')}
+                        contents={<div>Are you sure you want to <strong>reset</strong> all request?</div>}
+                        buttons={[
+                            <Button variant="primary" size="sm" key="ok"
+                                onClick={handleResetStatus}
+                            >
+                                {LangHelper.getResource('OK')}
+                            </Button>,
+                            <Button variant="secondary" size="sm" key="cancel"
+                                onClick={() => setResetModalDialog(false)}
+                            >
+                                {LangHelper.getResource('Cancel')}
+                            </Button>
+                        ]}
+                        onClose={() => setResetModalDialog(false)}
+                    />
+                }
             </Form.Row>
         </Form>
     );

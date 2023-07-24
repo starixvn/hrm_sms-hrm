@@ -28,5 +28,6 @@
         Task<CommandResult> UpdateAnnualRequestAsync(int userId, UpdateAnnualManpowerForecastRequestParam param);
 
         Task<CommandResult> UpdateStatusAnnualRequestAsync(UpdateStatusAnnualManpowerForecastRequestCommand command);
+        Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command);
     }
 }
