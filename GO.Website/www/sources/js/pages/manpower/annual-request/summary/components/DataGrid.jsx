@@ -103,19 +103,19 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     grandtotal += detail.totalCurrentHeadcount;
                     checkNone++;
                     row.push(
-                        <td>{checkZero(detail.localCurrentHeadcount)}</td>,
-                        <td>{checkZero(detail.expatCurrentHeadcount)}</td>,
-                        <td>{checkZero(detail.totalCurrentHeadcount)}</td>);
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>{checkZero(detail.localCurrentHeadcount)}</td>,
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>{checkZero(detail.expatCurrentHeadcount)}</td>,
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>{checkZero(detail.totalCurrentHeadcount)}</td>);
                 }
             });
             if (checkNone === 0) {
                 row.push(
-                    <td></td>,
-                    <td></td>,
-                    <td></td>);
+                    <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}></td>,
+                    <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}></td>,
+                    <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}></td>);
             }
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grantotal-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -129,19 +129,19 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount;
                     checkNone++;
-                    row.push(<td>{checkZero(detail.localApprovedHeadcount)}</td>,
-                        <td>{checkZero(detail.expatApprovedHeadcount)}</td>,
-                        <td>{checkZero(detail.totalApprovedHeadcount)}</td>)
+                    row.push(<td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>{checkZero(detail.localApprovedHeadcount)}</td>,
+                             <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>{checkZero(detail.expatApprovedHeadcount)}</td>,
+                        <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>{checkZero(detail.totalApprovedHeadcount)}</td>)
                 }
             });
             if (checkNone === 0) {
                 row.push(
-                    <td></td>,
-                    <td></td>,
-                    <td></td>);
+                    <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}></td>,
+                    <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}></td>,
+                    <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}></td>);
             }
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grantotal-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -155,19 +155,19 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalAddition;
                     checkNone++;
-                    row.push(<td>{checkZero(detail.localAddition)}</td>,
-                        <td>{checkZero(detail.expatAddition)}</td>,
-                        <td>{checkZero(detail.totalAddition)}</td>)
+                    row.push(<td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>{checkZero(detail.localAddition)}</td>,
+                             <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>{checkZero(detail.expatAddition)}</td>,
+                        <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>{checkZero(detail.totalAddition)}</td>)
                 }
             });
             if (checkNone === 0) {
                 row.push(
-                    <td></td>,
-                    <td></td>,
-                    <td></td>);
+                    <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}></td>,
+                    <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}></td>,
+                    <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}></td>);
             }
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grantotal-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -181,19 +181,19 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
                     checkNone++;
-                    row.push(<td>{checkZero(detail.localApprovedHeadcount + detail.localAddition)}</td>,
-                        <td>{checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}</td>,
-                        <td>{checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}</td>)
+                    row.push(<td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>{checkZero(detail.localApprovedHeadcount + detail.localAddition)}</td>,
+                             <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>{checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}</td>,
+                        <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>{checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}</td>)
                 }
             });
             if (checkNone === 0) {
                 row.push(
-                    <td></td>,
-                    <td></td>,
-                    <td></td>);
+                    <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}></td>,
+                    <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}></td>,
+                    <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}></td>);
             }
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grantotal-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -231,12 +231,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 }
             });
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalcurrentheadcountdepartment' + company + deparment.departmentName + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalcurrentheadcountdepartment' + company + deparment.departmentName + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalcurrentheadcountdepartment' + company + deparment.departmentName + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalcurrentheadcountdepartment' + deparment.departmentName}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -254,12 +254,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 }
             });
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalApprovedForecastheadcountdepartment' + company + deparment.departmentName + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalApprovedForecastheadcountdepartment' + company + deparment.departmentName + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalApprovedForecastheadcountdepartment' + company + deparment.departmentName + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalApprovedForecastheadcountdepartment' + deparment.departmentName}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -277,12 +277,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 }
             });
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalAdditionalheadcountdepartment' + company + deparment.departmentName + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalAdditionalheadcountdepartment' + company + deparment.departmentName + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalAdditionalheadcountdepartment' + company + deparment.departmentName + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalAdditionalheadcountdepartment' + deparment.departmentName}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -300,12 +300,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 }
             });
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalForecastheadcountdepartment' + company + deparment.departmentName + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalForecastheadcountdepartment' + company + deparment.departmentName + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalForecastheadcountdepartment' + company + deparment.departmentName + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalForecastheadcountdepartment' + deparment.departmentName}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -343,12 +343,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         companies.map(company => {
             const { local, expat } = calculaTotalCurrentHeadcountUnitType(company, unitType);
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalcurrentheadcountunitType' + company + unitType + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalcurrentheadcountunitType' + company + unitType + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalcurrentheadcountunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalcurrentheadcountunitType' + unitType + 'total'}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -374,12 +374,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         companies.map(company => {
             const { local, expat } = calculaTotalApprovedHeadcountUnitType(company, unitType);
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalapprovedforecastunitType' + company + unitType + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalapprovedforecastunitType' + company + unitType + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalapprovedforecastunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalapprovedforecastunitType' + unitType}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -405,12 +405,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         companies.map(company => {
             const { local, expat } = calculaTotalAdditionalHeadcountUnitType(company, unitType);
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalAdditionalHeadcountunitType' + company + unitType + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalAdditionalHeadcountunitType' + company + unitType + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalAdditionalHeadcountunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalAdditionalHeadcountunitType' + unitType }>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -437,12 +437,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         companies.map(company => {
             const { local, expat } = calculaTotalForecastHeadcountUnitType(company, unitType);
             row.push(
-                <td>{checkZero(local)}</td>,
-                <td>{checkZero(expat)}</td>,
-                <td>{checkZero(local + expat)}</td>);
+                <td key={'totalForecastHeadcountunitType' + company + unitType + 'local'}>{checkZero(local)}</td>,
+                <td key={'totalForecastHeadcountunitType' + company + unitType + 'expat'}>{checkZero(expat)}</td>,
+                <td key={'totalForecastHeadcountunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalForecastHeadcountunitType' + unitType }>{checkZero(grandtotal)}</td>)
         return row;
     };
 
