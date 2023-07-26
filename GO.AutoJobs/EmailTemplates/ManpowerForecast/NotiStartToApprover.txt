@@ -5,6 +5,7 @@
     This is to inform that the Manpower Forecast {1} in GO System is ready for your approval.
     <br />
     Kindly click the link and log in your user ID and password.
+    <br />
     <a href="{2}/auth/login">
         {2}/auth/login
     </a>

@@ -46,6 +46,7 @@
                     };
                     message.Body = builder.ToMessageBody();
 
+                    mailclient.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     await mailclient.ConnectAsync(mailConfigs.SmtpServer, mailConfigs.SmtpPort, mailConfigs.EnableSsl);
                     if (mailConfigs.EnableSsl)
                     {

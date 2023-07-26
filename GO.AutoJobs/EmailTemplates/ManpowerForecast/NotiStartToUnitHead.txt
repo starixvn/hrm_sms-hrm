@@ -5,6 +5,7 @@
     This is to inform that the GO System is now ready for {1} Manpower Forecast.
     <br />
     Kindly click the link and log in your user ID and password.
+    <br />
     <a href="{2}/auth/login">
         {2}/auth/login
     </a>

@@ -83,7 +83,7 @@
 
         private async Task SendNotiStartToUnitHeadAsync(ManpowerForecastPeriod period, PeriodEmployeeSetting setting, string emailBodyTemplate)
         {
-            emailBodyTemplate = string.Format(
+            var body = string.Format(
                 emailBodyTemplate,
                 setting.Nickname,
                 period.Year,
@@ -96,7 +96,7 @@
             {
                 MailTo = setting.Email,
                 Subject = "",
-                Body = emailBodyTemplate
+                Body = body
             };
 
             try

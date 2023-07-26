@@ -1,29 +1,44 @@
 ﻿namespace GO.Website.Services
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
     using GO.Core.Services;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Criteria.Manpower.AnnualRequest;
+    using GO.Website.Models;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
     using GO.Website.Repositories;
+    using Microsoft.AspNetCore.Hosting;
 
     public class ManpowerForecastService : IManpowerForecastService
     {
+        private const string NotiEditToUnitHeadTemplatePath = "EmailTemplates/ManpowerForecast/NotiEditToUnitHead.txt";
+
+        private readonly AppSettings appSettings;
+        private readonly IWebHostEnvironment hostEnvironment;
         private readonly IManpowerForecastRepository manpowerForecastRepository;
         private readonly IBaseService baseService;
+        private readonly IBaseMailService mailService;
 
         public ManpowerForecastService(
+            AppSettings appSettings,
+            IWebHostEnvironment hostEnvironment,
             IManpowerForecastRepository manpowerForecastRepository,
-            IBaseService baseService)
+            IBaseService baseService,
+            IBaseMailService mailService)
         {
+            this.appSettings = appSettings;
+            this.hostEnvironment = hostEnvironment;
             this.manpowerForecastRepository = manpowerForecastRepository;
             this.baseService = baseService;
+            this.mailService = mailService;
         }
 
         public async Task<IEnumerable<string>> GetUnitByUserIdAsync(int userId)
@@ -87,16 +102,16 @@
             AnnualManpowerForecastRequest request = await manpowerForecastRepository.GetAnnualRequestByIdAsync(criteria);
             if(request != null)
             {
-                IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(request.Period.PeriodId);
+                IEnumerable<AnnualManpowerForecastRequestDetail> prevForecasts = await GetPreviousApprovedManpowerForecastAsync(request.Period.PeriodId);
                 foreach (var item in request.Details)
                 {
-                    var prevforecast = prevforecasts.FirstOrDefault(x => x.SiteId == item.SiteId && x.SectionId == item.SectionId && x.JobLevel == item.JobLevel);
-                    if (prevforecast != null)
+                    var prevForecast = prevForecasts.FirstOrDefault(x => x.SiteId == item.SiteId && x.SectionId == item.SectionId && x.JobLevel == item.JobLevel);
+                    if (prevForecast != null)
                     {
-                        item.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
-                        item.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
-                        item.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
-                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatAddition;
+                        item.LocalCurrentHeadcount = prevForecast.LocalCurrentHeadcount;
+                        item.ExpatCurrentHeadcount = prevForecast.ExpatCurrentHeadcount;
+                        item.LocalApprovedHeadcount = prevForecast.LocalCurrentHeadcount + prevForecast.LocalAddition;
+                        item.ExpatApprovedHeadcount = prevForecast.ExpatCurrentHeadcount + prevForecast.ExpatAddition;
                     }
                 }
             }
@@ -154,7 +169,14 @@
                 StatusId = param.StatusId,
                 ModifiedBy = userId
             };
-            return await baseService.ExecuteNonQueryAsync(command);
+            var request = await GetAnnualRequestByIdAsync(param.RequestId);
+            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            if (commandResult.IsSuccessful)
+            {
+                await SendMailToUnitHeadAsync(request, param);
+            }
+
+            return commandResult;
         }
 
         public async Task<CommandResult> UpdateStatusAnnualRequestAsync(UpdateStatusAnnualManpowerForecastRequestCommand command)
@@ -174,6 +196,52 @@
                 PeriodId = periodId
             };
             return await baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(criteria);
+        }
+
+        private async Task SendMailToUnitHeadAsync(AnnualManpowerForecastRequest request, UpdateAnnualManpowerForecastRequestParam param)
+        {
+            if ((param.StatusId == AnnualManpowerForecastRequestStatus.Verified || param.StatusId == AnnualManpowerForecastRequestStatus.Approved)
+                && HasEditAddition(request, param))
+            {
+                ManpowerFlow unitHead = await GetUnitHeadAsync(request.UnitName);
+                if (unitHead != null)
+                {
+                    var templatePath = Path.Combine(hostEnvironment.ContentRootPath, NotiEditToUnitHeadTemplatePath);
+                    var emailBodyTemplate = mailService.ReadTextFile(templatePath);
+
+                    var body = string.Format(
+                        emailBodyTemplate,
+                        unitHead.Nickname,
+                        request.Period.Year,
+                        param.StatusId == AnnualManpowerForecastRequestStatus.Verified ? "verifier" : "approver",
+                        appSettings.Domain);
+
+                    var mailModel = new MailModel
+                    {
+                        MailTo = unitHead.Email,
+                        Subject = string.Empty,
+                        Body = body
+                    };
+
+                    await mailService.SendMailAsync(mailModel);
+                }
+            }
+        }
+
+        private async Task<ManpowerFlow> GetUnitHeadAsync(string unitName)
+        {
+            var criteria = new GetFlowByUnitCriteria
+            {
+                UnitName = unitName
+            };
+            var flows = await baseService.GetDataAsync<ManpowerFlow>(criteria);
+            return flows.FirstOrDefault(x => x.ProcessId == PeriodProcess.UnitHead);
+        }
+
+        private bool HasEditAddition(AnnualManpowerForecastRequest request, UpdateAnnualManpowerForecastRequestParam param)
+        {
+            return ((request.Details.Any(x => (x.LocalAddition > 0 || x.ExpatAddition > 0) && (param.Details == null || !param.Details.Any())))
+                || (request.Details.Any(x => param.Details.Any(y => y.LocalAddition != x.LocalAddition || y.ExpatAddition != x.ExpatAddition))));
         }
     }
 }

@@ -35,6 +35,9 @@
         public string FullName { get; set; }
 
         [XmlIgnore]
+        public string Email { get; set; }
+
+        [XmlIgnore]
         public bool IsActive { get; set; }
 
         [XmlIgnore]

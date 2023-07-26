@@ -126,6 +126,9 @@ namespace GO.Website
                 options.Cookie.IsEssential = true;
             });
 
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
             var jwtAuthSettings = Configuration.GetSection("JwtAuthSettings").Get<JwtAuthSettings>();
             services.AddSingleton(jwtAuthSettings);
 
