@@ -1,5 +1,5 @@
-﻿import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+﻿import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
 
 import Filter from './Filter';
 import DataGrid from './DataGrid';
@@ -20,7 +20,7 @@ const AppContainer = () => {
         requests.map(request => {
             request.details.map(detail => {
                 if (company.indexOf(detail.companyName) === -1) {
-                    company.push(detail.companyName)
+                    company.push(detail.companyName);
                 }
             });
         });

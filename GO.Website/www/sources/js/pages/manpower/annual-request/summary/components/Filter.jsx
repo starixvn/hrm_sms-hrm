@@ -16,11 +16,11 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
         var action = '';
         if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
             && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1) {
-            action =  'Verify';
+            action = LangHelper.getResource('Verify');
         }
         if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
             && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1) {
-            action = 'Approve';
+            action = LangHelper.getResource('Approve');
         }
         return action;
     }
@@ -101,14 +101,14 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     return (
         <Form className="form-filter" onSubmit={handleSubmit}>
             <Form.Row bsPrefix="form-row">
-                <Form.Group className="form-group-width">
+                <Form.Group>
                     <Form.Label>{LangHelper.getResource('Period')}</Form.Label>
                     <Select className={`react-select-container`} classNamePrefix="react-select"
                         options={periodOptions} value={period} isSearchable={false}
                         onChange={value => setPeriod(value)}
                     />
                 </Form.Group>
-                <Form.Group className="form-group-width">
+                <Form.Group>
                     <Form.Label>{LangHelper.getResource('UnitType')}</Form.Label>
                     <Select className={`react-select-container`}
                         classNamePrefix="react-select" isSearchable={false}
@@ -123,7 +123,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                 </Form.Group>
                 {
                     isVerify() &&
-                    <Form.Group className="form-group-width">
+                    <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Verify')}
                         </Button>
@@ -131,7 +131,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                 }
                 {
                     isApprove() &&
-                    <Form.Group className="form-group-width">
+                    <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Approve')}
                         </Button>
@@ -139,7 +139,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                 }
                 {
                     isReset() &&
-                    <Form.Group className="form-group-width">
+                    <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setResetModalDialog(true)}>
                             {LangHelper.getResource('Reset')}
                         </Button>

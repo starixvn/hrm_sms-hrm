@@ -1,23 +1,30 @@
 ﻿import React from 'react';
 
-import { Cell, Row } from '@jsroot/components/react-grid/index';
-
 import LangHelper from '@jsroot/common/langHelper';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const maxStep = 4;
+    const widthCompanyDefault = 280;
     const checkZero = number => number !== 0 ? number : '';
     const renderFirstRowHeader = () => {
         const year = periodSelected.year;
         return (
             <tr key="first-row-header">
-                <th className="name-step-background hide-border" rowSpan={3} colSpan={2}>{LangHelper.getResource('Unit')}</th>
-                <th className="name-step-background hide-border" rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
-                <th className="name-step-background section hide-border" rowSpan={3}>{LangHelper.getResource('Section')}</th>
-                <th className="name-step-background" colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Manpower Headcount (Current)')}</th>
-                <th className="name-step-background" colSpan={3 * companies.length + 1}>{year + LangHelper.getResource(' Approved Forecast Headcount')}</th>
-                <th className="name-step-background" colSpan={3 * companies.length + 1}>{LangHelper.getResource('Additional Headcount')}</th>
-                <th className="name-step-background" colSpan={3 * companies.length + 1}>{(year + 1) + LangHelper.getResource(' Manpower Headcount (Forecast)')}</th>
+                <th className="name-step-background hide-border fixed-header fixed-header-unit" rowSpan={3} colSpan={2}>{LangHelper.getResource('Unit')}</th>
+                <th className="name-step-background hide-border fixed-header fixed-header-department" rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
+                <th className="name-step-background section hide-border fixed-header fixed-header-section" rowSpan={3}>{LangHelper.getResource('Section')}</th>
+                <th className="name-step-background" style={{ width: companies.length * widthCompanyDefault }} colSpan={3 * companies.length + 1}>
+                    {year + LangHelper.getResource('ManpowerHeadcountCurrent')}
+                </th>
+                <th className="name-step-background" style={{ width: companies.length * widthCompanyDefault }} colSpan={3 * companies.length + 1}>
+                    {year + LangHelper.getResource('ApprovedForecastHeadcount')}
+                </th>
+                <th className="name-step-background" style={{ width: companies.length * widthCompanyDefault }} colSpan={3 * companies.length + 1}>
+                    {LangHelper.getResource('AdditionalHeadcount')}
+                </th>
+                <th className="name-step-background" style={{ width: companies.length * widthCompanyDefault }} colSpan={3 * companies.length + 1}>
+                    {(year + 1) + LangHelper.getResource('ManpowerHeadcountForecast')}
+                </th>
             </tr>);
     }
 
@@ -27,7 +34,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             companies.map((item, index) => {
                 if ((index + 1) === companies.length) {
                     headerHeadcount.push(<th className="name-company-background" key={item + step} colSpan={3}>{item}</th>,
-                        <th className="name-step-background grand-total hide-border" key={'Grand Total' + item + step} rowSpan={2}>{LangHelper.getResource('Grand Total')}</th>);
+                        <th className="name-step-background grand-total hide-border" key={'Grand Total' + item + step} rowSpan={2}>{LangHelper.getResource('GrandTotal')}</th>);
                 }
                 else {
                     headerHeadcount.push(<th className="name-company-background" key={item + step} colSpan={3}>{item}</th>);
@@ -202,7 +209,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             headcountRow.push(renderForecastHeadcount(request, deparment, section));
             sectionRow.push(
                 <tr className="highlight-row" key={request.unitName + deparment.departmentName + section}>
-                    <td className="text-left">{section}</td>
+                    <td className="text-left fixed-body fixed-body-section">{section}</td>
                     {headcountRow}
                 </tr>
             );
@@ -309,7 +316,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         totalHeadcountDepartmentRow.push(renderTotalAdditionalHeadcountDepartment(request, deparment));
         totalHeadcountDepartmentRow.push(renderTotalForecastHeadcountDepartment(request, deparment));
         return <tr className="total-department" key={'Total Headcount' + request.unitName + deparment.departmentName}>
-            <td className="text-left">Total Headcount</td>
+            <td className="text-left fixed-body fixed-body-total-department">Total Headcount</td>
             {totalHeadcountDepartmentRow}
         </tr>;
     }
@@ -446,7 +453,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         totalHeadcountRow.push(renderTotalAdditionalHeadcountUnitType(unitType));
         totalHeadcountRow.push(renderTotalForecastHeadcountUnitType(unitType));
         return <tr className="total-unittype" key={'Total Headcount ' + unitType}>
-            <td className="bold" colSpan={4}>Total Headcount ( {unitType} )</td>
+            <td className="bold fixed-body fixed-body-total-unittype" colSpan={4}>Total Headcount ( {unitType} )</td>
             {totalHeadcountRow}
         </tr>;
     }
@@ -460,7 +467,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { sectionRow, rowSpanDeparment } = renderSection(deparment, request)
             const totalHeadcountDepartmentRow = renderTotalHeadcountDepartment(request, deparment);
             rowSpanUnit += rowSpanDeparment;
-            departmentRow.push(<tr key={request.unitName + deparment.departmentName}><td className="bold" rowSpan={rowSpanDeparment}>{deparment.departmentName}</td></tr>);
+            departmentRow.push(<tr key={request.unitName + deparment.departmentName}><td className="bold fixed-body fixed-body fixed-body-department" rowSpan={rowSpanDeparment}>{deparment.departmentName}</td></tr>);
             departmentRow.push(sectionRow);
             departmentRow.push(totalHeadcountDepartmentRow);
         });
@@ -474,7 +481,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             if (unitType === request.unitName.slice(0, 2)) {
                 const {departmentRow, rowSpanUnit} = renderDeparment(request);
                 rowSpanUnitType += rowSpanUnit;
-                unitRow.push(<tr key={request.unitName}><td className="bold unit" rowSpan={rowSpanUnit}>{request.unitName}</td></tr>);
+                unitRow.push(<tr key={request.unitName}><td className="bold unit fixed-body fixed-body-unit" rowSpan={rowSpanUnit}>{request.unitName}</td></tr>);
                 unitRow.push(departmentRow);
             }               
         });
@@ -486,7 +493,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         unitTypes.map(unitType => {
             const {unitRow, rowSpanUnitType} = renderUnit(unitType);
             const totalHeadcountUnitType = renderTotalHeadcountUnitType(unitType);
-            row.push(<tr key={unitType}><td className="bold unit" rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
+            row.push(<tr key={unitType}><td className="bold unit fixed-body fixed-body-unittype" rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
             row.push(unitRow);
             row.push(totalHeadcountUnitType);
         });
@@ -502,7 +509,9 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                         <thead>
                             {buildHeader()}
                         </thead>
-                        <tbody>{buildBody()}</tbody>
+                        <tbody>
+                            {buildBody()}
+                        </tbody>
                     </table>
                 </div>
             }
