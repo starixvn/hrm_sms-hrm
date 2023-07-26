@@ -1,93 +1,65 @@
-﻿body {
-    padding: 0;
-    margin: 0;
-    min-width: 760px;
-    height: 100%;
-    font-size: 13px;
-    font-family: Open Sans, Arial, Tahoma, sans-serif;
-    color: #545454;
-}
+﻿.page-error {
+    .page-content {
+        text-align: center;
+        padding-top: 140px;
+        margin: 0;
+        min-width: 760px;
+        height: 100%;
+        font-size: 13px;
+        font-family: Open Sans, Arial, Tahoma, sans-serif;
+        color: #545454;
+    }
 
-.page-content {
-    text-align: center;
-    padding-top: 140px;
-}
+    .margin-bottom-30 {
+        margin-bottom: 30px;
+    }
 
-.margin-bottom-30 {
-  margin-bottom: 30px;
-}
+    .font-size-16 {
+        font-size: 16px;
+    }
 
-.font-size-16 {
-  font-size: 16px;
-}
+    .text-uppercase {
+        text-transform: uppercase;
+    }
 
-.text-uppercase {
-  text-transform: uppercase;
+    .error-mark {
+        margin-bottom: 33px;
+    }
+
+    header {
+        padding-bottom: 40px;
+
+        h1 {
+            font-size: 10em;
+            font-weight: 400;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin-bottom: 30px;
+            font-size: 30px;
+            text-transform: uppercase;
+        }
+    }
+
+    .error-advise {
+        margin-bottom: 10px;
+        margin-top: 0;
+        color: #324273;
+        font-size: 25px;
+    }
+
+    .img-block {
+        position: relative;
+        width: 700px;
+        margin: 0 auto;
+    }
 }
 
 // ------------------------ 404 PAGE -----------------------------//
-.page-error .error-mark {
-    margin-bottom: 33px;
-}
-
-.page-error header h1 {
-    font-size: 10em;
-    font-weight: 400;
-}
-
-.page-error header p {
-    margin-bottom: 30px;
-    font-size: 30px;
-    text-transform: uppercase;
-}
-
-.page-error h2 {
-    margin-bottom: 30px;
-}
-
-.page-error .error-advise {
-    margin-bottom: 10px;
-    margin-top: 0;
-    color: #324273;
-    font-size: 25px;
-}
-
-.page-error .cta {
-    margin-bottom: 10px;
-    color: #007fea;
-    font-size: 15px;
-    text-decoration: none;
-
-    .icon-back {
-      display: inline-block;
-      width: 30px;
-      height: 10px;
-      background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNC4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDQzMzYzKSAgLS0+DQo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAyNCAyNCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBmaWxsPSIjMDA3RkVBIiBkPSJNMywxMmw0LDR2LTNoMTV2LTJIN1Y4TDMsMTJ6Ii8+DQo8L3N2Zz4NCg==')
-      no-repeat center;
-      transition: all 0.3s ease;
-      transform: translateX(0);
-    }    
-
-    &:hover {
-        text-decoration: none;
-        color: darken(#007fea, 10%);
-
-        .icon-back {
-            transform: translateX(-5px);
-        }
-    }    
-}
-
-header {
-    padding-bottom: 40px;
-}
-
-.img-block {
-    position: relative;
-    width: 700px;
-    margin: 0 auto;
-}
-
 .page-error-404 {
     header {
         padding-bottom: 100px;
@@ -276,7 +248,6 @@ header {
         position: absolute;
         top: 0;
         left: 0;
-        height: 100%;
         transform: translate3d(0, 0, 0);
     }
 
@@ -292,38 +263,40 @@ header {
 }
 
 // ------------------------ STYLE FOR 500 PAGE -----------------------------//
-.big-text {
-    font-size: 50px;
-    color: #324371;
-    margin: 0;
-    line-height: 1;
-}
-
-.small-text {
-    font-size: 16px;
-    margin-bottom: 25px;
-}
-
-.screen {
-    width: 243px;
-    height: 151px;
-    position: absolute;
-    top: 9px;
-    left: 228px;
-
-    .error {
-        position: absolute;
-        top: 55px;
-        left: 53px;
-        animation: opacity 3s linear infinite;
+.page-error-500 {
+    .big-text {
+        font-size: 50px;
+        color: #324371;
+        margin: 0;
+        line-height: 1;
     }
-}
 
-.leave {
-    position: absolute;
-    top: 111px;
-    right: 70px;
-    animation: movingLeave 5s linear infinite;
+    .small-text {
+        font-size: 16px;
+        margin-bottom: 25px;
+    }
+
+    .screen {
+        width: 243px;
+        height: 151px;
+        position: absolute;
+        top: 9px;
+        left: 228px;
+
+        .error {
+            position: absolute;
+            top: 55px;
+            left: 53px;
+            animation: opacity 3s linear infinite;
+        }
+    }
+
+    .leave {
+        position: absolute;
+        top: 111px;
+        right: 70px;
+        animation: movingLeave 5s linear infinite;
+    }
 }
 
 @keyframes movingLeave {

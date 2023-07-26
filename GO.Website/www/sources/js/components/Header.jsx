@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
+import axios from 'axios';
+
 import Site from '@jsroot/common/site';
-import DataService from '@jsroot/common/dataService';
 
 export default class Header extends Component {
     constructor(props) {
@@ -17,26 +18,49 @@ export default class Header extends Component {
 
     async componentDidMount() {
         let url = Site.resolveClientUrl('home/getUserInfo');
-        await DataService.postDataAsync(url).then(response => {
+        await this.postDataAsync(url).then(response => {
             this.setState({ user: response.data });
         });
 
         url = Site.resolveClientUrl('home/getSites');
-        await DataService.getDataAsync(url).then(response => {
+        await this.getDataAsync(url).then(response => {
             this.setState({ sites: response.data });
         });
 
         url = Site.resolveClientUrl('home/getMenus');
-        await DataService.getDataAsync(url).then(response => {
+        await this.getDataAsync(url).then(response => {
             this.setState({ menus: response.data });
         });
     }
+
+    getDataAsync = async (url, params) => {
+        return await axios.get(
+            url,
+            {
+                params: params,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(response => response);
+    };
+
+    postDataAsync = async (url, params) => {
+        return await axios.post(
+            url,
+            params,
+            {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'RequestVerificationToken': Site.getXsrfToken()
+                }
+            }).then(response => response);
+    };
 
     onClick = async (event, menuUrl) => {
         event.preventDefault();
 
         let url = Site.resolveClientUrl('sso/gettime');
-        await DataService.getDataAsync(url).then(response => {
+        await this.getDataAsync(url).then(response => {
             url = `${menuUrl}&time=${response.data}`;
             window.open(url, '_blank', 'noopener,noreferrer');
         });
@@ -75,7 +99,7 @@ export default class Header extends Component {
                             </div>
                             <ul className="nav navbar-nav">
                                 {
-                                    menus.map((item, index) => {
+                                    menus.map(item => {
                                         let isActive = this.isActive(item, currentUrl);
                                         const activeClass = isActive ? 'active' : '';
                                         if (item.childs.length > 0) {

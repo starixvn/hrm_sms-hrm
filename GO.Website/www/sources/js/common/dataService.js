@@ -10,7 +10,7 @@ export default class DataService {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            }).then(response => response);//.catch(Site.handleAxiosError);
+            }).then(response => response).catch(Site.handleAxiosError);
     }
 
     static async postDataAsync(url, params) {
@@ -22,7 +22,7 @@ export default class DataService {
                     'X-Requested-With': 'XMLHttpRequest',
                     'RequestVerificationToken': Site.getXsrfToken()
                 }
-            }).then(response => response);//.catch(Site.handleAxiosError);
+            }).then(response => response).catch(Site.handleAxiosError);
     }
 
     static async getFileAsync(url, params) {
@@ -35,6 +35,6 @@ export default class DataService {
                     'X-Requested-With': 'XMLHttpRequest',
                     'RequestVerificationToken': Site.getXsrfToken()
                 }
-            }).then(response => response);//.catch(Site.handleAxiosError);
+            }).then(response => response).catch(Site.handleAxiosError);
     }
 }
