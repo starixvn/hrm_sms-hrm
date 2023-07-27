@@ -4,6 +4,7 @@
 <p>
     This is to inform that the Manpower Forecast {1} in GO System of your unit had been edited by your {2}.
     <br />
+    <br />
     Kindly click the link and log in your user ID and password, to check on your updated manpower forecast.
     <br />
     <a href="{3}/auth/login">

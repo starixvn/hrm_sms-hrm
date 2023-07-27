@@ -4,6 +4,7 @@
 <p>
     This is to inform that the GO System is now ready for {1} Manpower Forecast.
     <br />
+    <br />
     Kindly click the link and log in your user ID and password.
     <br />
     <a href="{2}/auth/login">
@@ -13,6 +14,7 @@
     <br />
     Please note that the system will only reflect the current headcount as of 31 August {3}.
     Updates or changes will not be reflected after this date.
+    <br />
     <br />
     {1} Annual Manpower Forecast plotting will start from {4} until {5}.
     Kindly complete the request form within the given period. After which, the system is already locked for editing/changes.

@@ -55,22 +55,29 @@
                     const byte VerifyProcess = 2;
                     const byte ApproveProcess = 3;
 
+                    string subject;
                     string emailBodyTemplate;
                     switch (emp.ProcessId)
                     {
                         case 1:
+                            subject = string.Format("{0} Manpower Forecast request form in GO System is available from {1} until {2}",
+                                period.Year, GetFromDate(emp.FromDate), GetToDate(emp.ToDate));
                             emailBodyTemplate = mailService.ReadTextFile(notiStartToUnitHeadTemplatePath);
-                            await SendNotiStartToUnitHeadAsync(period, emp, emailBodyTemplate);
+                            await SendNotiStartToUnitHeadAsync(period, emp, subject, emailBodyTemplate);
                             break;
 
                         case VerifyProcess:
+                            subject = string.Format("The Manpower Forecast {0} in GO System is ready for your verification from {1} until {2}",
+                                period.Year, GetFromDate(emp.FromDate), GetToDate(emp.ToDate));
                             emailBodyTemplate = mailService.ReadTextFile(notiStartToVerifierTemplatePath);
-                            await SendNotiStartToUnitHeadAsync(period, emp, emailBodyTemplate);
+                            await SendNotiStartToUnitHeadAsync(period, emp, subject, emailBodyTemplate);
                             break;
 
                         case ApproveProcess:
+                            subject = string.Format("The Manpower Forecast {0} in GO System is ready for your approval from {1} until {2}",
+                                period.Year, GetFromDate(emp.FromDate), GetToDate(emp.ToDate));
                             emailBodyTemplate = mailService.ReadTextFile(notiStartToApproverTemplatePath);
-                            await SendNotiStartToUnitHeadAsync(period, emp, emailBodyTemplate);
+                            await SendNotiStartToUnitHeadAsync(period, emp, subject, emailBodyTemplate);
                             break;
 
                         default:
@@ -81,7 +88,7 @@
             }
         }
 
-        private async Task SendNotiStartToUnitHeadAsync(ManpowerForecastPeriod period, PeriodEmployeeSetting setting, string emailBodyTemplate)
+        private async Task SendNotiStartToUnitHeadAsync(ManpowerForecastPeriod period, PeriodEmployeeSetting setting, string subject, string emailBodyTemplate)
         {
             var body = string.Format(
                 emailBodyTemplate,
@@ -95,7 +102,7 @@
             var mailModel = new MailModel
             {
                 MailTo = setting.Email,
-                Subject = "",
+                Subject = subject,
                 Body = body
             };
 
@@ -109,8 +116,10 @@
             }
         }
 
-        private static string GetFromDate(DateTime fromDate) => string.Format("{0} 00:00", fromDate.ToString("dd MMM, yyyy"));
+        private static string GetFromDate(DateTime fromDate) => string.Format("{0} 00:00", FormatDate(fromDate));
 
-        private static string GetToDate(DateTime toDate) => string.Format("{0} 23:59", toDate.ToString("dd MMM, yyyy"));
+        private static string GetToDate(DateTime toDate) => string.Format("{0} 23:59", FormatDate(toDate));
+
+        private static string FormatDate(DateTime date) => date.ToString("dd MMM, yyyy");
     }
 }

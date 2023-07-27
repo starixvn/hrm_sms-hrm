@@ -209,17 +209,19 @@
                     var templatePath = Path.Combine(hostEnvironment.ContentRootPath, NotiEditToUnitHeadTemplatePath);
                     var emailBodyTemplate = mailService.ReadTextFile(templatePath);
 
+                    var editor = param.StatusId == AnnualManpowerForecastRequestStatus.Verified ? "verifier" : "approver";
+                    var subject = string.Format("The Manpower Forecast {0} in GO System of your unit had been edited by your {1}", request.Period.Year, editor);
                     var body = string.Format(
                         emailBodyTemplate,
                         unitHead.Nickname,
                         request.Period.Year,
-                        param.StatusId == AnnualManpowerForecastRequestStatus.Verified ? "verifier" : "approver",
+                        editor,
                         appSettings.Domain);
 
                     var mailModel = new MailModel
                     {
                         MailTo = unitHead.Email,
-                        Subject = string.Empty,
+                        Subject = subject,
                         Body = body
                     };
 
@@ -238,7 +240,7 @@
             return flows.FirstOrDefault(x => x.ProcessId == PeriodProcess.UnitHead);
         }
 
-        private bool HasEditAddition(AnnualManpowerForecastRequest request, UpdateAnnualManpowerForecastRequestParam param)
+        private static bool HasEditAddition(AnnualManpowerForecastRequest request, UpdateAnnualManpowerForecastRequestParam param)
         {
             return ((request.Details.Any(x => (x.LocalAddition > 0 || x.ExpatAddition > 0) && (param.Details == null || !param.Details.Any())))
                 || (request.Details.Any(x => param.Details.Any(y => y.LocalAddition != x.LocalAddition || y.ExpatAddition != x.ExpatAddition))));
