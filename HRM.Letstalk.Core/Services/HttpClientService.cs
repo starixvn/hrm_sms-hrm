@@ -26,7 +26,7 @@
         public Task<T> ExecutePostAsync<T>(string baseUrl, string token, IDictionary<string, object> data) where T : new()
             => SendHttpClientAsync<T>(baseUrl, token, HttpMethod.Post, data);
 
-        private async Task<T> SendHttpClientAsync<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
+        private static async Task<T> SendHttpClientAsync<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
             where T : new()
         {
             ValidateEndPoint(baseUrl);
@@ -55,7 +55,7 @@
             }
         }
 
-        private T SendHttpClient<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
+        private static T SendHttpClient<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
             where T : new()
         {
             ValidateEndPoint(baseUrl);
@@ -79,12 +79,12 @@
                         return result;
                     }
 
-                    return default;
+                    return default(T);
                 }
             }
         }
 
-        private HttpRequestMessage CreateRequest(string baseUrl, HttpMethod method, string token)
+        private static HttpRequestMessage CreateRequest(string baseUrl, HttpMethod method, string token)
         {
             Uri url = new Uri(baseUrl);
             var request = new HttpRequestMessage(method, url);
@@ -97,9 +97,6 @@
             return request;
         }
 
-        private static string EncodeBase64(string input)
-            => Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
-
         private static void ValidateEndPoint(string baseUrl)
         {
             if (string.IsNullOrWhiteSpace(baseUrl))
@@ -108,7 +105,7 @@
             }
         }
 
-        private void ThrowExceptionWhenNotSuccess(HttpResponseMessage response)
+        private static void ThrowExceptionWhenNotSuccess(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
