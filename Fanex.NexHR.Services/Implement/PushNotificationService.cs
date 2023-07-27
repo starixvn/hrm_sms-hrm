@@ -40,7 +40,7 @@
             }
         }
 
-        private string GetToken()
+        private static string GetToken()
         {
             var loginParam = new Dictionary<string, string>
             {
@@ -68,7 +68,7 @@
                             var message = response.Content.ReadAsStringAsync().Result;
                             LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
 
-                            return default;
+                            return string.Empty;
                         }
                     }
                 }
@@ -77,7 +77,7 @@
             {
                 LogService.Error(ex.Message);
 
-                return default;
+                return string.Empty;
             }
         }
 
