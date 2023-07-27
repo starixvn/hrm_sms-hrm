@@ -50,7 +50,7 @@
                         return result;
                     }
 
-                    return default;
+                    return default(T);
                 }
             }
         }
