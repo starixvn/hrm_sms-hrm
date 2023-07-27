@@ -129,7 +129,7 @@
                 foreach (var detail in request.Details)
                 {
                     var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && x.UnitName == detail.UnitName 
-                                                            && x.DepartmentName == detail.DepartmentName && x.SectionId == detail.SectionId).ToList();
+                                                            && x.DepartmentName == detail.DepartmentName && x.SectionName == detail.SectionName).ToList();
                     if (prevforecast != null)
                     {
                         detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);

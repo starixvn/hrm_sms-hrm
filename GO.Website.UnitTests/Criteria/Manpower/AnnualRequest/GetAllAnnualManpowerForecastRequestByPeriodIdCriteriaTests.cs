@@ -1,0 +1,52 @@
+﻿namespace GO.Website.UnitTests.Criteria.Manpower.AnnualRequest
+{
+    using GO.Website.Criteria.Manpower.AnnualRequest;
+    using Xunit;
+
+    public class GetAllAnnualManpowerForecastRequestByPeriodIdCriteriaTests
+    {
+        [Fact]
+        public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
+        {
+            // Arrange
+            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+            var expected = "Manpower_AnnualRequestForm_GetAllByPeriodId";
+
+            // Act
+            var actual = criteria.GetSettingKey();
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public void IsValid_WhenCalled_ReturnTrue(short periodId)
+        {
+            // Arrange
+            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria()
+            {
+                PeriodId = periodId
+            };
+
+            // Act
+            var actual = criteria.IsValid();
+
+            // Assert
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void IsValid_WhenCalled_ReturnFalse()
+        {
+            // Arrange
+            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+
+            // Act
+            var actual = criteria.IsValid();
+
+            // Assert
+            Assert.False(actual);
+        }
+    }
+}

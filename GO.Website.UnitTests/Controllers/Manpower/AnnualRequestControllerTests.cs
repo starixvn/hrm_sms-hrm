@@ -5,7 +5,9 @@
     using GO.Website.Constants;
     using GO.Website.Controllers.Manpower;
     using GO.Website.Criteria.Manpower;
+    using GO.Website.Criteria.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower;
+    using GO.Website.Models.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower.Period;
     using GO.Website.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -39,6 +41,19 @@
             Assert.Equal("~/Views/Manpower/AnnualRequest/Create.cshtml", viewResult.ViewName);
             var dataResult = Assert.IsAssignableFrom<IEnumerable<string>>(viewResult.Model);
             Assert.Equal(units, dataResult);
+        }
+
+        [Fact]
+        public void Summary_WhenCalled_ReturnExpectedViewData()
+        {
+            // Arrange
+            var controller = GetController();
+            //Act
+            var result = controller.Summary();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal("~/Views/Manpower/AnnualRequest/Summary.cshtml", viewResult.ViewName);
         }
 
         [Fact]
@@ -297,6 +312,82 @@
 
             //Act
             var result = await controller.UpdateStatus(command);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            Assert.Equal(expected, jsonResult.Value);
+        }
+
+        [Fact]
+        public async Task UpdateAnnualManpowerForecastRequestParam_WhenCalled_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var param = fixture.Create<UpdateAnnualManpowerForecastRequestParam>();
+            userControlSession.UserId = fixture.Create<int>();
+            var expected = fixture.Create<CommandResult>();
+
+            manpowerForecastService.UpdateAnnualRequestAsync(Arg.Any<int>(), param).Returns(expected);
+
+            //Act
+            var result = await controller.Update(param);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            Assert.Equal(expected, jsonResult.Value);
+        }
+
+        [Fact]
+        public async Task GetAllByPeriodId_WhenCalled_ReturnNotFound()
+        {
+            // Arrange
+            var controller = GetController();
+            var criteria = fixture.Create<GetAllAnnualManpowerForecastRequestByPeriodIdCriteria>();
+            userControlSession.UserId = fixture.Create<int>();
+            criteria.UserId = userControlSession.UserId;
+            IEnumerable<AnnualManpowerForecastRequest> expected = null;
+            manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria).Returns(expected);
+
+            //Act
+            var result = await controller.GetAllByPeriodId(criteria);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task GetAllByPeriodId_WhenCalled_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var criteria = fixture.Create<GetAllAnnualManpowerForecastRequestByPeriodIdCriteria>();
+            userControlSession.UserId = fixture.Create<int>();
+            criteria.UserId = userControlSession.UserId;
+            var expected = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
+            manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria).Returns(expected);
+
+            //Act
+            var result = await controller.GetAllByPeriodId(criteria);
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
+            Assert.Equal(expected, actualRequest);
+        }
+
+        [Fact]
+        public async Task UpdateStatusByPeriodId_WhenCalled_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var command = fixture.Create<UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand>();
+            userControlSession.UserId = fixture.Create<int>();
+            command.ModifiedBy = userControlSession.UserId;
+            var expected = fixture.Create<CommandResult>();
+            manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command).Returns(expected);
+
+            //Act
+            var result = await controller.UpdateStatusByPeriodId(command);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);

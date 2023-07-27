@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 
 import LangHelper from '@jsroot/common/langHelper';
+import Site from '@jsroot/common/site';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const maxStep = 4;
@@ -103,9 +104,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     grandtotal += detail.totalCurrentHeadcount;
                     checkNone++;
                     row.push(
-                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>{checkZero(detail.localCurrentHeadcount)}</td>,
-                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>{checkZero(detail.expatCurrentHeadcount)}</td>,
-                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>{checkZero(detail.totalCurrentHeadcount)}</td>);
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>
+                            {checkZero(detail.localCurrentHeadcount)}
+                        </td>,
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>
+                            {checkZero(detail.expatCurrentHeadcount)}
+                        </td>,
+                        <td key={'data-section-CurrentHeadcount' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>
+                            {checkZero(detail.totalCurrentHeadcount)}
+                        </td>);
                 }
             });
             if (checkNone === 0) {
@@ -129,9 +136,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount;
                     checkNone++;
-                    row.push(<td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>{checkZero(detail.localApprovedHeadcount)}</td>,
-                             <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>{checkZero(detail.expatApprovedHeadcount)}</td>,
-                        <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>{checkZero(detail.totalApprovedHeadcount)}</td>)
+                    row.push(<td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>
+                            {checkZero(detail.localApprovedHeadcount)}
+                        </td>,
+                        <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>
+                            {checkZero(detail.expatApprovedHeadcount)}
+                        </td>,
+                        <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'total'}>
+                            {checkZero(detail.totalApprovedHeadcount)}
+                        </td>)
                 }
             });
             if (checkNone === 0) {
@@ -155,9 +168,16 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalAddition;
                     checkNone++;
-                    row.push(<td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>{checkZero(detail.localAddition)}</td>,
-                             <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>{checkZero(detail.expatAddition)}</td>,
-                        <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>{checkZero(detail.totalAddition)}</td>)
+                    row.push(
+                        <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>
+                            {checkZero(detail.localAddition)}
+                        </td>,
+                        <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>
+                            {checkZero(detail.expatAddition)}
+                        </td>,
+                        <td key={'data-section-Additional' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>
+                            {checkZero(detail.totalAddition)}
+                        </td>)
                 }
             });
             if (checkNone === 0) {
@@ -181,9 +201,16 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     detail.sectionName === section && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
                     checkNone++;
-                    row.push(<td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>{checkZero(detail.localApprovedHeadcount + detail.localAddition)}</td>,
-                             <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>{checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}</td>,
-                        <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>{checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}</td>)
+                    row.push(
+                        <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'local'}>
+                            {checkZero(detail.localApprovedHeadcount + detail.localAddition)}
+                        </td>,
+                        <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'expat'}>
+                            {checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}
+                        </td>,
+                        <td key={'data-section-Forecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + company + 'total'}>
+                            {checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}
+                        </td>)
                 }
             });
             if (checkNone === 0) {
@@ -467,7 +494,12 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { sectionRow, rowSpanDeparment } = renderSection(deparment, request)
             const totalHeadcountDepartmentRow = renderTotalHeadcountDepartment(request, deparment);
             rowSpanUnit += rowSpanDeparment;
-            departmentRow.push(<tr key={request.unitName + deparment.departmentName}><td className="bold fixed-body fixed-body fixed-body-department" rowSpan={rowSpanDeparment}>{deparment.departmentName}</td></tr>);
+            departmentRow.push(
+                <tr key={request.unitName + deparment.departmentName}>
+                    <td className="bold fixed-body fixed-body fixed-body-department" rowSpan={rowSpanDeparment}>
+                        {deparment.departmentName}
+                    </td>
+                </tr>);
             departmentRow.push(sectionRow);
             departmentRow.push(totalHeadcountDepartmentRow);
         });
@@ -481,7 +513,11 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             if (unitType === request.unitName.slice(0, 2)) {
                 const {departmentRow, rowSpanUnit} = renderDeparment(request);
                 rowSpanUnitType += rowSpanUnit;
-                unitRow.push(<tr key={request.unitName}><td className="bold unit fixed-body fixed-body-unit" rowSpan={rowSpanUnit}>{request.unitName}</td></tr>);
+                unitRow.push(<tr key={request.unitName}>
+                    <td className="bold unit fixed-body fixed-body-unit" rowSpan={rowSpanUnit}>
+                        <a className="link-unitname" href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${request.requestId}`)}>{request.unitName}</a>
+                    </td>
+                </tr>);
                 unitRow.push(departmentRow);
             }               
         });
