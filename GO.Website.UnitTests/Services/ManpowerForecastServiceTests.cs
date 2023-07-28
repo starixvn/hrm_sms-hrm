@@ -283,11 +283,11 @@
             var expectedDetail = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
             var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
 
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+            var criteria = new GetMemberSummaryAnnualManpowerForecastRequestCriteria();
             var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
             manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(
-                Arg.Do<GetAllAnnualManpowerForecastRequestByPeriodIdCriteria>(x => criteria = x)).Returns(
+                Arg.Do<GetMemberSummaryAnnualManpowerForecastRequestCriteria>(x => criteria = x)).Returns(
                 new ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedRequest, expectedDetail));
 
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(
@@ -322,11 +322,11 @@
             expectedPrevforecasts.First().DepartmentName = "test";
             expectedPrevforecasts.First().SectionName = "test";
 
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+            var criteria = new GetMemberSummaryAnnualManpowerForecastRequestCriteria();
             var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
             manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(
-                Arg.Do<GetAllAnnualManpowerForecastRequestByPeriodIdCriteria>(x => criteria = x)).Returns(
+                Arg.Do<GetMemberSummaryAnnualManpowerForecastRequestCriteria>(x => criteria = x)).Returns(
                 new ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedRequest, expectedDetail));
 
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(

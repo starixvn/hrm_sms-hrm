@@ -119,7 +119,7 @@
             return request;
         }
 
-        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria)
         {
             var (requests, details) = await manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(criteria);
             foreach(var request in requests)
@@ -184,7 +184,7 @@
             return await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public async Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command)
+        public async Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
         {
             return await baseService.ExecuteNonQueryAsync(command);
         }

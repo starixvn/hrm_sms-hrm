@@ -39,18 +39,18 @@ const AppContainer = () => {
 
     const getMemberRequests = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetAllByPeriodId');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberSummaryRequest');
         setPeriodSelected(periods.find(x => x.periodId === params.periodId));
         await DataService.postDataAsync(url, params).then(response => {
-            setRequests(response.data.request);
-            getCompanies(response.data.request);
-            getUnitTypes(response.data.request);
+            setRequests(response.data);
+            getCompanies(response.data);
+            getUnitTypes(response.data);
         }).then(() => Site.unblockUI());
     };
 
     const updateStatus = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatusByPeriodId');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatusMemberSummaryRequest');
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 toast.success(params.methodName + LangHelper.getResource('Successfully'));

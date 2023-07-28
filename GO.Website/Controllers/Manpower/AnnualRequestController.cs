@@ -94,19 +94,15 @@
             }
 
             request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
-            return Json(new { request });
+            return Json(request);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllByPeriodId([FromBody] GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria)
+        public async Task<IActionResult> GetMemberSummaryRequest([FromBody] GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria)
         {
             criteria.UserId = userControlSession.UserId;
-            var request = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria);
-            if (request is null)
-            {
-                return NotFound();
-            }
-            return Json(new { request });
+            var requests = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria);
+            return Json(requests);
         }
 
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
@@ -133,7 +129,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
+        public async Task<IActionResult> UpdateStatusMemberSummaryRequest([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestAsync(command);
@@ -143,7 +139,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateStatusByPeriodId([FromBody] UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command)
+        public async Task<IActionResult> UpdateStatusByPeriodId([FromBody] UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command);

@@ -2,15 +2,14 @@
 {
     using GO.Core.Models;
 
-    public class UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand : BaseNonQueryCommand
+    public class UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand : BaseNonQueryCommand
     {
-        public int PeriodId { get; set; }
-        public string UnitType { get; set; }
+        public string RequestId { get; set; }
         public byte StatusId { get; set; }
         public int ModifiedBy { get; set; }
 
         public override string GetSettingKey() => "Manpower_AnnualRequestForm_UpdateStatusByPeriodId";
 
-        public override bool IsValid() => PeriodId > 0 && ModifiedBy > 0;
+        public override bool IsValid() => !string.IsNullOrWhiteSpace(RequestId) && ModifiedBy > 0;
     }
 }

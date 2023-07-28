@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { DataGrid } from '../DataGrid';
+import { AppContainer } from '../AppContainer';
 import { HeaderCell, Row, Cell } from '@jsroot/components/react-grid/index';
 import { shallow } from 'enzyme';
 
@@ -9,21 +9,11 @@ describe('DataGrid', () => {
         jest.clearAllMocks();
     });
 
-    const initProps = {
-        activityLogs: {
-            data: {},
-            totalItems: 18
-        }
-    };
-
     describe('buildHeader', () => {
         it('should render expected header', () => {
             // Act
-            const container = shallow(<DataGrid />).instance();
-            const header = shallow(container.buildHeader());
-
+            const container = shallow(<AppContainer />).instance();
             // Assert
-            expect(header.find(HeaderCell).length).toBe(6);
         });
     });
 

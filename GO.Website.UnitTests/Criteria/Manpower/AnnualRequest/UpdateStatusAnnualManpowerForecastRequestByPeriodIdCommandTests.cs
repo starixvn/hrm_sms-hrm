@@ -9,7 +9,7 @@
         public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
         {
             // Arrange
-            var criteria = new UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand();
+            var criteria = new UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand();
             var expected = "Manpower_AnnualRequestForm_UpdateStatusByPeriodId";
 
             // Act
@@ -24,7 +24,7 @@
         public void IsValid_WhenCalled_ReturnTrue(short periodId, int modifiedId, string unitType, byte statusId)
         {
             // Arrange
-            var criteria = new UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand()
+            var criteria = new UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand()
             {
                 PeriodId = periodId,
                 ModifiedBy = modifiedId,
@@ -43,7 +43,7 @@
         public void IsValid_WhenCalled_ReturnFalse()
         {
             // Arrange
-            var criteria = new UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand();
+            var criteria = new UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand();
 
             // Act
             var actual = criteria.IsValid();

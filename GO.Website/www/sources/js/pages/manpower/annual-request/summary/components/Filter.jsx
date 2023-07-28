@@ -10,7 +10,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     const [period, setPeriod] = useState(null);
     const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
     const [resetModalDialog, setResetModalDialog] = useState(false);
-    const [unitType, setUnitType] = useState({ value: null, label: 'PU - BU' });
+    const [unitType, setUnitType] = useState({ value: 'BU, PU', label: 'PU - BU' });
 
     const getActionDialog = () => {
         var action = '';
@@ -68,14 +68,22 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     });
 
     const unitTypeOptions = [
-        { value: null, label: 'PU - BU' },
+        { value: 'BU, PU', label: 'PU - BU' },
         { value: 'SU', label: 'SU' }
     ];
 
     const handleUpdateRequest = () => {
+        let requestIds = "";
+        requests.map((request, index) => {
+            if (requests.length === index + 1) {
+                requestIds += `${request.requestId}`;
+            }
+            else {
+                requestIds += `${request.requestId}, `;
+            }
+        });
         const param = {
-            periodId: period.value,
-            unitType: unitType.value,
+            requestId: requestIds,
             statusId: requests[0].currentProcessId,
             methodName: 'Update '
         };
@@ -86,9 +94,17 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     };
 
     const handleResetStatus = () => {
+        let requestIds = "";
+        requests.map((request, index) => {
+            if (requests.length === index + 1) {
+                requestIds += `${request.requestId}`;
+            }
+            else {
+                requestIds += `${request.requestId}, `;
+            }
+        });
         const param = {
-            periodId: period.value,
-            unitType: unitType.value,
+            requestId: requestIds,
             statusId: requests[0].currentProcessId - 1,
             methodName: 'Update '
         };

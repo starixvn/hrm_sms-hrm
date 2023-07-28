@@ -20,7 +20,7 @@
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestAsync(GetMemberAnnualManpowerForecastRequestCriteria criteria);
 
         Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(int requestId);
-        Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetAllAnnualManpowerForecastRequestByPeriodIdCriteria criteria);
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria);
 
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(GetAnnualManpowerForecastRequestByPeriodIdCriteria criteria);
 
@@ -28,6 +28,6 @@
         Task<CommandResult> UpdateAnnualRequestAsync(int userId, UpdateAnnualManpowerForecastRequestParam param);
 
         Task<CommandResult> UpdateStatusAnnualRequestAsync(UpdateStatusAnnualManpowerForecastRequestCommand command);
-        Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusAnnualManpowerForecastRequestByPeriodIdCommand command);
+        Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command);
     }
 }

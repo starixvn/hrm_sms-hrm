@@ -9,7 +9,7 @@
         public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
         {
             // Arrange
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+            var criteria = new GetMemberSummaryAnnualManpowerForecastRequestCriteria();
             var expected = "Manpower_AnnualRequestForm_GetAllByPeriodId";
 
             // Act
@@ -24,7 +24,7 @@
         public void IsValid_WhenCalled_ReturnTrue(short periodId)
         {
             // Arrange
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria()
+            var criteria = new GetMemberSummaryAnnualManpowerForecastRequestCriteria()
             {
                 PeriodId = periodId
             };
@@ -40,7 +40,7 @@
         public void IsValid_WhenCalled_ReturnFalse()
         {
             // Arrange
-            var criteria = new GetAllAnnualManpowerForecastRequestByPeriodIdCriteria();
+            var criteria = new GetMemberSummaryAnnualManpowerForecastRequestCriteria();
 
             // Act
             var actual = criteria.IsValid();
