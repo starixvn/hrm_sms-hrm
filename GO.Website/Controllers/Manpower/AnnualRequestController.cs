@@ -77,7 +77,6 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
-        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> GetMyRequest()
         {
             var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);

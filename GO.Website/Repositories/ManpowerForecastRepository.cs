@@ -89,9 +89,9 @@
             {
                 using (var multi = await db.QueryMultipleAsync(criteria))
                 {
-                    var annualManpowerForecastRequests = multi.Read<AnnualManpowerForecastRequest>().ToList();
-                    var annualManpowerForecastRequestDetails = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
-                    return (annualManpowerForecastRequests, annualManpowerForecastRequestDetails);
+                    var requests = multi.Read<AnnualManpowerForecastRequest>().ToList();
+                    var details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
+                    return (requests, details);
                 }
             }
         }
