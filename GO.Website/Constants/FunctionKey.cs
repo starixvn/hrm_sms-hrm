@@ -8,5 +8,6 @@
         public const string ManpowerForecast_FlowManagement = "ManpowerForecast_FlowManagement";
         public const string MyAnnualManpowerForecastRequestForm = "MyAnnualManpowerForecastRequestForm";
         public const string MemberAnnualManpowerForecastRequestForm = "MemberAnnualManpowerForecastRequestForm";
+        public const string MemberSummayAnnualManpowerForecastRequestForm = "MemberSummayAnnualManpowerForecastRequestForm";
     }
 }

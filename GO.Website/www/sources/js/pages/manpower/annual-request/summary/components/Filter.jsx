@@ -6,7 +6,7 @@ import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
-const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
+const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
     const [period, setPeriod] = useState(null);
     const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
     const [resetModalDialog, setResetModalDialog] = useState(false);
@@ -72,7 +72,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
         { value: 'SU', label: 'SU' }
     ];
 
-    const handleUpdateRequest = () => {
+    const getRequestIds = () => {
         let requestIds = "";
         requests.map((request, index) => {
             if (requests.length === index + 1) {
@@ -82,34 +82,29 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                 requestIds += `${request.requestId}, `;
             }
         });
+        return requestIds;
+    }
+
+    const handleUpdateRequest = () => {
         const param = {
-            requestId: requestIds,
+            requestId: getRequestIds(),
             statusId: requests[0].currentProcessId,
             methodName: 'Update '
         };
-        setVerifyApproveModalDialog(false);
         updateStatus(param);
+        setVerifyApproveModalDialog(false);
         const params = getParams();
         onSubmit(params);
     };
 
     const handleResetStatus = () => {
-        let requestIds = "";
-        requests.map((request, index) => {
-            if (requests.length === index + 1) {
-                requestIds += `${request.requestId}`;
-            }
-            else {
-                requestIds += `${request.requestId}, `;
-            }
-        });
         const param = {
-            requestId: requestIds,
+            requestId: getRequestIds(),
             statusId: requests[0].currentProcessId - 1,
             methodName: 'Update '
         };
-        setResetModalDialog(false);
         updateStatus(param);
+        setResetModalDialog(false);
         const params = getParams();
         onSubmit(params);
     };
@@ -138,7 +133,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                     </Button>
                 </Form.Group>
                 {
-                    isVerify() &&
+                    isHost && isVerify() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Verify')}
@@ -146,7 +141,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                     </Form.Group>
                 }
                 {
-                    isApprove() &&
+                    isHost && isApprove() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Approve')}
@@ -154,7 +149,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                     </Form.Group>
                 }
                 {
-                    isReset() &&
+                    isHost &&  isReset() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setResetModalDialog(true)}>
                             {LangHelper.getResource('Reset')}

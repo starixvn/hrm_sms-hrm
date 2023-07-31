@@ -14,6 +14,7 @@ const AppContainer = () => {
     const [requests, setRequests] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [unitTypes, setUnitTypes] = useState([]);
+    const [isHost, setIsHost] = useState([]);
 
     const getCompanies = requests => {
         const company = [];
@@ -42,9 +43,10 @@ const AppContainer = () => {
         const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberSummaryRequest');
         setPeriodSelected(periods.find(x => x.periodId === params.periodId));
         await DataService.postDataAsync(url, params).then(response => {
-            setRequests(response.data);
-            getCompanies(response.data);
-            getUnitTypes(response.data);
+            setRequests(response.data.requests);
+            getCompanies(response.data.requests);
+            getUnitTypes(response.data.requests);
+            setIsHost(response.data.isHost);
         }).then(() => Site.unblockUI());
     };
 
@@ -73,7 +75,7 @@ const AppContainer = () => {
 
     return (
         <div className="manpower-forecast my-annual-request">
-            <Filter periods={periods} onSubmit={getMemberRequests} requests={requests} updateStatus={updateStatus} />
+            <Filter periods={periods} onSubmit={getMemberRequests} requests={requests} updateStatus={updateStatus} isHost={isHost} />
             <DataGrid requests={requests} companies={companies} unitTypes={unitTypes} periodSelected={periodSelected}/>
         </div>
     );

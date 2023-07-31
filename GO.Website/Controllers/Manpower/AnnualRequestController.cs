@@ -101,8 +101,9 @@
         public async Task<IActionResult> GetMemberSummaryRequest([FromBody] GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria)
         {
             criteria.UserId = userControlSession.UserId;
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MemberSummayAnnualManpowerForecastRequestForm, Policy.Host);
             var requests = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria);
-            return Json(requests);
+            return Json(new { requests, isHost });
         }
 
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
@@ -129,7 +130,7 @@
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateStatusMemberSummaryRequest([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestAsync(command);
@@ -138,8 +139,8 @@
 
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateStatusByPeriodId([FromBody] UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
+        [GOPermission(FunctionKey = FunctionKey.MemberSummayAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
+        public async Task<IActionResult> UpdateStatusMemberSummaryRequest([FromBody] UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command);

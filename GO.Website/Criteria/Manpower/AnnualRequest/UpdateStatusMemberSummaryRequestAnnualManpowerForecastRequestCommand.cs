@@ -8,7 +8,7 @@
         public byte StatusId { get; set; }
         public int ModifiedBy { get; set; }
 
-        public override string GetSettingKey() => "Manpower_AnnualRequestForm_UpdateStatusByPeriodId";
+        public override string GetSettingKey() => "Manpower_AnnualRequestForm_UpdateStatusMemberSummaryRequest";
 
         public override bool IsValid() => !string.IsNullOrWhiteSpace(RequestId) && ModifiedBy > 0;
     }
