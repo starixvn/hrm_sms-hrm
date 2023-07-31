@@ -6,7 +6,7 @@
     {
         public int RequestId { get; set; }
 
-        public override string GetSettingKey() => "Manpower_AnnualRequestForm_UpdateStatusMemberSummaryRequest";
+        public override string GetSettingKey() => "Manpower_AnnualRequestForm_GetByRequestId";
 
         public override bool IsValid() => RequestId > 0;
     }
