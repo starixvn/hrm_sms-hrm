@@ -122,7 +122,7 @@
             <th colspan="7">Employee Info</th>
             <th colspan="2">Contract Working Agreement</th>
             <th colspan="2">Actual Working Time in/out</th>
-            <th colspan="9">Total Working Days for Salary Payment</th>
+            <th colspan="10">Total Working Days for Salary Payment</th>
             <th colspan="5">@Labels.UnpaidLeave</th>
             <th colspan="5">@Labels.Overtime</th>
         <tr>
@@ -156,6 +156,7 @@
             <th>@Labels.ShortWeddingLeave</th>
             <th>SW</th>
             <th>HL</th>
+            <th>CE</th>
             <th>@Labels.ExcelTotalDays</th>
             <th>@Labels.UPL</th>
             <th>UPLI</th>
@@ -209,6 +210,7 @@
                     <td>@Utilities.DisplayEmptyFloatNumber(item.WeddingLeave)</td>
                     <td>@Utilities.DisplayEmptyFloatNumber(item.SuspendWork)</td>
                     <td>@Utilities.DisplayEmptyFloatNumber(item.HospitalizationLeave)</td>
+                    <td>@Utilities.DisplayEmptyFloatNumber(item.CompanyEvent)</td>
                     <td>@Utilities.DisplayFloatNumber(item.TotalPayments)</td>
                     <td>
                         @if (item.UnpaidLeave > 0 && isHR)
@@ -237,6 +239,6 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(colspan: 30);
+        @RazorHelper.DisplayNoInformation(colspan: 31);
     }
 </table>

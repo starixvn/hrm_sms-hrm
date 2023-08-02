@@ -27,11 +27,11 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private const ushort TotalFixedColumns = 20;
+        private const ushort TotalFixedColumns = 21;
         private const ushort TotalUPLColumns = 4;
-        private const ushort StartDateColumnIndex = 25;
-        private const ushort StartUPLColumnIndex = 21;
-        private const ushort EndUPLColumnIndex = 24;
+        private const ushort StartDateColumnIndex = 26;
+        private const ushort StartUPLColumnIndex = 22;
+        private const ushort EndUPLColumnIndex = 25;
         private const ushort StartHeaderRowIndex = 2;
         private const ushort EndHeaderRowIndex = 3;
         private const ushort StartBodyRowIndex = 4;
@@ -239,6 +239,10 @@
 
                 leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.KeepInViewByDay).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.CompanyEvent).Code;
+                excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
                 excelAddress = $"{worksheet.Cells[rowIndex, annualLeaveColumnIndex].Address}:{worksheet.Cells[rowIndex, colIndex++].Address}";
@@ -286,7 +290,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            const byte DefaultColumns = 14;
+            const byte DefaultColumns = 15;
             var templateIndex = new
             {
                 headerRow = 2,
@@ -294,8 +298,8 @@
                 summaryRow = 4,
                 actualWorkingDaysColumn = 4,
                 maternityLeaveColumn = 6,
-                hospitalizationLeaveColumn = 14,
-                unpaidLeaveColumn = 15
+                companyEventColumn = 15,
+                unpaidLeaveColumn = 16
             };
             IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
@@ -341,7 +345,7 @@
             dynamic templateIndex)
         {
             var rowIndex = templateIndex.headerRow;
-            var colIndex = templateIndex.hospitalizationLeaveColumn;
+            var colIndex = templateIndex.companyEventColumn;
             template.Cells[rowIndex, 1, rowIndex, colIndex].Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex]);
             colIndex++;
             foreach (DateTime month in months)
@@ -368,8 +372,8 @@
             {
                 var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(y => IsHoliday(y)));
                 var colIndex = 1;
-                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.hospitalizationLeaveColumn]
-                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.hospitalizationLeaveColumn]);
+                template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.companyEventColumn]
+                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.companyEventColumn]);
 
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Department;
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Section;
@@ -395,6 +399,8 @@
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.HospitalizationLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.KeepInViewByDay));
+                worksheet.Cells[rowIndex, colIndex++].Value =
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompanyEvent));
 
                 foreach (DateTime month in months)
                 {

@@ -43,6 +43,9 @@
         [StringValue("Wedding of Employee's Children")]
         WeddingOfEmployeeChildren = 34,
 
+        [StringValue("Company Event")]
+        CompanyEvent = 38,
+
         [StringValue("Hospitalization Leave")]
         HospitalizationLeave = 39,
 
