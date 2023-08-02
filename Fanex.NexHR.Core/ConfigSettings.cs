@@ -50,5 +50,10 @@
         public static string Letstalk_Token_Username => ConfigurationManager.AppSettings["Letstalk.API.Token:Username"];
         public static string Letstalk_Token_Password => ConfigurationManager.AppSettings["Letstalk.API.Token:Password"];
         public static int Letstalk_BotId => Convert.ToInt32(ConfigurationManager.AppSettings["Letstalk:BotId"]);
+
+        // Proxy
+        public static bool IsEnableProxy => Convert.ToBoolean(ConfigurationManager.AppSettings["Proxy:Enable"]);
+        public static string Proxy_Address => ConfigurationManager.AppSettings["Proxy:Address"];
+        public static bool Proxy_BypassOnLocal => Convert.ToBoolean(ConfigurationManager.AppSettings["Proxy:BypassOnLocal"]);
     }
 }

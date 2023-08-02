@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Threading.Tasks;
     using Fanex.Logging;
@@ -22,16 +23,30 @@
         Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
     }
 
-    public class SyncWorkingShiftService : ISyncWorkingShiftService
+    public class SyncWorkingShiftService : ISyncWorkingShiftService, IDisposable
     {
+        private bool isDisposed;
         private const int BatchSize = 1000;
         private readonly IBaseService baseService;
         private readonly HttpClient _httpClient;
 
-        public SyncWorkingShiftService(IBaseService baseService, HttpClient httpClient)
+        public SyncWorkingShiftService(IBaseService baseService)
         {
             this.baseService = baseService;
-            _httpClient = httpClient;
+
+            if (ConfigSettings.IsEnableProxy)
+            {
+                var proxy = new WebProxy(ConfigSettings.Proxy_Address, ConfigSettings.Proxy_BypassOnLocal);
+                var httpClientHandler = new HttpClientHandler
+                {
+                    Proxy = proxy
+                };
+                _httpClient = new HttpClient(handler: httpClientHandler, disposeHandler: true);
+            }
+            else
+            {
+                _httpClient = new HttpClient();
+            }
         }
 
         public async Task SyncWorkingShiftAsync()
@@ -73,7 +88,25 @@
         public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
         {
             var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{command.FromDate:yyyy-MM-dd}/{command.ToDate:yyyy-MM-dd}");
+            for (var date = command.FromDate.Date; date.Date <= command.ToDate.Date; date = date.AddDays(1))
+            {
+                try
+                {
+                    commandResult = await SyncWorkingShiftAsync(command, date);
+                }
+                catch(Exception ex)
+                {
+                    LogService.Error(ex.Message, ex);
+                }
+            }
+
+            return commandResult;
+        }
+
+        private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date)
+        {
+            var commandResult = new CommandResult { Code = 0, Message = string.Empty };
+            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{date:yyyy-MM-dd}/{date:yyyy-MM-dd}");
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
@@ -90,8 +123,14 @@
                     int totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
                     for (int i = 0; i < totalBatch; i++)
                     {
-                        command.WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString();
-                        commandResult = baseService.ExecuteNonQuery(command);
+                        commandResult = baseService.ExecuteNonQuery(new SyncWorkingShiftCommand
+                        {
+                            ActorId = command.ActorId,
+                            EmployeeIds = command.EmployeeIds,
+                            FromDate = date,
+                            ToDate = date,
+                            WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString()
+                        });
                     }
                 }
             }
@@ -166,6 +205,32 @@
                 const byte NumberOfDigits = 2;
                 shift.TotalHours = Math.Round((shift.ShiftEndTime.Value - shift.ShiftStartTime.Value).TotalHours, NumberOfDigits);
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _httpClient.Dispose();
+            }
+
+            isDisposed = true;
+        }
+
+        ~SyncWorkingShiftService()
+        {
+            Dispose(false);
         }
     }
 }

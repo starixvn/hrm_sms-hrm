@@ -9,9 +9,9 @@
     {
         public static void ResolveCoreDI(this IUnityContainer container)
         {
-            container.RegisterType<IDynamicRepository, DynamicRepository>();
-            container.RegisterType<IBaseRepository, BaseRepository>();
-            container.RegisterType<IBaseService, BaseService>();
+            container.RegisterType<IDynamicRepository, DynamicRepository>(TypeLifetime.Singleton);
+            container.RegisterType<IBaseRepository, BaseRepository>(TypeLifetime.Singleton);
+            container.RegisterType<IBaseService, BaseService>(TypeLifetime.Singleton);
         }
     }
 }
