@@ -69,7 +69,6 @@ const AppContainer = () => {
                 setPeriods(response.data);
             });
         };
-
         getPeriods();
     }, []);
 
