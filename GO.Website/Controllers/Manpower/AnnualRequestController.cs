@@ -34,12 +34,6 @@
             return View("~/Views/Manpower/AnnualRequest/Create.cshtml", units);
         }
 
-        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public IActionResult Summary()
-        {
-            return View("~/Views/Manpower/AnnualRequest/Summary.cshtml");
-        }
-
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
@@ -64,23 +58,9 @@
             return Json(commandResult);
         }
 
-        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
-        public IActionResult MyRequest()
-        {
-            return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
-        }
-
         public IActionResult Detail(int id)
         {
             return View("~/Views/Manpower/AnnualRequest/Detail.cshtml", id);
-        }
-
-        [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
-        public async Task<IActionResult> GetMyRequest()
-        {
-            var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
-            return Json(requests);
         }
 
         [HttpPost]
@@ -96,13 +76,18 @@
             return Json(request);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> GetMemberSummaryRequest([FromBody] GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria)
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
+        public IActionResult MyRequest()
         {
-            criteria.UserId = userControlSession.UserId;
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MemberSummayAnnualManpowerForecastRequestForm, Policy.Host);
-            var requests = await manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria);
-            return Json(new { requests, isHost });
+            return View("~/Views/Manpower/AnnualRequest/MyRequest.cshtml");
+        }
+
+        [HttpPost]
+        [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
+        public async Task<IActionResult> GetMyRequest()
+        {
+            var requests = await manpowerForecastService.GetMyAnnualRequestAsync(userControlSession.UserId);
+            return Json(requests);
         }
 
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
@@ -117,6 +102,21 @@
         {
             criteria.UserId = userControlSession.UserId;
             var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
+            return Json(requests);
+        }
+
+        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy = Policy.Host)]
+        public IActionResult MemberRequestSummary()
+        {
+            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy.Host);
+            return View("~/Views/Manpower/AnnualRequest/MemberRequestSummary.cshtml", isHost);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetMemberRequestSummary([FromBody] GetMemberAnnualManpowerForecastRequestSummaryCriteria criteria)
+        {
+            criteria.UserId = userControlSession.UserId;
+            var requests = await manpowerForecastService.GetMemberAnnualRequestSummaryAsync(criteria);
             return Json(requests);
         }
 
@@ -138,11 +138,11 @@
 
 
         [HttpPost]
-        [GOPermission(FunctionKey = FunctionKey.MemberSummayAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
-        public async Task<IActionResult> UpdateStatusMemberSummaryRequest([FromBody] UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
+        [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy = Policy.Host)]
+        public async Task<IActionResult> UpdateStatusMultiRequest([FromBody] UpdateStatusMultiAnnualManpowerForecastRequestCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
-            var requests = await manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command);
+            var requests = await manpowerForecastService.UpdateStatusMultiAnnualRequestAsync(command);
             return Json(requests);
         }
 

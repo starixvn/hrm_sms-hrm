@@ -1,5 +1,5 @@
-﻿import { toast } from 'react-toastify';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Filter from './Filter';
 import DataGrid from './DataGrid';
@@ -14,7 +14,6 @@ const AppContainer = () => {
     const [requests, setRequests] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [unitTypes, setUnitTypes] = useState([]);
-    const [isHost, setIsHost] = useState([]);
 
     const getCompanies = requests => {
         const company = [];
@@ -26,7 +25,7 @@ const AppContainer = () => {
             });
         });
         setCompanies(company);
-    }
+    };
 
     const getUnitTypes = requests => {
         const unitTypes = [];
@@ -36,23 +35,22 @@ const AppContainer = () => {
             }
         });
         setUnitTypes(unitTypes);
-    }
+    };
 
     const getMemberRequests = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberSummaryRequest');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberRequestSummary');
         setPeriodSelected(periods.find(x => x.periodId === params.periodId));
         await DataService.postDataAsync(url, params).then(response => {
-            setRequests(response.data.requests);
-            getCompanies(response.data.requests);
-            getUnitTypes(response.data.requests);
-            setIsHost(response.data.isHost);
+            setRequests(response.data);
+            getCompanies(response.data);
+            getUnitTypes(response.data);
         }).then(() => Site.unblockUI());
     };
 
     const updateStatus = async params => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatusMemberSummaryRequest');
+        const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/UpdateStatusMultiRequest');
         await DataService.postDataAsync(url, params).then(response => {
             if (response.data.isSuccessful) {
                 toast.success(params.methodName + LangHelper.getResource('Successfully'));
@@ -73,9 +71,17 @@ const AppContainer = () => {
     }, []);
 
     return (
-        <div className="manpower-forecast my-annual-request">
-            <Filter periods={periods} onSubmit={getMemberRequests} requests={requests} updateStatus={updateStatus} isHost={isHost} />
-            <DataGrid requests={requests} companies={companies} unitTypes={unitTypes} periodSelected={periodSelected}/>
+        <div className="manpower-forecast">
+            <Filter periods={periods}
+                onSubmit={getMemberRequests}
+                requests={requests}
+                updateStatus={updateStatus}
+            />
+            <DataGrid requests={requests}
+                companies={companies}
+                unitTypes={unitTypes}
+                periodSelected={periodSelected}
+            />
         </div>
     );
 };

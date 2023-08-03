@@ -27,7 +27,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     {(year + 1) + LangHelper.getResource('ManpowerHeadcountForecast')}
                 </th>
             </tr>);
-    }
+    };
 
     const renderSecondRowHeader = () => {
         const headerHeadcount = [];
@@ -35,7 +35,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             companies.map((item, index) => {
                 if ((index + 1) === companies.length) {
                     headerHeadcount.push(<th className="name-company-background" key={item + step} colSpan={3}>{item}</th>,
-                        <th className="name-step-background grand-total hide-border" key={'Grand Total' + item + step} rowSpan={2}>{LangHelper.getResource('GrandTotal')}</th>);
+                        <th className="name-step-background grand-total hide-border"
+                            key={'Grand Total' + item + step} rowSpan={2}>{LangHelper.getResource('GrandTotal')}</th>);
                 }
                 else {
                     headerHeadcount.push(<th className="name-company-background" key={item + step} colSpan={3}>{item}</th>);
@@ -43,7 +44,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             });
         }
         return headerHeadcount;
-    }
+    };
 
     const renderThirdRowHeader = () => {
         const headerDataHeadcount = [];
@@ -55,11 +56,11 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             });
         }
         return headerDataHeadcount;
-    }
+    };
 
     const buildHeader = () => {
         const row = [];
-        row.push(renderFirstRowHeader())
+        row.push(renderFirstRowHeader());
         row.push(<tr key="second-row-header">
             {renderSecondRowHeader()}
         </tr>);
@@ -69,7 +70,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return row;
     };
 
-    const getSection = (request, detaildepartment)  => {
+    const getSection = (request, detaildepartment) => {
         const sections = [];
         request.details.map(detail => {
             if (detail.departmentName === detaildepartment.departmentName
@@ -78,7 +79,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
         return sections;
-    }
+    };
 
     const getDepartment = request => {
         const departments = [];
@@ -137,8 +138,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     grandtotal += detail.totalApprovedHeadcount;
                     checkNone++;
                     row.push(<td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'local'}>
-                            {checkZero(detail.localApprovedHeadcount)}
-                        </td>,
+                        {checkZero(detail.localApprovedHeadcount)}
+                    </td>,
                         <td key={'data-section-ApprovedForecast' + request.unitName.slice(0, 2) + request.unitName + deparment.departmentName + section + detail.companyName + 'expat'}>
                             {checkZero(detail.expatApprovedHeadcount)}
                         </td>,
@@ -241,7 +242,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 </tr>
             );
         });
-        return {sectionRow, rowSpanDeparment};
+        return { sectionRow, rowSpanDeparment };
     };
 
     const renderTotalCurrentHeadcountDepartment = (request, deparment) => {
@@ -346,7 +347,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             <td className="text-left fixed-body fixed-body-total-department">Total Headcount</td>
             {totalHeadcountDepartmentRow}
         </tr>;
-    }
+    };
 
     const calculaTotalCurrentHeadcountUnitType = (company, unitType) => {
         let local = 0;
@@ -362,7 +363,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
         return { local, expat };
-    }
+    };
 
     const renderTotalCurrentHeadcountUnitType = unitType => {
         const row = [];
@@ -393,7 +394,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
         return { local, expat };
-    }
+    };
 
     const renderTotalApprovedForecastHeadcountUnitType = unitType => {
         const row = [];
@@ -424,7 +425,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
         return { local, expat };
-    }
+    };
 
     const renderTotalAdditionalHeadcountUnitType = unitType => {
         const row = [];
@@ -437,7 +438,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 <td key={'totalAdditionalHeadcountunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td key={'grandtotalAdditionalHeadcountunitType' + unitType }>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalAdditionalHeadcountunitType' + unitType}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -455,8 +456,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
         return { local, expat };
-    }
-
+    };
 
     const renderTotalForecastHeadcountUnitType = unitType => {
         const row = [];
@@ -469,7 +469,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 <td key={'totalForecastHeadcountunitType' + company + unitType + 'total'}>{checkZero(local + expat)}</td>);
             grandtotal += local + expat;
         });
-        row.push(<td key={'grandtotalForecastHeadcountunitType' + unitType }>{checkZero(grandtotal)}</td>)
+        row.push(<td key={'grandtotalForecastHeadcountunitType' + unitType}>{checkZero(grandtotal)}</td>)
         return row;
     };
 
@@ -483,7 +483,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             <td className="bold fixed-body fixed-body-total-unittype" colSpan={4}>Total Headcount ( {unitType} )</td>
             {totalHeadcountRow}
         </tr>;
-    }
+    };
 
     const renderDeparment = request => {
         const deparments = getDepartment(request);
@@ -503,15 +503,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             departmentRow.push(sectionRow);
             departmentRow.push(totalHeadcountDepartmentRow);
         });
-        return {departmentRow, rowSpanUnit}; 
+        return { departmentRow, rowSpanUnit };
     };
 
-    const renderUnit = unitType =>{
+    const renderUnit = unitType => {
         let rowSpanUnitType = 1;
         const unitRow = [];
         requests.map(request => {
             if (unitType === request.unitName.slice(0, 2)) {
-                const {departmentRow, rowSpanUnit} = renderDeparment(request);
+                const { departmentRow, rowSpanUnit } = renderDeparment(request);
                 rowSpanUnitType += rowSpanUnit;
                 unitRow.push(<tr key={request.unitName}>
                     <td className="bold unit fixed-body fixed-body-unit" rowSpan={rowSpanUnit}>
@@ -519,15 +519,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                     </td>
                 </tr>);
                 unitRow.push(departmentRow);
-            }               
+            }
         });
-    return {unitRow, rowSpanUnitType};
+        return { unitRow, rowSpanUnitType };
     };
 
     const buildBody = () => {
         const row = [];
         unitTypes.map(unitType => {
-            const {unitRow, rowSpanUnitType} = renderUnit(unitType);
+            const { unitRow, rowSpanUnitType } = renderUnit(unitType);
             const totalHeadcountUnitType = renderTotalHeadcountUnitType(unitType);
             row.push(<tr key={unitType}><td className="bold unit fixed-body fixed-body-unittype" rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
             row.push(unitRow);

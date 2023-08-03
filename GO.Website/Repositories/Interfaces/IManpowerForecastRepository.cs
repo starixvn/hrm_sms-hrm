@@ -1,6 +1,5 @@
 ﻿namespace GO.Website.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
@@ -15,6 +14,7 @@
         Task<AnnualManpowerForecastRequest> GetAnnualRequestByIdAsync(ICriteria criteria);
 
         Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(ICriteria criteria);
-        Task<ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>> GetAllAnnualRequestByPeriodIdAsync(ICriteria criteria);
+
+        Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestSummaryAsync(ICriteria criteria);
     }
 }

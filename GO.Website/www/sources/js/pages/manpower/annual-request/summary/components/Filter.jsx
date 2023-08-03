@@ -6,31 +6,34 @@ import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
-const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
+const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     const [period, setPeriod] = useState(null);
     const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
     const [resetModalDialog, setResetModalDialog] = useState(false);
-    const [unitType, setUnitType] = useState({ value: 'BU, PU', label: 'PU - BU' });
+    const [unitType, setUnitType] = useState({ value: 'BU,PU', label: 'PU - BU' });
 
     const getActionDialog = () => {
-        var action = '';
+        let action = '';
         if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
             && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1) {
             action = LangHelper.getResource('Verify');
         }
+
         if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
             && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1) {
             action = LangHelper.getResource('Approve');
         }
+
         return action;
-    }
+    };
 
     const isVerify = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
-        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1 ? true : false;
-    const isApprove = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
-        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1 ? true : false;
+        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1;
 
-    const isReset = () => requests.length > 0 && !isVerify() && !isApprove() ? true : false;
+    const isApprove = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
+        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1;
+
+    const isReset = () => requests.length > 0 && !isVerify() && !isApprove();
 
     useEffect(() => {
         if (periods.length > 0) {
@@ -68,26 +71,15 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
     });
 
     const unitTypeOptions = [
-        { value: 'BU, PU', label: 'PU - BU' },
+        { value: 'BU,PU', label: 'PU - BU' },
         { value: 'SU', label: 'SU' }
     ];
 
-    const getRequestIds = () => {
-        let requestIds = "";
-        requests.map((request, index) => {
-            if (requests.length === index + 1) {
-                requestIds += `${request.requestId}`;
-            }
-            else {
-                requestIds += `${request.requestId}, `;
-            }
-        });
-        return requestIds;
-    }
+    const getRequestIds = () => requests.map(request => request.requestId).join(',');
 
-    const handleUpdateRequest = () => {
+    const handleUpdateStatus = () => {
         const param = {
-            requestId: getRequestIds(),
+            requestIds: getRequestIds(),
             statusId: requests[0].currentProcessId,
             methodName: 'Update '
         };
@@ -99,7 +91,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
 
     const handleResetStatus = () => {
         const param = {
-            requestId: getRequestIds(),
+            requestIds: getRequestIds(),
             statusId: requests[0].currentProcessId - 1,
             methodName: 'Update '
         };
@@ -133,7 +125,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
                     </Button>
                 </Form.Group>
                 {
-                    isHost && isVerify() &&
+                    window.hasHostPermissionOnSummaryRequest && isVerify() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Verify')}
@@ -141,7 +133,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
                     </Form.Group>
                 }
                 {
-                    isHost && isApprove() &&
+                    window.hasHostPermissionOnSummaryRequest && isApprove() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setVerifyApproveModalDialog(true)}>
                             {LangHelper.getResource('Approve')}
@@ -149,7 +141,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
                     </Form.Group>
                 }
                 {
-                    isHost &&  isReset() &&
+                    window.hasHostPermissionOnSummaryRequest &&  isReset() &&
                     <Form.Group>
                         <Button variant="primary" size="sm" className="mr-3" onClick={() => setResetModalDialog(true)}>
                             {LangHelper.getResource('Reset')}
@@ -163,7 +155,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, isHost }) => {
                         contents={<div>Are you sure you want to <strong>{getActionDialog()}</strong> all request?</div>}
                         buttons={[
                             <Button variant="primary" size="sm" key="ok"
-                                onClick={handleUpdateRequest}
+                                onClick={handleUpdateStatus}
                             >
                                 {LangHelper.getResource('OK')}
                             </Button>,

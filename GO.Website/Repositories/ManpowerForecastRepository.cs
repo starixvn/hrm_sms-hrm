@@ -1,6 +1,5 @@
 ﻿namespace GO.Website.Repositories
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -83,7 +82,7 @@
             }
         }
 
-        public async Task<ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>> GetAllAnnualRequestByPeriodIdAsync(ICriteria criteria)
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestSummaryAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -91,7 +90,13 @@
                 {
                     var requests = multi.Read<AnnualManpowerForecastRequest>().ToList();
                     var details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
-                    return (requests, details);
+
+                    foreach (var request in requests)
+                    {
+                        request.Details = details.Where(x => x.RequestId == request.RequestId).ToList();
+                    }
+
+                    return requests;
                 }
             }
         }

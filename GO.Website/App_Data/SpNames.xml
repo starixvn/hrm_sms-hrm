@@ -63,8 +63,8 @@
         </Setting>
         <Setting Key="Manpower_AnnualRequestForm_UpdateStatus" SpName="Manpower_AnnualRequestForm_UpdateStatus" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_AnnualRequestForm_Update" SpName="Manpower_AnnualRequestForm_Update" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_AnnualRequestForm_GetMemberSummaryRequest" SpName="Manpower_AnnualRequestForm_GetMemberSummaryRequest" DbName="bodb_IUC" Plain="0" />
-		<Setting Key="Manpower_AnnualRequestForm_UpdateStatusMemberSummaryRequest" SpName="Manpower_AnnualRequestForm_UpdateStatusMemberSummaryRequest" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_AnnualRequestForm_GetMemberSummaryRequest" SpName="Manpower_AnnualRequestForm_GetMemberSummaryRequest" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_AnnualRequestForm_UpdateStatusMultiRequest" SpName="Manpower_AnnualRequestForm_UpdateStatusMultiRequest" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Report">
         <Setting Key="Report_Manpower_Get" SpName="Report_Manpower_Get" DbName="bodb_IUC" Plain="0" />

@@ -342,7 +342,7 @@
         {
             // Arrange
             var controller = GetController();
-            var criteria = fixture.Create<GetMemberSummaryAnnualManpowerForecastRequestCriteria>();
+            var criteria = fixture.Create<GetMemberAnnualManpowerForecastRequestSummaryCriteria>();
             userControlSession.UserId = fixture.Create<int>();
             criteria.UserId = userControlSession.UserId;
             IEnumerable<AnnualManpowerForecastRequest> expected = null;
@@ -360,7 +360,7 @@
         {
             // Arrange
             var controller = GetController();
-            var criteria = fixture.Create<GetMemberSummaryAnnualManpowerForecastRequestCriteria>();
+            var criteria = fixture.Create<GetMemberAnnualManpowerForecastRequestSummaryCriteria>();
             userControlSession.UserId = fixture.Create<int>();
             criteria.UserId = userControlSession.UserId;
             var expected = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();

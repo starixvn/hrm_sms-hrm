@@ -63,10 +63,10 @@
             {
                 period = periods.First();
                 IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(period.PeriodId);
-                foreach(var item in details)
+                foreach (var item in details)
                 {
                     var prevforecast = prevforecasts.FirstOrDefault(x => x.SiteId == item.SiteId && x.SectionId == item.SectionId && x.JobLevel == item.JobLevel);
-                    if(prevforecast != null)
+                    if (prevforecast != null)
                     {
                         item.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
                         item.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
@@ -100,7 +100,7 @@
                 RequestId = requestId
             };
             AnnualManpowerForecastRequest request = await manpowerForecastRepository.GetAnnualRequestByIdAsync(criteria);
-            if(request != null)
+            if (request != null)
             {
                 IEnumerable<AnnualManpowerForecastRequestDetail> prevForecasts = await GetPreviousApprovedManpowerForecastAsync(request.Period.PeriodId);
                 foreach (var item in request.Details)
@@ -119,16 +119,15 @@
             return request;
         }
 
-        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAllAnnualRequestByPeriodIdAsync(GetMemberSummaryAnnualManpowerForecastRequestCriteria criteria)
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestSummaryAsync(GetMemberAnnualManpowerForecastRequestSummaryCriteria criteria)
         {
-            var (requests, details) = await manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(criteria);
-            foreach(var request in requests)
+            var requests = await manpowerForecastRepository.GetMemberAnnualRequestSummaryAsync(criteria);
+            foreach (var request in requests)
             {
-                request.Details = details.Where(x => x.RequestId == request.RequestId).ToList();
                 IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(criteria.PeriodId);
                 foreach (var detail in request.Details)
                 {
-                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && x.UnitName == detail.UnitName 
+                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && x.UnitName == detail.UnitName
                                                             && x.DepartmentName == detail.DepartmentName && x.SectionName == detail.SectionName).ToList();
                     if (prevforecast != null)
                     {
@@ -184,7 +183,7 @@
             return await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public async Task<CommandResult> UpdateStatusAnnualRequestByPeriodIdAsync(UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand command)
+        public async Task<CommandResult> UpdateStatusMultiAnnualRequestAsync(UpdateStatusMultiAnnualManpowerForecastRequestCommand command)
         {
             return await baseService.ExecuteNonQueryAsync(command);
         }

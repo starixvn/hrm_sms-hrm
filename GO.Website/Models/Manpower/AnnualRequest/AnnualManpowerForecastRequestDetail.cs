@@ -10,8 +10,10 @@
     {
         [XmlIgnore]
         public short PeriodId { get; set; }
+
         [XmlIgnore]
         public short RequestId { get; set; }
+
         public short SiteId { get; set; }
 
         [XmlIgnore]
