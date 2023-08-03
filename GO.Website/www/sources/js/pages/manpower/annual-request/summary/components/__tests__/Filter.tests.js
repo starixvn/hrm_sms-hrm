@@ -14,14 +14,13 @@ describe('Filter', () => {
         jest.clearAllMocks();
     });
 
+    it('renders correctly', () => {
+        expect(render(<Filter periods={[]} onSubmit={jest.fn()} requests={[]} updateStatus={jest.fn()} isHost={true}/>)).toMatchSnapshot();
+    });
+
     test('filter period and unittype select box list [] render successfully', () => {
-        const periods = [];
-        const onSubmit = jest.fn();
-        const requests = [];
-        const updateStatus = jest.fn();
-        const isHost = true;
         // ARRANGE
-        render(<Filter periods={periods} onSubmit={onSubmit} requests={requests} updateStatus={updateStatus} isHost={isHost} />);
+        render(<Filter periods={[]} onSubmit={jest.fn()} requests={[]} updateStatus={jest.fn()} isHost={true} />);
 
         // ACT
         const elementPeriod = screen.getByText('Period');

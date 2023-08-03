@@ -540,7 +540,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         <>
             {
                 requests.length > 0 &&
-                <div className="table-summary">
+                <div data-testid='table-summary' className="table-summary">
                     <table className="table">
                         <thead>
                             {buildHeader()}

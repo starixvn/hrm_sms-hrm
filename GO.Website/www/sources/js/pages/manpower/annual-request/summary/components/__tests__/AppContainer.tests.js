@@ -1,6 +1,6 @@
-﻿import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+﻿import { toast } from 'react-toastify';
+import React from 'react';
+import { render, waitFor, renderHook } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import AppContainer from '../AppContainer';
 
@@ -8,17 +8,25 @@ import DataService from '@jsroot/common/dataService';
 import Site from '@jsroot/common/site';
 import LangHelper from '@jsroot/common/langHelper';
 
-describe('Filter', () => {
-    beforeAll(() => {
+describe('AppContainer', () => {
+    beforeEach(() => {
         LangHelper.getResource = jest.fn(key => key);
         Site.resolveClientUrl = jest.fn(url => url);
+        Site.blockUI = jest.fn(url => url);
+        Site.unblockUI = jest.fn(url => url);
+        toast.success = jest.fn();
+        toast.error = jest.fn();
     });
 
-    afterAll(() => {
+    afterEach(() => {
         jest.clearAllMocks();
     });
 
-    test('filter period and unittype select box list [] render successfully', async () => {
+    it('renders correctly', () => {
+        expect(render(<AppContainer />)).toMatchSnapshot();
+    });
+
+    test('useEffect render successfully', async () => {
         // ARRANGE
         const response = {
             data: []
@@ -29,10 +37,60 @@ describe('Filter', () => {
         await waitFor(() => {
             render(<AppContainer />);
         });
-        const elementPeriod = screen.getByText('Per iod');
 
         // ASSERT
         expect(DataService.postDataAsync).toHaveBeenCalled();
     })
-});
 
+    test('get member requests render successfully', async () => {
+        // ARRANGE
+        const response = {
+            data: [{
+                periodId: 1,
+                name: 'test',
+                year: 1
+            }]
+        };
+        const responseRequest = {
+            data: {
+                requests: [
+                    {
+                        requestId: 1, unitName: 'test', statusId: 1, currentProcessId: 1,
+                        details: [
+                            {
+                                requestId: 1, siteId: 1, siteName: 'test1', companyName: 'CompanyName1', unitName: 'UnitName1',
+                                departmentName: 'DepartmentName1', sectionName: 'SectionName1'
+                            },
+                            {
+                                requestId: 1, siteId: 2, siteName: 'test2', companyName: 'CompanyName2', unitName: 'UnitName2',
+                                departmentName: 'DepartmentName2', sectionName: 'SectionName2'
+                            }
+                        ]
+                    }
+                ],
+                isHost: true,
+                isSuccessful: true
+            }
+        };
+        const promise = Promise.resolve(response);
+        const promiseRequest = Promise.resolve(responseRequest);
+        DataService.postDataAsync = jest.fn();
+        DataService.postDataAsync.mockReturnValueOnce(promise).mockReturnValue(promiseRequest).mockReturnValue(promiseRequest);
+        // ACT
+        const { result } = renderHook(() => AppContainer());
+        await waitFor(() => {
+            const filter = result.current.props.children[0].props;
+            filter.onSubmit({
+                periodId: 1,
+                unitType: 'te'
+            });
+
+            filter.updateStatus({
+                methodName: 'Update'
+            });
+        });
+        // ASSERT
+        expect(DataService.postDataAsync).toHaveBeenCalledTimes(3);
+        expect(toast.success).toHaveBeenCalled();
+    })
+});
