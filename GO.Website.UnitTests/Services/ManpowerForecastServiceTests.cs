@@ -275,7 +275,7 @@
         }
 
         [Fact]
-        public async Task GetAllAnnualRequestByPeriodIdAsync_WhenCalled_ReturnExpectedData()
+        public async Task GetMemberAnnualRequestSummaryAsync_WhenCalled_ReturnExpectedData()
         {
             //Arrange
             var service = GetManpowerForecastService();
@@ -286,22 +286,21 @@
             var criteria = new GetMemberAnnualManpowerForecastRequestSummaryCriteria();
             var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
-            manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(
-                Arg.Do<GetMemberAnnualManpowerForecastRequestSummaryCriteria>(x => criteria = x)).Returns(
-                new ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedRequest, expectedDetail));
+            manpowerForecastRepository.GetMemberAnnualRequestSummaryAsync(
+                Arg.Do<GetMemberAnnualManpowerForecastRequestSummaryCriteria>(x => criteria = x)).Returns(expectedRequest);
 
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(
                 Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
 
             //Act
-            var actual = await service.GetAllAnnualRequestByPeriodIdAsync(criteria);
+            var actual = await service.GetMemberAnnualRequestSummaryAsync(criteria);
 
             //Assert
             Assert.Equal(expectedRequest, actual);
         }
 
         [Fact]
-        public async Task GetAllAnnualRequestByPeriodIdAsync_WhenCalledHaveForecasts_ReturnExpectedData()
+        public async Task GetMemberAnnualRequestSummaryAsync_WhenCalledHaveForecasts_ReturnExpectedData()
         {
             //Arrange
             var service = GetManpowerForecastService();
@@ -325,15 +324,14 @@
             var criteria = new GetMemberAnnualManpowerForecastRequestSummaryCriteria();
             var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
-            manpowerForecastRepository.GetAllAnnualRequestByPeriodIdAsync(
-                Arg.Do<GetMemberAnnualManpowerForecastRequestSummaryCriteria>(x => criteria = x)).Returns(
-                new ValueTuple<IEnumerable<AnnualManpowerForecastRequest>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedRequest, expectedDetail));
+            manpowerForecastRepository.GetMemberAnnualRequestSummaryAsync(
+                Arg.Do<GetMemberAnnualManpowerForecastRequestSummaryCriteria>(x => criteria = x)).Returns(expectedRequest);
 
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(
                 Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
 
             //Act
-            var actual = await service.GetAllAnnualRequestByPeriodIdAsync(criteria);
+            var actual = await service.GetMemberAnnualRequestSummaryAsync(criteria);
 
             //Assert
             Assert.Equal(expectedRequest, actual);

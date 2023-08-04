@@ -8,6 +8,7 @@ import LangHelper from '@jsroot/common/langHelper';
 describe('Filter', () => {
     beforeAll(() => {
         LangHelper.getResource = jest.fn(key => key);
+        window.hasHostPermissionOnSummaryRequest = true;
     });
 
     afterAll(() => {

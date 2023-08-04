@@ -10,7 +10,7 @@
         {
             // Arrange
             var criteria = new GetMemberAnnualManpowerForecastRequestSummaryCriteria();
-            var expected = "Manpower_AnnualRequestForm_GetAllByPeriodId";
+            var expected = "Manpower_AnnualRequestForm_GetMemberSummaryRequest";
 
             // Act
             var actual = criteria.GetSettingKey();

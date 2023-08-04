@@ -49,11 +49,11 @@
             // Arrange
             var controller = GetController();
             //Act
-            var result = controller.Summary();
+            var result = controller.MemberRequestSummary();
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("~/Views/Manpower/AnnualRequest/Summary.cshtml", viewResult.ViewName);
+            Assert.Equal("~/Views/Manpower/AnnualRequest/MemberRequestSummary.cshtml", viewResult.ViewName);
         }
 
         [Fact]
@@ -175,8 +175,7 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
-            Assert.Equal(request, actualRequest);
+            Assert.Equal(request, jsonResult.Value);
         }
 
         [Fact]
@@ -198,8 +197,7 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
-            Assert.Equal(request, actualRequest);
+            Assert.Equal(request, jsonResult.Value);
         }
 
         [Fact]
@@ -221,8 +219,7 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
-            Assert.Equal(request, actualRequest);
+            Assert.Equal(request, jsonResult.Value);
         }
 
         [Fact]
@@ -244,8 +241,7 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
-            Assert.Equal(request, actualRequest);
+            Assert.Equal(request, jsonResult.Value);
         }
 
         [Fact]
@@ -338,24 +334,6 @@
         }
 
         [Fact]
-        public async Task GetAllByPeriodId_WhenCalled_ReturnNotFound()
-        {
-            // Arrange
-            var controller = GetController();
-            var criteria = fixture.Create<GetMemberAnnualManpowerForecastRequestSummaryCriteria>();
-            userControlSession.UserId = fixture.Create<int>();
-            criteria.UserId = userControlSession.UserId;
-            IEnumerable<AnnualManpowerForecastRequest> expected = null;
-            manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria).Returns(expected);
-
-            //Act
-            var result = await controller.GetAllByPeriodId(criteria);
-
-            // Assert
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
         public async Task GetAllByPeriodId_WhenCalled_ReturnExpectedData()
         {
             // Arrange
@@ -364,15 +342,14 @@
             userControlSession.UserId = fixture.Create<int>();
             criteria.UserId = userControlSession.UserId;
             var expected = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
-            manpowerForecastService.GetAllAnnualRequestByPeriodIdAsync(criteria).Returns(expected);
+            manpowerForecastService.GetMemberAnnualRequestSummaryAsync(criteria).Returns(expected);
 
             //Act
-            var result = await controller.GetAllByPeriodId(criteria);
+            var result = await controller.GetMemberRequestSummary(criteria);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualRequest = jsonResult.Value.GetType().GetProperty("request").GetValue(jsonResult.Value);
-            Assert.Equal(expected, actualRequest);
+            Assert.Equal(expected, jsonResult.Value);
         }
 
         [Fact]
@@ -380,14 +357,14 @@
         {
             // Arrange
             var controller = GetController();
-            var command = fixture.Create<UpdateStatusMemberSummaryRequestAnnualManpowerForecastRequestCommand>();
+            var command = fixture.Create<UpdateStatusMultiAnnualManpowerForecastRequestCommand>();
             userControlSession.UserId = fixture.Create<int>();
             command.ModifiedBy = userControlSession.UserId;
             var expected = fixture.Create<CommandResult>();
-            manpowerForecastService.UpdateStatusAnnualRequestByPeriodIdAsync(command).Returns(expected);
+            manpowerForecastService.UpdateStatusMultiAnnualRequestAsync(command).Returns(expected);
 
             //Act
-            var result = await controller.UpdateStatusByPeriodId(command);
+            var result = await controller.UpdateStatusMultiRequest(command);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);

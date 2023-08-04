@@ -46,36 +46,33 @@ describe('AppContainer', () => {
         // ARRANGE
         const response = {
             data: [{
-                periodId: 1,
-                name: 'test',
-                year: 1
+                periodId: 2,
+                name: 'tes',
+                year: 2
             }]
         };
         const responseRequest = {
-            data: {
-                requests: [
-                    {
-                        requestId: 1, unitName: 'test', statusId: 1, currentProcessId: 1,
-                        details: [
-                            {
-                                requestId: 1, siteId: 1, siteName: 'test1', companyName: 'CompanyName1', unitName: 'UnitName1',
-                                departmentName: 'DepartmentName1', sectionName: 'SectionName1'
-                            },
-                            {
-                                requestId: 1, siteId: 2, siteName: 'test2', companyName: 'CompanyName2', unitName: 'UnitName2',
-                                departmentName: 'DepartmentName2', sectionName: 'SectionName2'
-                            }
-                        ]
-                    }
-                ],
-                isHost: true,
-                isSuccessful: true
-            }
+            data: [
+                {
+                    requestId: 2, unitName: 'test2', statusId: 1, currentProcessId: 1,
+                    details: [
+                        {
+                            requestId: 1, siteId: 1, siteName: 'test1', companyName: 'CompanyName1', unitName: 'UnitName1',
+                            departmentName: 'DepartmentName1', sectionName: 'SectionName1'
+                        },
+                        {
+                            requestId: 1, siteId: 2, siteName: 'test2', companyName: 'CompanyName2', unitName: 'UnitName2',
+                            departmentName: 'DepartmentName2', sectionName: 'SectionName2'
+                        }
+                    ]
+                }
+            ]
         };
+
         const promise = Promise.resolve(response);
         const promiseRequest = Promise.resolve(responseRequest);
         DataService.postDataAsync = jest.fn();
-        DataService.postDataAsync.mockReturnValueOnce(promise).mockReturnValue(promiseRequest).mockReturnValue(promiseRequest);
+        DataService.postDataAsync.mockReturnValueOnce(promise).mockReturnValue(promiseRequest);
         // ACT
         const { result } = renderHook(() => AppContainer());
         await waitFor(() => {
@@ -84,13 +81,9 @@ describe('AppContainer', () => {
                 periodId: 1,
                 unitType: 'te'
             });
-
-            filter.updateStatus({
-                methodName: 'Update'
-            });
         });
+
         // ASSERT
-        expect(DataService.postDataAsync).toHaveBeenCalledTimes(3);
-        expect(toast.success).toHaveBeenCalled();
-    })
+        expect(DataService.postDataAsync).toHaveBeenCalledTimes(2);
+    });
 });
