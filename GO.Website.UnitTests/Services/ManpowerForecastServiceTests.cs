@@ -1,5 +1,9 @@
 ﻿namespace GO.Website.UnitTests.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using AutoFixture;
     using GO.Core.Models;
     using GO.Core.Services;
@@ -12,12 +16,7 @@
     using GO.Website.Services;
     using Microsoft.AspNetCore.Hosting;
     using NSubstitute;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
-
 
     public class ManpowerForecastServiceTests
     {
@@ -151,7 +150,7 @@
 
             manpowerForecastRepository.GetAnnualRequestByIdAsync(Arg.Do<GetAnnualManpowerForecastRequestByIdCriteria>(x => criteria = x)).Returns(expectedAnnualManpowerForecastRequest);
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
-           
+
             //Act
             var actual = await service.GetAnnualRequestByIdAsync(requestId);
 
@@ -280,7 +279,6 @@
             //Arrange
             var service = GetManpowerForecastService();
             var expectedRequest = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
-            var expectedDetail = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
             var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
 
             var criteria = new GetMemberAnnualManpowerForecastRequestSummaryCriteria();
@@ -338,6 +336,7 @@
         }
 
         #region Helpers
+
         private ManpowerForecastService GetManpowerForecastService()
         {
             appSettings = fixture.Create<AppSettings>();

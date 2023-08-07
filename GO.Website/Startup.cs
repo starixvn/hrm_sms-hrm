@@ -82,10 +82,11 @@ namespace GO.Website
                 .GetHttpSessionInfo()
                 .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
-            services.AddHttpClient(HttpClientName.DefaultHttpClient).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
-            });
+            services.AddHttpClient(HttpClientName.DefaultHttpClient)
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+                });
             services.AddResponseCaching();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

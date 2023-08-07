@@ -30,7 +30,7 @@ const AppContainer = () => {
     const getUnitTypes = requests => {
         const unitTypes = [];
         requests.map(request => {
-            if (unitTypes.findIndex(x => x.slice(0, 2) === request.unitName.slice(0, 2)) === -1) {
+            if (unitTypes.findIndex(x => x === request.unitName.slice(0, 2)) === -1) {
                 unitTypes.push(request.unitName.slice(0, 2));
             }
         });

@@ -15,23 +15,23 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     const getActionDialog = () => {
         let action = '';
         if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
-            && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1) {
+            && requests.filter(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending).length > 0) {
             action = LangHelper.getResource('Verify');
-        }
-
-        if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
-            && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1) {
-            action = LangHelper.getResource('Approve');
+        } else {
+            if (requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
+                && requests.filter(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified).length > 0) {
+                action = LangHelper.getResource('Approve');
+            }
         }
 
         return action;
     };
 
     const isVerify = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Verifier
-        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending) !== -1;
+        && requests.filter(x => x.statusId === AnnualManpowerForecastRequestStatus.Pending).length > 0;
 
     const isApprove = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
-        && requests.findIndex(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified) !== -1;
+        && requests.filter(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified).length > 0;
 
     const isReset = () => requests.length > 0 && !isVerify() && !isApprove();
 

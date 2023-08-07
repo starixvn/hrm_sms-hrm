@@ -20,14 +20,14 @@
         }
 
         [Theory]
-        [InlineData("test", 1, 1)]
-        public void IsValid_WhenCalled_ReturnTrue(string requestIds, int modifiedId, byte statusId)
+        [InlineData("1", 1)]
+        public void IsValid_WhenCalled_ReturnTrue(string requestIds, int modifiedId)
         {
             // Arrange
-            var criteria = new UpdateStatusMultiAnnualManpowerForecastRequestCommand() { 
+            var criteria = new UpdateStatusMultiAnnualManpowerForecastRequestCommand
+            {
                 RequestIds = requestIds,
-                ModifiedBy = modifiedId,
-                StatusId = statusId
+                ModifiedBy = modifiedId
             };
 
             // Act

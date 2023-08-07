@@ -44,7 +44,7 @@
         }
 
         [Fact]
-        public void Summary_WhenCalled_ReturnExpectedViewData()
+        public void MemberRequestSummary_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -334,7 +334,10 @@
         }
 
         [Fact]
-        public async Task GetAllByPeriodId_WhenCalled_ReturnExpectedData()
+        public async Task GetMemberRequestSummary_WhenCalled_ReturnNotFound()
+            manpowerForecastService.GetMemberAnnualRequestSummaryAsync(criteria).Returns(expected);
+            var result = await controller.GetMemberRequestSummary(criteria);
+        public async Task GetMemberRequestSummary_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -353,7 +356,7 @@
         }
 
         [Fact]
-        public async Task UpdateStatusByPeriodId_WhenCalled_ReturnExpectedData()
+        public async Task UpdateStatusMultiRequest_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
