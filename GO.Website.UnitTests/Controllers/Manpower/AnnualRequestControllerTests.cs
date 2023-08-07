@@ -1,5 +1,8 @@
 ﻿namespace GO.Website.UnitTests.Controllers.Manpower
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using AutoFixture;
     using GO.Core.Models;
     using GO.Website.Constants;
@@ -13,9 +16,6 @@
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
     using NSubstitute;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Xunit;
 
     public class AnnualRequestControllerTests
@@ -66,9 +66,7 @@
             var details = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
             userControlSession.UserId = fixture.Create<int>();
 
-            manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, 
-                unitName).Returns(new ValueTuple<ManpowerPeriod, 
-                IEnumerable<AnnualManpowerForecastRequestDetail>>(periods, details));
+            manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName).Returns((periods, details));
 
             //Act
             var result = await controller.GetDataForCreateAnnualRequest(unitName);
@@ -334,9 +332,6 @@
         }
 
         [Fact]
-        public async Task GetMemberRequestSummary_WhenCalled_ReturnNotFound()
-            manpowerForecastService.GetMemberAnnualRequestSummaryAsync(criteria).Returns(expected);
-            var result = await controller.GetMemberRequestSummary(criteria);
         public async Task GetMemberRequestSummary_WhenCalled_ReturnExpectedData()
         {
             // Arrange
