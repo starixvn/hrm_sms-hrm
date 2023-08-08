@@ -9,5 +9,6 @@
         public const string MyAnnualManpowerForecastRequestForm = "MyAnnualManpowerForecastRequestForm";
         public const string MemberAnnualManpowerForecastRequestForm = "MemberAnnualManpowerForecastRequestForm";
         public const string MemberAnnualManpowerForecastRequestSummary = "MemberAnnualManpowerForecastRequestSummary";
+        public const string AdminPageRolePermission = "RolePermission";
     }
 }

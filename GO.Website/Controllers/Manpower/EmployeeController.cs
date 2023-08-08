@@ -1,7 +1,7 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
     using System.Threading.Tasks;
-    using GO.Admin.Website.Filters;
+    using GO.Website.Filters;
     using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Constants;

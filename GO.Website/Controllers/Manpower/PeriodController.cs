@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Admin.Website.Filters;
+    using GO.Website.Filters;
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
     using GO.Core.Services;

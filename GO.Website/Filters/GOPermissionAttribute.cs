@@ -1,4 +1,4 @@
-﻿namespace GO.Admin.Website.Filters
+﻿namespace GO.Website.Filters
 {
     using System;
     using System.Linq;

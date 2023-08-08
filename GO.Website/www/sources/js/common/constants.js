@@ -17,3 +17,9 @@ export const AnnualManpowerForecastRequestStatus = {
     Verified: 2,
     Approved: 3
 };
+
+export const Policy = {
+    None: 0,
+    Read: 1,
+    Host: 2
+};
