@@ -54,8 +54,12 @@ const AppContainer = () => {
 
     return (
         <div>
-            <Filter roles={roles} getRolePermission={getRolePermission} roleSelected={roleSelected} setRoleSelected={setRoleSelected}/>
-            <DataGrid rolePermission={rolePermission} setRolePermission={setRolePermission} />
+            <Filter roles={roles}
+                getRolePermission={getRolePermission}
+                roleSelected={roleSelected}
+                setRoleSelected={setRoleSelected} />
+            <DataGrid rolePermission={rolePermission}
+                setRolePermission={setRolePermission} />
             {
                 window.hasHostPermission && roles.length > 0 &&
                 rolePermission && rolePermission.functions.length > 0 &&

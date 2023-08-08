@@ -6,3 +6,7 @@
 @import '../../../components/forms';
 @import '../../../components/react-select';
 @import '../../../components/modal';
+
+.form-filter {
+    max-width: 720px !important;
+}
