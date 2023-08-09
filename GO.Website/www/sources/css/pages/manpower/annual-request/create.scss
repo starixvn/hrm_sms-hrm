@@ -15,7 +15,7 @@
     max-height: 80vh;
 
     &.has-filter {
-        max-height: 70vh;
+        max-height: 65vh;
     }
 }
 
@@ -32,7 +32,7 @@
     }
 
     .status {
-        margin-right: 20px;
+        margin-right: 20px; 
     }
 
     .bold {
@@ -103,6 +103,10 @@
 
             thead {
                 z-index: 98;
+
+                th {
+                    background-clip: padding-box;
+                }
             }
 
             .input-add {
@@ -110,19 +114,18 @@
                 width: 25px;
                 text-align: center;
                 border-width: 0 0 1px 0;
+                -moz-appearance: textfield;
 
                 &:focus {
                     outline: none;
                     border-bottom-color: #2684ff;
                 }
-            }
 
-            .input-add[type=number]::-webkit-inner-spin-button,
-            .input-add[type=number]::-webkit-outer-spin-button {
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
-                margin: 0;
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
             }
 
             &:last-child {
@@ -145,12 +148,13 @@
                 th {
                     background: #FFD966;
                     height: 111px;
+                    background-clip: padding-box
                 }
             }
 
             .jobLevel {
                 width: 18%;
-                background: #FFE699;
+                background-color: #FFE699;
             }
 
             .data-unit {
