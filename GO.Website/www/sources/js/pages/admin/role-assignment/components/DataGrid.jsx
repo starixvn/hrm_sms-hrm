@@ -28,7 +28,10 @@ export class DataGrid extends Component {
                 <HeaderCell colWidth={15}>{LangHelper.getResource('FullName')}</HeaderCell>
                 <HeaderCell colWidth={15}>{LangHelper.getResource('Roles')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Status')}</HeaderCell>
-                <HeaderCell colWidth={6}>{LangHelper.getResource('Action')}</HeaderCell>
+                {
+                    window.hasHostPermissionOnRoleAssignment &&
+                    <HeaderCell colWidth={6}>{LangHelper.getResource('Action')}</HeaderCell>
+                }
             </HeaderRow>
         );
     };
@@ -77,9 +80,12 @@ export class DataGrid extends Component {
             <Cell>{user.fullName}</Cell>
             <Cell>{user.roles.map(role => role.name).join(', ')}</Cell>
             <Cell className="text-center">{this.getStatus(user)}</Cell>
-            <Cell className="text-center action-cell">
-                <a className="icon-edit fa fa-edit" onClick={() => this.handleUpdateRole(user)} />
-            </Cell>
+            {
+                window.hasHostPermissionOnRoleAssignment &&
+                <Cell className="text-center action-cell">
+                    <a className="icon-edit fa fa-edit" onClick={() => this.handleUpdateRole(user)} />
+                </Cell>
+            }
         </Row>
     );
 
