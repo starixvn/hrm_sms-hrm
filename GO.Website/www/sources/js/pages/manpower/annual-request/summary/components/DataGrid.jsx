@@ -17,16 +17,16 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 <th className="name-step-background hide-border fixed-header fixed-header-department" rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
                 <th className="name-step-background section hide-border fixed-header fixed-header-section" rowSpan={3}>{LangHelper.getResource('Section')}</th>
                 <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {year + LangHelper.getResource('ManpowerHeadcountCurrent')}
+                    {(year - 1) + LangHelper.getResource('ManpowerHeadcountCurrent')}
                 </th>
                 <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {year + LangHelper.getResource('ApprovedForecastHeadcount')}
+                    {(year - 1) + LangHelper.getResource('ApprovedForecastHeadcount')}
                 </th>
                 <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
                     {LangHelper.getResource('AdditionalHeadcount')}
                 </th>
                 <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {(year + 1) + LangHelper.getResource('ManpowerHeadcountForecast')}
+                    {year + LangHelper.getResource('ManpowerHeadcountForecast')}
                 </th>
             </tr>);
     };
