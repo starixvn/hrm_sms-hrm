@@ -64,7 +64,7 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest,
             <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleSubmit}>
                 {LangHelper.getResource('Submit')}
             </Button>
-            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={handleBack} >
+            <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={handleBack} >
                 {LangHelper.getResource('Back')}
             </Button>
         </div>

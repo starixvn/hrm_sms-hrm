@@ -224,7 +224,7 @@ const AppContainer = ({ getAnnualRequestById,
                 logDetailModalDialog.show &&
                 <LogModalDialog />
             }
-            <Button variant="primary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
+            <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
                 {LangHelper.getResource('Back')}
             </Button>
         </>

@@ -1,0 +1,16 @@
+﻿@import "~react-toastify/dist/ReactToastify.css";
+@import '../../abstracts/mixins';
+@import '../../components/buttons';
+@import '../../components/react-grid/react-grid';
+@import '../../components/form-filter';
+@import '../../components/forms';
+@import '../../components/icons';
+@import '../../components/tables';
+@import '../../components/react-select';
+@import "../../components/modal";
+
+.assign-user-role-form {
+    .form-check {
+        padding-top: 7px;
+    }
+}

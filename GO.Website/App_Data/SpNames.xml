@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+    <Function Name="Role Assignment">
+        <Setting Key="GO_UserRole_Get" SpName="GO_UserRole_Get" DbName="bodb_IUC" Plain="0" />
+    </Function>
     <Function Name="User">
         <Setting Key="User_GetUserSiteByUserId" SpName="User_GetUserSiteByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
