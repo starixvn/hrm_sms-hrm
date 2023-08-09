@@ -1,5 +1,7 @@
 ﻿namespace GO.Website.Controllers.Admin
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using GO.Website.Constants;
     using GO.Website.Filters;
     using GO.Website.Models.Admin.RolePermission;
@@ -9,8 +11,6 @@
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     [Route("Admin/RolePermission/[action]")]
     public class RolePermissionController : BaseController
@@ -18,6 +18,7 @@
         private readonly IUserControlSession userControlSession;
         private readonly IRoleService roleService;
         private readonly IFunctionService functionService;
+
         public RolePermissionController(
             IUserControlSession userControlSession,
             IRoleService roleService,
@@ -28,13 +29,13 @@
             this.functionService = functionService;
         }
 
-        public IActionResult Permission()
+        public IActionResult Index()
         {
             bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.AdminPageRolePermission, Policy.Host);
-            return View("~/Views/Admin/RolePermission/Permission.cshtml", isHost);
+            return View("~/Views/Admin/RolePermission/Index.cshtml", isHost);
         }
 
-        public async Task<IActionResult> GetBySiteId(bool? isActive = true)
+        public async Task<IActionResult> GetRoles(bool? isActive = true)
         {
             IList<Role> roles = await roleService.GetBySiteIdAsync(userControlSession.SiteId, isActive);
             return Json(roles);

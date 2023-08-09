@@ -41,7 +41,7 @@ const AppContainer = () => {
 
     useEffect(() => {
         const getRoleBySiteId = async () => {
-            const url = Site.resolveClientUrl('Admin/RolePermission/GetBySiteId');
+            const url = Site.resolveClientUrl('Admin/RolePermission/GetRoles');
             await DataService.getDataAsync(url).then(response => {
                 setRoles(response.data);
                 if (response.data.length > 0) {
