@@ -20,9 +20,9 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, c
 
     const handleSubmit = () => {
         const details = [];
-        requestDetails.map(itemDetail => {
-            if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
-                details.push(itemDetail);
+        requestDetails.map(item => {
+            if (item.expatAddition !== 0 || item.localAddition !== 0) {
+                details.push(item);
             }
         });
         const param = {

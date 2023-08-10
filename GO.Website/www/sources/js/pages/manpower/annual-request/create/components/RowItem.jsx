@@ -5,12 +5,11 @@ import { bindActionCreators } from 'redux';
 import { ActionCreators } from '../../action';
 import Equal from '@jsroot/components/CompareText';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
+import { renderNumberOfHeadcount } from '../../../common.funcs';
 
 const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem,
     isTableTotal, request, logDetails, setLogDetailModalDialog }) => {
     const MaxAdditionalInput = 100;
-
-    const checkZero = number => number !== 0 ? number : '';
 
     const checkMaxInput = number => number > MaxAdditionalInput ? MaxAdditionalInput : number;
 
@@ -30,18 +29,18 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
     const renderTotalDetail = () => {
         return (
             <tr>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatCurrentHeadcount)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localCurrentHeadcount)}</td>
-                <td className="highlight">{checkZero(total.totalCurrentHeadcount)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatApprovedHeadcount)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localApprovedHeadcount)}</td>
-                <td className="highlight">{checkZero(total.totalApprovedHeadcount)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatAddition)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localAddition)}</td>
-                <td className="highlight">{checkZero(total.totalAddition)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.expatForecastHeadcount)}</td>
-                <td className={`${isTableTotal ? '' : 'highlight'}`}>{checkZero(total.localForecastHeadcount)}</td>
-                <td className="highlight">{checkZero(total.totalForecastHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.expatCurrentHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.localCurrentHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(total.totalCurrentHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.expatApprovedHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.localApprovedHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(total.totalApprovedHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.expatAddition)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.localAddition)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(total.totalAddition)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.expatForecastHeadcount)}</td>
+                <td className={`${isTableTotal ? '' : 'highlight'}`}>{renderNumberOfHeadcount(total.localForecastHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(total.totalForecastHeadcount)}</td>
             </tr>
         );
     };
@@ -90,44 +89,46 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
 
         return (
             <tr>
-                <td>{checkZero(itemDetail.expatCurrentHeadcount)}</td>
-                <td>{checkZero(itemDetail.localCurrentHeadcount)}</td>
-                <td className="highlight">{checkZero(itemDetail.totalCurrentHeadcount)}</td>
-                <td>{checkZero(itemDetail.expatApprovedHeadcount)}</td>
-                <td>{checkZero(itemDetail.localApprovedHeadcount)}</td>
-                <td className="highlight">{checkZero(itemDetail.totalApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(itemDetail.expatCurrentHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(itemDetail.localCurrentHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(itemDetail.totalCurrentHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(itemDetail.expatApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(itemDetail.localApprovedHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(itemDetail.totalApprovedHeadcount)}</td>
                 <td>
                     {
-                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && checkZero(itemDetail.expatAddition)
+                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && renderNumberOfHeadcount(itemDetail.expatAddition)
                     }
                     {
                         (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
                         <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
-                            value={checkZero(itemDetail.expatAddition)}></input>
+                            value={renderNumberOfHeadcount(itemDetail.expatAddition)}
+                        />
                     }
                 </td>
                 <td>
                     {
-                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && checkZero(itemDetail.localAddition)
+                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && renderNumberOfHeadcount(itemDetail.localAddition)
                     }
                     {
                         (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
                         <input className="input-add" type="number"
                             min={0} max={MaxAdditionalInput}
                             onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
-                            value={checkZero(itemDetail.localAddition)}></input>
+                            value={renderNumberOfHeadcount(itemDetail.localAddition)}
+                        />
                     }
                 </td>
                 <td className="highlight">
                     <div className="company-total-add">
-                        {checkZero(itemDetail.totalAddition)}
+                        {renderNumberOfHeadcount(itemDetail.totalAddition)}
                         {!isTableTotal && logs.length > 1 && <span className="fa fa-info-circle" onClick={handleShowLogModalDialog} />}
                     </div>
                 </td>
-                <td>{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
-                <td>{checkZero(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
-                <td className="highlight">{checkZero(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
+                <td>{renderNumberOfHeadcount(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
                     itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
             </tr>
         );

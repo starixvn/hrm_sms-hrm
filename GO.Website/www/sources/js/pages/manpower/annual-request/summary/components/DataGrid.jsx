@@ -2,11 +2,11 @@
 
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
+import { renderNumberOfHeadcount } from '../../../common.funcs';
 import Equal from '@jsroot/components/CompareText';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const MaxStep = 4;
-    const checkZero = number => number !== 0 ? number : '';
 
     const renderFirstRowHeader = () => {
         const year = periodSelected.year;
@@ -118,13 +118,13 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
                     rows.push(
                         <td key={`${key}-local`}>
-                            {checkZero(detail.localCurrentHeadcount)}
+                            {renderNumberOfHeadcount(detail.localCurrentHeadcount)}
                         </td>,
                         <td key={`${key}-expat`}>
-                            {checkZero(detail.expatCurrentHeadcount)}
+                            {renderNumberOfHeadcount(detail.expatCurrentHeadcount)}
                         </td>,
                         <td key={`${key}-total`}>
-                            {checkZero(detail.totalCurrentHeadcount)}
+                            {renderNumberOfHeadcount(detail.totalCurrentHeadcount)}
                         </td>);
                 }
             });
@@ -138,7 +138,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         });
 
         const key = `section-CurrentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -159,13 +159,13 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
                     rows.push(
                         <td key={`${key}-local`}>
-                            {checkZero(detail.localApprovedHeadcount)}
+                            {renderNumberOfHeadcount(detail.localApprovedHeadcount)}
                         </td>,
                         <td key={`${key}-expat`}>
-                            {checkZero(detail.expatApprovedHeadcount)}
+                            {renderNumberOfHeadcount(detail.expatApprovedHeadcount)}
                         </td>,
                         <td key={`${key}-total`}>
-                            {checkZero(detail.totalApprovedHeadcount)}
+                            {renderNumberOfHeadcount(detail.totalApprovedHeadcount)}
                         </td>
                     );
                 }
@@ -180,7 +180,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         });
 
         const key = `section-ApprovedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -202,13 +202,13 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
                     rows.push(
                         <td key={`${key}-local`}>
-                            {checkZero(detail.localAddition)}
+                            {renderNumberOfHeadcount(detail.localAddition)}
                         </td>,
                         <td key={`${key}-expat`}>
-                            {checkZero(detail.expatAddition)}
+                            {renderNumberOfHeadcount(detail.expatAddition)}
                         </td>,
                         <td key={`${key}-total`}>
-                            {checkZero(detail.totalAddition)}
+                            {renderNumberOfHeadcount(detail.totalAddition)}
                         </td>
                     );
                 }
@@ -223,7 +223,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         });
 
         const key = `section-Additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -245,13 +245,13 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
                     row.push(
                         <td key={`${key}-local`}>
-                            {checkZero(detail.localApprovedHeadcount + detail.localAddition)}
+                            {renderNumberOfHeadcount(detail.localApprovedHeadcount + detail.localAddition)}
                         </td>,
                         <td key={`${key}-expat`}>
-                            {checkZero(detail.expatApprovedHeadcount + detail.expatAddition)}
+                            {renderNumberOfHeadcount(detail.expatApprovedHeadcount + detail.expatAddition)}
                         </td>,
                         <td key={`${key}-total`}>
-                            {checkZero(detail.totalApprovedHeadcount + detail.totalAddition)}
+                            {renderNumberOfHeadcount(detail.totalApprovedHeadcount + detail.totalAddition)}
                         </td>
                     );
                 }
@@ -266,7 +266,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         });
 
         const key = `section-Forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        row.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        row.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return row;
     };
@@ -308,15 +308,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
             const key = `department-${company}-${deparment.departmentName}-totalcurrentheadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `department-${deparment.departmentName}-totalcurrentheadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -338,15 +338,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
             const key = `department-${company}-${deparment.departmentName}-totalApprovedForecastheadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `department-${deparment.departmentName}-totalApprovedForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -368,15 +368,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
             const key = `department-${company}-${deparment.departmentName}-totalAdditionalheadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `department-${deparment.departmentName}-totalApprovedForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -398,15 +398,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
             const key = `department-${company}-${deparment.departmentName}-totalForecastheadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `department-${deparment.departmentName}-totalForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -448,15 +448,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { local, expat } = calculaTotalCurrentHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalcurrentheadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `unitType-${unitType}-totalcurrentheadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -484,14 +484,14 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { local, expat } = calculaTotalApprovedHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalApprovedforecast`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>);
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>);
             grandtotal += local + expat;
         });
 
         const key = `unitType-${unitType}-totalApprovedforecast-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -519,15 +519,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { local, expat } = calculaTotalAdditionalHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalAdditionalHeadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `unitType-${unitType}-totalAdditionalHeadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };
@@ -555,15 +555,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const { local, expat } = calculaTotalForecastHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalForecastHeadcount`;
             rows.push(
-                <td key={`${key}-local`}>{checkZero(local)}</td>,
-                <td key={`${key}-expat`}>{checkZero(expat)}</td>,
-                <td key={`${key}-total`}>{checkZero(local + expat)}</td>
+                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
+                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
+                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
             );
             grandtotal += local + expat;
         });
 
         const key = `unitType-${unitType}-totalForecastHeadcount-grandtotal`;
-        rows.push(<td key={key}>{checkZero(grandtotal)}</td>);
+        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
     };

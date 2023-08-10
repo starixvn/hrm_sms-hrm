@@ -11,6 +11,7 @@ import LogModalDialog from './LogModalDialog';
 import { ActionCreators } from '../../action';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
+import { getAnnualRequestStatus } from '../../../common.funcs';
 
 const AppContainer = ({ getAnnualRequestById,
     request,
@@ -43,22 +44,6 @@ const AppContainer = ({ getAnnualRequestById,
     const isReset = () => request.isEdit &&
         ((request.currentProcessId === ManpowerFlow.Approver && AnnualManpowerForecastRequestStatus.Approved === request.statusId) ||
             (request.currentProcessId === ManpowerFlow.Verifier && AnnualManpowerForecastRequestStatus.Verified === request.statusId));
-
-    const getStatus = statusId => {
-        let status = '';
-        switch (statusId) {
-            case AnnualManpowerForecastRequestStatus.Pending:
-                status = LangHelper.getResource('Pending');
-                break;
-            case AnnualManpowerForecastRequestStatus.Verified:
-                status = LangHelper.getResource('Verified');
-                break;
-            case AnnualManpowerForecastRequestStatus.Approved:
-                status = LangHelper.getResource('Approved');
-                break;
-        }
-        return status;
-    };
 
     const handleSubmit = () => {
         const details = [];
@@ -124,7 +109,7 @@ const AppContainer = ({ getAnnualRequestById,
         <>
             <div className="filter">
                 <span className="status">{LangHelper.getResource('Status') + ': '}</span>
-                <span className="bold">{getStatus(request.statusId)}</span>
+                <span className="bold">{getAnnualRequestStatus(request.statusId)}</span>
             </div>
             <div className="request-form has-filter">
                 <div className="manpower-forecast row">
@@ -166,14 +151,10 @@ const AppContainer = ({ getAnnualRequestById,
                     title={LangHelper.getResource('Confirmation')}
                     contents={<div>Are you sure you want to <strong>submit</strong> this request?</div>}
                     buttons={[
-                        <Button variant="primary" size="sm" key="ok"
-                            onClick={handleSubmit}
-                        >
+                        <Button variant="primary" size="sm" key="ok" onClick={handleSubmit}>
                             {LangHelper.getResource('OK')}
                         </Button>,
-                        <Button variant="secondary" size="sm" key="cancel"
-                            onClick={() => setSubmitModalDialog(false)}
-                        >
+                        <Button variant="secondary" size="sm" key="cancel" onClick={() => setSubmitModalDialog(false)}>
                             {LangHelper.getResource('Cancel')}
                         </Button>
                     ]}
@@ -184,36 +165,28 @@ const AppContainer = ({ getAnnualRequestById,
                 verifyApproveModalDialog &&
                 <SweetModalDialog
                     title={LangHelper.getResource('Confirmation')}
-                    contents={<div>Are you sure you want to <strong>{getStatus(request.statusId + 1)}</strong> this request?</div>}
+                    contents={<div>Are you sure you want to <strong>{getRequestStatus(request.statusId + 1)}</strong> this request?</div>}
                     buttons={[
-                        <Button variant="primary" size="sm" key="ok"
-                            onClick={handleUpdateRequest}
-                        >
+                        <Button variant="primary" size="sm" key="ok" onClick={handleUpdateRequest}>
                             {LangHelper.getResource('OK')}
                         </Button>,
-                        <Button variant="secondary" size="sm" key="cancel"
-                            onClick={() => setverifyApproveModalDialog(false)}
-                        >
+                        <Button variant="secondary" size="sm" key="cancel" onClick={() => setverifyApproveModalDialog(false)}>
                             {LangHelper.getResource('Cancel')}
                         </Button>
                     ]}
                     onClose={() => setverifyApproveModalDialog(false)}
                 />
-            }            
+            }
             {
                 resetModalDialog &&
                 <SweetModalDialog
                     title={LangHelper.getResource('Confirmation')}
                     contents={<div>Are you sure you want to <strong>reset</strong> this request?</div>}
                     buttons={[
-                        <Button variant="primary" size="sm" key="ok"
-                            onClick={handleResetStatus}
-                        >
+                        <Button variant="primary" size="sm" key="ok" onClick={handleResetStatus}>
                             {LangHelper.getResource('OK')}
                         </Button>,
-                        <Button variant="secondary" size="sm" key="cancel"
-                            onClick={() => setResetModalDialog(false)}
-                        >
+                        <Button variant="secondary" size="sm" key="cancel" onClick={() => setResetModalDialog(false)}>
                             {LangHelper.getResource('Cancel')}
                         </Button>
                     ]}

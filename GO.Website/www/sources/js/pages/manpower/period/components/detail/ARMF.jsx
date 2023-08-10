@@ -1,5 +1,4 @@
-import React, { PureComponent } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 
@@ -7,32 +6,25 @@ import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
 import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
+import { getAnnualRequestStatus } from '../../../common.funcs';
 
-export default class DataGrid extends PureComponent {
-    constructor(props) {
-        super(props);
+const DataGrid = () => {
+    const [requests, setRequests] = useState([]);
 
-        this.state = {
-            requests: null
-        };
-    }
+    useEffect(() => {
+        getAnnualRequestByPeriodId();
+    }, []);
 
-    componentDidMount() {
-        this.getAnnualRequestByPeriodId();
-    }
-
-    getAnnualRequestByPeriodId = async () => {
+    const getAnnualRequestByPeriodId = async () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetByPeriodId');
         const params = { periodId: window.periodId };
         await DataService.postDataAsync(url, params).then(response => {
-            this.setState({
-                requests: response.data
-            });
+            setRequests(response.data);
         }).then(() => Site.unblockUI());
     };
 
-    buildHeader = () => {
+    const buildHeader = () => {
         return (
             <HeaderRow>
                 <HeaderCell colWidth={3}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
@@ -46,25 +38,7 @@ export default class DataGrid extends PureComponent {
         );
     };
 
-    renderStatus = statusId => {
-        let status = '';
-        switch (statusId) {
-            case AnnualManpowerForecastRequestStatus.Pending:
-                status = LangHelper.getResource('Pending');
-                break;
-            case AnnualManpowerForecastRequestStatus.Verified:
-                status = LangHelper.getResource('Verified');
-                break;
-            case AnnualManpowerForecastRequestStatus.Approved:
-                status = LangHelper.getResource('Approved');
-                break;
-        }
-
-        return status;
-    };
-
-    buildBody = () => {
-        const requests = this.state.requests;
+    const buildBody = () => {
         if (requests.length > 0) {
             return requests.map((item, index) =>
                 <Row key={item.requestId}>
@@ -73,18 +47,10 @@ export default class DataGrid extends PureComponent {
                     <Cell>{item.unitName}</Cell>
                     <Cell>{item.verifier != null ? `${item.verifier.fullName} (${item.verifier.nickname})` : ''}</Cell>
                     <Cell>{item.approver != null ? `${item.approver.fullName} (${item.approver.nickname})` : ''}</Cell>
-                    <Cell className="text-center">{this.renderStatus(item.statusId)}</Cell>
+                    <Cell className="text-center">{getAnnualRequestStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
                         <a href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${item.requestId}`)}>
-                            <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
-                                overlay={
-                                    <Tooltip id={`tooltip-request-${item.requestId}`}>
-                                        Detail
-                                    </Tooltip>
-                                }
-                            >
-                                <i className="icon-edit fa fa-search" />
-                            </OverlayTrigger>
+                            <i className="icon-edit fa fa-search" />
                         </a>
                     </Cell>
                 </Row>
@@ -98,22 +64,18 @@ export default class DataGrid extends PureComponent {
         ];
     };
 
-    render() {
-        if (!this.state.requests) {
-            return null;
-        }
+    return (
+        <Table
+            minWidth={720}
+            maxWidth={document.getElementById('detail-app-container').clientWidth}
+            autoWidth
+            header={buildHeader()}
+            body={buildBody()}
+            isPaging={false}
+            containerPadding={0}
+            adjustedHeight={10}
+        />
+    );
+};
 
-        return (
-            <Table
-                minWidth={720}
-                maxWidth={document.getElementById('detail-app-container').clientWidth}
-                autoWidth
-                header={this.buildHeader()}
-                body={this.buildBody()}
-                isPaging={false}
-                containerPadding={0}
-                adjustedHeight={10}
-            />
-        );
-    }
-}
+export default DataGrid;

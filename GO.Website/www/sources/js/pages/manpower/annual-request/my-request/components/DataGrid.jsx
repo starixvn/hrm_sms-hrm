@@ -5,7 +5,7 @@ import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/reac
 
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
-import { AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
+import { getAnnualRequestStatus } from '../../../common.funcs';
 
 const DataGrid = ({ requests }) => {
     const buildHeader = () => {
@@ -22,23 +22,6 @@ const DataGrid = ({ requests }) => {
         );
     };
 
-    const renderStatus = statusId => {
-        let status = '';
-        switch (statusId) {
-            case AnnualManpowerForecastRequestStatus.Pending:
-                status = LangHelper.getResource('Pending');
-                break;
-            case AnnualManpowerForecastRequestStatus.Verified:
-                status = LangHelper.getResource('Verified');
-                break;
-            case AnnualManpowerForecastRequestStatus.Approved:
-                status = LangHelper.getResource('Approved');
-                break;
-        }
-
-        return status;
-    };
-
     const buildBody = () => {
         if (requests.length > 0) {
             return requests.map((item, index) =>
@@ -48,7 +31,7 @@ const DataGrid = ({ requests }) => {
                     <Cell>{item.unitName}</Cell>
                     <Cell>{item.verifier != null ? `${item.verifier.fullName} (${item.verifier.nickname})` : ''}</Cell>
                     <Cell>{item.approver != null ? `${item.approver.fullName} (${item.approver.nickname})` : ''}</Cell>
-                    <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
+                    <Cell className="text-center">{getAnnualRequestStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
                         <a href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${item.requestId}`)}>
                             <OverlayTrigger placement="auto" trigger={['focus', 'hover']}

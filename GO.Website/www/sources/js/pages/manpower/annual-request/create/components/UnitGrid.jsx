@@ -6,73 +6,70 @@ import { ActionCreators } from '../../action';
 import LangHelper from '@jsroot/common/langHelper';
 
 const UnitGrid = ({ departments, jobLevels, unitSelected }) => {
-    const renderJobLevel = itemSection => {
-        const cellJobLevel = [];
-        jobLevels.map(itemJobLevel => {
-            cellJobLevel.push(
-                <tr key={`columnJobLevel-${itemSection + itemJobLevel}`}>
-                    <td>{itemJobLevel}</td>
+    const renderJobLevel = sectionName => {
+        const cells = [];
+        jobLevels.map(jobLevel => {
+            cells.push(
+                <tr key={`col-jobLevel-${sectionName}-${jobLevel}`}>
+                    <td>{jobLevel}</td>
                 </tr>
             );
         });
-        cellJobLevel.push(
-            <tr key={`columnJobLevelToTal-${itemSection}`}>
+        cells.push(
+            <tr key={`col-jobLevel-total-${sectionName}`}>
                 <td className="data-section"></td>
             </tr>
         );
-        return cellJobLevel;
+        return cells;
     };
 
-    const renderSection = itemDepartment => {
-        let rowSpanDepartment = 2;
-        const rowSpanSection = 10;
-        const cellSections = [];
-        itemDepartment.sections.map(itemSection => {
-            rowSpanDepartment += rowSpanSection;
-            const cellJobLevel = renderJobLevel(itemSection);
-            cellSections.push(
-                <tr key={`columnSection-${itemDepartment.departmentName + itemSection}`}>
-                    <td rowSpan={rowSpanSection}
-                        className="data-section">{itemSection}</td>
+    const renderSection = deptItem => {
+        let deptRowSpan = 2;
+        const sectionRowSpan = 10;
+        const sectionCells = [];
+        deptItem.sections.map(sectionName => {
+            deptRowSpan += sectionRowSpan;
+            sectionCells.push(
+                <tr key={`col-section-${deptItem.departmentName}-${sectionName}`}>
+                    <td rowSpan={sectionRowSpan} className="data-section">{sectionName}</td>
                 </tr>
             );
-            cellSections.push(cellJobLevel);
+            sectionCells.push(renderJobLevel(sectionName));
         });
-        return { cellSections, rowSpanDepartment };
+        return { sectionCells, deptRowSpan };
     };
 
     const renderDepartment = () => {
-        let rowSpanUnit = 3;
-        const cellDepartments = [];
-        departments.map(itemDepartment => {
-            const { cellSections, rowSpanDepartment } = renderSection(itemDepartment);
-            cellDepartments.push(
-                <tr key={`columnDeparment-${unitSelected.value + itemDepartment.departmentName}`}>
-                    <td rowSpan={rowSpanDepartment}
-                        className="data-unit">{itemDepartment.departmentName}</td>
+        let unitRowSpan = 3;
+        const deptCells = [];
+        departments.map(deptItem => {
+            const { sectionCells, deptRowSpan } = renderSection(deptItem);
+            deptCells.push(
+                <tr key={`col-dept-${unitSelected.value}-${deptItem.departmentName}`}>
+                    <td rowSpan={deptRowSpan} className="data-unit">{deptItem.departmentName}</td>
                 </tr>
             );
-            cellDepartments.push(cellSections);
-            cellDepartments.push(
-                <tr key={`columnTotal-${unitSelected.value + itemDepartment.departmentName}`} className="data-section data-unit">
+            deptCells.push(sectionCells);
+            deptCells.push(
+                <tr key={`col-total-${unitSelected.value}-${deptItem.departmentName}`} className="data-section data-unit">
                     <td>{LangHelper.getResource('Total')}</td>
                     <td></td>
                 </tr>
             );
-            rowSpanUnit += rowSpanDepartment - 1;
+            unitRowSpan += deptRowSpan - 1;
         });
-        return {cellDepartments, rowSpanUnit};
+        return { deptCells, unitRowSpan };
     };
 
     const renderbody = () => {
         const cells = [];
-        const { cellDepartments, rowSpanUnit } = renderDepartment();
+        const { deptCells, unitRowSpan } = renderDepartment();
         cells.push(
-            <tr key={`columnUnit-${unitSelected.value}`}>
-                <td rowSpan={rowSpanUnit} className="data-unit" >{unitSelected.value}</td>
+            <tr key={`col-unit-${unitSelected.value}`}>
+                <td rowSpan={unitRowSpan} className="data-unit">{unitSelected.value}</td>
             </tr>
         );
-        cells.push(cellDepartments);
+        cells.push(deptCells);
 
         return cells;
     };
@@ -88,7 +85,7 @@ const UnitGrid = ({ departments, jobLevels, unitSelected }) => {
                     <th>{LangHelper.getResource('Unit')}</th>
                     <th>{LangHelper.getResource('Department')}</th>
                     <th>{LangHelper.getResource('Section')}</th>
-                    <th className="jobLevel">{LangHelper.getResource('JobLevel')}</th>
+                    <th className="job-level">{LangHelper.getResource('JobLevel')}</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,6 +94,7 @@ const UnitGrid = ({ departments, jobLevels, unitSelected }) => {
         </table>
     );
 };
+
 const mapDispatchToProps = dispatch => bindActionCreators(ActionCreators, dispatch);
 
 const mapStateToProps = state => {
