@@ -6,7 +6,7 @@ import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
-const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
+const Filter = ({ periods, onSubmit, requests, updateStatus, setPeriodSelected }) => {
     const [period, setPeriod] = useState(null);
     const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
     const [resetModalDialog, setResetModalDialog] = useState(false);
@@ -43,6 +43,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
                 periodId: periods[0].periodId,
                 unitType: unitType.value
             };
+            setPeriodSelected(periods.find(x => x.periodId === params.periodId));
             onSubmit(params);
         }
     }, [periods]);
@@ -59,6 +60,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
 
         if (periods.length > 0) {
             const params = getParams();
+            setPeriodSelected(periods.find(x => x.periodId === params.periodId));
             onSubmit(params);
         }
     };

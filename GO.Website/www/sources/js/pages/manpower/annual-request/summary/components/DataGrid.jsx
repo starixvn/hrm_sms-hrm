@@ -632,10 +632,41 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return row;
     };
 
+    const buildTableNoneData = () => {
+        return <div data-testid='table-summary' className="table-summary">
+            <table className="table">
+                <thead>
+                    <tr key="first-row-header">
+                        <th className="name-step-background hide-border fixed-header fixed-header-unit">{LangHelper.getResource('Unit')}</th>
+                        <th className="name-step-background hide-border fixed-header fixed-header-department">{LangHelper.getResource('Deparment')}</th>
+                        <th className="name-step-background section hide-border fixed-header fixed-header-section">{LangHelper.getResource('Section')}</th>
+                        <th className="name-step-background">
+                            {(periodSelected.year - 1) + LangHelper.getResource('ManpowerHeadcountCurrent')}
+                        </th>
+                        <th className="name-step-background">
+                            {(periodSelected.year - 1) + LangHelper.getResource('ApprovedForecastHeadcount')}
+                        </th>
+                        <th className="name-step-background">
+                            {LangHelper.getResource('AdditionalHeadcount')}
+                        </th>
+                        <th className="name-step-background">
+                            {periodSelected.year + LangHelper.getResource('ManpowerHeadcountForecast')}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr key={'body'} className="no-data">
+                        <td colSpan={7}>{LangHelper.getResource('ThereIsNoData')}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    };
+
     return (
         <>
             {
-                requests.length > 0 &&
+                periodSelected != null && requests.length > 0 &&
                 <div data-testid='table-summary' className="table-summary">
                     <table className="table">
                         <thead>
@@ -646,6 +677,9 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                         </tbody>
                     </table>
                 </div>
+            }
+            {
+                periodSelected != null && requests.length === 0 && buildTableNoneData()
             }
         </>
     );
