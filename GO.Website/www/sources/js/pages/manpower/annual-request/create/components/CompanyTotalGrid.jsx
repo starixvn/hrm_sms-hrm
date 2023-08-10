@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
 
+import Equal from '@jsroot/components/CompareText';
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 
@@ -21,8 +22,8 @@ const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelec
                 expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
             requestDetails.map(itemDetail => {
-                if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
-                    itemDetail.sectionName === itemSection && itemDetail.jobLevel === itemJobLevel) {
+                if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, itemDepartment.departmentName) &&
+                    Equal(itemDetail.sectionName, itemSection) && itemDetail.jobLevel === itemJobLevel) {
                     totalJoblevel = {
                         expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
                         localCurrentHeadcount: totalJoblevel.localCurrentHeadcount + itemDetail.localCurrentHeadcount,

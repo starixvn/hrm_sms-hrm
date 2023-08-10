@@ -2,6 +2,7 @@
 
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
+import Equal from '@jsroot/components/CompareText';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const MaxStep = 4;
@@ -80,8 +81,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const getSection = (request, detaildepartment) => {
         const sections = [];
         request.details.map(detail => {
-            if (detail.departmentName === detaildepartment.departmentName
-                && sections.findIndex(section => section === detail.sectionName) === -1) {
+            if (Equal(detail.departmentName, detaildepartment.departmentName)
+                && sections.findIndex(section => Equal(section, detail.sectionName)) === -1) {
                 sections.push(detail.sectionName);
             }
         });
@@ -91,7 +92,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const getDepartment = request => {
         const departments = [];
         request.details.map(detail => {
-            if (departments.findIndex(x => x.departmentName === detail.departmentName) === -1) {
+            if (departments.findIndex(x => Equal(x.departmentName, detail.departmentName)) === -1) {
                 departments.push({
                     departmentName: detail.departmentName,
                     sections: getSection(request, detail)
@@ -110,8 +111,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const key = `section-CurrentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
-                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName
-                    && detail.sectionName === section && company === detail.companyName) {
+                if (detail.unitName === request.unitName && Equal(detail.departmentName, deparment.departmentName)
+                    && Equal(detail.sectionName, section) && company === detail.companyName) {
                     grandtotal += detail.totalCurrentHeadcount;
                     checkNone++;
 
@@ -151,8 +152,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const key = `section-ApprovedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
-                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName
-                    && detail.sectionName === section && company === detail.companyName) {
+                if (detail.unitName === request.unitName && Equal(detail.departmentName, deparment.departmentName)
+                    && Equal(detail.sectionName, section) && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount;
                     checkNone++;
 
@@ -194,8 +195,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const key = `section-Additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
-                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName
-                    && detail.sectionName === section && company === detail.companyName) {
+                if (detail.unitName === request.unitName && Equal(detail.departmentName, deparment.departmentName)
+                    && Equal(detail.sectionName, section) && company === detail.companyName) {
                     grandtotal += detail.totalAddition;
                     checkNone++;
 
@@ -237,8 +238,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             const key = `section-Forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
-                if (detail.unitName === request.unitName && detail.departmentName === deparment.departmentName
-                    && detail.sectionName === section && company === detail.companyName) {
+                if (detail.unitName === request.unitName && Equal(detail.departmentName, deparment.departmentName)
+                    && Equal(detail.sectionName, section) && company === detail.companyName) {
                     grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
                     checkNone++;
 
@@ -298,7 +299,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             let expat = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName
-                    && detail.departmentName === deparment.departmentName
+                    && Equal(detail.departmentName, deparment.departmentName)
                     && company === detail.companyName) {
                     local += detail.localCurrentHeadcount;
                     expat += detail.expatCurrentHeadcount;
@@ -328,7 +329,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             let expat = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName
-                    && detail.departmentName === deparment.departmentName
+                    && Equal(detail.departmentName, deparment.departmentName)
                     && company === detail.companyName) {
                     local += detail.localApprovedHeadcount;
                     expat += detail.expatApprovedHeadcount;
@@ -358,7 +359,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             let expat = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName
-                    && detail.departmentName === deparment.departmentName
+                    && Equal( detail.departmentName, deparment.departmentName)
                     && company === detail.companyName) {
                     local += detail.localAddition;
                     expat += detail.expatAddition;
@@ -388,7 +389,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             let expat = 0;
             request.details.map(detail => {
                 if (detail.unitName === request.unitName
-                    && detail.departmentName === deparment.departmentName
+                    && Equal(detail.departmentName, deparment.departmentName)
                     && company === detail.companyName) {
                     local += detail.localApprovedHeadcount + detail.localAddition;
                     expat += detail.expatApprovedHeadcount + detail.expatAddition;

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Equal from '@jsroot/components/CompareText';
 
 const annualRequestSlice = createSlice({
     name: 'annualRequestSlice',
@@ -32,11 +33,11 @@ const annualRequestSlice = createSlice({
         setDepartments: (state, action) => {
             const departments = [];
             action.payload.map(item => {
-                if (departments.findIndex(x => x.departmentName === item.departmentName) === -1) {
+                if (departments.findIndex(x => Equal(x.departmentName, item.departmentName)) === -1) {
                     const sections = [];
                     action.payload.map(detail => {
-                        if (detail.departmentName === item.departmentName
-                            && sections.findIndex(section => section === detail.sectionName) === -1) {
+                        if (Equal(detail.departmentName, item.departmentName)
+                            && sections.findIndex(section => Equal(section, detail.sectionName)) === -1) {
                             sections.push(detail.sectionName);
                         }
                     });
@@ -57,8 +58,8 @@ const annualRequestSlice = createSlice({
         addRequestDetailsItem: (state, action) => {
             const { companyName, unitName, departmentName, sectionName, jobLevel, columnName, value } = action.payload;
 
-            const index = state.requestDetails.findIndex(x => x.unitName === unitName && x.departmentName === departmentName
-                && x.sectionName === sectionName && x.jobLevel === jobLevel && x.companyName === companyName);
+            const index = state.requestDetails.findIndex(x => x.unitName === unitName && Equal(x.departmentName, departmentName)
+                && Equal(x.sectionName, sectionName) && x.jobLevel === jobLevel && x.companyName === companyName);
             if (index >= 0) {
                 state.requestDetails[index][columnName] = value;
 

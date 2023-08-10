@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
+import Equal from '@jsroot/components/CompareText';
 import CompanyTotalGrid from './CompanyTotalGrid';
 
 const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails, unitSelected }) => {
     const renderSectionNoneData = (itemDepartment, itemSection) => {
         const bodyJobLevel = [];
         requestDetails.map(itemDetail => {
-            if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
-                itemDetail.sectionName === itemSection) {
+            if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, itemDepartment.departmentName) &&
+                Equal(itemDetail.sectionName, itemSection)) {
                 bodyJobLevel.push(<RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
                         isRenderData={false} isRenderTotal={false}/>);
             }
@@ -48,8 +49,8 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
             expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
         requestDetails.map(itemDetail => {
-            if (itemDetail.unitName === unitSelected.value && itemDetail.departmentName === itemDepartment.departmentName &&
-                itemDetail.sectionName === itemSection && itemDetail.companyName === company) {
+            if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, itemDepartment.departmentName) &&
+                Equal(itemDetail.sectionName, itemSection) && itemDetail.companyName === company) {
                 bodyJobLevel.push(
                     <RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
                         isDetail={isDetail} itemDetail={itemDetail} isRenderData={true} isRenderTotal={false} />
@@ -134,10 +135,10 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
     const isExistCompany = company => requestDetails.find(x => x.unitName === unitSelected.value
         && x.companyName === company) != null ? true : false;
 
-    const isExistDepartment = (company, itemDepartment) => requestDetails.find(x => x.departmentName === itemDepartment.departmentName
+    const isExistDepartment = (company, itemDepartment) => requestDetails.find(x => Equal(x.departmentName, itemDepartment.departmentName)
         && x.companyName === company) != null ? true : false;
 
-    const isExistSection = (company, itemSection) => requestDetails.find(x => x.sectionName === itemSection
+    const isExistSection = (company, itemSection) => requestDetails.find(x => Equal(x.sectionName, itemSection)
         && x.companyName === company) != null ? true : false;
 
     const renderBodyTable = company => {
