@@ -4,10 +4,10 @@ import Select from 'react-select';
 import LangHelper from '@jsroot/common/langHelper';
 
 const Filter = ({ roles, getRolePermission, roleSelected, setRoleSelected }) => {
-    const handleChange = selected => {
-        setRoleSelected(selected);
+    const handleChange = selectedItem => {
+        setRoleSelected(selectedItem);
         getRolePermission({
-            roleId: selected.value
+            roleId: selectedItem.value
         });
     };
 
@@ -18,7 +18,7 @@ const Filter = ({ roles, getRolePermission, roleSelected, setRoleSelected }) => 
     }, [roles]);
 
     const roleOptions = roles.map(item => { return { value: item.roleId, label: item.name }; });
-        
+
     return (
         <Form className="form-filter">
             <Form.Row bsPrefix="form-row">
@@ -26,7 +26,7 @@ const Filter = ({ roles, getRolePermission, roleSelected, setRoleSelected }) => 
                     <Form.Label>{LangHelper.getResource('Role')}</Form.Label>
                     <Select className={`react-select-container`} classNamePrefix="react-select"
                         options={roleOptions} value={roleSelected}
-                        onChange={value => handleChange(value)}
+                        onChange={handleChange}
                     />
                 </Form.Group>
             </Form.Row>

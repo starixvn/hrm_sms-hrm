@@ -20,20 +20,20 @@ export default class DataGrid extends PureComponent {
         return [
             <HeaderRow key="header-row1">
                 <HeaderCell colWidth={3} rowSpan={2}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
-                <HeaderCell colWidth={10} rowSpan={2}>{LangHelper.getResource('Name')}</HeaderCell>
-                <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('UnitHead')}</HeaderCell>
-                <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Verifier')}</HeaderCell>
-                <HeaderCell colWidth={8} colSpan={2}>{LangHelper.getResource('Approver')}</HeaderCell>
+                <HeaderCell colWidth={14} rowSpan={2}>{LangHelper.getResource('Name')}</HeaderCell>
+                <HeaderCell colWidth={12} colSpan={2}>{LangHelper.getResource('UnitHead')}</HeaderCell>
+                <HeaderCell colWidth={12} colSpan={2}>{LangHelper.getResource('Verifier')}</HeaderCell>
+                <HeaderCell colWidth={12} colSpan={2}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Active')}</HeaderCell>
                 <HeaderCell colWidth={4} rowSpan={2}>{LangHelper.getResource('Action')}</HeaderCell>
             </HeaderRow>,
             <HeaderRow key="header-row2">
-                <HeaderCell colWidth={8}>{LangHelper.getResource('FromDate')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('ToDate')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('FromDate')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('ToDate')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('FromDate')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('ToDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('FromDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('ToDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('FromDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('ToDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('FromDate')}</HeaderCell>
+                <HeaderCell colWidth={6}>{LangHelper.getResource('ToDate')}</HeaderCell>
             </HeaderRow>
             ];
     };

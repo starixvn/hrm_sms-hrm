@@ -13,6 +13,8 @@
         public string FullName { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
+        public string SiteName { get; set; }
+        public string CompanyName { get; set; }
 
         public IList<UserRole> Roles { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { Form } from 'react-bootstrap';
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 
@@ -121,7 +121,7 @@ const DataGrid = ({ rolePermission, setRolePermission }) => {
             const childs = functions.filter(child => child.parentId === parentId
                 && permissions.filter(item => item.functionId === child.functionId
                     && ((target === 'funcRead' && item.isRead) || (target === 'funcHost' && item.isHost))).length > 0);
-            isChecked = childs.length === 0 ? false : true;
+            isChecked = childs.length !== 0;
         }
 
         updatePermission(functions, permissions, functions[pindex].functionId, target, isChecked);

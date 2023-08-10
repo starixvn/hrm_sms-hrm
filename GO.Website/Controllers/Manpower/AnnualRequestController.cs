@@ -72,7 +72,7 @@
                 return NotFound();
             }
 
-            request.IsEdit = IsEditIntoUnitHead(request) || IsEditIntoVerify(request) || IsEditIntoApprove(request);
+            request.IsEdit = IsEditOnUnitHead(request) || IsEditOnVerify(request) || IsEditOnApprove(request);
             return Json(request);
         }
 
@@ -102,6 +102,11 @@
         {
             criteria.UserId = userControlSession.UserId;
             var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
+            foreach(var request in requests)
+            {
+                request.IsEdit = IsEditOnUnitHead(request) || IsEditOnVerify(request) || IsEditOnApprove(request);
+            }
+
             return Json(requests);
         }
 
@@ -146,13 +151,13 @@
             return Json(requests);
         }
 
-        private bool IsEditIntoUnitHead(AnnualManpowerForecastRequest request)
+        private bool IsEditOnUnitHead(AnnualManpowerForecastRequest request)
             => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
 
-        private bool IsEditIntoVerify(AnnualManpowerForecastRequest request)
+        private bool IsEditOnVerify(AnnualManpowerForecastRequest request)
            => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verifier;
 
-        private bool IsEditIntoApprove(AnnualManpowerForecastRequest request)
+        private bool IsEditOnApprove(AnnualManpowerForecastRequest request)
            => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approver;
     }
 }

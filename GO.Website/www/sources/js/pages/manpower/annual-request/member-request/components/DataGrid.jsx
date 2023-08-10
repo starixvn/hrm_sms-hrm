@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { Cell, HeaderCell, HeaderRow, Row, Table } from '@jsroot/components/react-grid/index';
 
@@ -51,15 +50,14 @@ const DataGrid = ({ requests }) => {
                     <Cell className="text-center">{renderStatus(item.statusId)}</Cell>
                     <Cell className="text-center">
                         <a href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${item.requestId}`)}>
-                            <OverlayTrigger placement="auto" trigger={['focus', 'hover']}
-                                overlay={
-                                    <Tooltip id={`tooltip-request-${item.requestId}`}>
-                                        Detail
-                                    </Tooltip>
-                                }
-                            >
+                            {
+                                item.isEdit &&
+                                <i className="icon-edit fa fa-edit" />
+                            }
+                            {
+                                !item.isEdit &&
                                 <i className="icon-edit fa fa-search" />
-                            </OverlayTrigger>
+                            }
                         </a>
                     </Cell>
                 </Row>

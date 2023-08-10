@@ -19,8 +19,8 @@ const cssPaths = {
     annual_manpower_forecast_request_memberpage: ['./www/sources/css/pages/manpower/annual-request/member-request.scss'],
     annual_manpower_forecast_request_create: ['./www/sources/css/pages/manpower/annual-request/create.scss'],
     annual_manpower_forecast_request_summary: ['./www/sources/css/pages/manpower/annual-request/summary.scss'],
-    role_assignment: ['./www/sources/css/pages/admin/role-assignment.scss'],
-    admin_role_permission: ['./www/sources/css/pages/admin/role-permission/index.scss']
+    role_permission: ['./www/sources/css/pages/admin/role-permission.scss'],
+    role_assignment: ['./www/sources/css/pages/admin/role-assignment.scss']
 };
 
 const scriptPaths = {
@@ -41,7 +41,7 @@ const scriptPaths = {
     annual_manpower_forecast_request_create: ['./www/sources/js/pages/manpower/annual-request/create/index.js'],
     annual_manpower_forecast_request_detail: ['./www/sources/js/pages/manpower/annual-request/detail/index.js'],
     annual_manpower_forecast_request_summary: ['./www/sources/js/pages/manpower/annual-request/summary/index.js'],
-    admin_role_permission: ['./www/sources/js/pages/admin/role-permission/index.js'],
+    role_permission: ['./www/sources/js/pages/admin/role-permission/index.js'],
     role_assignment: ['./www/sources/js/pages/admin/role-assignment/index.js']
 };
 

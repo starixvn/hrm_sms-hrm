@@ -4,7 +4,7 @@
         <Setting Key="GO_UserRole_Get" SpName="GO_UserRole_Get" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="User">
-        <Setting Key="User_GetUserSiteByUserId" SpName="User_GetUserSiteByUserId" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="GO_User_GetUserSiteByUserId" SpName="GO_User_GetUserSiteByUserId" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="Unit Head">
         <Setting Key="API_UnitHead_GetInfo" SpName="API_UnitHead_GetInfo" DbName="bodb_IUC" Plain="0" />

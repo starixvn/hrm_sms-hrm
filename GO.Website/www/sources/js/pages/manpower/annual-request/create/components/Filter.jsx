@@ -7,25 +7,21 @@ import { ActionCreators } from '../../action';
 import LangHelper from '@jsroot/common/langHelper';
 
 const Filter = ({ unitSelected, setUnitSelected, getDataForCreateAnnualRequest }) => {
-    const handleChange = async value => {
-        await setUnitSelected(value);
+    const handleChange = value => {
+        setUnitSelected(value);
         getDataForCreateAnnualRequest(value.value);
     };
 
-    const unitOptions = () => {
-        const options = [];
-        window.units.map(item => {
-            options.push({ value: item, label: item });
-        });
-        return options;
-    };
+    const unitOptions = window.units.map(item => {
+        return { value: item, label: item };
+    });
 
     return (
         <div className="filter">
             <span className="unit">{LangHelper.getResource('Unit')}</span>
             <Select className="react-select-container unit-option"
                 classNamePrefix="react-select" isSearchable={false}
-                options={unitOptions()} value={unitSelected}
+                options={unitOptions} value={unitSelected}
                 onChange={handleChange}
             />
         </div>

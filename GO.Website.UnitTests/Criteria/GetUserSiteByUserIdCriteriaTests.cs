@@ -10,7 +10,7 @@
         {
             // Arrange
             var criteria = new GetUserSiteByUserIdCriteria();
-            var expected = "User_GetUserSiteByUserId";
+            var expected = "GO_User_GetUserSiteByUserId";
 
             // Act
             var actual = criteria.GetSettingKey();

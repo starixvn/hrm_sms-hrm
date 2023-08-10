@@ -4,16 +4,16 @@
 }
 @section Breadcrumb {
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">Admin</li>
+        <li class="breadcrumb-item">Admin Center</li>
         <li class="breadcrumb-item active">Role Permission</li>
     </ol>
 }
 @section Styles {
     <environment include="Development">
-        <link rel="stylesheet" href="~/css/dev/pages/admin/role-permission/index.chunk.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/dev/pages/admin/role-permission.chunk.css" asp-append-version="true" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/pro/pages/admin/role-permission/index.chunk.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/pro/pages/admin/role-permission.chunk.css" asp-append-version="true" />
     </environment>
 }
 @section Scripts {
@@ -26,10 +26,10 @@
         <script>window.hasHostPermission = false;</script>
     }
     <environment include="Development">
-        <script src="~/js/dev/pages/admin/role-permission/index.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/dev/pages/admin/role-permission.chunk.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
-        <script src="~/js/pro/pages/admin/role-permission/index.chunk.js" asp-append-version="true"></script>
+        <script src="~/js/pro/pages/admin/role-permission.chunk.js" asp-append-version="true"></script>
     </environment>
 }
 <div id="app-container"></div>
