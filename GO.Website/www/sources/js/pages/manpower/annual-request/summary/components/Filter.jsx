@@ -6,7 +6,7 @@ import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 
-const Filter = ({ periods, onSubmit, requests, updateStatus, setPeriodSelected }) => {
+const Filter = ({ periods, onSubmit, requests, updateStatus }) => {
     const [period, setPeriod] = useState(null);
     const [verifyApproveModalDialog, setVerifyApproveModalDialog] = useState(false);
     const [resetModalDialog, setResetModalDialog] = useState(false);
@@ -33,7 +33,7 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, setPeriodSelected }
     const isApprove = () => requests.length > 0 && requests[0].currentProcessId === ManpowerFlow.Approver
         && requests.filter(x => x.statusId === AnnualManpowerForecastRequestStatus.Verified).length > 0;
 
-    const isReset = () => requests.length > 0 && !isVerify() && !isApprove();
+    const isReset = () => requests.length > 0 && requests[0].currentProcessId != null && !isVerify() && !isApprove();
 
     useEffect(() => {
         if (periods.length > 0) {
@@ -43,7 +43,6 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, setPeriodSelected }
                 periodId: periods[0].periodId,
                 unitType: unitType.value
             };
-            setPeriodSelected(periods.find(x => x.periodId === params.periodId));
             onSubmit(params);
         }
     }, [periods]);
@@ -60,7 +59,6 @@ const Filter = ({ periods, onSubmit, requests, updateStatus, setPeriodSelected }
 
         if (periods.length > 0) {
             const params = getParams();
-            setPeriodSelected(periods.find(x => x.periodId === params.periodId));
             onSubmit(params);
         }
     };

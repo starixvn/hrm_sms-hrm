@@ -41,6 +41,7 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('ManpowerForecast/AnnualRequest/GetMemberRequestSummary');
         await DataService.postDataAsync(url, params).then(response => {
+            setPeriodSelected(periods.find(x => x.periodId === params.periodId));
             setRequests(response.data);
             getCompanies(response.data);
             getUnitTypes(response.data);
@@ -64,9 +65,6 @@ const AppContainer = () => {
             const url = Site.resolveClientUrl('Common/GetManpowerPeriods');
             await DataService.postDataAsync(url).then(response => {
                 setPeriods(response.data);
-                if (response.data.length > 0) {
-                    setPeriodSelected(periods.find(x => x.periodId === response.data[0].periodId));
-                }
             });
         };
         getPeriods();
@@ -78,7 +76,6 @@ const AppContainer = () => {
                 onSubmit={getMemberRequests}
                 requests={requests}
                 updateStatus={updateStatus}
-                setPeriodSelected={setPeriodSelected}
             />
             <DataGrid requests={requests}
                 companies={companies}
