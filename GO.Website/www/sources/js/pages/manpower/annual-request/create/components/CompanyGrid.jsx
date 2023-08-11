@@ -7,85 +7,84 @@ import { Equal } from '@jsroot/common/string.funcs';
 import CompanyTotalGrid from './CompanyTotalGrid';
 
 const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails, unitSelected }) => {
-    const renderSectionNoneData = (itemDepartment, itemSection) => {
-        const bodyJobLevel = [];
-        requestDetails.map(itemDetail => {
-            if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, itemDepartment.departmentName) &&
-                Equal(itemDetail.sectionName, itemSection)) {
-                bodyJobLevel.push(<RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
+    const renderSectionNoneData = (deptItem, sentionName) => {
+        const jobLevelRows = [];
+        requestDetails.map(item => {
+            if (item.unitName === unitSelected.value && Equal(item.departmentName, deptItem.departmentName) && Equal(item.sectionName, sentionName)) {
+                jobLevelRows.push(<RowItem key={`${unitSelected.value}-${deptItem.departmentName}-${sentionName}-${item.jobLevel}`}
                         isRenderData={false} isRenderTotal={false}/>);
             }
         });
-        return bodyJobLevel;
+        return jobLevelRows;
     };
 
-    const renderDepartmentNoneData = itemDepartment => {
-        const bodySection = [];
-        itemDepartment.sections.map(itemSection => {
-            const bodyJobLevel = renderSectionNoneData(itemDepartment, itemSection);
-            bodySection.push(bodyJobLevel);
-            bodySection.push(<RowItem key={`columnTotalSection-${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}`}
+    const renderDepartmentNoneData = deptItem => {
+        const sectionRows = [];
+        deptItem.sections.map(sentionName => {
+            const jobLevelRows = renderSectionNoneData(deptItem, sentionName);
+            sectionRows.push(jobLevelRows);
+            sectionRows.push(<RowItem key={`col-total-section-${unitSelected.value}-${deptItem.departmentName}-${sentionName}`}
                     isRenderData={false} isRenderTotal={false}/>);
         });
-        return bodySection;
+        return sectionRows;
     };
 
     const renderUnitNoneData = () => {
-        const body = [];
-        departments.map(itemDepartment => {
-            const bodySection = renderDepartmentNoneData(itemDepartment);
-            body.push(bodySection);
-            body.push(<RowItem key={`columnTotalDepartment-${unitSelected.value}-${itemDepartment.departmentName}`} isRenderData={false} isRenderTotal={false}/>);
+        const rows = [];
+        departments.map(deptItem => {
+            const sectionRows = renderDepartmentNoneData(deptItem);
+            rows.push(sectionRows);
+            rows.push(<RowItem key={`col-total-dept-${unitSelected.value}-${deptItem.departmentName}`} isRenderData={false} isRenderTotal={false}/>);
         });
-        return body;
+        return rows;
     };
 
-    const renderJoblevel = (itemDepartment, itemSection, company) => {
-        const bodyJobLevel = [];
+    const renderJoblevel = (deptItem, sentionName, companyName) => {
+        const jobLevelRows = [];
         let totalSection = {
             expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
             expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0,
             expatAddition: 0, localAddition: 0, totalAddition: 0,
             expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
-        requestDetails.map(itemDetail => {
-            if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, itemDepartment.departmentName) &&
-                Equal(itemDetail.sectionName, itemSection) && itemDetail.companyName === company) {
-                bodyJobLevel.push(
-                    <RowItem key={`${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}-${itemDetail.jobLevel}`}
-                        isDetail={isDetail} itemDetail={itemDetail} isRenderData={true} isRenderTotal={false} />
+        requestDetails.map(item => {
+            if (item.unitName === unitSelected.value && Equal(item.departmentName, deptItem.departmentName) &&
+                Equal(item.sectionName, sentionName) && item.companyName === companyName) {
+                jobLevelRows.push(
+                    <RowItem key={`${unitSelected.value}-${deptItem.departmentName}-${sentionName}-${item.jobLevel}`}
+                        isDetail={isDetail} itemDetail={item} isRenderData={true} isRenderTotal={false} />
                 );
 
                 totalSection = {
-                    expatCurrentHeadcount: totalSection.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
-                    localCurrentHeadcount: totalSection.localCurrentHeadcount + itemDetail.localCurrentHeadcount,
-                    totalCurrentHeadcount: totalSection.totalCurrentHeadcount + itemDetail.totalCurrentHeadcount,
-                    expatApprovedHeadcount: totalSection.expatApprovedHeadcount + itemDetail.expatApprovedHeadcount,
-                    localApprovedHeadcount: totalSection.localApprovedHeadcount + itemDetail.localApprovedHeadcount,
-                    totalApprovedHeadcount: totalSection.totalApprovedHeadcount + itemDetail.totalApprovedHeadcount,
-                    expatAddition: totalSection.expatAddition + itemDetail.expatAddition,
-                    localAddition: totalSection.localAddition + itemDetail.localAddition,
-                    totalAddition: totalSection.totalAddition + itemDetail.totalAddition,
-                    expatForecastHeadcount: totalSection.expatForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount,
-                    localForecastHeadcount: totalSection.localForecastHeadcount + itemDetail.localAddition + itemDetail.localApprovedHeadcount,
-                    totalForecastHeadcount: totalSection.totalForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount
-                        + itemDetail.localAddition + itemDetail.localApprovedHeadcount
+                    expatCurrentHeadcount: totalSection.expatCurrentHeadcount + item.expatCurrentHeadcount,
+                    localCurrentHeadcount: totalSection.localCurrentHeadcount + item.localCurrentHeadcount,
+                    totalCurrentHeadcount: totalSection.totalCurrentHeadcount + item.totalCurrentHeadcount,
+                    expatApprovedHeadcount: totalSection.expatApprovedHeadcount + item.expatApprovedHeadcount,
+                    localApprovedHeadcount: totalSection.localApprovedHeadcount + item.localApprovedHeadcount,
+                    totalApprovedHeadcount: totalSection.totalApprovedHeadcount + item.totalApprovedHeadcount,
+                    expatAddition: totalSection.expatAddition + item.expatAddition,
+                    localAddition: totalSection.localAddition + item.localAddition,
+                    totalAddition: totalSection.totalAddition + item.totalAddition,
+                    expatForecastHeadcount: totalSection.expatForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount,
+                    localForecastHeadcount: totalSection.localForecastHeadcount + item.localAddition + item.localApprovedHeadcount,
+                    totalForecastHeadcount: totalSection.totalForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount
+                        + item.localAddition + item.localApprovedHeadcount
                 };
             }
         });
-        return { totalSection, bodyJobLevel };
+        return { totalSection, jobLevelRows };
     };
 
-    const renderSection = (itemDepartment, company) => {
-        const bodySection = [];
+    const renderSection = (deptItem, companyName) => {
+        const sectionRows = [];
         let totalDepartment = {
             expatCurrentHeadcount: 0, localCurrentHeadcount: 0, totalCurrentHeadcount: 0,
             expatApprovedHeadcount: 0, localApprovedHeadcount: 0, totalApprovedHeadcount: 0, expatAddition: 0,
             localAddition: 0, totalAddition: 0, expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
         };
-        itemDepartment.sections.map(itemSection => {
-            if (isExistSection(company, itemSection)) {
-                const { totalSection, bodyJobLevel } = renderJoblevel(itemDepartment, itemSection, company);
+        deptItem.sections.map(sentionName => {
+            if (isExistSection(companyName, sentionName)) {
+                const { totalSection, jobLevelRows } = renderJoblevel(deptItem, sentionName, companyName);
                 totalDepartment = {
                     expatCurrentHeadcount: totalDepartment.expatCurrentHeadcount + totalSection.expatCurrentHeadcount,
                     localCurrentHeadcount: totalDepartment.localCurrentHeadcount + totalSection.localCurrentHeadcount,
@@ -101,64 +100,59 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
                     totalForecastHeadcount: totalDepartment.totalForecastHeadcount + totalSection.totalForecastHeadcount
                 };
 
-                bodySection.push(bodyJobLevel);
-                bodySection.push(<RowItem key={`columnTotalSection-${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}`}
+                sectionRows.push(jobLevelRows);
+                sectionRows.push(<RowItem key={`col-total-section-${unitSelected.value}-${deptItem.departmentName}-${sentionName}`}
                         total={totalSection} isRenderData={false} isRenderTotal={true}/> );
-            }
-            else {
-                bodySection.push(renderSectionNoneData(itemDepartment, itemSection));
-                bodySection.push(<RowItem key={`columnTotalSection-${unitSelected.value}-${itemDepartment.departmentName}-${itemSection}`}
+            } else {
+                sectionRows.push(renderSectionNoneData(deptItem, sentionName));
+                sectionRows.push(<RowItem key={`col-total-section-${unitSelected.value}-${deptItem.departmentName}-${sentionName}`}
                         isRenderData={false} isRenderTotal={false}/>);
             }
         });
-        return { totalDepartment, bodySection };
+        return { totalDepartment, sectionRows };
     };
 
-    const renderDepartment = company => {
-        const body = [];
-        departments.map(itemDepartment => {
-            if (isExistDepartment(company, itemDepartment)) {
-                const { totalDepartment, bodySection } = renderSection(itemDepartment, company);
-                body.push(bodySection);
-                body.push(<RowItem key={`columnTotalDepartment-${unitSelected.value}-${itemDepartment.departmentName}`}
+    const renderDepartment = companyName => {
+        const rows = [];
+        departments.map(deptItem => {
+            if (isExistDepartment(companyName, deptItem)) {
+                const { totalDepartment, sectionRows } = renderSection(deptItem, companyName);
+                rows.push(sectionRows);
+                rows.push(<RowItem key={`col-total-dept-${unitSelected.value}-${deptItem.departmentName}`}
                     total={totalDepartment} isRenderData={false} isRenderTotal={true} />);
-            }
-            else {
-                body.push(renderDepartmentNoneData(itemDepartment));
-                body.push(<RowItem key={`columnTotalDepartment-${unitSelected.value}-${itemDepartment.departmentName}`}
+            } else {
+                rows.push(renderDepartmentNoneData(deptItem));
+                rows.push(<RowItem key={`col-total-dept-${unitSelected.value}-${deptItem.departmentName}`}
                     isRenderData={false} isRenderTotal={false} />);
             }
         });
-        return body;
+        return rows;
     };
 
-    const isExistCompany = company => requestDetails.find(x => x.unitName === unitSelected.value
-        && x.companyName === company) != null;
+    const isExistCompany = companyName => requestDetails.find(x => x.unitName === unitSelected.value && x.companyName === companyName) != null;
 
-    const isExistDepartment = (company, itemDepartment) => requestDetails.find(x => Equal(x.departmentName, itemDepartment.departmentName)
-        && x.companyName === company) != null;
+    const isExistDepartment = (companyName, deptItem) => requestDetails.find(x => Equal(x.departmentName, deptItem.departmentName) && x.companyName === companyName) != null;
 
-    const isExistSection = (company, itemSection) => requestDetails.find(x => Equal(x.sectionName, itemSection)
-        && x.companyName === company) != null;
+    const isExistSection = (companyName, sentionName) => requestDetails.find(x => Equal(x.sectionName, sentionName) && x.companyName === companyName) != null;
 
-    const renderBodyTable = company => {
-        const body = [];
-        if (isExistCompany(company)) {
-            body.push(renderDepartment(company));
+    const renderBodyTable = companyName => {
+        const rows = [];
+        if (isExistCompany(companyName)) {
+            rows.push(renderDepartment(companyName));
         } else {
-            body.push(renderUnitNoneData());
+            rows.push(renderUnitNoneData());
         }
 
-        return body;
+        return rows;
     };
 
     const renderTable = () => {
         const tables = [];
-        companies.map(company => {
+        companies.map(companyName => {
             tables.push(
-                <table key={`tablecompany-${company}`} className={`table table-bordered table-company company-${company}`}>
+                <table key={`table-company-${companyName}`} className={`table table-bordered table-company company-${companyName}`}>
                     <thead>
-                        <tr><th colSpan="12" className="name">{company}</th></tr>
+                        <tr><th colSpan="12" className="name">{companyName}</th></tr>
                         <tr>
                             <th colSpan="3" className="highlight">{LangHelper.getResource('CurrentHeadcount') + (period.year - 1)}</th>
                             <th colSpan="3" className="highlight">{LangHelper.getResource('ApprovedForecastHeadcount') + (period.year - 1)}</th>
@@ -180,13 +174,13 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
                             <th className="highlight">{LangHelper.getResource('Total')}</th>
                         </tr>
                     </thead>
-                    <tbody>{renderBodyTable(company)}</tbody>
+                    <tbody>{renderBodyTable(companyName)}</tbody>
                 </table>
             );
         });
 
         if (companies.length > 1) {
-            tables.push(<CompanyTotalGrid key="renderCompanyTotalGrid" />);
+            tables.push(<CompanyTotalGrid key="company-total-grid" />);
         }
 
         return tables;

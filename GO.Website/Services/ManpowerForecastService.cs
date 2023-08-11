@@ -1,5 +1,6 @@
 ﻿namespace GO.Website.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -127,8 +128,8 @@
                 IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(criteria.PeriodId);
                 foreach (var detail in request.Details)
                 {
-                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && x.UnitName == detail.UnitName
-                                                            && x.DepartmentName == detail.DepartmentName && x.SectionName == detail.SectionName).ToList();
+                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && IsEqual(x.UnitName, detail.UnitName)
+                        && IsEqual(x.DepartmentName, detail.DepartmentName) && IsEqual(x.SectionName, detail.SectionName)).ToList();
                     if (prevforecast != null)
                     {
                         detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);
@@ -244,5 +245,7 @@
             return ((request.Details.Any(x => (x.LocalAddition > 0 || x.ExpatAddition > 0) && (param.Details == null || !param.Details.Any())))
                 || (request.Details.Any(x => param.Details.Any(y => y.LocalAddition != x.LocalAddition || y.ExpatAddition != x.ExpatAddition))));
         }
+
+        private bool IsEqual(string strA = null, string strB = null) => string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase) == 0;
     }
 }
