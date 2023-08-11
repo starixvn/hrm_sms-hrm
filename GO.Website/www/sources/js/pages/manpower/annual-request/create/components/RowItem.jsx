@@ -64,11 +64,11 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
         );
     };
 
-    const isSubmit = () => (request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead) ? true : false;
-    const isVerify = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
-        request.statusId === AnnualManpowerForecastRequestStatus.Pending) ? true : false;
-    const isApprove = () => (request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
-        request.statusId === AnnualManpowerForecastRequestStatus.Verified) ? true : false;
+    const isSubmit = () => request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead;
+    const isVerify = () => request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
+        request.statusId === AnnualManpowerForecastRequestStatus.Pending;
+    const isApprove = () => request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
+        request.statusId === AnnualManpowerForecastRequestStatus.Verified;
 
     const handleShowLogModalDialog = () => {
         const logs = logDetails.filter(log => log.companyName === itemDetail.companyName

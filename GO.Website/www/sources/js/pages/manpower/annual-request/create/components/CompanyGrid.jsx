@@ -133,13 +133,13 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
     };
 
     const isExistCompany = company => requestDetails.find(x => x.unitName === unitSelected.value
-        && x.companyName === company) != null ? true : false;
+        && x.companyName === company) != null;
 
     const isExistDepartment = (company, itemDepartment) => requestDetails.find(x => Equal(x.departmentName, itemDepartment.departmentName)
-        && x.companyName === company) != null ? true : false;
+        && x.companyName === company) != null;
 
     const isExistSection = (company, itemSection) => requestDetails.find(x => Equal(x.sectionName, itemSection)
-        && x.companyName === company) != null ? true : false;
+        && x.companyName === company) != null;
 
     const renderBodyTable = company => {
         const body = [];
