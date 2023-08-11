@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../../action';
-import Equal from '@jsroot/components/CompareText';
+import { Equal } from '@jsroot/common/string.funcs';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import { renderNumberOfHeadcount } from '../../../common.funcs';
 

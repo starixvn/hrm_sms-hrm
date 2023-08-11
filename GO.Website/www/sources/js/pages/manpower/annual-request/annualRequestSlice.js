@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Equal from '@jsroot/components/CompareText';
+import { Equal } from '@jsroot/common/string.funcs';
 
 const annualRequestSlice = createSlice({
     name: 'annualRequestSlice',

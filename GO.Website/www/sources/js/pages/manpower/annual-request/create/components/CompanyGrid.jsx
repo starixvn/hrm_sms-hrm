@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
-import Equal from '@jsroot/components/CompareText';
+import { Equal } from '@jsroot/common/string.funcs';
 import CompanyTotalGrid from './CompanyTotalGrid';
 
 const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails, unitSelected }) => {

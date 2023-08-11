@@ -3,7 +3,7 @@
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 import { renderNumberOfHeadcount } from '../../../common.funcs';
-import Equal from '@jsroot/components/CompareText';
+import { Equal } from '@jsroot/common/string.funcs';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
     const MaxStep = 4;

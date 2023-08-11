@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
 
-import Equal from '@jsroot/components/CompareText';
+import { Equal } from '@jsroot/common/string.funcs';
 import LangHelper from '@jsroot/common/langHelper';
 import RowItem from './RowItem';
 
