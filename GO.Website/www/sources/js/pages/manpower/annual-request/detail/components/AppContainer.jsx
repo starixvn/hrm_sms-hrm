@@ -94,10 +94,8 @@ const AppContainer = ({ getAnnualRequestById,
 
     const handleRequest = statusId => {
         setRequest({
-            requestId: request.requestId,
-            currentProcessId: request.currentProcessId,
-            statusId: statusId,
-            isEdit: request.isEdit
+            ...request,
+            statusId: statusId
         });
     };
 
@@ -106,10 +104,24 @@ const AppContainer = ({ getAnnualRequestById,
     }
 
     return (
-        <>
+        <div className="annual-manpower-forecast-request-detail">
             <div className="filter">
-                <span className="status">{LangHelper.getResource('Status') + ': '}</span>
-                <span className="bold">{getAnnualRequestStatus(request.statusId)}</span>
+                {
+                    request.verifier != null &&
+                    <>
+                        <span>{LangHelper.getResource('Verifier')}:</span>
+                        <span className="font-weight-bold">{`${request.verifier.fullName} (${request.verifier.nickname})`}</span>
+                    </>
+                }
+                {
+                    request.approver != null &&
+                    <>
+                        <span className="ml-4">{LangHelper.getResource('Approver')}:</span>
+                        <span className="font-weight-bold">{`${request.approver.fullName} (${request.approver.nickname})`}</span>
+                    </>
+                }
+                <span className="ml-4">{LangHelper.getResource('Status')}:</span>
+                <span className="font-weight-bold">{getAnnualRequestStatus(request.statusId)}</span>
             </div>
             <div className="request-form has-filter">
                 <div className="manpower-forecast row">
@@ -165,7 +177,7 @@ const AppContainer = ({ getAnnualRequestById,
                 verifyApproveModalDialog &&
                 <SweetModalDialog
                     title={LangHelper.getResource('Confirmation')}
-                    contents={<div>Are you sure you want to <strong>{getRequestStatus(request.statusId + 1)}</strong> this request?</div>}
+                    contents={<div>Are you sure you want to <strong>{getAnnualRequestStatus(request.statusId + 1)}</strong> this request?</div>}
                     buttons={[
                         <Button variant="primary" size="sm" key="ok" onClick={handleUpdateRequest}>
                             {LangHelper.getResource('OK')}
@@ -200,7 +212,7 @@ const AppContainer = ({ getAnnualRequestById,
             <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
                 {LangHelper.getResource('Back')}
             </Button>
-        </>
+        </div>
     );
 };
 

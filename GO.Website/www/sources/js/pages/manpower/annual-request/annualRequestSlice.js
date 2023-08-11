@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Equal } from '@jsroot/common/string.funcs';
+import { isEqual } from '@jsroot/common/string.funcs';
 
 const annualRequestSlice = createSlice({
     name: 'annualRequestSlice',
     initialState: {
-        period: '',
+        period: null,
         unitSelected: { value: null, label: null },
         departments: [],
         companies: [],
@@ -23,21 +23,16 @@ const annualRequestSlice = createSlice({
     },
     reducers: {
         setRequest: (state, action) => {
-            state.request = {
-                requestId: action.payload.requestId,
-                currentProcessId: action.payload.currentProcessId,
-                statusId: action.payload.statusId,
-                isEdit: action.payload.isEdit
-            };
+            state.request = action.payload;
         },
         setDepartments: (state, action) => {
             const departments = [];
             action.payload.map(item => {
-                if (departments.findIndex(x => Equal(x.departmentName, item.departmentName)) === -1) {
+                if (departments.findIndex(x => isEqual(x.departmentName, item.departmentName)) === -1) {
                     const sections = [];
                     action.payload.map(detail => {
-                        if (Equal(detail.departmentName, item.departmentName)
-                            && sections.findIndex(section => Equal(section, detail.sectionName)) === -1) {
+                        if (isEqual(detail.departmentName, item.departmentName)
+                            && sections.findIndex(section => isEqual(section, detail.sectionName)) === -1) {
                             sections.push(detail.sectionName);
                         }
                     });
@@ -58,8 +53,8 @@ const annualRequestSlice = createSlice({
         addRequestDetailsItem: (state, action) => {
             const { companyName, unitName, departmentName, sectionName, jobLevel, columnName, value } = action.payload;
 
-            const index = state.requestDetails.findIndex(x => x.unitName === unitName && Equal(x.departmentName, departmentName)
-                && Equal(x.sectionName, sectionName) && x.jobLevel === jobLevel && x.companyName === companyName);
+            const index = state.requestDetails.findIndex(x => x.unitName === unitName && isEqual(x.departmentName, departmentName)
+                && isEqual(x.sectionName, sectionName) && x.jobLevel === jobLevel && x.companyName === companyName);
             if (index >= 0) {
                 state.requestDetails[index][columnName] = value;
 

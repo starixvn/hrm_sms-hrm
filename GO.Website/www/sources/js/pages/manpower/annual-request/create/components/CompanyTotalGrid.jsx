@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import RowItem from './RowItem';
 
 import LangHelper from '@jsroot/common/langHelper';
-import { Equal } from '@jsroot/common/string.funcs';
+import { isEqual } from '@jsroot/common/string.funcs';
 
 const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelected }) => {
     const renderJoblevel = (deptItem, sentionName) => {
@@ -23,8 +23,8 @@ const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelec
                 expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
             requestDetails.map(itemDetail => {
-                if (itemDetail.unitName === unitSelected.value && Equal(itemDetail.departmentName, deptItem.departmentName) &&
-                    Equal(itemDetail.sectionName, sentionName) && itemDetail.jobLevel === jobLevel) {
+                if (itemDetail.unitName === unitSelected.value && isEqual(itemDetail.departmentName, deptItem.departmentName) &&
+                    isEqual(itemDetail.sectionName, sentionName) && itemDetail.jobLevel === jobLevel) {
                     totalJoblevel = {
                         expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
                         localCurrentHeadcount: totalJoblevel.localCurrentHeadcount + itemDetail.localCurrentHeadcount,

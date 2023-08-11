@@ -45,7 +45,7 @@ const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, c
     }
 
     return (
-        <div>
+        <div className="annual-manpower-forecast-request">
             {
                 window.units.length > 1 &&
                 <Filter />

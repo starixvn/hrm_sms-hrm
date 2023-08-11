@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { ActionCreators } from '../../action';
-import { Equal } from '@jsroot/common/string.funcs';
+import { isEqual } from '@jsroot/common/string.funcs';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import { renderNumberOfHeadcount } from '../../../common.funcs';
 
@@ -72,8 +72,8 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
 
     const handleShowLogModalDialog = () => {
         const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
-            && log.unitName === itemDetail.unitName && Equal(log.departmentName, itemDetail.departmentName)
-            && Equal(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
+            && log.unitName === itemDetail.unitName && isEqual(log.departmentName, itemDetail.departmentName)
+            && isEqual(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
 
         setLogDetailModalDialog({
             show: true,
@@ -84,8 +84,8 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
 
     const renderDetail = () => {
         const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
-            && log.unitName === itemDetail.unitName && Equal(log.departmentName, itemDetail.departmentName)
-            && Equal(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
+            && log.unitName === itemDetail.unitName && isEqual(log.departmentName, itemDetail.departmentName)
+            && isEqual(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
 
         return (
             <tr>

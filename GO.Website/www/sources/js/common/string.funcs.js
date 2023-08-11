@@ -1,1 +1,1 @@
-﻿export const Equal = (firstText, secondText) => firstText.toLowerCase() === secondText.toLowerCase();
+﻿export const isEqual = (firstText, secondText) => firstText.toLowerCase() === secondText.toLowerCase();

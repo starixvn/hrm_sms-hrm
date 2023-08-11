@@ -7,6 +7,26 @@
 @import '../../../components/react-select';
 @import '../../../components/modal';
 
+.annual-manpower-forecast-request, .annual-manpower-forecast-request-detail {
+    .filter {
+        display: flex;
+        column-gap: 16px;
+        align-items: center;
+        background-color: #eaecef;
+        border: 1px solid #dbdbdb;
+        margin: 1rem 0;
+        padding: 8px;
+
+        .unit-option {
+            width: fit-content;
+        }
+
+        .react-select__menu {
+            z-index: 999;
+        }
+    }
+}
+
 .request-form {
     overflow: auto;
     margin-top: 10px;
@@ -16,35 +36,6 @@
 
     &.has-filter {
         max-height: 65vh;
-    }
-}
-
-.filter {
-    display: flex;
-    margin: 10px;
-    background-color: #eaecef;
-    border: 1px solid #dbdbdb;
-    margin: 1rem 0;
-    padding: 8px;
-
-    .unit {
-        margin: 5px 20px 0px 0px;
-    }
-
-    .status {
-        margin-right: 20px; 
-    }
-
-    .bold {
-        font-weight: bold;
-    }
-
-    .unit-option {
-        width: fit-content;
-    }
-
-    .react-select__menu {
-        z-index: 999;
     }
 }
 
