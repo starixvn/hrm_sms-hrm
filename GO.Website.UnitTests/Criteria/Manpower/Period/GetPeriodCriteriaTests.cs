@@ -19,9 +19,8 @@
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
-        [InlineData(1)]
-        public void IsValid_WhenCalled_ReturnTrue(short periodId)
+        [Fact]
+        public void IsValid_WhenCalled_ReturnTrue()
         {
             // Arrange
             var criteria = new GetPeriodCriteria();

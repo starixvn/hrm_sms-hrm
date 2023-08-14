@@ -21,7 +21,7 @@
         private readonly Fixture fixture = new();
 
         [Fact]
-        public void Index_WhenCalled_ReturnExpectedViewData()
+        public void GetViewIndex_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -51,7 +51,7 @@
         }
 
         [Fact]
-        public async Task GetData_WhenCalled_ReturnExpectedDataGridCountry()
+        public async Task GetData_WhenHaveMultipleSupervisor_ReturnExpectedDataGridCountry()
         {
             // Arrange
             var controller = GetController();
@@ -87,7 +87,7 @@
         }
 
         [Fact]
-        public async Task GetData_WhenCalled_ReturnExpectedDataGridUnit()
+        public async Task GetData_WhenHaveMultipleEmployee_ReturnExpectedDataGridUnit()
         {
             // Arrange
             var controller = GetController();
@@ -124,7 +124,7 @@
         }
 
         [Fact]
-        public async Task GetData_WhenCalled_ReturnExpectedDataGridUnitAndGridCountry()
+        public async Task GetData_WhenHaveSupervisorAndEmployee_ReturnExpectedDataGridUnitAndGridCountry()
         {
             // Arrange
             var controller = GetController();

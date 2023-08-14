@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData("test")]
-        public void IsValid_WhenCalled_ReturnTrue(string Keyword)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(string Keyword)
         {
             // Arrange
             var criteria = new SearchEmployeeCriteria(){
@@ -37,7 +37,7 @@
 
         [Theory]
         [InlineData("")]
-        public void IsValid_WhenCalled_ReturnFalse(string Keyword)
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse(string Keyword)
         {
             // Arrange
             var criteria = new SearchEmployeeCriteria()

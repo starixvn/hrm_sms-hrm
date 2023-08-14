@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData("test","tests", 1)]
-        public void IsValid_WhenCalled_ReturnTrue(string unitName, string flowXml , int modifiedBy)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(string unitName, string flowXml , int modifiedBy)
         {
             // Arrange
             var criteria = new UpdateFlowCommand()
@@ -39,7 +39,7 @@
         }
 
         [Fact]
-        public void IsValid_WhenCalled_ReturnFalse()
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
             var criteria = new UpdateFlowCommand()

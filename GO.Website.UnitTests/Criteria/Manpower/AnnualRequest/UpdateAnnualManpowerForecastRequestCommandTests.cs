@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData(1, 1, "", 1)]
-        public void IsValid_WhenCalled_ReturnTrue(short requestId, int modifiedId, string detailXml, byte statusId)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(short requestId, int modifiedId, string detailXml, byte statusId)
         {
             // Arrange
             var criteria = new UpdateAnnualManpowerForecastRequestCommand()
@@ -40,7 +40,7 @@
         }
 
         [Fact]
-        public void IsValid_WhenCalled_ReturnFalse()
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
             var criteria = new UpdateAnnualManpowerForecastRequestCommand();

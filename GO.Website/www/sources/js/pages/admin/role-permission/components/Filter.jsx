@@ -24,7 +24,7 @@ const Filter = ({ roles, getRolePermission, roleSelected, setRoleSelected }) => 
             <Form.Row bsPrefix="form-row">
                 <Form.Group>
                     <Form.Label>{LangHelper.getResource('Role')}</Form.Label>
-                    <Select className={`react-select-container`} classNamePrefix="react-select"
+                    <Select data-testid="select" className={`react-select-container`} classNamePrefix="react-select"
                         options={roleOptions} value={roleSelected}
                         onChange={handleChange}
                     />

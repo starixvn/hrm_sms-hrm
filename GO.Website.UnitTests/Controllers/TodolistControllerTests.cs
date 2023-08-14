@@ -141,7 +141,7 @@
         }
 
         [Fact]
-        public async Task ProcessAction_WhenCalled_ReturnExpectedDataStatusCode200()
+        public async Task ProcessAction_WhenCalledWithIsRedirectAndUsersiteIsNull_ReturnExpectedDataStatusCode200()
         {
             // Arrange
             var controller = GetController();
@@ -164,7 +164,7 @@
         }
 
         [Fact]
-        public async Task ProcessAction_WhenCalled_ReturnExpectedDataURL()
+        public async Task ProcessAction_WhenCalledWithIsRedirectTrueAndUsersiteIsNotNull_ReturnExpectedDataURL()
         {
             // Arrange
             var controller = GetController();
@@ -197,7 +197,7 @@
         }
 
         [Fact]
-        public async Task ProcessAction_WhenCalledUserNameAndCodeIsNull_ReturnExpectedDataURL()
+        public async Task ProcessAction_WhenCalledWithUserNameAndCodeIsNull_ReturnExpectedDataURL()
         {
             // Arrange
             var controller = GetController();

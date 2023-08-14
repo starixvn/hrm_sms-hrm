@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData(1, 1,true, 1)]
-        public void IsValid_WhenCalled_ReturnTrue(short siteId, int empId, bool isExcluded , int modifiedBy)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(short siteId, int empId, bool isExcluded , int modifiedBy)
         {
             // Arrange
             var criteria = new UpdateExcludedEmployeeCommand()
@@ -40,7 +40,7 @@
         }
 
         [Fact]
-        public void IsValid_WhenCalled_ReturnFalse()
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
             var criteria = new UpdateExcludedEmployeeCommand();

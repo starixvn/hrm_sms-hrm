@@ -40,7 +40,7 @@ const UnitGrid = ({ departments, jobLevels, unitSelected }) => {
     };
 
     const renderDepartment = () => {
-        let unitRowSpan = 3;
+        let unitRowSpan = 2;
         const deptCells = [];
         departments.map(deptItem => {
             const { sectionCells, deptRowSpan } = renderSection(deptItem);

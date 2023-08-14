@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData("test", 1)]
-        public void IsValid_WhenCalled_ReturnTrue(string unitName, int modifiedBy)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(string unitName, int modifiedBy)
         {
             // Arrange
             var criteria = new DeleteFlowCommand()
@@ -38,7 +38,7 @@
         }
 
         [Fact]
-        public void IsValid_WhenCalled_ReturnFalse()
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
             var criteria = new DeleteFlowCommand()

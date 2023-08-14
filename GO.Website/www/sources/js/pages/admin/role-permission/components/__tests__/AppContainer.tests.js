@@ -26,8 +26,22 @@ describe('AppContainer', () => {
         expect(render(<AppContainer />)).toMatchSnapshot();
     });
 
-    it('', () => {
+    test('useEffect render successfully', async () => {
+        // ARRANGE
+        const response = {
+            data: [{
+                roleId: 1,
+                name: 'test'
+            }]
+        };
+        const promise = Promise.resolve(response);
+        DataService.getDataAsync = jest.fn(() => promise);
+        // ACT
+        await waitFor(() => {
+            render(<AppContainer />);
+        });
 
+        // ASSERT
+        expect(DataService.getDataAsync).toHaveBeenCalled();
     });
-
 });

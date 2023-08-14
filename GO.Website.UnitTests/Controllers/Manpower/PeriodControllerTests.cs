@@ -24,7 +24,7 @@
         private readonly Fixture fixture = new Fixture();
 
         [Fact]
-        public void Index_WhenCalled_ReturnExpectedViewData()
+        public void GetViewIndex_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -43,7 +43,7 @@
         }
 
         [Fact]
-        public void Detail_WhenCalled_ReturnExpectedViewData()
+        public void GetViewDetail_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -90,7 +90,7 @@
         }
 
         [Fact]
-        public async Task GetById_WhenCalled_ReturnExpectedData()
+        public async Task GetByPeriodId_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();

@@ -21,7 +21,7 @@
 
         [Theory]
         [InlineData("test")]
-        public void IsValid_WhenCalled_ReturnTrue(string unitName)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(string unitName)
         {
             // Arrange
             var criteria = new GetFlowByUnitCriteria()
@@ -37,7 +37,7 @@
         }
 
         [Fact]
-        public void IsValid_WhenCalled_ReturnFalse()
+        public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
             var criteria = new GetFlowByUnitCriteria()
