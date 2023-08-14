@@ -7,7 +7,7 @@ import { isEqual } from '@jsroot/common/string.funcs';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import { renderNumberOfHeadcount } from '../../../common.funcs';
 
-const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem,
+const RowItem = ({ isDetail, requestDetail, total, isRenderData, isRenderTotal, addRequestDetailsItem,
     isTableTotal, request, logDetails, setLogDetailModalDialog }) => {
     const MaxAdditionalInput = 100;
 
@@ -15,11 +15,11 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
 
     const handleAddRequestDetailsItem = (value, columnName) => {
         const param = {
-            unitName: itemDetail.unitName,
-            departmentName: itemDetail.departmentName,
-            sectionName: itemDetail.sectionName,
-            jobLevel: itemDetail.jobLevel,
-            companyName: itemDetail.companyName,
+            unitName: requestDetail.unitName,
+            departmentName: requestDetail.departmentName,
+            sectionName: requestDetail.sectionName,
+            jobLevel: requestDetail.jobLevel,
+            companyName: requestDetail.companyName,
             columnName: columnName,
             value: (value === '' || value < 0) ? 0 : checkMaxInput(value)
         };
@@ -70,66 +70,64 @@ const RowItem = ({ isDetail, itemDetail, total, isRenderData, isRenderTotal, add
     const isApprove = () => request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
         request.statusId === AnnualManpowerForecastRequestStatus.Verified;
 
-    const handleShowLogModalDialog = () => {
-        const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
-            && log.unitName === itemDetail.unitName && isEqual(log.departmentName, itemDetail.departmentName)
-            && isEqual(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
+    const getLogs = () => logDetails.filter(log => log.companyName === requestDetail.companyName
+        && log.unitName === requestDetail.unitName && isEqual(log.departmentName, requestDetail.departmentName)
+        && isEqual(log.sectionName, requestDetail.sectionName) && log.jobLevel === requestDetail.jobLevel);
 
+    const handleShowLogModalDialog = () => {
         setLogDetailModalDialog({
             show: true,
-            requestDetail: itemDetail,
-            logs
+            requestDetail,
+            logs: getLogs()
         });
     };
 
+    const renderAddition = (addition, fieldName) => {
+        const inputValue = renderNumberOfHeadcount(addition);
+
+        const inputField = <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
+            onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), fieldName)}
+            value={inputValue}
+        />;
+
+        if (isDetail) {
+            if ((!request.isEdit || (!isSubmit() && !isVerify() && !isApprove()))) {
+                return <span>{inputValue}</span>;
+            }
+
+            if ((isSubmit() || isVerify() || isApprove())) {
+                return inputField;
+            }
+        } else {
+            return inputField;
+        }
+
+        return <span />;
+    };
+
     const renderDetail = () => {
-        const logs = logDetails.filter(log => log.companyName === itemDetail.companyName
-            && log.unitName === itemDetail.unitName && isEqual(log.departmentName, itemDetail.departmentName)
-            && isEqual(log.sectionName, itemDetail.sectionName) && log.jobLevel === itemDetail.jobLevel);
+        const logs = getLogs();
 
         return (
             <tr>
-                <td>{renderNumberOfHeadcount(itemDetail.expatCurrentHeadcount)}</td>
-                <td>{renderNumberOfHeadcount(itemDetail.localCurrentHeadcount)}</td>
-                <td className="highlight">{renderNumberOfHeadcount(itemDetail.totalCurrentHeadcount)}</td>
-                <td>{renderNumberOfHeadcount(itemDetail.expatApprovedHeadcount)}</td>
-                <td>{renderNumberOfHeadcount(itemDetail.localApprovedHeadcount)}</td>
-                <td className="highlight">{renderNumberOfHeadcount(itemDetail.totalApprovedHeadcount)}</td>
-                <td>
-                    {
-                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && renderNumberOfHeadcount(itemDetail.expatAddition)
-                    }
-                    {
-                        (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
-                        <input className="input-add" type="number" min={0} max={MaxAdditionalInput}
-                            onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'expatAddition')}
-                            value={renderNumberOfHeadcount(itemDetail.expatAddition)}
-                        />
-                    }
-                </td>
-                <td>
-                    {
-                        isDetail && (!request.isEdit || (!isSubmit() && !isVerify() && !isApprove())) && renderNumberOfHeadcount(itemDetail.localAddition)
-                    }
-                    {
-                        (!isDetail || (isDetail && (isSubmit() || isVerify() || isApprove()))) &&
-                        <input className="input-add" type="number"
-                            min={0} max={MaxAdditionalInput}
-                            onChange={e => handleAddRequestDetailsItem(parseInt(e.target.value, 10), 'localAddition')}
-                            value={renderNumberOfHeadcount(itemDetail.localAddition)}
-                        />
-                    }
-                </td>
+                <td>{renderNumberOfHeadcount(requestDetail.expatCurrentHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.localCurrentHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(requestDetail.totalCurrentHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.expatApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.localApprovedHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(requestDetail.totalApprovedHeadcount)}</td>
+                <td>{renderAddition(requestDetail.expatAddition, 'expatAddition')}</td>
+                <td>{renderAddition(requestDetail.localAddition, 'localAddition')}</td>
                 <td className="highlight">
                     <div className="company-total-add">
-                        {renderNumberOfHeadcount(itemDetail.totalAddition)}
+                        {renderNumberOfHeadcount(requestDetail.totalAddition)}
                         {!isTableTotal && logs.length > 1 && <span className="fa fa-info-circle" onClick={handleShowLogModalDialog} />}
                     </div>
                 </td>
-                <td>{renderNumberOfHeadcount(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount)}</td>
-                <td>{renderNumberOfHeadcount(itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
-                <td className="highlight">{renderNumberOfHeadcount(itemDetail.expatAddition + itemDetail.expatApprovedHeadcount +
-                    itemDetail.localAddition + itemDetail.localApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.localAddition + requestDetail.localApprovedHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatApprovedHeadcount +
+                    requestDetail.localAddition + requestDetail.localApprovedHeadcount)}</td>
             </tr>
         );
     };

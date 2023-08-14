@@ -10,7 +10,7 @@ import LangHelper from '@jsroot/common/langHelper';
 const LogModalDialog = ({ logDetailModalDialog, setLogDetailModalDialog }) => {
     const { requestDetail, logs } = logDetailModalDialog;
 
-    const handleHideLogModalDialog = () => {
+    const handleHideModalDialog = () => {
         setLogDetailModalDialog({
             show: false,
             requestDetail: null,
@@ -19,9 +19,7 @@ const LogModalDialog = ({ logDetailModalDialog, setLogDetailModalDialog }) => {
     };
 
     return (
-        <Modal show backdrop="static" className="view-log-modal-dialog" centered
-            onHide={handleHideLogModalDialog}
-        >
+        <Modal show backdrop="static" className="view-log-modal-dialog" centered onHide={handleHideModalDialog}>
             <Modal.Header closeButton>
                 <Modal.Title as="div">View Log</Modal.Title>
             </Modal.Header>
@@ -62,7 +60,7 @@ const LogModalDialog = ({ logDetailModalDialog, setLogDetailModalDialog }) => {
                 </table>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" size="sm" onClick={handleHideLogModalDialog}>{LangHelper.getResource('Close')}</Button>
+                <Button variant="primary" size="sm" onClick={handleHideModalDialog}>{LangHelper.getResource('Close')}</Button>
             </Modal.Footer>
         </Modal>
     );

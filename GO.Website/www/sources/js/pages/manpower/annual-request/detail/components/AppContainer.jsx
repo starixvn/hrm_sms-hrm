@@ -37,19 +37,22 @@ const AppContainer = ({ getAnnualRequestById,
     }, []);
 
     const isSubmit = () => request.isEdit && request.currentProcessId === ManpowerFlow.UnitHead;
+
     const isVerify = () => request.isEdit && request.currentProcessId === ManpowerFlow.Verifier &&
         request.statusId === AnnualManpowerForecastRequestStatus.Pending;
+
     const isApprove = () => request.isEdit && request.currentProcessId === ManpowerFlow.Approver &&
         request.statusId === AnnualManpowerForecastRequestStatus.Verified;
+
     const isReset = () => request.isEdit &&
         ((request.currentProcessId === ManpowerFlow.Approver && AnnualManpowerForecastRequestStatus.Approved === request.statusId) ||
             (request.currentProcessId === ManpowerFlow.Verifier && AnnualManpowerForecastRequestStatus.Verified === request.statusId));
 
     const handleSubmit = () => {
         const details = [];
-        requestDetails.map(itemDetail => {
-            if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
-                details.push(itemDetail);
+        requestDetails.map(item => {
+            if (item.expatAddition !== 0 || item.localAddition !== 0) {
+                details.push(item);
             }
         });
         const param = {
@@ -64,9 +67,9 @@ const AppContainer = ({ getAnnualRequestById,
 
     const handleUpdateRequest = () => {
         const details = [];
-        requestDetails.map(itemDetail => {
-            if (itemDetail.expatAddition !== 0 || itemDetail.localAddition !== 0) {
-                details.push(itemDetail);
+        requestDetails.map(item => {
+            if (item.expatAddition !== 0 || item.localAddition !== 0) {
+                details.push(item);
             }
         });
         const param = {
@@ -98,6 +101,8 @@ const AppContainer = ({ getAnnualRequestById,
             statusId: statusId
         });
     };
+
+    const handleGoBack = () => history.back();
 
     if (request === null) {
         return null;
@@ -209,7 +214,7 @@ const AppContainer = ({ getAnnualRequestById,
                 logDetailModalDialog.show &&
                 <LogModalDialog />
             }
-            <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={() => history.back()} >
+            <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={handleGoBack}>
                 {LangHelper.getResource('Back')}
             </Button>
         </div>

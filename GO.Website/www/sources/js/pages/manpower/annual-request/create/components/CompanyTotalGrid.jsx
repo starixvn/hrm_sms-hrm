@@ -22,23 +22,23 @@ const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelec
                 expatAddition: 0, localAddition: 0, totalAddition: 0,
                 expatForecastHeadcount: 0, localForecastHeadcount: 0, totalForecastHeadcount: 0
             };
-            requestDetails.map(itemDetail => {
-                if (itemDetail.unitName === unitSelected.value && isEqual(itemDetail.departmentName, deptItem.departmentName) &&
-                    isEqual(itemDetail.sectionName, sentionName) && itemDetail.jobLevel === jobLevel) {
+            requestDetails.map(item => {
+                if (item.unitName === unitSelected.value && isEqual(item.departmentName, deptItem.departmentName) &&
+                    isEqual(item.sectionName, sentionName) && item.jobLevel === jobLevel) {
                     totalJoblevel = {
-                        expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + itemDetail.expatCurrentHeadcount,
-                        localCurrentHeadcount: totalJoblevel.localCurrentHeadcount + itemDetail.localCurrentHeadcount,
-                        totalCurrentHeadcount: totalJoblevel.totalCurrentHeadcount + itemDetail.totalCurrentHeadcount,
-                        expatApprovedHeadcount: totalJoblevel.expatApprovedHeadcount + itemDetail.expatApprovedHeadcount,
-                        localApprovedHeadcount: totalJoblevel.localApprovedHeadcount + itemDetail.localApprovedHeadcount,
-                        totalApprovedHeadcount: totalJoblevel.totalApprovedHeadcount + itemDetail.totalApprovedHeadcount,
-                        expatAddition: totalJoblevel.expatAddition + itemDetail.expatAddition,
-                        localAddition: totalJoblevel.localAddition + itemDetail.localAddition,
-                        totalAddition: totalJoblevel.totalAddition + itemDetail.totalAddition,
-                        expatForecastHeadcount: totalJoblevel.expatForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount,
-                        localForecastHeadcount: totalJoblevel.localForecastHeadcount + itemDetail.localAddition + itemDetail.localApprovedHeadcount,
-                        totalForecastHeadcount: totalJoblevel.totalForecastHeadcount + itemDetail.expatAddition + itemDetail.expatApprovedHeadcount
-                            + itemDetail.localAddition + itemDetail.localApprovedHeadcount
+                        expatCurrentHeadcount: totalJoblevel.expatCurrentHeadcount + item.expatCurrentHeadcount,
+                        localCurrentHeadcount: totalJoblevel.localCurrentHeadcount + item.localCurrentHeadcount,
+                        totalCurrentHeadcount: totalJoblevel.totalCurrentHeadcount + item.totalCurrentHeadcount,
+                        expatApprovedHeadcount: totalJoblevel.expatApprovedHeadcount + item.expatApprovedHeadcount,
+                        localApprovedHeadcount: totalJoblevel.localApprovedHeadcount + item.localApprovedHeadcount,
+                        totalApprovedHeadcount: totalJoblevel.totalApprovedHeadcount + item.totalApprovedHeadcount,
+                        expatAddition: totalJoblevel.expatAddition + item.expatAddition,
+                        localAddition: totalJoblevel.localAddition + item.localAddition,
+                        totalAddition: totalJoblevel.totalAddition + item.totalAddition,
+                        expatForecastHeadcount: totalJoblevel.expatForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount,
+                        localForecastHeadcount: totalJoblevel.localForecastHeadcount + item.localAddition + item.localApprovedHeadcount,
+                        totalForecastHeadcount: totalJoblevel.totalForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount
+                            + item.localAddition + item.localApprovedHeadcount
                     };
                 }
             });

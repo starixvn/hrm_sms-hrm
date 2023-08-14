@@ -52,7 +52,7 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
                 isEqual(item.sectionName, sentionName) && item.companyName === companyName) {
                 jobLevelRows.push(
                     <RowItem key={`${unitSelected.value}-${deptItem.departmentName}-${sentionName}-${item.jobLevel}`}
-                        isDetail={isDetail} itemDetail={item} isRenderData={true} isRenderTotal={false} />
+                        isDetail={isDetail} requestDetail={item} isRenderData={true} isRenderTotal={false} />
                 );
 
                 totalSection = {
