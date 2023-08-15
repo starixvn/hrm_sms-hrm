@@ -19,14 +19,19 @@ describe('Filter', () => {
     });
 
     test('handle change role renders correctly', async () => {
-        const roles = [{ roleId: 1, name: 'test1' }, { roleId: 2, name: 'test2' }];
-        const getRolePermission = jest.fn;
-        const roleSelected = { value: 1, label: 'test1' };
-        const setRoleSelected = jest.fn;
+        // ARRANGE
+        let roles = [{ roleId: 1, name: 'test1' }, { roleId: 2, name: 'test2' }];
+        let getRolePermission = jest.fn();
+        let roleSelected = { value: 1, label: 'test1' };
+        let setRoleSelected = jest.fn();
+        // ACT
         const { result } = renderHook(() => Filter({ roles, getRolePermission, roleSelected, setRoleSelected}));
         await waitFor(() => {
             const filter = result.current.props.children.props.children.props.children[1].props;
             filter.onChange({ value: 2, label: 'test2' });
         });
+        // ASSERT
+        expect(getRolePermission).toHaveBeenCalled();
+        expect(setRoleSelected).toHaveBeenCalled();
     });
 });

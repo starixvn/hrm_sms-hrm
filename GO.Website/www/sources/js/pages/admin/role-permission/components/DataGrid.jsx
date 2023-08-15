@@ -171,15 +171,17 @@ const DataGrid = ({ rolePermission, setRolePermission }) => {
         return null;
     }
     return (
-        <Table
-            width={720}
-            autoWidth={false}
-            header={buildHeader()}
-            body={buildBody()}
-            containerPadding={0}
-            adjustedHeight={10}
-            shouldResetScrollPosition={false}
-        />
+        <div data-testid='table-role-permission'>
+            <Table
+                width={720}
+                autoWidth={false}
+                header={buildHeader()}
+                body={buildBody()}
+                containerPadding={0}
+                adjustedHeight={10}
+                shouldResetScrollPosition={false}
+            />
+        </div>
     );
 }
 export default DataGrid;
