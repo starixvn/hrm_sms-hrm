@@ -4,9 +4,439 @@ exports[`AppContainer renders correctly 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
-    <div />
+    <div>
+      <div
+        data-testid="table-role-permission"
+      >
+        <div>
+          <div
+            class="table-container"
+            style="max-width: 0;"
+          >
+            <div
+              class="header-content"
+              style="width: 720px;"
+            >
+              <div
+                class="table-wrapper"
+              >
+                <table
+                  class="table"
+                  style="width: 701px;"
+                >
+                  <thead>
+                    <tr
+                      class="first-row"
+                    >
+                      <td
+                        style="width: 467.33333333333337px;"
+                      />
+                      <td
+                        style="width: 116.83333333333334px;"
+                      />
+                      <td
+                        style="width: 116.83333333333334px;"
+                      />
+                    </tr>
+                    <tr>
+                      <th
+                        rowspan="2"
+                      >
+                        Function
+                      </th>
+                      <th
+                        colspan="2"
+                      >
+                        Permission
+                      </th>
+                    </tr>
+                    <tr>
+                      <th>
+                        Read
+                      </th>
+                      <th>
+                        Host
+                      </th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+            <div
+              class="body-content"
+              style="width: 720px; max-height: 688px;"
+            >
+              <div
+                class="table-wrapper"
+              >
+                <table
+                  class="table"
+                  style="width: 701px;"
+                >
+                  <tbody>
+                    <tr
+                      class="first-row"
+                    >
+                      <td
+                        style="width: 467.33333333333337px;"
+                      />
+                      <td
+                        style="width: 116.83333333333334px;"
+                      />
+                      <td
+                        style="width: 116.83333333333334px;"
+                      />
+                    </tr>
+                    <tr>
+                      <td
+                        class="border-bottom-0 "
+                      >
+                        <span>
+                           
+                          test1
+                        </span>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            checked=""
+                            class="form-check-input position-static"
+                            data-testid="funcRead"
+                            name="funcRead"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            class="form-check-input position-static"
+                            data-testid="funcHost"
+                            name="funcHost"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class=" border-top-0 border-bottom-0"
+                      >
+                        <span>
+                          └──
+                        </span>
+                        <span>
+                           
+                          test2
+                        </span>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            checked=""
+                            class="form-check-input position-static"
+                            data-testid="funcRead"
+                            name="funcRead"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            checked=""
+                            class="form-check-input position-static"
+                            data-testid="funcHost"
+                            name="funcHost"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td
+                        class=" border-top-0 border-bottom-0"
+                      >
+                        <span>
+                          └──
+                        </span>
+                        <span>
+                           
+                          test3
+                        </span>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            checked=""
+                            class="form-check-input position-static"
+                            data-testid="funcRead"
+                            name="funcRead"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                      <td
+                        class="text-center"
+                      >
+                        <div
+                          class="form-check"
+                        >
+                          <input
+                            checked=""
+                            class="form-check-input position-static"
+                            data-testid="funcHost"
+                            name="funcHost"
+                            type="checkbox"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>,
-  "container": <div />,
+  "container": <div>
+    <div
+      data-testid="table-role-permission"
+    >
+      <div>
+        <div
+          class="table-container"
+          style="max-width: 0;"
+        >
+          <div
+            class="header-content"
+            style="width: 720px;"
+          >
+            <div
+              class="table-wrapper"
+            >
+              <table
+                class="table"
+                style="width: 701px;"
+              >
+                <thead>
+                  <tr
+                    class="first-row"
+                  >
+                    <td
+                      style="width: 467.33333333333337px;"
+                    />
+                    <td
+                      style="width: 116.83333333333334px;"
+                    />
+                    <td
+                      style="width: 116.83333333333334px;"
+                    />
+                  </tr>
+                  <tr>
+                    <th
+                      rowspan="2"
+                    >
+                      Function
+                    </th>
+                    <th
+                      colspan="2"
+                    >
+                      Permission
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      Read
+                    </th>
+                    <th>
+                      Host
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <div
+            class="body-content"
+            style="width: 720px; max-height: 688px;"
+          >
+            <div
+              class="table-wrapper"
+            >
+              <table
+                class="table"
+                style="width: 701px;"
+              >
+                <tbody>
+                  <tr
+                    class="first-row"
+                  >
+                    <td
+                      style="width: 467.33333333333337px;"
+                    />
+                    <td
+                      style="width: 116.83333333333334px;"
+                    />
+                    <td
+                      style="width: 116.83333333333334px;"
+                    />
+                  </tr>
+                  <tr>
+                    <td
+                      class="border-bottom-0 "
+                    >
+                      <span>
+                         
+                        test1
+                      </span>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          checked=""
+                          class="form-check-input position-static"
+                          data-testid="funcRead"
+                          name="funcRead"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          class="form-check-input position-static"
+                          data-testid="funcHost"
+                          name="funcHost"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class=" border-top-0 border-bottom-0"
+                    >
+                      <span>
+                        └──
+                      </span>
+                      <span>
+                         
+                        test2
+                      </span>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          checked=""
+                          class="form-check-input position-static"
+                          data-testid="funcRead"
+                          name="funcRead"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          checked=""
+                          class="form-check-input position-static"
+                          data-testid="funcHost"
+                          name="funcHost"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      class=" border-top-0 border-bottom-0"
+                    >
+                      <span>
+                        └──
+                      </span>
+                      <span>
+                         
+                        test3
+                      </span>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          checked=""
+                          class="form-check-input position-static"
+                          data-testid="funcRead"
+                          name="funcRead"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                    <td
+                      class="text-center"
+                    >
+                      <div
+                        class="form-check"
+                      >
+                        <input
+                          checked=""
+                          class="form-check-input position-static"
+                          data-testid="funcHost"
+                          name="funcHost"
+                          type="checkbox"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
   "debug": [Function],
   "findAllByAltText": [Function],
   "findAllByDisplayValue": [Function],

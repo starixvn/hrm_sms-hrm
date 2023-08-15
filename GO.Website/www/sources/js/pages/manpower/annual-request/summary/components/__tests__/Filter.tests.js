@@ -61,7 +61,7 @@ describe('Filter', () => {
         render(<Filter periods={periods} onSubmit={onSubmit} requests={requests} updateStatus={updateStatus} isHost={isHost} />);
 
         // ACT
-        fireEvent.click(screen.getByText('Submit'))
+        fireEvent.click(screen.getByText('Submit'));
 
         // ASSERT
         expect(onSubmit).toHaveBeenCalled();

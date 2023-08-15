@@ -61,6 +61,7 @@ const DataGrid = ({ rolePermission, setRolePermission }) => {
                         <Form.Check type='checkbox' name="funcRead"
                             disabled={!window.hasHostPermission}
                             checked={permission !== undefined && permission.isRead}
+                            data-testid="funcRead"
                             onChange={event => handleChangePermission(func, event)}
                         />
                     }
@@ -71,6 +72,7 @@ const DataGrid = ({ rolePermission, setRolePermission }) => {
                         <Form.Check type='checkbox' name="funcHost"
                             checked={permission !== undefined && permission.isHost}
                             disabled={!window.hasHostPermission}
+                            data-testid="funcHost"
                             onChange={event => handleChangePermission(func, event)}
                         />
                     }

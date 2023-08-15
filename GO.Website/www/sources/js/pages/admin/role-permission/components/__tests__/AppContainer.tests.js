@@ -63,24 +63,7 @@ describe('AppContainer', () => {
         await filter.getRolePermission;
         // ASSERT
         expect(DataService.getDataAsync).toHaveBeenCalledTimes(1);
-    });
-
-    test('assign permission then render successfully', async () => {
-        // ARRANGE
-        const response = { data: [{ roleId: 1, name: 'test' }] };
-        const responseRolePermission = { data: [] };
-        const promise = Promise.resolve(response);
-        const promiseRolePermission = Promise.resolve(responseRolePermission);
-        DataService.getDataAsync = jest.fn();
-        DataService.getDataAsync.mockReturnValueOnce(promise).mockReturnValueOnce(promise).mockReturnValue(promiseRolePermission);
-        // ACT
-        let appContainer;
-        await waitFor(() => {
-            appContainer = renderHook(() => AppContainer());
-        });
-        const submit = appContainer.result.current.props.children.props.children[2].props;
-        console.log(submit);
-        // ASSERT
-        //expect(DataService.getDataAsync).toHaveBeenCalledTimes(1);
+        expect(filter.roles).toEqual([{ roleId: 1, name: 'test' }]);
+        expect(filter.roleSelected).toEqual({ value: 1, label: 'test' });
     });
 });
