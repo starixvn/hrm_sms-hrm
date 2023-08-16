@@ -24,7 +24,7 @@
         private readonly Fixture fixture = new Fixture();
 
         [Fact]
-        public void GetViewIndex_WhenCalled_ReturnExpectedViewData()
+        public void Index_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -43,7 +43,7 @@
         }
 
         [Fact]
-        public void GetViewDetail_WhenCalled_ReturnExpectedViewData()
+        public void Detail_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();

@@ -25,7 +25,7 @@
         private readonly Fixture fixture = new();
 
         [Fact]
-        public async Task GetViewCreateRequest_WhenCalled_ReturnExpectedViewData()
+        public async Task Create_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -44,7 +44,7 @@
         }
 
         [Fact]
-        public void GetViewMemberRequestSummaryRequest_WhenCalled_ReturnExpectedViewData()
+        public void MemberRequestSummary_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -80,7 +80,7 @@
         }
 
         [Fact]
-        public async Task SubmitCreateRequest_WhenCalled_ReturnExpectedData()
+        public async Task Create_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -98,7 +98,7 @@
         }
 
         [Fact]
-        public void GetViewMyRequest_WhenCalled_ReturnExpectedViewData()
+        public void MyRequest_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -111,7 +111,7 @@
         }
 
         [Fact]
-        public void GetViewDetail_WhenCalled_ReturnExpectedViewData()
+        public void Detail_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -144,7 +144,7 @@
         }
 
         [Fact]
-        public async Task GetByRequestId_WhenCalledWithIdNull_ReturnExpectedNotFound()
+        public async Task GetById_WhenCalledWithIdNull_ReturnExpectedNotFound()
         {
             // Arrange
             var controller = GetController();
@@ -160,7 +160,7 @@
         }
 
         [Fact]
-        public async Task GetByRequestId_WhenCalledWithRequestId_ReturnExpectedData()
+        public async Task GetById_WhenCalledWithRequestId_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -177,7 +177,7 @@
         }
 
         [Fact]
-        public async Task GetByRequestId_WhenCalledWithRoleUnitHead_ReturnExpectedData()
+        public async Task GetById_WhenCalledWithRoleUnitHead_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -199,7 +199,7 @@
         }
 
         [Fact]
-        public async Task GetByRequestId_WhenCalledWithRoleVerify_ReturnExpectedData()
+        public async Task GetById_WhenCalledWithRoleVerify_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -221,7 +221,7 @@
         }
 
         [Fact]
-        public async Task GetByRequestId_WhenCalledWithRoleApprove_ReturnExpectedData()
+        public async Task GetById_WhenCalledWithRoleApprove_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -243,7 +243,7 @@
         }
 
         [Fact]
-        public void GetViewMemberRequest_WhenCalled_ReturnExpectedViewData()
+        public void MemberRequest_WhenCalled_ReturnExpectedViewData()
         {
             // Arrange
             var controller = GetController();
@@ -275,7 +275,7 @@
         }
 
         [Fact]
-        public async Task GetRequestsByPeriodId_WhenCalled_ReturnExpectedData()
+        public async Task GetByPeriodId_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -293,7 +293,7 @@
         }
 
         [Fact]
-        public async Task UpdateStatusRequest_WhenCalled_ReturnExpectedData()
+        public async Task UpdateStatus_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -313,7 +313,7 @@
         }
 
         [Fact]
-        public async Task UpdateStatusAndDetailRequest_WhenCalled_ReturnExpectedData()
+        public async Task Update_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
