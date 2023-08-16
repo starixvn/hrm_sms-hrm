@@ -56,7 +56,7 @@ BEGIN
 		AND emp.IsDeleted = 0
 		AND NOT EXISTS (
 			SELECT 1
-			FROM dbo.HRM_Manpower_ExcludedEmployee AS exclude WITH (NOLOCK)
+			FROM dbo.Manpower_ExcludedEmployee AS exclude WITH (NOLOCK)
 			WHERE emp.SiteId = exclude.SiteId
 				AND emp.EmpId = exclude.EmpId
 			)

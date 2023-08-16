@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[User_GetUserSiteByUserId] @UserId INT
+CREATE PROCEDURE [dbo].[GO_User_GetUserSiteByUserId] @UserId INT
 AS
 /*
 Created: 20220803@Tim.Trinh
