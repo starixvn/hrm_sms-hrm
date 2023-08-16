@@ -48,3 +48,4 @@ node_modules/
 */coverage/
 *.cobertura.xml
 *.pubxml
+__snapshots__/
