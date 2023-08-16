@@ -18,7 +18,6 @@ namespace GO.Website
     using GO.Core.Repository;
     using GO.Core.Services;
     using GO.Website.Constants;
-    using GO.Website.Hubs;
     using GO.Website.Middlewares;
     using GO.Website.Models;
     using GO.Website.Repositories;
@@ -33,7 +32,6 @@ namespace GO.Website
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Http.Connections;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -127,24 +125,7 @@ namespace GO.Website
                 options.Cookie.IsEssential = true;
             });
 
-            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
-            services.AddSingleton(appSettings);
-
-            var jwtAuthSettings = Configuration.GetSection("JwtAuthSettings").Get<JwtAuthSettings>();
-            services.AddSingleton(jwtAuthSettings);
-
-            var apiSiteSettings = Configuration.GetSection("ApiSiteSettings").Get<List<ApiSiteSetting>>();
-            services.AddSingleton(apiSiteSettings);
-
-            var mailConfigs = Configuration.GetSection("MailConfigs").Get<MailConfigs>();
-            services.AddSingleton(mailConfigs);
-
             RegisterDI(services);
-
-            services.AddSignalR(hubOptions =>
-            {
-                hubOptions.EnableDetailedErrors = true;
-            });
 
             services.AddControllersWithViews();
         }
@@ -177,11 +158,6 @@ namespace GO.Website
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<TodolistHub>("/todolist/hubs", options =>
-                {
-                    options.Transports = HttpTransportType.WebSockets;
-                });
-
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -190,6 +166,18 @@ namespace GO.Website
 
         private void RegisterDI(IServiceCollection services)
         {
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
+            var jwtAuthSettings = Configuration.GetSection("JwtAuthSettings").Get<JwtAuthSettings>();
+            services.AddSingleton(jwtAuthSettings);
+
+            var apiSiteSettings = Configuration.GetSection("ApiSiteSettings").Get<List<ApiSiteSetting>>();
+            services.AddSingleton(apiSiteSettings);
+
+            var mailConfigs = Configuration.GetSection("MailConfigs").Get<MailConfigs>();
+            services.AddSingleton(mailConfigs);
+
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<ILogger, Logger>();

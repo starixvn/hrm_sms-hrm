@@ -227,7 +227,6 @@
     <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\JobLevelService .cs" />
-    <Compile Include="Implement\PushNotificationService.cs" />
     <Compile Include="Implement\LetstalkService.cs" />
     <Compile Include="Implement\SyncWorkingShiftService.cs" />
     <Compile Include="Implement\EmployeeWorkFromHomeService.cs" />
@@ -267,7 +266,6 @@
     <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IJobLevelService.cs" />
     <Compile Include="Interfaces\IEmployeeWorkFromHomeService.cs" />
-    <Compile Include="Interfaces\IPushNotificationService.cs" />
     <Compile Include="Interfaces\ILetstalkService.cs" />
     <Compile Include="Interfaces\IUnitService.cs" />
     <Compile Include="Interfaces\ISectionService.cs" />
