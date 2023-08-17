@@ -14,11 +14,11 @@ import {
 } from '../../shared/common.functions';
 
 (function () {
-    var $disciplineTable;
+    let $disciplineTable;
 
     function initEventForViewDisciplineDetail() {
         $disciplineTable.find('a.viewDisciplineDetail').on('click', function () {
-            var year = parseInt($(this).data('year'), 10),
+            const year = parseInt($(this).data('year'), 10),
                 empId = $(this).data('empid'),
                 employee = $(this).data('employee'),
                 teamId = $('form.form-filter #TeamId').val(),
@@ -34,38 +34,33 @@ import {
 
     function query() {
         blockUI();
-        $.ajax({
+        axios({
             url: resolveClientUrl('disciplineSummaryPerYear/getDisciplineSummaryGrid'),
-            type: 'POST',
+            method: 'POST',
             data: $('form.form-filter').serialize(),
-            success: function (data) {
-                $disciplineTable.html(data);
-                floatThead("table#data");
-                initEventForViewDisciplineDetail();
-                unblockUI();
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $disciplineTable.html(response.data);
+            floatThead('table#data');
+            initEventForViewDisciplineDetail();
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     $(document).ready(function () {
         $disciplineTable = $('#discipline-summary-table');
         initDatepicker();
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    isSelectedAll: true,
-                    hasSearchBox: true
-                });
-                $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
-                query();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            query();
+        }).catch(axiosError);
 
         $('form.form-filter #submit').on('click', function (event) {
             $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
@@ -73,12 +68,12 @@ import {
         });
 
         $('form.form-filter #FromYear').on('change', function () {
-            var fromYear = parseInt($(this).val());
+            const fromYear = parseInt($(this).val());
             $('form.form-filter #ToYear').val(fromYear + 4);
         });
 
         $('form.form-filter #ToYear').on('change', function () {
-            var toYear = parseInt($(this).val());
+            const toYear = parseInt($(this).val());
             $('form.form-filter #FromYear').val(toYear - 4);
         });
 

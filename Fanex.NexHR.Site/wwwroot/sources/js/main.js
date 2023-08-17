@@ -1,4 +1,8 @@
-﻿$(document).ready(function () {
+﻿import axios from 'axios';
+
+import { axiosError, resolveClientUrl } from './shared/common.functions';
+
+$(document).ready(function () {
     function toggleLeftNavigation(isShow) {
         let currentElement = $('#toggle-left-navigation');
 
@@ -18,11 +22,11 @@
     }
 
     function updateLeftNavigationSetting(isShow) {
-        $.ajax({
-            type: 'POST',
-            url: _global.root + 'Employee/ToogleLeftNavigation',
+        axios({
+            url: resolveClientUrl('Employee/ToogleLeftNavigation'),
+            method: 'POST',
             data: { isShow: isShow }
-        });
+        }).catch(axiosError);
     }
 
     if (_global.isShowLeftNavigation === 'True') {
@@ -36,7 +40,7 @@
     });
 
     $('#searchIcon').on('click', function () {
-        document.location = _global.root + 'employee/index?query=' + $('#searchbox').val();
+        document.location = resolveClientUrl('employee/index?query=' + $('#searchbox').val());
     });
 
     $('#searchbox').keyup(function (event) {

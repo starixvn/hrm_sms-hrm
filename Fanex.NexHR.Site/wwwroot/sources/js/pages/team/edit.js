@@ -1,30 +1,30 @@
 ﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
 import 'jquery-ui-bundle/jquery-ui';
 import 'chosen-js/chosen.jquery';
+import axios from 'axios';
 
-import { resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, resolveClientUrl } from '../../shared/common.functions';
 
 (function () {
     function initSearchUnitHead() {
         $('#UnitHead').autocomplete({
             source: function (request, response) {
-                $.ajax({
+                axios({
                     url: resolveClientUrl('employee/getemployees'),
-                    data: {
+                    params: {
                         query: request.term,
                         enable: true,
                         isDelete: false,
                         $top: 10
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
                     }
-                });
+                }).then(res => {
+                    response($.map(res.data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.Id
+                        };
+                    }));
+                }).catch(axiosError);
             },
             minLength: 2,
             select: function (event, ui) {

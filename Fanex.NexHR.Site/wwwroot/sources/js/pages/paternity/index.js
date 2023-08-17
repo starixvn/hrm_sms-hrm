@@ -1,11 +1,12 @@
 ﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
+import axios from 'axios';
 
-import { confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 
 const paternityModule = (function ($) {
-    var domElement = {
+    const domElement = {
         AddButton: '#add-paternity',
         Table: '#list-paternity',
         $dialog: $('#dialog'),
@@ -14,26 +15,17 @@ const paternityModule = (function ($) {
     };
 
     function query() {
-        $.ajax({
-            type: 'GET',
-            url: resolveClientUrl("paternity/ListPaternity?year=" + $("#Year").val()),
-            dataType: 'html',
-            beforeSend: function () {
-                blockUI();
-            },
-            success: function (data) {
-                $(domElement.Table).html(data);
-                initEditEvent();
-                initDeleteEvent();
-                initToolTip();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                unblockUI();
-            }
-        });
+        blockUI();
+        axios({
+            method: 'GET',
+            url: resolveClientUrl('paternity/ListPaternity?year=' + $('#Year').val()),
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Table).html(response.data);
+            initEditEvent();
+            initDeleteEvent();
+            initToolTip();
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     function initToolTip() {
@@ -70,14 +62,18 @@ const paternityModule = (function ($) {
     }
 
     function initAddEvent() {
-        $(domElement.AddButton).on("click", function (e) {
+        $(domElement.AddButton).on('click', function (e) {
             e.preventDefault();
-            $.get(resolveClientUrl("Paternity/create"), function (data) {
-                domElement.$dialog.html(data);
+            axios({
+                url: resolveClientUrl('Paternity/create'),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initAddPaternityDialog();
                 initAutoComplete();
                 initDatepicker();
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -92,22 +88,18 @@ const paternityModule = (function ($) {
                     click: function () {
                         removeMsg(domElement.$dialog);
                         if (validateAddPaternity()) {
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('Paternity/Create'),
-                                data: $(domElement.CreateForm).serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        domElement.$dialog.dialog('close');
-                                        alert('Create employee paternity successfully!', query);
-                                    } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
-                                    }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
+                                data: $(domElement.CreateForm).serialize()
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    domElement.$dialog.dialog('close');
+                                    alert('Create employee paternity successfully!', query);
+                                } else {
+                                    showErrorMsg(domElement.$dialog, '<li>' + response.data.Message + '</li>');
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -126,7 +118,7 @@ const paternityModule = (function ($) {
 
     function removeMsg($dialog) {
         $dialog.find('.validation-summary-valid')
-            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html("");
+            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html('');
     }
 
     function showErrorMsg($dialog, msg) {
@@ -145,23 +137,18 @@ const paternityModule = (function ($) {
                     click: function () {
                         removeMsg(domElement.$dialog);
                         if (validateAddPaternity()) {
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('Paternity/Update/' + PaternityId),
-                                data: $(domElement.EditForm).serialize(),
-
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        domElement.$dialog.dialog('close');
-                                        alert('Update employee paternity successfully!', query);
-                                    } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
-                                    }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
+                                data: $(domElement.EditForm).serialize()
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    domElement.$dialog.dialog('close');
+                                    alert('Update employee paternity successfully!', query);
+                                } else {
+                                    showErrorMsg(domElement.$dialog, '<li>' + response.data.Message + '</li>');
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -183,21 +170,20 @@ const paternityModule = (function ($) {
             $selectorId = domElement.$dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
-                $.ajax({
+                axios({
                     url: resolveClientUrl('Employee/GetMemberByGender'),
-                    data: {
+                    params: {
                         keyword: request.term,
                         gender: 1 //male
                     },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
-                    }
-                });
+                }).then(res => {
+                    response($.map(res.data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.Id
+                        };
+                    }));
+                }).catch(axiosError);
             },
             minLength: 2,
             select: function (event, ui) {
@@ -227,9 +213,13 @@ const paternityModule = (function ($) {
     function initEditEvent() {
         $('.edit-paternity').on('click', function (event) {
             event.preventDefault();
-            const paternityId = $(this).data("id");
-            $.get(resolveClientUrl("Paternity/edit/" + paternityId), function (data) {
-                domElement.$dialog.html(data);
+            const paternityId = $(this).data('id');
+            axios({
+                url: resolveClientUrl('Paternity/edit/' + paternityId),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initEventEditPaternity(paternityId);
                 initDatepicker();
                 initAutoComplete();
@@ -242,18 +232,17 @@ const paternityModule = (function ($) {
         $selector.on('click', function (event) {
             event.preventDefault();
             const paternityId = $(this).data('id');
-            confirm("Are you sure you want to remove this paternity?", function () {
-                $.ajax({
-                    type: 'POST',
-                    url: resolveClientUrl('Paternity/delete/' + paternityId),
-                    success: function (result) {
-                        if (result.IsSuccessful) {
-                            alert('Remove employee paternity successfully!', query);
-                        } else {
-                            alert(result.Message);
-                        }
+            confirm('Are you sure you want to remove this paternity?', function () {
+                axios({
+                    method: 'POST',
+                    url: resolveClientUrl('Paternity/delete/' + paternityId)
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        alert('Remove employee paternity successfully!', query);
+                    } else {
+                        alert(response.data.Message);
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }

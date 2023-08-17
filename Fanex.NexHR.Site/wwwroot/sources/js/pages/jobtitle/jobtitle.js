@@ -1,7 +1,9 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
+import axios from 'axios';
+
+import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
 
 const jobTitleModule = (function ($) {
     const domElement = {
@@ -69,22 +71,18 @@ const jobTitleModule = (function ($) {
         };
 
         if (validate($(domElement.CreateDialog))) {
-            $.ajax({
+            axios({
                 method: 'POST',
                 url: resolveClientUrl('JobTitle/Insert'),
-                data: data,
-                success: function (response) {
-                    if (response.IsSuccessful) {
-                        $(domElement.CreateDialog).dialog("close");
-                        alert('Create successfully!', getJobtitle);
-                    } else {
-                        alert(response.Message);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ': ' + errorThrown);
+                data: data
+            }).then(response => {
+                if (response.data.IsSuccessful) {
+                    $(domElement.CreateDialog).dialog('close');
+                    alert('Create successfully!', getJobtitle);
+                } else {
+                    alert(response.data.Message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -163,22 +161,18 @@ const jobTitleModule = (function ($) {
         };
 
         if (validate($(domElement.EditDialog))) {
-            $.ajax({
+            axios({
                 method: 'POST',
                 url: resolveClientUrl('JobTitle/Update'),
-                data: data,
-                success: function (response) {
-                    if (response.IsSuccessful) {
-                        $(domElement.EditDialog).dialog("close");
-                        alert('Edit successfully!', getJobtitle);
-                    } else {
-                        alert(response.Message);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ': ' + errorThrown);
+                data: data
+            }).then(response => {
+                if (response.data.IsSuccessful) {
+                    $(domElement.EditDialog).dialog('close');
+                    alert('Edit successfully!', getJobtitle);
+                } else {
+                    alert(response.Message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -186,52 +180,39 @@ const jobTitleModule = (function ($) {
         $(domElement.DelJobtitle).on('click', function() {
             const jobTitleId = $(this).attr("data-id");
             confirm('Are you sure you want to delete?', function () {
-                $.ajax({
+                axios({
                     method: 'POST',
                     url: resolveClientUrl('JobTitle/Delete'),
                     data: {
                         id: jobTitleId
-                    },
-                    success: function(response) {
-                        if (response.IsSuccessful) {
-                            alert('Delete successfully!');
-                            getJobtitle();
-                        } else {
-                            alert(response.Message);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        alert(textStatus + ': ' + errorThrown);
                     }
-                });
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        alert('Delete successfully!');
+                        getJobtitle();
+                    } else {
+                        alert(response.Message);
+                    }
+                }).catch(axiosError);
             });
         });
     }
 
     function getJobtitle() {
-        $.ajax({
-            type: 'POST',
+        blockUI();
+        axios({
+            method: 'POST',
             url: resolveClientUrl('jobTitle/GetJobTitles'),
-            dataType: 'html',
             data: {
                 jobTitle: $(domElement.Keyword).val()
             },
-            beforeSend: function () {
-                blockUI();
-            },
-            success: function (data) {
-                $(domElement.Table).html(data);
-                floatThead('table');
-                initEditEvent();
-                initDeleteEvent();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                unblockUI();
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Table).html(response.data);
+            floatThead('table');
+            initEditEvent();
+            initDeleteEvent();
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     function initModule() {

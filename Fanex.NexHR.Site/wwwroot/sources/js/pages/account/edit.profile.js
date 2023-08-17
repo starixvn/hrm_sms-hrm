@@ -1,7 +1,8 @@
 ﻿import 'bootstrap/dist/js/bootstrap';
 import 'jquery-ui-bundle/jquery-ui';
+import axios from 'axios';
 import toastr from 'toastr';
-import { confirm, alert, toastOptions, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, confirm, alert, toastOptions, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 
 var editAccount = (function ($) {
     const domElement = {
@@ -25,18 +26,17 @@ var editAccount = (function ($) {
         $(domElement.EditInformationForm).on('submit', function (e) {
             e.preventDefault();
             removeErrorMsg($(domElement.EditInformationForm));
-            $.ajax({
+            axios({
                 url: $(domElement.EditInformationForm).attr('action'),
                 method: $(domElement.EditInformationForm).attr('method'),
-                data: $(domElement.EditInformationForm).serialize(),
-                success: function (result) {
-                    if (result.IsSuccessful) {
-                        toastr.success('Updated information sucessfully!', '', toastOptions());
-                    } else {
-                        showErrorMsg($(domElement.EditInformationForm), result.Message);
-                    }
+                data: $(domElement.EditInformationForm).serialize()
+            }).then(response => {
+                if (response.data.IsSuccessful) {
+                    toastr.success('Updated information sucessfully!', '', toastOptions());
+                } else {
+                    showErrorMsg($(domElement.EditInformationForm), response.data.Message);
                 }
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -56,10 +56,9 @@ var editAccount = (function ($) {
             return;
         }
 
-        var fd = new FormData();
-
-        for (var i = 0; i < files.length; i++) {
-            var file = files[i];
+        let fd = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
 
             if (file.size / 1024 > 5120) {
                 alert('file is to large (' + file.size / 1024 + 'kb) to upload. maximum = 5120kb');
@@ -69,107 +68,94 @@ var editAccount = (function ($) {
             fd.append('files[' + i + ']', file);
         }
 
-        $.ajax({
-            type: 'POST',
+        axios({
+            method: 'POST',
             url: resolveClientUrl('File/MyProfileUploadFile'),
-            contentType: false,
-            processData: false,
-            data: fd,
-            success: function (result) {
-                getFileUpload();
-                if (result.isSuccessful) {
-                    toastr.success('File upload successfully!', '', toastOptions());
-                } else {
-                    toastr.error(result.message, '', toastOptions());
-                    $(domElement.Attachments).val('');
-                }
-            },
-            error: function (xhr, status, p3, p4) {
-                var err = 'Error ' + ' ' + status + ' ' + p3 + ' ' + p4;
-                if (xhr.responseText && xhr.responseText[0] === '{')
-                    err = JSON.parse(xhr.responseText).Message;
-                toastr.error(err, '', toastOptions());
+            data: fd
+        }).then(response => {
+            getFileUpload();
+            if (response.data.isSuccessful) {
+                toastr.success('File upload successfully!', '', toastOptions());
+            } else {
+                toastr.error(response.data.message, '', toastOptions());
+                $(domElement.Attachments).val('');
             }
-        });
+        }).catch(axiosError);
     }
 
     function initDeleteFileUpload() {
         $(domElement.DeleteFile).on('click', function () {
-            var $btn = $(this);
+            let $btn = $(this);
             confirm('Are you sure to want to delete this file?', function () {
-                var fileName = $btn.attr('data-file-name');
-                $.ajax({
-                    type: 'POST',
+                const fileName = $btn.attr('data-file-name');
+                axios({
+                    method: 'POST',
                     url: resolveClientUrl('File/DeleteMyProfileUploadedFile'),
-                    data: { fileName },
-                    success: function (result) {
-                        if (result.isSuccessful) {
-                            toastr.success('Deleted file successfully!', '', toastOptions());
-                            getFileUpload();
-                        } else {
-                            toastr.error(result.message, '', toastOptions());
-                        }
-                    },
-                    error: function (xhr, status, p3, p4) {
-                        var err = 'Error ' + ' ' + status + ' ' + p3 + ' ' + p4;
-                        if (xhr.responseText && xhr.responseText[0] === '{')
-                            err = JSON.parse(xhr.responseText).Message;
-                        toastr.error(err, '', toastOptions());
+                    data: { fileName }
+                }).then(response => {
+                    if (response.data.isSuccessful) {
+                        toastr.success('Deleted file successfully!', '', toastOptions());
+                        getFileUpload();
+                    } else {
+                        toastr.error(response.data.message, '', toastOptions());
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }
 
     function validateFileUpload(files) {
-        var isValid = true;
-        for (var i = 0; i < files.length; i++) {
+        let isValid = true;
+        for (let i = 0; i < files.length; i++) {
             if (files[i].size > constants.FileMaxSize) {
                 isValid = false;
+                break;
             }
-            break;
         }
+
         return isValid;
     }
 
     function getFileUpload() {
-        $.ajax({
-            type: 'GET',
+        axios({
+            method: 'GET',
             url: resolveClientUrl('Information/GetFileUploaded'),
-            contentType: 'html',
-            success: function (data) {
-                $(domElement.ListFileUpload).html(data);
-                initUploadFileHandler();
-                initDeleteFileUpload();
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.ListFileUpload).html(response.data);
+            initUploadFileHandler();
+            initDeleteFileUpload();
+        }).catch(axiosError);
     }
 
     function getRelationship() {
-        $.ajax({
-            type: 'GET',
+        axios({
+            method: 'GET',
             url: resolveClientUrl('Information/GetEmployeeRelationship'),
-            contentType: 'html',
-            success: function (data) {
-                $(domElement.Relationship).html(data);
-                initEditEvent($(domElement.Relationship),
-                    constants.EditRelationshipUrl,
-                    'Edit Relationship',
-                    function () { getRelationship(); });
-                initDeleteEvent($(domElement.Relationship),
-                    'Do you want to delete this relationship?',
-                    constants.DeleteRelationship,
-                    function () { getRelationship(); });
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Relationship).html(response.data);
+            initEditEvent($(domElement.Relationship),
+                constants.EditRelationshipUrl,
+                'Edit Relationship',
+                function () { getRelationship(); });
+            initDeleteEvent($(domElement.Relationship),
+                'Do you want to delete this relationship?',
+                constants.DeleteRelationship,
+                function () { getRelationship(); });
+        }).catch(axiosError);
     }
 
     function initEditEvent($table, baseUrl, title, onEditSuccess) {
         $table.find('.edit-icon').on('click', function () {
-            var id = $(this).data('id');
+            const id = $(this).data('id');
             if (id > 0) {
-                $.get(baseUrl + id, function (data) {
-                    $(domElement.CreateForm).html(data);
+                axios({
+                    url: baseUrl + id,
+                    method: 'GET',
+                    responseType: 'text'
+                }).then(response => {
+                    $(domElement.CreateForm).html(response.data);
                     initDatepicker();
                     $(domElement.CreateForm).dialog({
                         title: title,
@@ -181,22 +167,21 @@ var editAccount = (function ($) {
                                 text: 'Submit',
                                 class: 'btn btn-primary',
                                 click: function () {
-                                    $.ajax({
+                                    axios({
                                         method: $(domElement.CreateForm).find('form').attr('method'),
                                         url: $(domElement.CreateForm).find('form').attr('action'),
-                                        data: $(domElement.CreateForm).find('form').serialize(),
-                                        success: function (data) {
-                                            if (data.IsSuccessful) {
-                                                $(domElement.CreateForm).dialog('close');
-                                                toastr.success('Updated successfully!', '', toastOptions());
-                                                if (onEditSuccess) {
-                                                    onEditSuccess();
-                                                }
-                                            } else {
-                                                showErrorMsg($(domElement.CreateForm), data.Message);
+                                        data: $(domElement.CreateForm).find('form').serialize()
+                                    }).then(response => {
+                                        if (response.data.IsSuccessful) {
+                                            $(domElement.CreateForm).dialog('close');
+                                            toastr.success('Updated successfully!', '', toastOptions());
+                                            if (onEditSuccess) {
+                                                onEditSuccess();
                                             }
+                                        } else {
+                                            showErrorMsg($(domElement.CreateForm), response.data.Message);
                                         }
-                                    });
+                                    }).catch(axiosError);
                                 }
                             },
                             {
@@ -208,17 +193,21 @@ var editAccount = (function ($) {
                             }
                         ]
                     });
-                });
+                }).catch(axiosError);
             }
         });
     }
 
     function initButtonInsertEvent($btn, onCreateSuccess) {
         $btn.on('click', function () {
-            var url = $(this).attr('data-url');
-            var title = $(this).attr('title');
-            $.get(url, function (data) {
-                $(domElement.CreateForm).html(data);
+            const url = $(this).attr('data-url');
+            const title = $(this).attr('title');
+            axios({
+                url,
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                $(domElement.CreateForm).html(response.data);
                 initDatepicker();
                 $(domElement.CreateForm).dialog({
                     title: title,
@@ -230,22 +219,21 @@ var editAccount = (function ($) {
                             text: 'Submit',
                             class: 'btn btn-primary',
                             click: function () {
-                                $.ajax({
+                                axios({
                                     method: $(domElement.CreateForm).find('form').attr('method'),
                                     url: $(domElement.CreateForm).find('form').attr('action'),
-                                    data: $(domElement.CreateForm).find('form').serialize(),
-                                    success: function (data) {
-                                        if (data.IsSuccessful) {
-                                            $(domElement.CreateForm).dialog('close');
-                                            if (onCreateSuccess) {
-                                                onCreateSuccess();
-                                            }
-                                            toastr.success('Created successfully!', '', toastOptions());
-                                        } else {
-                                            showErrorMsg($(domElement.CreateForm), data.Message);
+                                    data: $(domElement.CreateForm).find('form').serialize()
+                                }).then(response => {
+                                    if (response.data.IsSuccessful) {
+                                        $(domElement.CreateForm).dialog('close');
+                                        if (onCreateSuccess) {
+                                            onCreateSuccess();
                                         }
+                                        toastr.success('Created successfully!', '', toastOptions());
+                                    } else {
+                                        showErrorMsg($(domElement.CreateForm), response.data.Message);
                                     }
-                                });
+                                }).catch(axiosError);
                             }
                         },
                         {
@@ -257,33 +245,32 @@ var editAccount = (function ($) {
                         }
                     ]
                 });
-            });
+            }).catch(axiosError);
         });
     }
 
     function initDeleteEvent($table, title, url, onDeleteSuccess) {
         $table.find('.delete-icon').on('click', function () {
-            var id = $(this).data('id');
+            const id = $(this).data('id');
             confirm(title, function () {
-                $.ajax({
+                axios({
                     method: 'POST',
-                    url: url + id,
-                    success: function (data) {
-                        if (data.IsSuccessful) {
-                            onDeleteSuccess();
-                            toastr.success('Deleted successfully!', '', toastOptions());
-                        } else {
-                            toastr.error(data.message, '', toastOptions());
-                        }
+                    url: url + id
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        onDeleteSuccess();
+                        toastr.success('Deleted successfully!', '', toastOptions());
+                    } else {
+                        toastr.error(response.data.message, '', toastOptions());
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }
 
     function showErrorMsg($form, msg) {
         $form.find('.validation-summary-valid').find('ul:first').html('');
-        var htmlObj = '<li>' + msg + '</li>';
+        let htmlObj = '<li>' + msg + '</li>';
         $form.find('.validation-summary-valid')
             .show().addClass('validation-summary-errors').find('ul:first').append(htmlObj);
     }

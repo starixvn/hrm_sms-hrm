@@ -1,20 +1,23 @@
-﻿$(document).ready(function () {
+﻿import axios from 'axios';
+
+import { axiosError, resolveClientUrl } from './common.functions';
+
+$(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
-            $.ajax({
-                url: _global.root + 'employee/getmemberbymanager',
-                data: {
+            axios({
+                url: resolveClientUrl('employee/getmemberbymanager'),
+                params: {
                     keyword: request.term
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.Id
-                        };
-                    }));
                 }
-            });
+            }).then(res => {
+                response($.map(res.data, function (item) {
+                    return {
+                        label: item.NickName + ' (' + item.FullName + ')',
+                        value: item.Id
+                    };
+                }));
+            }).catch(axiosError);
         },
         minLength: 2,
         select: function (event, ui) {

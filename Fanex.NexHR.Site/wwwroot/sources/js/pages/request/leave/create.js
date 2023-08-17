@@ -236,12 +236,15 @@ const LeaveRequest = (function ($) {
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
             var leaveDetailContainer = $('#leaveDetails');
             if (leaveDetailContainer.length > 0) {
-                $.get(resolveClientUrl('Leave/LeaveRequestDetail'),
-                    { 'employeeId': employeeId, 'fromDate': fromDate, 'toDate': toDate, 'requestId': requestId })
-                    .done(function (content) {
-                        leaveDetailContainer.empty();
-                        leaveDetailContainer.html(content);
-                    });
+                axios({
+                    url: resolveClientUrl('Leave/LeaveRequestDetail'),
+                    method: 'GET',
+                    params: { 'employeeId': employeeId, 'fromDate': fromDate, 'toDate': toDate, 'requestId': requestId },
+                    responseType: 'text'
+                }).then(response => {
+                    leaveDetailContainer.empty();
+                    leaveDetailContainer.html(response.data);
+                }).catch(axiosError);
             }
         },
         saveLeaveRequest: function () {
@@ -266,11 +269,11 @@ const LeaveRequest = (function ($) {
                     ApproverId: LeaveRequest.approverId.val()
                 };
 
-                var requestDetails = [];
-                var leaveDate = '';
-                var isHalfDay = false;
-                var fromTime = new Date();
-                var toTime = new Date();
+                const requestDetails = [];
+                let leaveDate = '';
+                let isHalfDay = false;
+                let fromTime = new Date();
+                let toTime = new Date();
                 if (leaveTypeId === LeaveType.GeneralLeave) {
                     $('.tabledata tbody tr').each(function () {
                         leaveDate = $.trim($('td.tdleavedate', this).first().attr('data-date'));
@@ -384,81 +387,83 @@ const LeaveRequest = (function ($) {
             LeaveRequest.toDate.datepicker('enable');
         },
         getTimeByShift: function () {
-            $.getJSON(resolveClientUrl('shift/getshiftbydate'),
-                { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() },
-                function (data) {
-                    if (data !== null) {
-                        const arrTimeIn = data.BeginCheckInTime.split(':'),
-                            arrTimeOut = data.BeginCheckOutTime.split(':');
+            axios({
+                url: resolveClientUrl('shift/getshiftbydate'),
+                method: 'GET',
+                params: { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() }
+            }).then(response => {
+                const data = response.data;
+                if (data !== null) {
+                    const arrTimeIn = data.BeginCheckInTime.split(':'),
+                        arrTimeOut = data.BeginCheckOutTime.split(':');
 
-                        let minuteFrom = parseInt(arrTimeIn[0], 10) * 60 + parseInt(arrTimeIn[1], 10),
-                            minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
-                            isFromAfterday = data.IsInAfterDay,
-                            isToAfterday = data.IsOutAfterDay;
-                        $('.time-isafterday').show();
+                    let minuteFrom = parseInt(arrTimeIn[0], 10) * 60 + parseInt(arrTimeIn[1], 10),
+                        minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
+                        isFromAfterday = data.IsInAfterDay,
+                        isToAfterday = data.IsOutAfterDay;
+                    $('.time-isafterday').show();
 
-                        if (data.IsInAfterDay) {
-                            minuteFrom += 1440; //60*24
-                        }
-
-                        if (data.IsOutAfterDay) {
-                            minuteTo += 1440;
-                        }
-
-                        let averageTime = (minuteFrom + minuteTo) / 2;
-                        if (averageTime >= 1440) {
-                            averageTime = averageTime - 1440;
-                            isToAfterday = true;
-                        } else {
-                            isToAfterday = false;
-                        }
-
-                        let hour = Math.floor(averageTime / 60),
-                            minute = Math.floor((averageTime % 60) / 30) * 30;
-                        minute = minute === 0 ? '00' : minute;
-                        if (hour < 10) {
-                            hour = '0' + hour;
-                        }
-
-                        LeaveRequest.fromTimeHour.val(arrTimeIn[0]);
-                        LeaveRequest.fromTimeMinute.val(arrTimeIn[1]);
-                        LeaveRequest.toTimeHour.val(hour);
-                        LeaveRequest.toTimeMinute.val(minute);
-
-                        LeaveRequest.isFromTimeAfterDay.prop('checked', isFromAfterday);
-                        LeaveRequest.isToTimeAfterDay.prop('checked', isToAfterday);
-
-                        if (isToAfterday) {
-                            let toDate = new Date(LeaveRequest.fromDate.val());
-                            toDate.setDate(toDate.getDate() + 1);
-                            LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
-                        }
+                    if (data.IsInAfterDay) {
+                        minuteFrom += 1440; //60*24
                     }
 
-                    LeaveRequest.totalDays.val(0.5);
-                });
+                    if (data.IsOutAfterDay) {
+                        minuteTo += 1440;
+                    }
+
+                    let averageTime = (minuteFrom + minuteTo) / 2;
+                    if (averageTime >= 1440) {
+                        averageTime = averageTime - 1440;
+                        isToAfterday = true;
+                    } else {
+                        isToAfterday = false;
+                    }
+
+                    let hour = Math.floor(averageTime / 60),
+                        minute = Math.floor((averageTime % 60) / 30) * 30;
+                    minute = minute === 0 ? '00' : minute;
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    }
+
+                    LeaveRequest.fromTimeHour.val(arrTimeIn[0]);
+                    LeaveRequest.fromTimeMinute.val(arrTimeIn[1]);
+                    LeaveRequest.toTimeHour.val(hour);
+                    LeaveRequest.toTimeMinute.val(minute);
+
+                    LeaveRequest.isFromTimeAfterDay.prop('checked', isFromAfterday);
+                    LeaveRequest.isToTimeAfterDay.prop('checked', isToAfterday);
+
+                    if (isToAfterday) {
+                        let toDate = new Date(LeaveRequest.fromDate.val());
+                        toDate.setDate(toDate.getDate() + 1);
+                        LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
+                    }
+                }
+
+                LeaveRequest.totalDays.val(0.5);
+            }).catch(axiosError);
         },
         autocomplete: function () {
             const requestType = LeaveRequest.requestType.val();
             LeaveRequest.employee.autocomplete({
                 source: function (request, response) {
-                    $.ajax({
+                    axios({
                         url: resolveClientUrl('request/GetEmployeesByActingUser'),
-                        data: {
+                        params: {
                             role: 5,
                             requestType: requestType,
                             query: request.term
-                        },
-                        success: function (data) {
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.NickName + ' (' + item.FullName + ')',
-                                    value: item.OwnerId,
-                                    isTopManager: item.IsTopManager
-                                };
-                            }));
                         }
-                    });
+                    }).then(res => {
+                        response($.map(res.data, function (item) {
+                            return {
+                                label: item.NickName + ' (' + item.FullName + ')',
+                                value: item.OwnerId,
+                                isTopManager: item.IsTopManager
+                            };
+                        }));
+                    }).catch(axiosError);
                 },
                 minLength: 1,
                 select: function (event, ui) {
@@ -663,41 +668,42 @@ const LeaveRequest = (function ($) {
                 }).catch(axiosError);
         },
         getLeaveBalance: function () {
-            $.getJSON(resolveClientUrl('leave/GetLeaveBalance'),
-                {
+            axios({
+                url: resolveClientUrl('leave/GetLeaveBalance'),
+                method: 'GET',
+                params: {
                     employeeId: LeaveRequest.employeeId.val(),
                     requestId: LeaveRequest.requestId.val(),
                     toDate: LeaveRequest.toDate.val()
-                },
-                function (response) {
-                    if (response !== null) {
-                        LeaveRequest.annualBalance.html(response.AnnualBalance);
-                        LeaveRequest.keepInViewBalance.html(response.KeepInViewBalance);
-                        LeaveRequest.keepInViewByHourBalance.html(response.KeepInViewByHourBalance);
-                        LeaveRequest.currentLeaveBalance.html(response.CurrentLeaveBalanceDay);
-                        LeaveRequest.weekendLeaveTaken.html(response.WeekedLeaveDayTaken);
-                        $('#lblHospitalizationLeaveBalance').html(response.HospitalizationLeaveBalance);
-                        $('#lblSickLeaveBalance').html(response.SickLeaveBalance);
-                    }
-                });
+                }
+            }).then(response => {
+                const data = response.data;
+                if (data !== null) {
+                    LeaveRequest.annualBalance.html(data.AnnualBalance);
+                    LeaveRequest.keepInViewBalance.html(data.KeepInViewBalance);
+                    LeaveRequest.keepInViewByHourBalance.html(data.KeepInViewByHourBalance);
+                    LeaveRequest.currentLeaveBalance.html(data.CurrentLeaveBalanceDay);
+                    LeaveRequest.weekendLeaveTaken.html(data.WeekedLeaveDayTaken);
+                    $('#lblHospitalizationLeaveBalance').html(data.HospitalizationLeaveBalance);
+                    $('#lblSickLeaveBalance').html(data.SickLeaveBalance);
+                }
+            }).catch(axiosError);
         },
         getTotalLeaveDay: function () {
-            $.ajax({
+            axios({
                 url: resolveClientUrl('leave/getTotalLeaveDay'),
-                data: {
+                params: {
                     leaveTypeId: parseInt(LeaveRequest.leaveTypeId.val(), 10),
                     RequestId: LeaveRequest.requestId.val(),
                     employeeId: LeaveRequest.employeeId.val(),
                     fromDate: LeaveRequest.fromDate.val(),
                     toDate: LeaveRequest.toDate.val()
-                },
-                async: false,
-                success: function (response) {
-                    if (response !== null) {
-                        LeaveRequest.totalDays.val(response);
-                    }
                 }
-            });
+            }).then(response => {
+                if (response.data !== null) {
+                    LeaveRequest.totalDays.val(response.data);
+                }
+            }).catch(axiosError);
         },
         getUnavailableDate: function () {
             blockUI();

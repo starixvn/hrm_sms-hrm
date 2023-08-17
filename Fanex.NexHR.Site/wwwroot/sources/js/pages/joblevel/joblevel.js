@@ -1,7 +1,9 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'bootstrap/dist/js/bootstrap';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
+import axios from 'axios';
+
+import { axiosError, blockUI, floatThead, unblockUI, confirm, alert, resolveClientUrl } from '../../shared/common.functions';
 
 const jobLevelModule = (function ($) {
     const domElement = {
@@ -48,22 +50,18 @@ const jobLevelModule = (function ($) {
         };
 
         if (validate($(domElement.CreateDialog))) {
-            $.ajax({
+            axios({
                 method: 'POST',
                 url: resolveClientUrl('JobLevel/Insert'),
-                data: data,
-                success: function (response) {
-                    if (response.IsSuccessful) {
-                        $(domElement.CreateDialog).dialog("close");
-                        alert('Create successfully!', getJobLevel);
-                    } else {
-                        alert(response.Message);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ': ' + errorThrown);
+                data: data
+            }).then(response => {
+                if (response.data.IsSuccessful) {
+                    $(domElement.CreateDialog).dialog('close');
+                    alert('Create successfully!', getJobLevel);
+                } else {
+                    alert(response.data.Message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -134,22 +132,18 @@ const jobLevelModule = (function ($) {
         };
 
         if (validate($(domElement.EditDialog))) {
-            $.ajax({
+            axios({
                 method: 'POST',
                 url: resolveClientUrl('JobLevel/Update'),
-                data: data,
-                success: function (response) {
-                    if (response.IsSuccessful) {
-                        $(domElement.EditDialog).dialog("close");
-                        alert('Edit successfully!', getJobLevel);
-                    } else {
-                        alert(response.Message);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ': ' + errorThrown);
+                data: data
+            }).then(response => {
+                if (response.data.IsSuccessful) {
+                    $(domElement.EditDialog).dialog('close');
+                    alert('Edit successfully!', getJobLevel);
+                } else {
+                    alert(response.data.Message);
                 }
-            });
+            }).catch(axiosError);
         }
     }
 
@@ -157,50 +151,36 @@ const jobLevelModule = (function ($) {
         $(domElement.DelJobLevel).on('click', function () {
             const jobLevelId = $(this).attr("data-id");
             confirm('Are you sure you want to delete?', function () {
-                $.ajax({
+                axios({
                     method: 'POST',
                     url: resolveClientUrl('JobLevel/Delete'),
                     data: {
                         id: jobLevelId
-                    },
-                    success: function (response) {
-                        if (response.IsSuccessful) {
-                            alert('Delete successfully!');
-                            getJobLevel();
-                        } else {
-                            alert(response.Message);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(textStatus + ': ' + errorThrown);
                     }
-                });
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        alert('Delete successfully!');
+                        getJobLevel();
+                    } else {
+                        alert(response.Message);
+                    }
+                }).catch(axiosError);
             });
         });
     }
 
     function getJobLevel() {
-        $.ajax({
-            type: 'POST',
+        blockUI();
+        axios({
+            method: 'POST',
             url: resolveClientUrl('jobLevel/GetJobLevel'),
-            dataType: 'html',
-            data: {},
-            beforeSend: function () {
-                blockUI();
-            },
-            success: function (data) {
-                $(domElement.Table).html(data);
-                floatThead('table');
-                initEditEvent();
-                initDeleteEvent();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                unblockUI();
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Table).html(response.data);
+            floatThead('table');
+            initEditEvent();
+            initDeleteEvent();
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     function initModule() {

@@ -1,23 +1,24 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import { resolveClientUrl } from '../../shared/common.functions';
+import axios from 'axios';
+
+import { axiosError, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
     $('#Employee').autocomplete({
         source: function (request, response) {
-            $.ajax({
+            axios({
                 url: resolveClientUrl('overtime/GetActingEmployees'),
-                data: {
+                params: {
                     query: request.term
-                },
-                success: function (data) {
-                    response($.map(data, function (item) {
-                        return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.OwnerId
-                        };
-                    }));
                 }
-            });
+            }).then(res => {
+                response($.map(res.data, function (item) {
+                    return {
+                        label: item.NickName + ' (' + item.FullName + ')',
+                        value: item.OwnerId
+                    };
+                }));
+            }).catch(axiosError);
         },
         minLength: 2,
         select: function (event, ui) {

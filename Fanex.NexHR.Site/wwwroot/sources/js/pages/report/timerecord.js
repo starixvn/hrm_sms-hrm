@@ -40,20 +40,22 @@ import { parse } from 'qs';
     }
 
     function processInOut(inoutType, eventElement) {
-        var recordTimeId = parseInt(eventElement.attr('data-id'), 10);
+        const recordTimeId = parseInt(eventElement.attr('data-id'), 10);
         blockUI();
 
-        $.post(resolveClientUrl('time/ProcessInOut'),
-            { inoutType: inoutType, recordTimeId: recordTimeId },
-            function (response) {
-                unblockUI();
-                if (response.IsSuccessful) {
-                    query();
-                } else {
-                    alert(response.Message);
-                    return;
-                }
-            });
+        axios({
+            url: resolveClientUrl('time/ProcessInOut'),
+            method: 'POST',
+            params: { inoutType, recordTimeId }
+        }).then(response => {
+            unblockUI();
+            if (response.data.IsSuccessful) {
+                query();
+            } else {
+                alert(response.data.Message);
+                return;
+            }
+        });
     }
 
     function processCommand(command, options) {
@@ -93,37 +95,31 @@ import { parse } from 'qs';
         blockUI();
 
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
-        $.ajax({
+        axios({
             url: resolveClientUrl('Report/TimeRecordDetail'),
-            type: 'POST',
-            dataType: 'html',
-            data: $('form.filter').serialize(),
-            success: function (data) {
-                $('#TimeRecordContent').html(data);
-                $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+            method: 'POST',
+            responseType: 'text',
+            data: $('form.filter').serialize()
+        }).then(response => {
+            $('#TimeRecordContent').html(response.data);
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+
+            if ($('table#data #pagination').length > 0) {
+                bindMenu('.in-action', 'inMenu');
+                bindMenu('.out-action', 'outMenu');
 
                 if ($('table#data #pagination').length > 0) {
-                    bindMenu('.in-action', 'inMenu');
-                    bindMenu('.out-action', 'outMenu');
+                    initPagination();
 
-                    if ($('table#data #pagination').length > 0) {
-                        initPagination();
-
-                        $('#ItemsPerPageOption').on('change', function () {
-                            $('form.filter #ItemsPerPage').val($(this).val());
-                            $('form.filter #CurrentPage').val(1);
-                            query();
-                        });
-                    }
-                    floatThead('table#data');
+                    $('#ItemsPerPageOption').on('change', function () {
+                        $('form.filter #ItemsPerPage').val($(this).val());
+                        $('form.filter #CurrentPage').val(1);
+                        query();
+                    });
                 }
-
-                unblockUI();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
+                floatThead('table#data');
             }
-        });
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     $(document).ready(function () {

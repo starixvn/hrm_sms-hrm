@@ -1,6 +1,7 @@
 ﻿import 'jquery.are-you-sure/jquery.are-you-sure';
+import axios from 'axios';
 import { LeaveType } from '../../../shared/constants';
-import { resolveClientUrl } from '../../../shared/common.functions';
+import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
 
 var LeaveRequestDetail = (function ($) {
     const workTypeEnum = {
@@ -26,8 +27,8 @@ var LeaveRequestDetail = (function ($) {
             }
         }
 
-        $("#totalAnnualLeave").html(totalAnnualLeave);
-        $("#totalUnpaidLeave").html(totalUnpaidLeave);
+        $('#totalAnnualLeave').html(totalAnnualLeave);
+        $('#totalUnpaidLeave').html(totalUnpaidLeave);
     }
 
     function workTypeChange(element) {
@@ -94,7 +95,7 @@ var LeaveRequestDetail = (function ($) {
 
     return {
         init: function () {
-            $("th.tdhalfday").width(100);
+            $('th.tdhalfday').width(100);
 
             LeaveRequestDetail.showHideHalfDay();
             showHideControlByWorkType();
@@ -113,42 +114,42 @@ var LeaveRequestDetail = (function ($) {
                 LeaveRequestDetail.halfdayChange($(this).closest('tr'));
             });
 
-            $(".addhalfday").on("click", function () {
+            $('.addhalfday').on('click', function () {
                 var object = $(this);
                 var trObject = object.parent().parent();
                 var trCopy = trObject.clone();
-                var halfdayObject = trCopy.find(".addhalfday").first().html("- Remove a half").removeClass("addhalfday").addClass("removehaflday");
-                var workTypeObject = trCopy.find(".ddlWorkType").first();
+                var halfdayObject = trCopy.find('.addhalfday').first().html('- Remove a half').removeClass('addhalfday').addClass('removehaflday');
+                var workTypeObject = trCopy.find('.ddlWorkType').first();
 
                 halfdayObject.click(function () {
                     $(this).parent().parent().remove();
-                    trObject.find(".addhalfday").first().html("+ Add a half");
-                    trObject.find(".chkhalfday").removeAttr("disabled");
+                    trObject.find('.addhalfday').first().html('+ Add a half');
+                    trObject.find('.chkhalfday').removeAttr('disabled');
                     getTotalLeave();
                 });
 
                 workTypeObject.change();
 
                 trObject.after(trCopy);
-                trObject.find(".addhalfday").first().html("");
+                trObject.find('.addhalfday').first().html('');
                 getTotalLeave();
 
-                trObject.find(".chkhalfday").prop("checked", true).attr("disabled", "disabled");
-                trCopy.find(".chkhalfday").attr("checked", true).attr("disabled", "disabled");
+                trObject.find('.chkhalfday').prop('checked', true).attr('disabled', 'disabled');
+                trCopy.find('.chkhalfday').attr('checked', true).attr('disabled', 'disabled');
 
                 // bind value for time and check box of copy row
-                trCopy.find(".ddlfromtime").val(trObject.find(".ddltotime").val());
-                trCopy.find(".ddltotime").val(trCopy.find(".ddltotime").attr("data-outtime"));
-                if (trObject.find(".chkIsToAfterday").prop("checked")) {
-                    trCopy.find(".chkIsFromAfterday").attr("checked", true);
+                trCopy.find('.ddlfromtime').val(trObject.find('.ddltotime').val());
+                trCopy.find('.ddltotime').val(trCopy.find('.ddltotime').attr('data-outtime'));
+                if (trObject.find('.chkIsToAfterday').prop('checked')) {
+                    trCopy.find('.chkIsFromAfterday').attr('checked', true);
                 } else {
-                    trCopy.find(".chkIsFromAfterday").prop("checked", false);
+                    trCopy.find('.chkIsFromAfterday').prop('checked', false);
                 }
 
-                if (trCopy.find(".ddltotime").attr("data-isOutAfterday") === "true") {
-                    trCopy.find(".chkIsToAfterday").prop("checked", trCopy.find(".ddltotime").attr("data-isOutAfterday"));
+                if (trCopy.find('.ddltotime').attr('data-isOutAfterday') === 'true') {
+                    trCopy.find('.chkIsToAfterday').prop('checked', trCopy.find('.ddltotime').attr('data-isOutAfterday'));
                 } else {
-                    trCopy.find(".chkIsToAfterday").prop("checked", false);
+                    trCopy.find('.chkIsToAfterday').prop('checked', false);
                 }
             });
 
@@ -163,89 +164,92 @@ var LeaveRequestDetail = (function ($) {
             disableControlForDetail();
         },
         halfdayChange: function (trObject) {
-            if (trObject.find(".chkhalfday").prop("checked")) {
+            if (trObject.find('.chkhalfday').prop('checked')) {
                 trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
-                $(".tdhalfday").show();
-                trObject.find(".addhalfday").first().html("+ Add a half").show();
-                var fromTimeObject = trObject.find(".ddlfromtime");
-                var toTimeObject = trObject.find(".ddltotime");
+                $('.tdhalfday').show();
+                trObject.find('.addhalfday').first().html('+ Add a half').show();
+                var fromTimeObject = trObject.find('.ddlfromtime');
+                var toTimeObject = trObject.find('.ddltotime');
 
                 fromTimeObject.show();
                 toTimeObject.show();
-                trObject.find(".timehalfday").show();
-                trObject.find(".tdnumberleaves").html("0.5");
+                trObject.find('.timehalfday').show();
+                trObject.find('.tdnumberleaves').html('0.5');
 
                 LeaveRequestDetail.fillTimeForHalfday(trObject);
             } else {
                 trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', false);
-                trObject.find(".addhalfday").first().html();
-                trObject.find(".ddlfromtime").hide();
-                trObject.find(".ddltotime").hide();
-                trObject.find(".timehalfday").hide();
-                trObject.find(".tdnumberleaves").html("1");
+                trObject.find('.addhalfday').first().html();
+                trObject.find('.ddlfromtime').hide();
+                trObject.find('.ddltotime').hide();
+                trObject.find('.timehalfday').hide();
+                trObject.find('.tdnumberleaves').html('1');
 
                 var isShow = false;
-                var otherTrObject = $(".tabledata tbody tr");
+                var otherTrObject = $('.tabledata tbody tr');
                 for (var i = 0; i < otherTrObject.length; i++) {
                     var object = otherTrObject[i];
-                    if ($(object).find(".chkhalfday").first().prop("checked")) {
+                    if ($(object).find('.chkhalfday').first().prop('checked')) {
                         isShow = true;
                         break;
                     }
                 }
 
                 if (isShow) {
-                    $(".tdhalfday").show();
+                    $('.tdhalfday').show();
                 } else {
-                    $(".tdhalfday").hide();
+                    $('.tdhalfday').hide();
                 }
             }
 
             getTotalLeave();
         },
         fillTimeForHalfday: function (trObject) {
-            $.getJSON(resolveClientUrl('shift/getshiftbydate'),
-                { employeeId: $("#EmployeeId").val(), date: trObject.find(".tdleavedate").attr("data-date") },
-                function (data) {
-                    if (data !== null) {
-                        var arrTimeIn = data.BeginCheckInTime.split(":");
-                        var arrTimeOut = data.BeginCheckOutTime.split(":");
+            axios({
+                url: resolveClientUrl('shift/getshiftbydate'),
+                method: 'GET',
+                params: { employeeId: $('#EmployeeId').val(), date: trObject.find('.tdleavedate').attr('data-date') }
+            }).then(response => {
+                const data = response.data;
+                if (data !== null) {
+                    const arrTimeIn = data.BeginCheckInTime.split(':');
+                    const arrTimeOut = data.BeginCheckOutTime.split(':');
 
-                        var minuteFrom = (parseInt(arrTimeIn[0], 10) * 60) + parseInt(arrTimeIn[1], 10);
-                        var minuteTo = (parseInt(arrTimeOut[0], 10) * 60) + parseInt(arrTimeOut[1], 10);
-                        var isFromAfterday = data.IsInAfterDay;
-                        var isToAfterday = false;
-                        if (data.IsInAfterDay) {
-                            minuteFrom += 1440; //60*24
-                        }
-
-                        if (data.IsOutAfterDay) {
-                            minuteTo += 1440;
-                        }
-
-                        var averageTime = (minuteFrom + minuteTo) / 2;
-                        if (averageTime >= 1440) {
-                            averageTime = averageTime - 1440;
-                            isToAfterday = true;
-                        }
-
-                        var hour = Math.floor(averageTime / 60);
-                        var minute = Math.floor((averageTime % 60) / 30) * 30;
-                        minute = minute === 0 ? "00" : minute;
-                        if (hour < 10) {
-                            hour = "0" + hour;
-                        }
-
-                        var toTime = hour + ":" + minute;
-                        trObject.find(".ddlfromtime").val(data.BeginCheckInTime);
-                        trObject.find(".ddltotime").val(toTime);
-
-                        trObject.find(".chkIsFromAfterday").prop("checked", isFromAfterday);
-                        trObject.find(".chkIsToAfterday").prop("checked", isToAfterday);
-                        trObject.find(".ddltotime").attr("data-outtime", data.BeginCheckOutTime);
-                        trObject.find(".ddltotime").attr("data-isOutAfterday", data.IsOutAfterDay);
+                    let minuteFrom = (parseInt(arrTimeIn[0], 10) * 60) + parseInt(arrTimeIn[1], 10);
+                    let minuteTo = (parseInt(arrTimeOut[0], 10) * 60) + parseInt(arrTimeOut[1], 10);
+                    let isFromAfterday = data.IsInAfterDay;
+                    let isToAfterday = false;
+                    if (data.IsInAfterDay) {
+                        minuteFrom += 1440; //60*24
                     }
-                });
+
+                    if (data.IsOutAfterDay) {
+                        minuteTo += 1440;
+                    }
+
+                    let averageTime = (minuteFrom + minuteTo) / 2;
+                    if (averageTime >= 1440) {
+                        averageTime = averageTime - 1440;
+                        isToAfterday = true;
+                    }
+
+                    let hour = Math.floor(averageTime / 60);
+                    let minute = Math.floor((averageTime % 60) / 30) * 30;
+                    minute = minute === 0 ? '00' : minute;
+                    if (hour < 10) {
+                        hour = '0' + hour;
+                    }
+
+                    let toTime = hour + ':' + minute;
+                    trObject.find('.ddlfromtime').val(data.BeginCheckInTime);
+                    trObject.find('.ddltotime').val(toTime);
+
+                    trObject.find('.chkIsFromAfterday').prop('checked', isFromAfterday);
+                    trObject.find('.chkIsToAfterday').prop('checked', isToAfterday);
+                    trObject.find('.ddltotime').attr('data-outtime', data.BeginCheckOutTime);
+                    trObject.find('.ddltotime').attr('data-isOutAfterday', data.IsOutAfterDay);
+                }
+            }).catch(axiosError);
         },
         enableControlForEdit: function () {
             LeaveRequestDetail.showHideHalfDay();
@@ -265,54 +269,54 @@ var LeaveRequestDetail = (function ($) {
         },
         showHideHalfDay: function () {
             var isShow = false;
-            var objectTr = $(".tabledata tbody tr");
+            var objectTr = $('.tabledata tbody tr');
             var length = objectTr.length;
             if (length > 0) {
                 var oldObject = objectTr[0];
                 var object = objectTr[0];
                 for (var i = 0; i < objectTr.length; i++) {
                     object = objectTr[i];
-                    if ($(object).find(".chkhalfday").first().prop("checked")) {
-                        $(object).find(".addhalfday").first().html("+ Add a half");
+                    if ($(object).find('.chkhalfday').first().prop('checked')) {
+                        $(object).find('.addhalfday').first().html('+ Add a half');
                         if (i > 0) {
                             oldObject = objectTr[i - 1];
                             LeaveRequestDetail.bindSecondHalfDay(object, oldObject);
                         }
 
                         isShow = true;
-                        $(object).find(".ddlfromtime").show();
-                        $(object).find(".ddltotime").show();
-                        $(object).find(".timehalfday").show();
+                        $(object).find('.ddlfromtime').show();
+                        $(object).find('.ddltotime').show();
+                        $(object).find('.timehalfday').show();
                     }
                     else {
-                        $(object).find(".ddlfromtime").hide();
-                        $(object).find(".ddltotime").hide();
-                        $(object).find(".timehalfday").hide();
+                        $(object).find('.ddlfromtime').hide();
+                        $(object).find('.ddltotime').hide();
+                        $(object).find('.timehalfday').hide();
                     }
                 }
             }
 
             if (isShow) {
-                $(".tdhalfday").show();
+                $('.tdhalfday').show();
             } else {
-                $(".tdhalfday").hide();
-                $(".ddlfromtime").hide();
-                $(".ddltotime").hide();
-                $(".timehalfday").hide();
+                $('.tdhalfday').hide();
+                $('.ddlfromtime').hide();
+                $('.ddltotime').hide();
+                $('.timehalfday').hide();
             }
         },
         bindSecondHalfDay: function (object, oldObject) {
-            if ($.trim($(object).find(".tdleavedate").first().html()) === $.trim($(oldObject).find(".tdleavedate").first().html())) {
-                var halfdayObject = $(object).find(".addhalfday").first().html("- Remove a half");
-                halfdayObject.removeClass("addhalfday").addClass("removehaflday");
-                $(oldObject).find(".addhalfday").first().html("");
-                $(object).find(".chkhalfday").attr("disabled", "disabled");
-                $(oldObject).find(".chkhalfday").attr("disabled", "disabled");
+            if ($.trim($(object).find('.tdleavedate').first().html()) === $.trim($(oldObject).find('.tdleavedate').first().html())) {
+                var halfdayObject = $(object).find('.addhalfday').first().html('- Remove a half');
+                halfdayObject.removeClass('addhalfday').addClass('removehaflday');
+                $(oldObject).find('.addhalfday').first().html('');
+                $(object).find('.chkhalfday').attr('disabled', 'disabled');
+                $(oldObject).find('.chkhalfday').attr('disabled', 'disabled');
 
                 halfdayObject.click(function () {
                     $(this).parent().parent().remove();
-                    $(oldObject).find(".addhalfday").first().html("+ Add a half");
-                    $(oldObject).find(".chkhalfday").removeAttr("disabled");
+                    $(oldObject).find('.addhalfday').first().html('+ Add a half');
+                    $(oldObject).find('.chkhalfday').removeAttr('disabled');
                     getTotalLeave();
                 });
             }

@@ -1,22 +1,23 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import { confirm, autoIndex, resolveClientUrl } from '../../shared/common.functions';
-
-function deleteMemo(memoId) {
-    confirm('Are you sure you want to delete this memo?', function () {
-        $.post(resolveClientUrl('Memo/delete'), { id: memoId }, function () {
-            $('#row_' + memoId).remove();
-            autoIndex();
-        });
-    });
-}
-
-function init() {
-    $('.icon-delete').on('click', function () {
-        var id = $(this).attr('data-id');
-        deleteMemo(id);
-    });
-}
+import axios from 'axios';
+import { axiosError, confirm, autoIndex, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
-    init();
+    const deleteMemo = function (memoId) {
+        confirm('Are you sure you want to delete this memo?', function () {
+            axios({
+                url: resolveClientUrl('Memo/delete'),
+                method: 'POST',
+                params: { id: memoId }
+            }).then(response => {
+                $('#row_' + memoId).remove();
+                autoIndex();
+            }).catch(axiosError);
+        });
+    };
+
+    $('.icon-delete').on('click', function () {
+        const id = $(this).attr('data-id');
+        deleteMemo(id);
+    });
 });

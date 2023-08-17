@@ -1,9 +1,12 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
+import axios from 'axios';
+
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/employee.search.in.team';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
+
+import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
 
 (function () {
     function initPagination() {
@@ -33,36 +36,31 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
 
     function query() {
         blockUI();
-        $.ajax({
+        axios({
             url: resolveClientUrl('employee/ContactList'),
-            type: 'POST',
-            dataType: 'html',
+            method: 'POST',
+            responseType: 'text',
             data: $('form.filter').serialize(),
-            success: function (response) {
-                unblockUI();
-                $('#contact-list').html(response);
-                if ($('table#data #pagination').length > 0) {
-                    initPagination();
-                    $('#ItemsPerPageOption').on('change', function () {
-                        $('form.filter #ItemsPerPage').val($(this).val());
-                        $('form.filter #CurrentPage').val(1);
-                        query();
-                    });
-                    $('.fullSizeAvatar').on('click', function () {
-                        const codeId = $(this).data('code');
-                        const nickname = $(this).data('nickname');
-                        showFullAvatar(codeId, nickname);
-                    });
-                }
-
-                floatThead('table#data');
-                initSortTable();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                unblockUI();
-                alert(textStatus + ': ' + errorThrown);
+        }).then(response => {
+            unblockUI();
+            $('#contact-list').html(response.data);
+            if ($('table#data #pagination').length > 0) {
+                initPagination();
+                $('#ItemsPerPageOption').on('change', function () {
+                    $('form.filter #ItemsPerPage').val($(this).val());
+                    $('form.filter #CurrentPage').val(1);
+                    query();
+                });
+                $('.fullSizeAvatar').on('click', function () {
+                    const codeId = $(this).data('code');
+                    const nickname = $(this).data('nickname');
+                    showFullAvatar(codeId, nickname);
+                });
             }
-        });
+
+            floatThead('table#data');
+            initSortTable();
+        }).catch(axiosError);
     }
 
     function initSortTable() {
@@ -76,19 +74,15 @@ import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sort
     }
 
     $(document).ready(function () {
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    isSelectedAll: true,
-                    hasSearchBox: true
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+        }).catch(axiosError);
 
         $('#category').on('change', function () {
             switch ($(this).val()) {

@@ -1,10 +1,13 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
-import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import 'floatthead/dist/jquery.floatThead';
-import { blockUI, floatThead, unblockUI, alert, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
+import 'chosen-js/chosen.jquery';
+import axios from 'axios';
+
+import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import 'chosen-js/chosen.jquery';
+
+import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl, sortTable, showFullAvatar } from '../../shared/common.functions';
 
 (function () {
     function initPagination() {
@@ -43,40 +46,35 @@ import 'chosen-js/chosen.jquery';
     function query() {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
-        $.ajax({
+        axios({
             url: resolveClientUrl('employee/ListEmployee'),
-            type: 'POST',
-            dataType: 'html',
-            data: $('form.filter').serialize(),
-            success: function (response) {
-                unblockUI();
-                $('#user-management').html(response);
-                checkDisabledUser();
+            method: 'POST',
+            responseType: 'text',
+            data: $('form.filter').serialize()
+        }).then(response => {
+            unblockUI();
+            $('#user-management').html(response.data);
+            checkDisabledUser();
 
-                if ($('table#data #pagination').length > 0) {
-                    initPagination();
+            if ($('table#data #pagination').length > 0) {
+                initPagination();
 
-                    $('#ItemsPerPageOption').on('change', function () {
-                        $('form.filter #ItemsPerPage').val($(this).val());
-                        $('form.filter #CurrentPage').val(1);
-                        query();
-                    });
+                $('#ItemsPerPageOption').on('change', function () {
+                    $('form.filter #ItemsPerPage').val($(this).val());
+                    $('form.filter #CurrentPage').val(1);
+                    query();
+                });
 
-                    $('.fullSizeAvatar').on('click', function () {
-                        const codeId = $(this).data('code');
-                        const nickname = $(this).data('nickname');
-                        showFullAvatar(codeId, nickname);
-                    });
-                }
-
-                floatThead('table#data');
-                initSortTable();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                unblockUI();
-                alert(textStatus + ': ' + errorThrown);
+                $('.fullSizeAvatar').on('click', function () {
+                    const codeId = $(this).data('code');
+                    const nickname = $(this).data('nickname');
+                    showFullAvatar(codeId, nickname);
+                });
             }
-        });
+
+            floatThead('table#data');
+            initSortTable();
+        }).catch(axiosError);
     }
 
     function exportExcel(object) {
@@ -106,21 +104,17 @@ import 'chosen-js/chosen.jquery';
     }
 
     $(document).ready(function () {
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    selectedItems: $('#TeamIds').val(),
-                    hasSearchBox: true
-                });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamIds').val(),
+                hasSearchBox: true
+            });
 
-                query();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            query();
+        }).catch(axiosError);
 
         var jobTitleId = $('#JobTitleId').val();
         var dropDownTittle = $('#title');

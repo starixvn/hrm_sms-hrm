@@ -1,26 +1,24 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
+import axios from 'axios';
+
+import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 const annualLeaveBalance = (function ($) {
     function getSection() {
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    selectedItems: $('#TeamIds').val(),
-                    hasSearchBox: true
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamIds').val(),
+                hasSearchBox: true
+            });
+        }).catch(axiosError);
     }
 
     function submitData(postToUrl) {
@@ -105,7 +103,7 @@ const annualLeaveBalance = (function ($) {
                     text: 'Submit',
                     class: 'btn btn-primary',
                     click: function () {
-                        var $form = $(this);
+                        let $form = $(this);
                         if (validateInputInsertForm($form)) {
                             removeMsg($form);
                             var annualLeaveMuiltiple = {
@@ -114,22 +112,20 @@ const annualLeaveBalance = (function ($) {
                                 AffectedFrom: $form.find("#AffectedFrom").val(),
                                 TotalDays: parseInt($form.find("#TotalDays").val(), 10)
                             };
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('AnnualLeaveBalance/Adjust'),
-                                data: { annualLeaveJson: JSON.stringify(annualLeaveMuiltiple) },
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.IsSuccessful) {
-                                        alert('Adjust successfully.');
-                                        setInterval(function () {
-                                            document.location = resolveClientUrl('annualleavebalance/index');
-                                        }, 2000);
-                                    } else {
-                                        showErrorMsg($form, response.Message);
-                                    }
+                                data: { annualLeaveJson: JSON.stringify(annualLeaveMuiltiple) }
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    alert('Adjust successfully.');
+                                    setInterval(function () {
+                                        document.location = resolveClientUrl('annualleavebalance/index');
+                                    }, 2000);
+                                } else {
+                                    showErrorMsg($form, response.data.Message);
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -160,14 +156,18 @@ const annualLeaveBalance = (function ($) {
                         var $form = $(this).find('form');
                         if (validateInputResetForm($form)) {
                             removeMsg($form);
-                            $.post(resolveClientUrl('AnnualLeaveBalance/Reset'), $form.serialize(), function (response) {
-                                if (response.IsSuccessful) {
-                                    alert('Close balance successful');
+                            axios({
+                                url: resolveClientUrl('AnnualLeaveBalance/Reset'),
+                                method: 'POST',
+                                data: $form.serialize()
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    alert('Close balance successful!');
                                     $('#resetform').dialog('close');
                                 } else {
-                                    alert(response.Message);
+                                    alert(response.data.Message);
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },

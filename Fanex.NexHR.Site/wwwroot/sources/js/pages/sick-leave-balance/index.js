@@ -1,26 +1,25 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
-import { alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
+import axios from 'axios';
+
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
+import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
+
 const sickLeaveBalance = (function ($) {
     function getSection() {
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    selectedItems: $('#TeamIds').val(),
-                    hasSearchBox: true
-                });
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamIds').val(),
+                hasSearchBox: true
+            });
+        }).catch(axiosError);
     }
 
     function submitData(postToUrl) {
@@ -106,27 +105,25 @@ const sickLeaveBalance = (function ($) {
                         const $form = $(this);
                         if (validateInputInsertForm($form)) {
                             removeMsg($form);
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('SickLeaveBalance/Adjust'),
                                 data: {
                                     EmpIds: $("#EmpIds").val(),
                                     Description: $form.find("#Description").val(),
                                     AffectedFrom: $form.find("#AffectedFrom").val(),
                                     TotalDays: parseInt($form.find("#TotalDays").val(), 10)
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.isSuccessful) {
-                                        alert('Adjust successfully.');
-                                        setInterval(function () {
-                                            document.location = resolveClientUrl('SickLeaveBalance/index');
-                                        }, 2000);
-                                    } else {
-                                        showErrorMsg($form, response.message);
-                                    }
                                 }
-                            });
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    alert('Adjust successfully.');
+                                    setInterval(function () {
+                                        document.location = resolveClientUrl('SickLeaveBalance/index');
+                                    }, 2000);
+                                } else {
+                                    showErrorMsg($form, response.data.message);
+                                }
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -157,23 +154,21 @@ const sickLeaveBalance = (function ($) {
                         const $form = $(this).find('form');
                         if (validateInputResetForm($form)) {
                             removeMsg($form);
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('SickLeaveBalance/Reset'),
                                 data: {
                                     ResetDays: parseInt($form.find("#ResetDays").val(), 10),
                                     Description: $form.find("#Description").val()
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.isSuccessful) {
-                                        alert('Close balance successful.');
-                                        $('#resetform').dialog('close');
-                                    } else {
-                                        alert(response.message);
-                                    }
                                 }
-                            });
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    alert('Close balance successful.');
+                                    $('#resetform').dialog('close');
+                                } else {
+                                    alert(response.data.message);
+                                }
+                            }).catch(axiosError);
                         }
                     }
                 },

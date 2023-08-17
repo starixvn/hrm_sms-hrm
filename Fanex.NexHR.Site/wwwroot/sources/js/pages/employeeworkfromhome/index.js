@@ -12,7 +12,7 @@ import {
     blockUI, unblockUI, initDatepicker, resolveClientUrl
 } from '../../shared/common.functions';
 
-var tempFile = [];
+const tempFile = [];
 
 const workFromHomeModule = (function ($) {
     const domElement = {
@@ -92,14 +92,18 @@ const workFromHomeModule = (function ($) {
     }
 
     function initAddEvent() {
-        $(domElement.AddButton).on("click", function (e) {
+        $(domElement.AddButton).on('click', function (e) {
             e.preventDefault();
-            $.get(resolveClientUrl("EmployeeWorkFromHome/create"), function (data) {
-                domElement.$dialog.html(data);
+            axios({
+                url: resolveClientUrl('EmployeeWorkFromHome/create'),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initAddEmployeeWorkFromHomeDialog();
                 initAutoComplete();
                 initDatepicker();
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -228,22 +232,21 @@ const workFromHomeModule = (function ($) {
             $selectorId = domElement.$dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
-                $.ajax({
+                axios({
                     url: resolveClientUrl('employee/getemployees'),
-                    data: {
+                    params: {
                         query: request.term,
                         enable: true,
                         isDelete: false
                     },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
-                    }
-                });
+                }).then(res => {
+                    response($.map(res.data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.Id
+                        };
+                    }));
+                }).catch(axiosError);
             },
             minLength: 2,
             select: function (event, ui) {
@@ -275,12 +278,16 @@ const workFromHomeModule = (function ($) {
             event.preventDefault();
 
             const employeeworkfromhomeId = $(this).data('id');
-            $.get(resolveClientUrl('EmployeeWorkFromHome/Edit/' + employeeworkfromhomeId), function (data) {
-                domElement.$dialog.html(data);
+            axios({
+                url: resolveClientUrl('EmployeeWorkFromHome/Edit/' + employeeworkfromhomeId),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initEventEditWorkFromHome(employeeworkfromhomeId);
                 initAutoComplete();
                 initDatepicker();
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -289,18 +296,17 @@ const workFromHomeModule = (function ($) {
         $selector.on('click', function (event) {
             event.preventDefault();
             const employeeworkfromhomeId = $(this).data('id');
-            confirm("Are you sure you want to remove this employee work from home?", function () {
-                $.ajax({
-                    type: 'POST',
+            confirm('Are you sure you want to remove this employee work from home?', function () {
+                axios({
+                    method: 'POST',
                     url: resolveClientUrl('EmployeeWorkFromHome/Delete/' + employeeworkfromhomeId),
-                    success: function (result) {
-                        if (result.IsSuccessful) {
-                            alert('Remove employee work from home successfully!', getEmployeeWorkFromHome);
-                        } else {
-                            alert(result.Message);
-                        }
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        alert('Remove employee work from home successfully!', getEmployeeWorkFromHome);
+                    } else {
+                        alert(response.data.Message);
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }

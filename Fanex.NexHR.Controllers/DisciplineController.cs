@@ -50,6 +50,7 @@
             return View(model);
         }
 
+        [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.Discipline)]
         public ActionResult GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
         {

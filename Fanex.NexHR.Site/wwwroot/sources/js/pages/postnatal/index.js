@@ -2,9 +2,10 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
+import axios from 'axios';
 import moment from 'moment';
 
-import { floatThead, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
+import { axiosError, floatThead, confirm, alert, blockUI, unblockUI, initDatepicker, resolveClientUrl } from '../../shared/common.functions';
 
 const postnatalModule = (function ($) {
     const domElement = {
@@ -16,27 +17,18 @@ const postnatalModule = (function ($) {
     };
 
     function getPostnatal() {
-        $.ajax({
-            type: 'GET',
-            url: resolveClientUrl("postnatal/getPostnatalGrid?year=" + $("#Year").val()),
-            dataType: 'html',
-            beforeSend: function () {
-                blockUI();
-            },
-            success: function (data) {
-                $(domElement.Table).html(data);
-                floatThead('#data');
-                initEditEvent();
-                initDeleteEvent();
-                initToolTip();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            },
-            complete: function () {
-                unblockUI();
-            }
-        });
+        blockUI();
+        axios({
+            method: 'GET',
+            url: resolveClientUrl('postnatal/getPostnatalGrid?year=' + $('#Year').val()),
+            responseType: 'text'
+        }).then(response => {
+            $(domElement.Table).html(response.data);
+            floatThead('#data');
+            initEditEvent();
+            initDeleteEvent();
+            initToolTip();
+        }).then(() => unblockUI()).catch(axiosError);
     }
 
     function initToolTip() {
@@ -75,14 +67,18 @@ const postnatalModule = (function ($) {
     }
 
     function initAddEvent() {
-        $(domElement.AddButton).on("click", function (e) {
+        $(domElement.AddButton).on('click', function (e) {
             e.preventDefault();
-            $.get(resolveClientUrl("postnatal/create"), function (data) {
-                domElement.$dialog.html(data);
+            axios({
+                url: resolveClientUrl('postnatal/create'),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initAddPostnatalDialog();
                 initAutoComplete();
                 initDatepicker();
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -97,22 +93,18 @@ const postnatalModule = (function ($) {
                     click: function (e) {
                         removeMsg(domElement.$dialog);
                         if (validateAddPostnatal()) {
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('postnatal/Create'),
-                                data: $(domElement.CreateForm).serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        domElement.$dialog.dialog('close');
-                                        alert('Create employee postnatal successfully!', getPostnatal);
-                                    } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
-                                    }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
+                                data: $(domElement.CreateForm).serialize()
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    domElement.$dialog.dialog('close');
+                                    alert('Create employee postnatal successfully!', getPostnatal);
+                                } else {
+                                    showErrorMsg(domElement.$dialog, '<li>' + response.data.Message + '</li>');
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -131,7 +123,7 @@ const postnatalModule = (function ($) {
 
     function removeMsg($dialog) {
         $dialog.find('.validation-summary-valid')
-            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html("");
+            .hide().removeClass('success').removeClass('validation-summary-errors').find('ul:first').html('');
     }
 
     function showErrorMsg($dialog, msg) {
@@ -150,22 +142,18 @@ const postnatalModule = (function ($) {
                     click: function () {
                         removeMsg(domElement.$dialog);
                         if (validateAddPostnatal()) {
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('postnatal/Update/' + postnatalId),
-                                data: $(domElement.EditForm).serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        domElement.$dialog.dialog('close');
-                                        alert('Update employee postnatal successfully!', getPostnatal);
-                                    } else {
-                                        showErrorMsg(domElement.$dialog, '<li>' + result.Message + '</li>');
-                                    }
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    alert(textStatus + ': ' + errorThrown);
+                                data: $(domElement.EditForm).serialize()
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    domElement.$dialog.dialog('close');
+                                    alert('Update employee postnatal successfully!', getPostnatal);
+                                } else {
+                                    showErrorMsg(domElement.$dialog, '<li>' + response.data.Message + '</li>');
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -187,21 +175,20 @@ const postnatalModule = (function ($) {
             $selectorId = domElement.$dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
-                $.ajax({
+                axios({
                     url: resolveClientUrl('employee/GetMemberByGender'),
-                    data: {
+                    params: {
                         keyword: request.term,
                         gender: 0 //female
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.Id
-                            };
-                        }));
                     }
-                });
+                }).then(res => {
+                    response($.map(res.data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.Id
+                        };
+                    }));
+                }).catch(axiosError);
             },
             minLength: 2,
             select: function (event, ui) {
@@ -233,12 +220,16 @@ const postnatalModule = (function ($) {
             event.preventDefault();
 
             const postnatalId = $(this).data('id');
-            $.get(resolveClientUrl('postnatal/edit/' + postnatalId), function (data) {
-                domElement.$dialog.html(data);
+            axios({
+                url: resolveClientUrl('postnatal/edit/' + postnatalId),
+                method: 'GET',
+                responseType: 'text'
+            }).then(response => {
+                domElement.$dialog.html(response.data);
                 initEventEditPostnatal(postnatalId);
                 initAutoComplete();
                 initDatepicker();
-            });
+            }).catch(axiosError);
         });
     }
 
@@ -247,18 +238,17 @@ const postnatalModule = (function ($) {
         $selector.on('click', function (event) {
             event.preventDefault();
             const postnatalId = $(this).data('id');
-            confirm("Are you sure you want to remove this postnatal?", function () {
-                $.ajax({
-                    type: 'POST',
-                    url: resolveClientUrl('postnatal/delete/' + postnatalId),
-                    success: function (result) {
-                        if (result.IsSuccessful) {
-                            alert('Remove employee postnatal successfully!', getPostnatal);
-                        } else {
-                            alert(result.Message);
-                        }
+            confirm('Are you sure you want to remove this postnatal?', function () {
+                axios({
+                    method: 'POST',
+                    url: resolveClientUrl('postnatal/delete/' + postnatalId)
+                }).then(response => {
+                    if (response.data.IsSuccessful) {
+                        alert('Remove employee postnatal successfully!', getPostnatal);
+                    } else {
+                        alert(response.data.Message);
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }

@@ -38,17 +38,16 @@
 
         private string SaveFileToServer(HttpPostedFileBase file, int categoryId, bool isOverride)
         {
-            string pathAttach = string.Empty;
             var fileName = Path.GetFileName(file.FileName);
             var dir = "~/file/uploads/" + categoryId;
-            pathAttach = dir + "/" + fileName;
+            var pathAttach = string.Format("{0}/{1}", dir, fileName);
 
             if (isOverride)
             {
                 while (System.IO.File.Exists(Server.MapPath(pathAttach)))
                 {
                     fileName = "(1)" + fileName;
-                    pathAttach = dir + "/" + fileName;
+                    pathAttach = string.Format("{0}/{1}", dir, fileName);
                 }
             }
 
@@ -121,6 +120,7 @@
                     return false;
                 }
             }
+
             return true;
         }
 

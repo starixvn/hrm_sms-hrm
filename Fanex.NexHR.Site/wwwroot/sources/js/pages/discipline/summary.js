@@ -8,7 +8,7 @@ import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 import {
-    axiosError, blockUI, floatThead, unblockUI, confirm, alert, autoIndex, initDatepicker,
+    axiosError, blockUI, floatThead, unblockUI, confirm, autoIndex, initDatepicker,
     resolveClientUrl, downloadFile
 } from '../../shared/common.functions';
 
@@ -72,20 +72,19 @@ import {
             $selectorId = $dialog.find('#EmployeeId');
         $selectorName.autocomplete({
             source: function (request, response) {
-                $.ajax({
+                axios({
                     url: resolveClientUrl('discipline/GetMemberToAddOtherDiscipline'),
-                    data: {
+                    params: {
                         keyword: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.EmployeeId
-                            };
-                        }));
                     }
-                });
+                }).then(res => {
+                    response($.map(res.data, function (item) {
+                        return {
+                            label: item.NickName + ' (' + item.FullName + ')',
+                            value: item.EmployeeId
+                        };
+                    }));
+                }).catch(axiosError);
             },
             minLength: 2,
             select: function (event, ui) {
@@ -138,19 +137,18 @@ import {
                     click: function () {
                         removeMsg($dialogAddOtherDiscipline);
                         if (validateAddOtherDiscipline()) {
-                            $.ajax({
-                                type: 'POST',
+                            axios({
+                                method: 'POST',
                                 url: resolveClientUrl('discipline/AddOtherDiscipline'),
                                 data: $('#frmAddOtherDiscipline').serialize(),
-                                success: function (result) {
-                                    if (result.IsSuccessful) {
-                                        showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
-                                        $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true);
-                                    } else {
-                                        showErrorMsg($dialogAddOtherDiscipline, '<li>' + result.Message + '</li>');
-                                    }
+                            }).then(response => {
+                                if (response.data.IsSuccessful) {
+                                    showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
+                                    $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true);
+                                } else {
+                                    showErrorMsg($dialogAddOtherDiscipline, '<li>' + response.data.Message + '</li>');
                                 }
-                            });
+                            }).catch(axiosError);
                         }
                     }
                 },
@@ -173,34 +171,33 @@ import {
 
     function initEventViewOtherDiscipline() {
         $disciplineTableBody.find('a.other-discipline').on('click', function () {
-            var empId = parseInt($(this).data('empid'), 10),
+            const empId = parseInt($(this).data('empid'), 10),
                 nickname = $(this).data('nickname');
 
             if (empId > 0) {
-                $.ajax({
-                    type: 'GET',
+                axios({
+                    method: 'GET',
                     url: resolveClientUrl('discipline/ViewOtherDiscipline'),
-                    dataType: 'html',
-                    data: {
+                    responseType: 'text',
+                    params: {
                         employeeId: empId,
                         fromDate: $('form.form-filter #FromDate').datepicker({ dateFormat: 'dd M, yy' }).val(),
                         toDate: $('form.form-filter #ToDate').datepicker({ dateFormat: 'dd M, yy' }).val()
                     },
-                    success: function (data) {
-                        $dialogViewOtherDiscipline.html(data);
-                        initEventForDeleteOtherDiscipline();
-                        $dialogViewOtherDiscipline.dialog({
-                            modal: true,
-                            title: 'Other Discipline - ' + nickname,
-                            close: function () {
-                                if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
-                                    query();
-                                }
-                            },
-                            minWidth: 500
-                        });
-                    }
-                });
+                }).then(response => {
+                    $dialogViewOtherDiscipline.html(response.data);
+                    initEventForDeleteOtherDiscipline();
+                    $dialogViewOtherDiscipline.dialog({
+                        modal: true,
+                        title: 'Other Discipline - ' + nickname,
+                        close: function () {
+                            if ($dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked')) {
+                                query();
+                            }
+                        },
+                        minWidth: 500
+                    });
+                }).catch(axiosError);
             }
         });
     }
@@ -233,11 +230,15 @@ import {
                 rowIndex = $(this).data('row-index');
 
             confirm('Are you sure you want to delete this other discipline?', function () {
-                $.post(resolveClientUrl('discipline/DeleteOtherDiscipline'), {
-                    employeeId: empId,
-                    workDate: workdate,
-                    disciplineTypeId: disciplineTypeId
-                }, function () {
+                axios({
+                    url: resolveClientUrl('discipline/DeleteOtherDiscipline'),
+                    method: 'POST',
+                    params: {
+                        employeeId: empId,
+                        workDate: workdate,
+                        disciplineTypeId: disciplineTypeId
+                    }
+                }).then(response => {
                     $dialogViewOtherDiscipline.find('#IsSuccessful').prop('checked', true);
                     $('#row_' + rowIndex).remove();
                     autoIndex();
@@ -245,7 +246,7 @@ import {
                     if ($dialogViewOtherDiscipline.find('table.table tbody > tr').length === 0) {
                         $(noInformation(6)).appendTo('#dialogViewOtherDiscipline table.table');
                     }
-                });
+                }).catch(axiosError);
             });
         });
     }
@@ -287,15 +288,14 @@ import {
         $btnAddOtherDiscipline.on('click', function (event) {
             event.preventDefault();
 
-            $.ajax({
-                type: 'GET',
+            axios({
+                method: 'GET',
                 url: resolveClientUrl('discipline/PartialAddOtherDiscipline'),
-                dataType: 'html',
-                success: function (data) {
-                    $dialogAddOtherDiscipline.html(data);
-                    initAddOtherDisciplineDialog();
-                }
-            });
+                responseType: 'text'
+            }).then(response => {
+                $dialogAddOtherDiscipline.html(response.data);
+                initAddOtherDisciplineDialog();
+            }).catch(axiosError);
         });
     }
 
@@ -316,17 +316,18 @@ import {
 
     function query() {
         blockUI();
-        $.ajax({
+        axios({
+            method: 'POST',
             url: resolveClientUrl('discipline/getDisciplineSummaryGrid'),
             data: $('form.form-filter').serialize(),
-            success: function (data) {
-                $disciplineTableBody.html(data);
-                $('.tooltip-tipsy').tipsy({ html: true, gravity: 'w' });
-                initEventViewOtherDiscipline();
-                initEventForViewDisciplineDetail();
-                unblockUI();
-            }
-        });
+            responseType: 'text'
+        }).then(response => {
+            $disciplineTableBody.html(response.data);
+            $('.tooltip-tipsy').tipsy({ html: true, gravity: 'w' });
+            initEventViewOtherDiscipline();
+            initEventForViewDisciplineDetail();
+            unblockUI();
+        }).catch(axiosError);
     }
 
     $(document).ready(function () {
@@ -336,22 +337,19 @@ import {
         $btnAddOtherDiscipline = $('#btnAddOtherDiscipline');
         initDatepicker();
         initEventForDateRangeDropdown();
-        $.ajax({
-            url: resolveClientUrl('Section/GetOrgChart'),
-            success: function (data) {
-                $('#Team').multiSelectTreeView({
-                    data: data,
-                    isSelectedAll: true,
-                    hasSearchBox: true
-                });
-                $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        axios({
+            method: 'GET',
+            url: resolveClientUrl('Section/GetOrgChart')
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
-                query();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }
-        });
+            query();
+        }).catch(axiosError);
 
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');

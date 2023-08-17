@@ -28,7 +28,6 @@
         [ChildActionOnly]
         public ActionResult GlobalScript()
         {
-            ViewBag.Employee = EmployeeSession;
             ViewBag.IsShowLeftNavigation = userControlSession.Get<bool>(SessionKey.IsShowLeftNavigation);
             return PartialView();
         }
