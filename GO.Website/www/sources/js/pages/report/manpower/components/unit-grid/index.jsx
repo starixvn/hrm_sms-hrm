@@ -4,8 +4,8 @@ import TotalRow from './TotalRow';
 import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
-    const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal } = data;
+const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
+    const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal, totalJobTypeSupervisor, totalJobTypeloyeEmployee } = data;
 
     const showHides = headers.map(gunit => {
         return {
@@ -29,10 +29,10 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
         }
     };
 
-    const renderRows = rows => {
+    const renderRows = (rows, jobLevelsType, totalJobType) => {
         const trs = [];
-        rows.map(item => {
-            trs.push(<Row key={item.name} data={item} showHideOptions={showHideOptions} onClick={handleShowDetail} />);
+        jobLevelsType.map(jobType => {
+            trs.push(<Row key={jobType} data={rows} jobType={jobType} totalJobType={totalJobType} showHideOptions={showHideOptions} onClick={handleShowDetail} />);
         });
 
         return trs;
@@ -42,7 +42,7 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
         <table className="table group-by-country">
             <thead>
                 <tr>
-                    <td rowSpan={3} className="col-job-level">{LangHelper.getResource('JobLevel')}</td>
+                    <td rowSpan={3} colSpan={2} className="col-job-level">{LangHelper.getResource('JobLevel')}</td>
                     {
                         headers.map(gunit => {
                             const showHideOption = showHideOptions.find(x => x.key === gunit.name);
@@ -98,11 +98,11 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
                 </tr>
             </thead>
             <tbody>
-                {renderRows(supervisors)}
-                <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
-                {renderRows(employees)}
-                <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
                 <GrandTotalRow data={grandTotal} showHideOptions={showHideOptions} />
+                {renderRows(supervisors, jobLevelsType.Supervisor, totalJobTypeSupervisor)}
+                <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
+                {renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}
+                <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
             </tbody>
         </table>
     );

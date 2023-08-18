@@ -9,6 +9,8 @@
         public IList<RowItem> Headers { get; set; }
         public IList<RowItem> Supervisors { get; set; }
         public IList<RowItem> Employees { get; set; }
+        public IList<RowItem> TotalJobTypeSupervisor { get; set; }
+        public IList<RowItem> TotalJobTypeloyeEmployee { get; set; }
         public RowItem TotalSupervisor { get; set; }
         public RowItem TotalEmployee { get; set; }
         public RowItem GrandTotal { get; set; }

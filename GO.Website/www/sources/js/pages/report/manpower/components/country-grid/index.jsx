@@ -5,7 +5,7 @@ import TotalRow from './TotalRow';
 import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
+const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
     const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal } = data;
 
     const handleShowDetail = (event, jobLevel, country, gunit) => {
@@ -29,11 +29,11 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail }) => {
         <table className="table group-by-country">
             <THead data={headers} />
             <tbody>
+                <GrandTotalRow data={grandTotal} />
                 {renderRows(supervisors)}
                 <TotalRow data={totalSupervisor} />
                 {renderRows(employees)}
                 <TotalRow data={totalEmployee} />
-                <GrandTotalRow data={grandTotal} />
             </tbody>
         </table>
     );

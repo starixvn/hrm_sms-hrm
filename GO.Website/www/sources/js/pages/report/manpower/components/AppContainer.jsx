@@ -14,6 +14,10 @@ export default class AppContainer extends Component {
             employeeInfos: [],
             gridCountryData: null,
             gridUnitData: null,
+            jobLevelsType: {
+                Supervisor: [],
+                Employee: []
+            },
             detail: {
                 show: false,
                 target: null,
@@ -109,7 +113,7 @@ export default class AppContainer extends Component {
     };
 
     render() {
-        const { employeeInfos, gridCountryData, gridUnitData, detail } = this.state;
+        const { employeeInfos, gridCountryData, gridUnitData, jobLevelsType, detail } = this.state;
 
         return (
             <div className="manpower-report">
@@ -123,6 +127,7 @@ export default class AppContainer extends Component {
                         employeeInfos={employeeInfos}
                         detail={detail}
                         onShowDetail={this.handleShowDetail}
+                        jobLevelsType={jobLevelsType}
                     />
                 }
                 {
@@ -132,6 +137,7 @@ export default class AppContainer extends Component {
                         employeeInfos={employeeInfos}
                         detail={detail}
                         onShowDetail={this.handleShowDetail}
+                        jobLevelsType={jobLevelsType}
                     />
                 }
                 <Overlay

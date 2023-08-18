@@ -25,8 +25,14 @@
 
         private readonly Dictionary<string, string[]> jobLevels = new Dictionary<string, string[]>
         {
-            { "Supervisor", new [] { "M3-A", "M3-B", "P3-A", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
+            { "Supervisor", new [] {"M4", "P4", "M3-A", "M3-B", "P3-A", "P3-B", "M2-A", "M2-B", "P2-A", "P2-B", "M1-A", "M1-B", "P1-A", "P1-B" } },
             { "Employee", new []{ "E3-A", "E3-B", "E3-C", "E2-A", "E2-B", "E2-C", "E1-A", "E1-B", "E1-C", "E0-A", "E0-B", "E0-C" } }
+        };
+
+        private readonly Dictionary<string, string[]> jobLevelsType = new Dictionary<string, string[]>
+        {
+            { "Supervisor", new [] {"M4", "P4", "M3", "P3", "M2", "P2", "M1", "P1"} },
+            { "Employee", new []{ "E3", "E2", "E1", "E0" } }
         };
 
         private readonly IBaseService baseService;
@@ -52,9 +58,10 @@
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
 
             GridData gridCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
-            GridData gridUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
+            GridData gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, employeeInfos);
 
-            return Json(new { employeeInfos, gridCountryData, gridUnitData });
+
+            return Json(new { employeeInfos, gridCountryData, gridUnitData , jobLevelsType });
         }
 
         [HttpPost]
@@ -64,7 +71,7 @@
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
 
             GridData gridCountryData = GroupDataByCountry(jobLevels, units, employeeInfos);
-            GridData gridUnitData = GroupDataByUnit(jobLevels, units, employeeInfos);
+            GridData gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, employeeInfos);
 
             var bytes = excelService.ExportManpowerReport(gridUnitData, gridCountryData);
             var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}";
@@ -150,6 +157,7 @@
                     }).ToList()
                 }).ToList()
             };
+
             foreach (var jobLevel in jobLevels)
             {
                 var employees = employeeInfos.Where(emp => jobLevel.Equals(emp.JobLevel, StringComparison.CurrentCultureIgnoreCase)).ToList();
@@ -165,7 +173,6 @@
                         Name = country,
                         Cells = new List<CellItem>()
                     };
-
                     foreach (var unit in units)
                     {
                         var cell = new CellItem
@@ -192,11 +199,14 @@
         public static GridData GroupDataByUnit(
             Dictionary<string, string[]> jobLevels,
             Dictionary<string, string[]> units,
+            Dictionary<string, string[]> jobLevelsType,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
             (IList<RowItem> supervisors, RowItem totalSupervisor) = GroupDataByUnit(jobLevels.ElementAt(0).Value, units, employeeInfos);
             (IList<RowItem> employees, RowItem totalEmployee) = GroupDataByUnit(jobLevels.ElementAt(1).Value, units, employeeInfos);
             RowItem grandTotal = GetGrandTotal(units, totalSupervisor, totalEmployee);
+            var totalJobTypeSupervisor = GetTotalByJobType(units, jobLevelsType.ElementAt(0).Value, employeeInfos);
+            var totalJobTypeEmployee = GetTotalByJobType(units, jobLevelsType.ElementAt(1).Value, employeeInfos);
             var headers = units.Select(group => new RowItem
             {
                 Name = group.Key,
@@ -210,8 +220,23 @@
                 Employees = employees,
                 TotalSupervisor = totalSupervisor,
                 TotalEmployee = totalEmployee,
+                TotalJobTypeSupervisor = totalJobTypeSupervisor,
+                TotalJobTypeloyeEmployee = totalJobTypeEmployee,
                 GrandTotal = grandTotal
             };
+        }
+
+        private static string GetJobTypeLevel(string[] jobLevels)
+        {
+            var jobType = string.Empty;
+            foreach (var item in jobLevels)
+            {
+                if(!jobType.Contains(item.Substring(0, 1)))
+                {
+                    jobType += jobType != string.Empty ? (", " + item.Substring(0, 1) ) : item.Substring(0, 1);
+                }
+            }
+            return jobType;
         }
 
         private static (IList<RowItem>, RowItem) GroupDataByUnit(
@@ -219,10 +244,10 @@
             Dictionary<string, string[]> gunits,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
-            var rows = new List<RowItem>();
+            var rows = new List<RowItem>();     
             var totalRow = new RowItem
             {
-                Name = "Total",
+                Name = "Total " + GetJobTypeLevel(jobLevels) + " Level",
                 Cells = gunits.Select(gunit => new GroupCellItem
                 {
                     Name = gunit.Key,
@@ -232,6 +257,7 @@
                     }).ToList()
                 }).ToList()
             };
+
             foreach (var jobLevel in jobLevels)
             {
                 var employees = employeeInfos.Where(emp => jobLevel.Equals(emp.JobLevel, StringComparison.CurrentCultureIgnoreCase)).ToList();
@@ -240,6 +266,7 @@
                     Name = jobLevel,
                     Cells = new List<GroupCellItem>()
                 };
+
                 foreach (var gunit in gunits)
                 {
                     var groupCell = new GroupCellItem
@@ -256,6 +283,7 @@
                             TotalLocal = employees.Count(emp => unit.Equals(emp.UnitName, StringComparison.CurrentCultureIgnoreCase) && emp.IsLocal),
                             TotalExpat = employees.Count(emp => unit.Equals(emp.UnitName, StringComparison.CurrentCultureIgnoreCase) && !emp.IsLocal)
                         };
+
                         groupCell.Cells.Add(cell);
 
                         var totalCell = totalRow.Cells.First(tcell => tcell.Name.Equals(gunit.Key, StringComparison.CurrentCultureIgnoreCase))
@@ -263,14 +291,73 @@
                         totalCell.TotalLocal += cell.TotalLocal;
                         totalCell.TotalExpat += cell.TotalExpat;
                     }
-
                     row.Cells.Add(groupCell);
                 }
-
                 rows.Add(row);
             }
-
             return (rows, totalRow);
+        }
+
+        private static List<RowItem> GetTotalByJobType(
+            Dictionary<string, string[]> gunits,
+            string[] jobLevelsType,
+            IEnumerable<EmployeeInfo> employeeInfos)
+        {
+            var totalJobType = new List<RowItem>();
+            foreach (var item in jobLevelsType)
+            {
+                totalJobType.Add(new RowItem
+                {
+                    Name = item,
+                    Cells = gunits.Select(gunit => new GroupCellItem
+                    {
+                        Name = gunit.Key,
+                        Cells = gunit.Value.Select(unit => new CellItem
+                        {
+                            Name = unit
+                        }).ToList()
+                    }).ToList()
+                });
+            };
+
+            foreach(var item in totalJobType)
+            {
+                var employees = employeeInfos.Where(emp => item.Name.Equals(emp.JobLevel.Substring(0,2), StringComparison.CurrentCultureIgnoreCase)).ToList();
+                var row = new RowItem
+                {
+                    Name = item.Name,
+                    Cells = new List<GroupCellItem>()
+                };
+
+                foreach (var gunit in gunits)
+                {
+                    var groupCell = new GroupCellItem
+                    {
+                        Name = gunit.Key,
+                        Cells = new List<CellItem>()
+                    };
+
+                    foreach (var unit in gunit.Value)
+                    {
+                        var cell = new CellItem
+                        {
+                            Name = unit,
+                            TotalLocal = employees.Count(emp => unit.Equals(emp.UnitName, StringComparison.CurrentCultureIgnoreCase) && emp.IsLocal),
+                            TotalExpat = employees.Count(emp => unit.Equals(emp.UnitName, StringComparison.CurrentCultureIgnoreCase) && !emp.IsLocal)
+                        };
+
+                        groupCell.Cells.Add(cell);
+
+                        var totalCell = item.Cells.First(tcell => tcell.Name.Equals(gunit.Key, StringComparison.CurrentCultureIgnoreCase))
+                            .Cells.First(tcell => tcell.Name.Equals(unit, StringComparison.CurrentCultureIgnoreCase));
+                        totalCell.TotalLocal += cell.TotalLocal;
+                        totalCell.TotalExpat += cell.TotalExpat;
+                    }
+                    row.Cells.Add(groupCell);
+                }
+            }
+
+            return totalJobType;
         }
 
         private static RowItem GetGrandTotal(
