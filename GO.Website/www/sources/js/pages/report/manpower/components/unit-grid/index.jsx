@@ -7,6 +7,24 @@ import LangHelper from '@jsroot/common/langHelper';
 const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
     const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal, totalJobTypeSupervisor, totalJobTypeloyeEmployee } = data;
 
+    const showHideJobs = () => {
+        const showHides = [];
+        totalJobTypeSupervisor.map(item => {
+            showHides.push({
+                key: item.name,
+                show: false
+            })
+        });
+
+        totalJobTypeloyeEmployee.map(item => {
+            showHides.push({
+                key: item.name,
+                show: false
+            })
+        });
+        return showHides;
+    }
+
     const showHides = headers.map(gunit => {
         return {
             key: gunit.name,
@@ -14,12 +32,20 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
         };
     });
     const [showHideOptions, setShowHideOptions] = useState(showHides);
+    const [showHideJobOptions, setShowHideJobOptions] = useState(showHideJobs);
 
     const handleShowHideCells = unit => {
         const options = [...showHideOptions];
         const index = options.findIndex(x => x.key === unit);
         options[index] = { ...options[index], show: !options[index].show };
         setShowHideOptions(options);
+    };
+
+    const handleShowHideJobCells = job => {
+        const options = [...showHideJobOptions];
+        const index = options.findIndex(x => x.key === job);
+        options[index] = { ...options[index], show: !options[index].show };
+        setShowHideJobOptions(options);
     };
 
     const handleShowDetail = (event, jobLevel, unitName, isLocal) => {
@@ -32,7 +58,14 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
     const renderRows = (rows, jobLevelsType, totalJobType) => {
         const trs = [];
         jobLevelsType.map(jobType => {
-            trs.push(<Row key={jobType} data={rows} jobType={jobType} totalJobType={totalJobType} showHideOptions={showHideOptions} onClick={handleShowDetail} />);
+            trs.push(<Row key={jobType}
+                data={rows}
+                jobType={jobType}
+                totalJobType={totalJobType}
+                showHideOptions={showHideOptions}
+                showHideJobOptions={showHideJobOptions}
+                handleShowHideJobCells={handleShowHideJobCells}
+                onClick={handleShowDetail} />);
         });
 
         return trs;
@@ -101,7 +134,7 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
                 <GrandTotalRow data={grandTotal} showHideOptions={showHideOptions} />
                 {renderRows(supervisors, jobLevelsType.Supervisor, totalJobTypeSupervisor)}
                 <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
-                {renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}
+                {/*{renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}*/}
                 <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
             </tbody>
         </table>

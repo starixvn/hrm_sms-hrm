@@ -37,6 +37,10 @@
 
         tbody {
             tr {
+                .bold {
+                    font-weight: bold;
+                }
+
                 td {
                     &.col-job-level, &.col-total {
                         background: #97b1bd99;
@@ -44,6 +48,11 @@
 
                     .cursor-pointer {
                         cursor: pointer;
+                    }
+
+                    .fa {
+                        cursor: pointer;
+                        margin-right: 5px;
                     }
                 }
 
