@@ -74,7 +74,7 @@
             GridData gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, employeeInfos);
 
             var bytes = excelService.ExportManpowerReport(gridUnitData, gridCountryData);
-            var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}";
+            var reportName = $"JobLevelSummaryReportByUnitAndCountry_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
 

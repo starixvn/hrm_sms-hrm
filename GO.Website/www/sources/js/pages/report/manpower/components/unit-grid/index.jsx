@@ -134,7 +134,7 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
                 <GrandTotalRow data={grandTotal} showHideOptions={showHideOptions} />
                 {renderRows(supervisors, jobLevelsType.Supervisor, totalJobTypeSupervisor)}
                 <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
-                {/*{renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}*/}
+                {renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}
                 <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
             </tbody>
         </table>
