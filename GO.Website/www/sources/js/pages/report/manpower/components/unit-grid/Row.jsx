@@ -18,7 +18,7 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
                 let cell = [];
-                cell.push(<td colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
+                cell.push(<td key={`${item.name}-totaljobtype`} colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
                 item.cells.map(gunit => {
                     let totalLocal = 0,
                         totalExpat = 0;
@@ -35,9 +35,9 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                         }
                     });
 
-                    cell.push(<td colSpan={2} key={`${data.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat + totalLocal}</td>);
+                    cell.push(<td colSpan={2} key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat + totalLocal}</td>);
                 });
-                total.push(<tr>{cell}</tr>);
+                total.push(<tr key={`${item.name}-totaljobType`}>{cell}</tr>);
             }
         });
         return total;
@@ -48,7 +48,7 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
                 let cell = [];
-                cell.push(<td className="text-center col-job-level">Total</td>);
+                cell.push(<td key={`${item.name}-totaljobLevel`} className="text-center col-job-level">Total</td>);
                 item.cells.map(gunit => {
                     let totalLocal = 0,
                         totalExpat = 0;
@@ -70,10 +70,10 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                         }
                     });
 
-                    cell.push(<td key={`${data.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
-                    cell.push(<td key={`${data.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
+                    cell.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
+                    cell.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
                 });
-                total.push(<tr>{cell}</tr>);
+                total.push(<tr key={`${item.name}-totaljoblevel`}>{cell}</tr>);
             }
         });
         return total;
@@ -86,17 +86,16 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                 const showHideJobOption = showHideJobOptions.find(x => x.key === jobType);
                 let cell = [];
                 if (row.length === 0) {
-                    cell.push(<td key={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
+                    cell.push(<td key={`${item.name}-jobtype`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
                         {
-                            isMultipleData &&
-                            <span className={`fa ${showHideJobOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
+                           isMultipleData &&                           <span className={`fa ${showHideJobOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
                                 onClick={() => handleShowHideJobCells(jobType)} />
                         }
                         {jobType}
                     </td>);
                 }
                 if (showHideJobOption.show || !isMultipleData) {
-                    cell.push(<td className="text-center col-job-level">
+                    cell.push(<td key={`${item.name}-data`} className="text-center col-job-level">
                         {isMultipleData ? item.name : 'Total'}
                     </td>);
                     item.cells.map(gunit => {
@@ -120,12 +119,12 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                             }
                         });
 
-                        cell.push(<td key={`${data.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
-                        cell.push(<td key={`${data.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
+                        cell.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
+                        cell.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
                     });
                 }
-               
-                row.push(<tr>{cell}</tr>);
+
+                row.push(<tr key={`${item.name}-row-data`}>{cell}</tr>);
             }
         });
         return row;

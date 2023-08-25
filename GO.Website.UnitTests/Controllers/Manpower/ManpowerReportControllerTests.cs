@@ -189,12 +189,12 @@
 
         #region helper
 
-        private ManpowerReportController GetController()
+        private JobLevelSummaryReportController GetController()
         {
             baseService = Substitute.For<IBaseService>();
             excelService = Substitute.For<IExportExcelService>();
 
-            return new ManpowerReportController(
+            return new JobLevelSummaryReportController(
                 baseService,
                 excelService
             );

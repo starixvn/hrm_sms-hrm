@@ -32,7 +32,7 @@ export default class AppContainer extends Component {
 
     getReportData = async () => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerReport/getData');
+        const url = Site.resolveClientUrl('JobLevelSummaryReport/getData');
         await DataService.postDataAsync(url).then(response => {
             this.setState({
                 ...response.data
@@ -42,7 +42,7 @@ export default class AppContainer extends Component {
 
     exportExcel = async () => {
         Site.blockUI();
-        const url = Site.resolveClientUrl('ManpowerReport/exportExcel');
+        const url = Site.resolveClientUrl('JobLevelSummaryReport/exportExcel');
         await DataService.getFileAsync(url).then(response => {
             const fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
             Site.downloadFile(response.data, fileName);

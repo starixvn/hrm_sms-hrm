@@ -13,8 +13,8 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using Microsoft.AspNetCore.Mvc;
 
-    [GOPermission(FunctionKey = FunctionKey.ManpowerReport, Policy = Policy.Read)]
-    public class ManpowerReportController : BaseController
+    [GOPermission(FunctionKey = FunctionKey.JobLevelSummaryReport, Policy = Policy.Read)]
+    public class JobLevelSummaryReportController : BaseController
     {
         private readonly Dictionary<string, string[]> units = new Dictionary<string, string[]>
         {
@@ -38,7 +38,7 @@
         private readonly IBaseService baseService;
         private readonly IExportExcelService excelService;
 
-        public ManpowerReportController(
+        public JobLevelSummaryReportController(
             IBaseService baseService,
             IExportExcelService excelService)
         {
@@ -48,7 +48,7 @@
 
         public IActionResult Index()
         {
-            return View("~/Views/Report/Manpower.cshtml");
+            return View("~/Views/Report/JobLevelSummaryReport.cshtml");
         }
 
         [HttpPost]
