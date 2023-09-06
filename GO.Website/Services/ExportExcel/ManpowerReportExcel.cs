@@ -261,15 +261,13 @@
                 {
                     templateWorksheet.Cells[TotalRowIndex, UnitColIndex, TotalRowIndex, UnitColIndex + 1]
                         .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                    worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                     worksheet.Cells[rowIndex, colIndex++].Value = unit.TotalExpat + unit.TotalLocal;
                     total += unit.TotalExpat + unit.TotalLocal;
                     colIndex++;
                 }
 
-                templateWorksheet.Cells[TotalRowIndex, UnitColIndex, TotalRowIndex, UnitColIndex + 1]
+                templateWorksheet.Cells[TotalRowIndex + 1, UnitColIndex, TotalRowIndex + 1, UnitColIndex + 1]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                 worksheet.Cells[rowIndex, colIndex++].Value = total;
                 colIndex++;
             }
@@ -281,14 +279,12 @@
             IList<RowItem> rows,
             RowItem jobType)
         {
-            const byte UnitColIndex = Two;
+            const byte UnitColIndex = 1;
             if (IsMultipleData(rows, jobType.Name))
             {
                 var colIndex = 3;
-                templateWorksheet.Cells[TotalRowIndex, UnitColIndex, TotalRowIndex, UnitColIndex + 1]
+                templateWorksheet.Cells[RowBodyIndex, UnitColIndex, RowBodyIndex, UnitColIndex + 1]
                              .Copy(worksheet.Cells[rowIndex, 1, rowIndex, 1]);
-                var excelAddress = $"{worksheet.Cells[rowIndex, 1, rowIndex, Two].Address}";
-                worksheet.Cells[excelAddress].Merge = true;
                 worksheet.Cells[rowIndex, 1].Value = "Total " + jobType.Name;
                 RenderRowTotalJobTypeData(templateWorksheet, worksheet, ref rowIndex, ref colIndex, jobType);
 
@@ -345,7 +341,7 @@
 
         private static void RenderTotalSecondRow(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet, ref int rowIndex, RowItem row, int colIndex)
         {
-            const byte UnitColIndex = Two;
+            const byte UnitColIndex = Three;
             foreach (var gunit in row.Cells)
             {
                 var total = 0;
@@ -353,15 +349,13 @@
                 {
                     templateWorksheet.Cells[TotalRowIndex, UnitColIndex, TotalRowIndex, UnitColIndex + 1]
                                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                    worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                     worksheet.Cells[rowIndex, colIndex++].Value = unit.TotalExpat + unit.TotalLocal;
                     total += unit.TotalExpat + unit.TotalLocal;
                     colIndex++;
                 }
 
-                templateWorksheet.Cells[TotalRowIndex, UnitColIndex, TotalRowIndex, UnitColIndex + 1]
+                templateWorksheet.Cells[GrandTotalRowIndex, UnitColIndex, GrandTotalRowIndex, UnitColIndex + 1]
                                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                 worksheet.Cells[rowIndex, colIndex++].Value = total;
                 colIndex++;
             }
@@ -370,11 +364,8 @@
 
         private static void RenderTotalRow(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet, ref int rowIndex, RowItem row)
         {
-            const byte UnitColIndex = Two;
             var colIndex = 1;
-            templateWorksheet.Cells[TotalRowIndex, 1].Copy(worksheet.Cells[rowIndex, colIndex]);
-            var excelAddress = $"{worksheet.Cells[rowIndex, 1, rowIndex + 1, UnitColIndex].Address}";
-            worksheet.Cells[excelAddress].Merge = true;
+            templateWorksheet.Cells[TotalRowIndex, 1, TotalRowIndex + 1, Two].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, colIndex + 1]);
             worksheet.Cells[rowIndex, colIndex++].Value = row.Name;
             colIndex++;
             RenderTotalFirstRow(templateWorksheet, worksheet, ref rowIndex, row, colIndex);
@@ -420,7 +411,6 @@
                 {
                     templateWorksheet.Cells[GrandTotalRowIndex, UnitColIndex, GrandTotalRowIndex, UnitColIndex + 1]
                         .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                    worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                     worksheet.Cells[rowIndex, colIndex++].Value = unit.TotalExpat + unit.TotalLocal;
                     total += unit.TotalExpat + unit.TotalLocal;
                     colIndex++;
@@ -428,7 +418,6 @@
 
                 templateWorksheet.Cells[GrandTotalRowIndex, TotalColIndex, GrandTotalRowIndex, TotalColIndex + 1]
                         .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
-                worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1].Merge = true;
                 worksheet.Cells[rowIndex, colIndex++].Value = total;
                 colIndex++;
             }
@@ -535,6 +524,7 @@
            int colIndex,
            RowItem jobType)
         {
+            const byte CountryColIndex = 10;
             foreach (var country in jobType.Cells)
             {
                 var total = 0;
@@ -543,7 +533,7 @@
                     total += unit.Total;
                 }
 
-                templateWorksheet.Cells[TotalRowIndex, Two, TotalRowIndex, Three]
+                templateWorksheet.Cells[TotalRowIndex, CountryColIndex, TotalRowIndex, CountryColIndex + Two]
                      .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + Two]);
                 worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + Two].Merge = true;
                 worksheet.Cells[rowIndex, colIndex].Value = total;
@@ -607,7 +597,7 @@
 
         private static void RenderCountryTotalSecondRow(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet, ref int rowIndex, RowItem row, int colIndex)
         {
-            const byte CountryColIndex = 8;
+            const byte CountryColIndex = 10;
             foreach (var country in row.Cells)
             {
                 var total = 0;
@@ -615,9 +605,8 @@
                 {
                     total += unit.Total;
                 }
-                templateWorksheet.Cells[TotalRowIndex, CountryColIndex, TotalRowIndex, CountryColIndex]
-                               .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex]);
-                worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + Two].Merge = true;
+                templateWorksheet.Cells[TotalRowIndex + 1, CountryColIndex, TotalRowIndex + 1, CountryColIndex + Two]
+                               .Copy(worksheet.Cells[rowIndex, colIndex]);
                 worksheet.Cells[rowIndex, colIndex].Value = total;
                 colIndex += Three;
             }
@@ -627,9 +616,7 @@
         private void RenderCountryTotalRow(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet, ref int rowIndex, RowItem row)
         {
             var colIndex = _startCountryColIndex;
-            templateWorksheet.Cells[TotalRowIndex, 1].Copy(worksheet.Cells[rowIndex, colIndex]);
-            var excelAddress = $"{worksheet.Cells[rowIndex, colIndex, rowIndex + 1, colIndex + 1].Address}";
-            worksheet.Cells[excelAddress].Merge = true;
+            templateWorksheet.Cells[TotalRowIndex, 1, TotalRowIndex + 1 , Two].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + 1]);
             worksheet.Cells[rowIndex, colIndex++].Value = row.Name;
             colIndex++;
             RenderCountryTotalFirstRow(templateWorksheet, worksheet, ref rowIndex, row, colIndex);
@@ -659,7 +646,7 @@
 
         private static void RenderCountryGrandTotalSecondRow(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet, ref int rowIndex, int colIndex, RowItem row)
         {
-            const byte CountryColIndex = 8;
+            const byte CountryColIndex = 10;
             foreach (var country in row.Cells)
             {
                 var total = 0;
@@ -667,9 +654,8 @@
                 {
                     total += unit.Total;
                 }
-                templateWorksheet.Cells[TotalRowIndex, CountryColIndex, TotalRowIndex, CountryColIndex]
+                templateWorksheet.Cells[TotalRowIndex + 1 , CountryColIndex, TotalRowIndex + 1 , CountryColIndex + Two]
                                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex]);
-                worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + Two].Merge = true;
                 worksheet.Cells[rowIndex, colIndex].Value = total;
                 colIndex += Three;
             }
