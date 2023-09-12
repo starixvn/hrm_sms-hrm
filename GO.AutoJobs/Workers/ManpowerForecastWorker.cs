@@ -15,7 +15,7 @@
         public ManpowerForecastWorker(
             IManpowerForecastService manpowerForecastService,
             List<JobSettings> jobSettings,
-            ILogger<SmsHrmWorker> serilog,
+            ILogger<ManpowerForecastWorker> serilog,
             Fanex.Logging.ILogger logger) : base(serilog, logger)
         {
             this.manpowerForecastService = manpowerForecastService;
