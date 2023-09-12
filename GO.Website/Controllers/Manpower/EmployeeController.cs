@@ -84,42 +84,32 @@
             {
                 Id = d.DepartmentId.ToString(),
                 Text = d.DepartmentName,
-                Items = GetSection(sections, d)
-                //Items = sections.Where(s => s.SecTionName != null && !string.IsNullOrWhiteSpace(s.SecTionName) 
-                //&& s.DepartmentName.ToLowerInvariant() == d.DepartmentName.ToLowerInvariant()).Select(x => new MultiSelectViewModel
-                //{
-                //    Id = string.Join(", ", sections.Where(y => y.SecTionName != null && !string.IsNullOrWhiteSpace(y.SecTionName)
-                //        && y.DepartmentName.ToLowerInvariant() == d.DepartmentName.ToLowerInvariant()
-                //        && x.SecTionName.ToLowerInvariant() == y.SecTionName.ToLowerInvariant()).Select(z => z.SectionId).ToArray()),
-                //    Text = x.SecTionName,
-                //    ParentId = d.DepartmentId,
-                //    IsLeaf = true
-                //}).ToList()
+                Items = GetMultiSelectViewModel(sections, d)
             });
 
             return multiSelectViewModel;
         }
 
-        private static List<MultiSelectViewModel> GetSection(IEnumerable<Section> sections, Section department)
+        private static List<MultiSelectViewModel> GetMultiSelectViewModel(IEnumerable<Section> sections, Section department)
         {
-            var section = new List<MultiSelectViewModel>();
+            var multiSelectViewModel = new List<MultiSelectViewModel>();
             foreach(var item in sections)
             {
-                if(!section.Any(x => x.Text.ToLowerInvariant() == item.SecTionName.ToLowerInvariant()) 
+                if(!multiSelectViewModel.Any(x => x.Text.ToLowerInvariant() == item.SecTionName.ToLowerInvariant()) 
                     && !string.IsNullOrWhiteSpace(item.SecTionName)
                     && item.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()){
-                    section.Add(new MultiSelectViewModel
+                    multiSelectViewModel.Add(new MultiSelectViewModel
                     {
-                        Id= string.Join(", ", sections.Where(y => !string.IsNullOrWhiteSpace(y.SecTionName)
-                        && y.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
-                        && item.SecTionName.ToLowerInvariant() == y.SecTionName.ToLowerInvariant()).Select(z => z.SectionId).ToArray()),
+                        Id= string.Join(", ", sections.Where(s => !string.IsNullOrWhiteSpace(s.SecTionName)
+                        && s.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
+                        && item.SecTionName.ToLowerInvariant() == s.SecTionName.ToLowerInvariant()).Select(z => z.SectionId).ToArray()),
                         Text = item.SecTionName,
                         ParentId = department.DepartmentId,
                         IsLeaf = true
                     });
                 }
             }
-            return section;
+            return multiSelectViewModel;
         }
     }
 }
