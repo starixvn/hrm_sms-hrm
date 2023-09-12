@@ -18,6 +18,7 @@ const AppContainer = () => {
         pageSize: DefaultPageSize
     });
     const [gridData, setGridData] = useState(null);
+    const [sectionsTree, setSectionsTree] = useState(null);
 
     useEffect(() => {
         const getSites = async () => {
@@ -36,6 +37,14 @@ const AppContainer = () => {
         const url = Site.resolveClientUrl('Manpower/Employee/GetEmployeeInfos');
         await DataService.postDataAsync(url, params).then(response => {
             setGridData(response.data);
+        }).then(() => Site.unblockUI());
+    };
+
+    const getSectionInfos = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Employee/GetSectionInfos');
+        await DataService.getDataAsync(url, params).then(response => {
+            setSectionsTree(response.data);
         }).then(() => Site.unblockUI());
     };
 
@@ -59,9 +68,12 @@ const AppContainer = () => {
 
     return (
         <div className="manpower-employee">
-            <Filter companies={companies}
+            <Filter
+                sectionsTree={sectionsTree}
+                companies={companies}
                 onFilterChange={handleChangeFilter}
                 getEmployeeInfos={getEmployeeInfos}
+                getSectionInfos={getSectionInfos}
             />
             <DataGrid filter={filter}
                 gridData={gridData}

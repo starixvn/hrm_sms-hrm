@@ -73,5 +73,6 @@
         <Setting Key="Report_Manpower_Get" SpName="Report_Manpower_Get" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_GetJobLevel" SpName="Manpower_GetJobLevel" DbName="bodb_IUC" Plain="0" />
         <Setting Key="Manpower_GetUnit" SpName="Manpower_GetUnit" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="Manpower_GetSection" SpName="Manpower_GetSection" DbName="bodb_IUC" Plain="0" />
     </Function>
 </Functions>

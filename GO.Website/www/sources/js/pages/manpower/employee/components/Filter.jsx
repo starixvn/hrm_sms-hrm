@@ -3,14 +3,18 @@ import { Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
+import TreeMultiselect from '@jsroot/components/react-tree-multiselect/TreeMultiselect';
 
-const Filter = ({ companies, getEmployeeInfos, onFilterChange }) => {
+const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, onFilterChange }) => {
     const [keyword, setKeyword] = useState('');
     const [company, setCompany] = useState({ value: null, label: 'All' });
+    const [category, setCategory] = useState({ value: null, label: 'All' });
+    const [sections, setSections] = useState(null);
     const [status, setStatus] = useState({ value: 1, label: 'Include' });
 
     useEffect(() => {
         const params = getParams();
+        getSectionInfos();
         getEmployeeInfos(params);
     }, []);
 
@@ -18,6 +22,8 @@ const Filter = ({ companies, getEmployeeInfos, onFilterChange }) => {
         return {
             keyword,
             companyId: company.value,
+            category: category.value,
+            sections: sections,
             statusId: status.value,
             pageIndex: 1,
             pageSize: DefaultPageSize
@@ -45,6 +51,16 @@ const Filter = ({ companies, getEmployeeInfos, onFilterChange }) => {
         { value: 2, label: 'Excluded' }
     ];
 
+    const categoryOptions = [
+        { value: null, label: 'All' },
+        { value: true, label: 'Local' },
+        { value: false, label: 'Expat' }
+    ];
+
+    const handleSectionChange = selectedItems => {
+        const ids = selectedItems.map(item => item.id);
+        setSections(ids.join(','));
+    };
     return (
         <Form className="form-filter" onSubmit={handleSubmit}>
             <Form.Row bsPrefix="form-row">
@@ -62,6 +78,19 @@ const Filter = ({ companies, getEmployeeInfos, onFilterChange }) => {
                         options={companyOptions} value={company} isSearchable={false}
                         onChange={value => setCompany(value)}
                     />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>{LangHelper.getResource('Category')}</Form.Label>
+                    <Select className={`react-select-container`} classNamePrefix="react-select"
+                        options={categoryOptions} value={category} isSearchable={false}
+                        onChange={value => setCategory(value)}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>{LangHelper.getResource('Section')}</Form.Label>
+                    <TreeMultiselect data={sectionsTree}
+                        isSelectedAll
+                        onChange={handleSectionChange}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>{LangHelper.getResource('Status')}</Form.Label>

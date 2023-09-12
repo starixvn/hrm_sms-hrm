@@ -11,6 +11,10 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using GO.Website.Criteria.Report;
+    using Fanex.NexHR.ViewModels;
+    using System.Collections.Generic;
+    using System.Linq;
 
     [Route("Manpower/Employee/[action]")]
     [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_EmployeeManagement, Policy = Policy.Read)]
@@ -37,7 +41,15 @@
         public async Task<IActionResult> GetEmployeeInfos([FromBody] GetEmployeeCriteria criteria)
         {
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
-            return Json(new { totalItems = criteria.TotalRows, data = employeeInfos });
+            return Json(new { totalItems = criteria.TotalRows, data = employeeInfos});
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSectionInfos()
+        {
+            var sections = await baseService.GetDataAsync<Section>(new GetSectionCriteria());
+            IEnumerable<MultiSelectViewModel> orgchart = GetOrgChart(sections);
+            return Json(orgchart);
         }
 
         public async Task<IActionResult> GetCompanies()
@@ -54,6 +66,60 @@
             command.ModifiedBy = userControlSession.UserId;
             CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
+        }
+
+        private static IEnumerable<MultiSelectViewModel> GetOrgChart(
+            IEnumerable<Section> sections)
+        {
+            var department = new List<Section>();
+            foreach(var item in sections)
+            {
+                if(!department.Any(x => x.DepartmentName.ToLowerInvariant() == item.DepartmentName.ToLowerInvariant()))
+                {
+                    department.Add(item);
+                }
+            }
+
+            var multiSelectViewModel = department.Select(d => new MultiSelectViewModel
+            {
+                Id = d.DepartmentId.ToString(),
+                Text = d.DepartmentName,
+                Items = GetSection(sections, d)
+                //Items = sections.Where(s => s.SecTionName != null && !string.IsNullOrWhiteSpace(s.SecTionName) 
+                //&& s.DepartmentName.ToLowerInvariant() == d.DepartmentName.ToLowerInvariant()).Select(x => new MultiSelectViewModel
+                //{
+                //    Id = string.Join(", ", sections.Where(y => y.SecTionName != null && !string.IsNullOrWhiteSpace(y.SecTionName)
+                //        && y.DepartmentName.ToLowerInvariant() == d.DepartmentName.ToLowerInvariant()
+                //        && x.SecTionName.ToLowerInvariant() == y.SecTionName.ToLowerInvariant()).Select(z => z.SectionId).ToArray()),
+                //    Text = x.SecTionName,
+                //    ParentId = d.DepartmentId,
+                //    IsLeaf = true
+                //}).ToList()
+            });
+
+            return multiSelectViewModel;
+        }
+
+        private static List<MultiSelectViewModel> GetSection(IEnumerable<Section> sections, Section department)
+        {
+            var section = new List<MultiSelectViewModel>();
+            foreach(var item in sections)
+            {
+                if(!section.Any(x => x.Text.ToLowerInvariant() == item.SecTionName.ToLowerInvariant()) 
+                    && !string.IsNullOrWhiteSpace(item.SecTionName)
+                    && item.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()){
+                    section.Add(new MultiSelectViewModel
+                    {
+                        Id= string.Join(", ", sections.Where(y => !string.IsNullOrWhiteSpace(y.SecTionName)
+                        && y.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
+                        && item.SecTionName.ToLowerInvariant() == y.SecTionName.ToLowerInvariant()).Select(z => z.SectionId).ToArray()),
+                        Text = item.SecTionName,
+                        ParentId = department.DepartmentId,
+                        IsLeaf = true
+                    });
+                }
+            }
+            return section;
         }
     }
 }

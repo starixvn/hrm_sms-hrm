@@ -13,10 +13,12 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using Microsoft.AspNetCore.Mvc;
     using GO.Website.Models;
+    using Fanex.NexHR.ViewModels;
 
     [GOPermission(FunctionKey = FunctionKey.JobLevelSummaryReport, Policy = Policy.Read)]
     public class JobLevelSummaryReportController : BaseController
     {
+        private const int LengthJobLevelType = 2;
         private readonly Dictionary<string, string> unitTypes = new()
         {
             { "Product Unit", "PU"},
@@ -91,7 +93,7 @@
             var dictionaryUnits = new Dictionary<string, string []>();
             foreach (var unitType in unitTypes)
             {
-                var unitNames = units.Where(x => x.Substring(0, 2).Contains(unitType.Value)).ToArray();
+                var unitNames = units.Where(x => x.Substring(0, LengthJobLevelType).Contains(unitType.Value)).ToArray();
                 dictionaryUnits.Add(unitType.Key, unitNames);
             }
             return dictionaryUnits;
@@ -120,7 +122,8 @@
                 var jobLevelNames = new List<string>();
                 foreach (var item in jobLevelType.Value)
                 {
-                    jobLevelNames.AddRange(jobLevels.Where(x => x.Substring(0, 1).Contains(item)).Select(y => y.Substring(0, 2)).Distinct().ToArray());
+                    jobLevelNames.AddRange(jobLevels.Where(x => x.Substring(0, 1).Contains(item))
+                        .Select(y => y.Substring(0, LengthJobLevelType)).Distinct().ToArray());
                 }
 
                 dictionaryJobLevelTypes.Add(jobLevelType.Key, SortJobLevel(jobLevelNames));
@@ -133,8 +136,8 @@
             var sortJobLevel = new List<string>();
             foreach(var item in jobLevelNames)
             {
-                var range = Int32.Parse(item[1..]);
-                sortJobLevel.AddRange(jobLevelNames.Where(x => Int32.Parse(x[1..]).Equals(range) && !sortJobLevel.Any(y => y == x)).ToList());
+                var range = int.Parse(item[1..]);
+                sortJobLevel.AddRange(jobLevelNames.Where(x => int.Parse(x[1..]).Equals(range) && !sortJobLevel.Any(y => y == x)).ToList());
             }
             return sortJobLevel.ToArray();
         }
@@ -145,7 +148,8 @@
             Dictionary<string, string[]> jobLevelsType,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
-            IList<string> countries = employeeInfos.Where(emp => !string.IsNullOrWhiteSpace(emp.Country)).Select(emp => emp.Country).Distinct().OrderBy(item => item).ToList();
+            IList<string> countries = employeeInfos.Where(emp => !string.IsNullOrWhiteSpace(emp.Country))
+                .Select(emp => emp.Country).Distinct().OrderBy(item => item).ToList();
             (IList<RowItem> supervisors, RowItem totalSupervisor) = GroupDataByCountry(jobLevels.ElementAt(0).Value, countries, units, employeeInfos);
             (IList<RowItem> employees, RowItem totalEmployee) = GroupDataByCountry(jobLevels.ElementAt(1).Value, countries, units, employeeInfos);
             var totalJobTypeSupervisor = GetTotalByJobType(countries, units, jobLevelsType.ElementAt(0).Value, employeeInfos);
@@ -387,7 +391,8 @@
 
             foreach (var item in totalJobType)
             {
-                var employees = employeeInfos.Where(emp => item.Name.Equals(emp.JobLevel.Substring(0, 2), StringComparison.CurrentCultureIgnoreCase)).ToList();
+                var employees = employeeInfos.Where(emp => 
+                    item.Name.Equals(emp.JobLevel.Substring(0, LengthJobLevelType), StringComparison.CurrentCultureIgnoreCase)).ToList();
                 var row = new RowItem
                 {
                     Name = item.Name,
@@ -450,7 +455,8 @@
 
             foreach (var item in totalJobType)
             {
-                var employees = employeeInfos.Where(emp => item.Name.Equals(emp.JobLevel.Substring(0, 2), StringComparison.CurrentCultureIgnoreCase)).ToList();
+                var employees = employeeInfos.Where(emp => 
+                    item.Name.Equals(emp.JobLevel.Substring(0, LengthJobLevelType), StringComparison.CurrentCultureIgnoreCase)).ToList();
                 var row = new RowItem
                 {
                     Name = item.Name,

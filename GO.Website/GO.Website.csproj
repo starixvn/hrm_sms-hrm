@@ -9,6 +9,10 @@
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="EmailTemplates\ManpowerForecast\NotiEditToUnitHead.txt" />
     <None Remove="logs\log.txt" />
+    <None Remove="www\sources\css\components\react-tree-multiselect\_multiselect-treeview.scss" />
+    <None Remove="www\sources\js\components\react-tree-multiselect\buildData.js" />
+    <None Remove="www\sources\js\components\react-tree-multiselect\TreeMultiselect.js" />
+    <None Remove="www\sources\js\components\react-tree-multiselect\TreeNode.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +26,10 @@
     <Content Include="logs\log.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="www\sources\css\components\react-tree-multiselect\_multiselect-treeview.scss" />
+    <Content Include="www\sources\js\components\react-tree-multiselect\buildData.js" />
+    <Content Include="www\sources\js\components\react-tree-multiselect\TreeMultiselect.js" />
+    <Content Include="www\sources\js\components\react-tree-multiselect\TreeNode.js" />
   </ItemGroup>
 
   <ItemGroup>

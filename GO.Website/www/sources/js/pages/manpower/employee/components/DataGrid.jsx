@@ -26,7 +26,7 @@ const DataGrid = ({ filter, gridData, getEmployeeInfos, onFilterChange, onChange
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Nickname')}</HeaderCell>
                 <HeaderCell colWidth={12}>{LangHelper.getResource('FullName')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('JobLevel')}</HeaderCell>
-                <HeaderCell colWidth={8}>{LangHelper.getResource('Local')} / {LangHelper.getResource('Expat')}</HeaderCell>
+                <HeaderCell colWidth={8}>{LangHelper.getResource('Category')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Unit')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Department')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Section')}</HeaderCell>
@@ -52,7 +52,7 @@ const DataGrid = ({ filter, gridData, getEmployeeInfos, onFilterChange, onChange
 
         return [
             <Row key={'body'} className="no-data">
-                <Cell colSpan={10}>{LangHelper.getResource('ThereIsNoData')}</Cell>
+                <Cell colSpan={13}>{LangHelper.getResource('ThereIsNoData')}</Cell>
             </Row>
         ];
     };

@@ -9,6 +9,7 @@
     AddNew: 'Add New',
     Back: 'Back',
     Cancel: 'Cancel',
+    Category: 'Category',
     Comment: 'Comment',
     Confirmation: 'Confirmation',
     Country: 'Country',
