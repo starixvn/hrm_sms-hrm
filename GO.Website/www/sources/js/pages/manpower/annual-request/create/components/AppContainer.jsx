@@ -12,7 +12,7 @@ import LangHelper from '@jsroot/common/langHelper';
 
 const AppContainer = ({ period, requestDetails, getDataForCreateAnnualRequest, createAnnualRequest, unitSelected, setUnitSelected }) => {
     useEffect(() => {
-        if (window.units.length > 1) {
+        if (window.units.length > 0) {
             setUnitSelected({ value: window.units[0], label: window.units[0] });
             getDataForCreateAnnualRequest(window.units[0]);
         }
