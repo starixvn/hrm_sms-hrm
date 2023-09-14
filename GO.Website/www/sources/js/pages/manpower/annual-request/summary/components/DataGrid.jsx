@@ -639,7 +639,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 <thead>
                     <tr key="first-row-header">
                         <th className="name-step-background hide-border fixed-header fixed-header-unit">{LangHelper.getResource('Unit')}</th>
-                        <th className="name-step-background hide-border fixed-header fixed-header-department">{LangHelper.getResource('Deparment')}</th>
+                        <th className="name-step-background hide-border fixed-header fixed-header-department">{LangHelper.getResource('Department')}</th>
                         <th className="name-step-background section hide-border fixed-header fixed-header-section">{LangHelper.getResource('Section')}</th>
                         <th className="name-step-background">
                             {(periodSelected.year - 1) + LangHelper.getResource('ManpowerHeadcountCurrent')}

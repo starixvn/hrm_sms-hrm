@@ -101,6 +101,25 @@
             }
         }
 
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetManpowerForecastReportAsync(ICriteria criteria)
+        {
+            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var multi = await db.QueryMultipleAsync(criteria))
+                {
+                    var requests = multi.Read<AnnualManpowerForecastRequest>().ToList();
+                    var details = multi.Read<AnnualManpowerForecastRequestDetail>().ToList();
+
+                    foreach (var request in requests)
+                    {
+                        request.Details = details.Where(x => x.RequestId == request.RequestId).ToList();
+                    }
+
+                    return requests;
+                }
+            }
+        }
+
         public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetAnnualRequestByPeriodIdAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

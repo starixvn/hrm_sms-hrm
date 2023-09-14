@@ -11,6 +11,7 @@
     using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Criteria.Manpower.AnnualRequest;
+    using GO.Website.Criteria.Report.Manpower;
     using GO.Website.Models;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
@@ -123,6 +124,29 @@
         public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetMemberAnnualRequestSummaryAsync(GetMemberAnnualManpowerForecastRequestSummaryCriteria criteria)
         {
             var requests = await manpowerForecastRepository.GetMemberAnnualRequestSummaryAsync(criteria);
+            foreach (var request in requests)
+            {
+                IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(criteria.PeriodId);
+                foreach (var detail in request.Details)
+                {
+                    var prevforecast = prevforecasts.Where(x => x.SiteId == detail.SiteId && IsEqual(x.UnitName, detail.UnitName)
+                        && IsEqual(x.DepartmentName, detail.DepartmentName) && IsEqual(x.SectionName, detail.SectionName)).ToList();
+                    if (prevforecast != null)
+                    {
+                        detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);
+                        detail.ExpatCurrentHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount);
+                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
+                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
+                    }
+                }
+            }
+
+            return requests;
+        }
+
+        public async Task<IEnumerable<AnnualManpowerForecastRequest>> GetManpowerForecastReportAsync(GetManpowerForecastReportCriteria criteria)
+        {
+            var requests = await manpowerForecastRepository.GetManpowerForecastReportAsync(criteria);
             foreach (var request in requests)
             {
                 IEnumerable<AnnualManpowerForecastRequestDetail> prevforecasts = await GetPreviousApprovedManpowerForecastAsync(criteria.PeriodId);
