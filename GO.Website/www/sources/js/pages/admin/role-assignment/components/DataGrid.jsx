@@ -73,7 +73,7 @@ const DataGrid = ({ userRoleGridData, userRoleFilterParams, getUserRoles, setUse
     };
 
     const renderRow = (user, index) => (
-        <Row key={`row-${user.userId}`}>
+        <Row key={`row-${user.companyName}-${user.userId}`}>
             <Cell className="text-center">{index}</Cell>
             <Cell>{user.companyName}</Cell>
             <Cell>{user.username}</Cell>

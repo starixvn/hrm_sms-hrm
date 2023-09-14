@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using System.Net;
-    using System.Threading.Tasks;
     using HRM.UserControl.Client.Core;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -12,7 +11,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public class GOPermissionAttribute : Attribute, IAsyncAuthorizationFilter
+    public class GOPermissionAttribute : Attribute, IAuthorizationFilter
     {
         private readonly IUserControlSession session;
 
@@ -28,7 +27,7 @@
         public string FunctionKey { get; set; }
         public Policy Policy { get; set; }
 
-        public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
             if (session.UserId <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
             {
@@ -43,11 +42,11 @@
             }
             else
             {
-                await CheckUserPermissionAsync(context);
+                CheckUserPermission(context);
             }
         }
 
-        private async Task CheckUserPermissionAsync(AuthorizationFilterContext context)
+        private void CheckUserPermission(AuthorizationFilterContext context)
         {
             var attributes = context.ActionDescriptor.FilterDescriptors.Where(x => x.Filter is GOPermissionAttribute)
                     .Select(x => x.Filter as GOPermissionAttribute).ToList();
@@ -65,9 +64,7 @@
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
-                    var response = context.HttpContext.Response;
-                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
-                    await response.WriteAsync("<center><b>Access denied!</b></center>");
+                    context.Result = new StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
                 }
                 else
                 {
