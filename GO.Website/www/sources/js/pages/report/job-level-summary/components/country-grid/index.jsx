@@ -5,7 +5,7 @@ import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
 const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
-    const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal, totalJobTypeSupervisor, totalJobTypeloyeEmployee } = data;
+    const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal, totalJobTypeSupervisor, totalJobTypeEmployee } = data;
 
     const showHides = () => {
         const showHides = [];
@@ -16,7 +16,7 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
             })
         });
 
-        totalJobTypeloyeEmployee.map(item => {
+        totalJobTypeEmployee.map(item => {
             showHides.push({
                 key: item.name,
                 show: false
@@ -80,7 +80,7 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
                 <GrandTotalRow data={grandTotal} totalSupervisor={totalSupervisor} totalEmployee={totalEmployee} />
                 {renderRows(supervisors, jobLevelsType.Supervisor, totalJobTypeSupervisor)}
                 <TotalRow data={totalSupervisor} />
-                {renderRows(employees, jobLevelsType.Employee, totalJobTypeloyeEmployee)}
+                {renderRows(employees, jobLevelsType.Employee, totalJobTypeEmployee)}
                 <TotalRow data={totalEmployee} />
             </tbody>
         </table>

@@ -9,10 +9,12 @@
     public class ManpowerForecastReportExcel : ExcelBase
     {
         private readonly IEnumerable<AnnualManpowerForecastRequest> requests;
+        private List<string> companies;
         private readonly int year;
-        private const byte RowHeaderIndex = 2;
-        private const byte RowBodyIndex = 5;
-        private const byte RowTotalUnitIndex = 7;
+        private readonly string periodName;
+        private const byte RowHeaderIndex = 3;
+        private const byte RowBodyIndex = 6;
+        private const byte RowTotalUnitIndex = 8;
         private const byte ColBodyIndex = 5;
         private const byte ColUnitIndex = 2;
         private const byte ColDepartmentIndex = 3;
@@ -20,18 +22,25 @@
         private const byte ColGrandTotalIndex = 8;
         private const byte IndexUnitType = 2;
         private const byte NumColCompany = 3;
+        private const byte Twelve = 12;
+        private const byte Eight = 8;
 
         public ManpowerForecastReportExcel(
                string templatePath,
-               IEnumerable<AnnualManpowerForecastRequest> requests, int year) : base(templatePath, 0, "ManpowerForecast")
+               IEnumerable<AnnualManpowerForecastRequest> requests, int year, string periodName) : base(templatePath, 0, "ManpowerForecast")
         {
             this.requests = requests;
             this.year = year;
+            this.periodName = periodName;
         }
 
         protected internal override void RenderTitle(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet)
         {
-            templateWorksheet.Cells[1, 1].Copy(worksheet.Cells[1, 1]);
+            GetCompanies();
+            var excelAddress = $"{worksheet.Cells[1, 1, 1, companies.Count * Twelve + Eight].Address}";
+            templateWorksheet.Cells[1, 1].Copy(worksheet.Cells[excelAddress]);
+            worksheet.Cells[excelAddress].Merge = true;
+            worksheet.Cells[excelAddress].Value = periodName;
         }
 
         protected internal override void ProcessUI(ExcelWorksheet worksheet)
@@ -43,7 +52,6 @@
         protected internal override void RenderHeader(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet)
         {
             int UnitColIndex = 5;
-            var companies = GetCompanies();
             templateWorksheet.Cells[RowHeaderIndex, 1, RowBodyIndex - 1, UnitColIndex - 1]
                 .Copy(worksheet.Cells[RowHeaderIndex, 1, RowBodyIndex - 1, UnitColIndex - 1]);
 
@@ -58,7 +66,6 @@
 
         protected internal override void RenderBody(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet)
         {
-            var companies = GetCompanies();
             var unitTypes = GetUnitTypes();
             int rowIndex = RowBodyIndex;
             foreach (var unitType in unitTypes)
@@ -69,8 +76,8 @@
                 var excelAddress = $"{worksheet.Cells[rowIndex, 1, rowIndex + numRowUnitType - 1, 1].Address}";
                 worksheet.Cells[excelAddress].Merge = true;
                 worksheet.Cells[excelAddress].Value = unitType;
-                RenderUnit(templateWorksheet, worksheet, ref rowIndex, unitType, companies);
-                RenderTotalUnitHeadcount(templateWorksheet, worksheet, ref rowIndex, unitType, companies);
+                RenderUnit(templateWorksheet, worksheet, ref rowIndex, unitType);
+                RenderTotalUnitHeadcount(templateWorksheet, worksheet, ref rowIndex, unitType);
             }
         }
 
@@ -78,8 +85,7 @@
             ExcelWorksheet templateWorksheet,
             ExcelWorksheet worksheet,
             ref int rowIndex,
-            string unitType,
-            List<string> companies)
+            string unitType)
         {
             int colIndex = ColSectionIndex;
             templateWorksheet.Cells[RowTotalUnitIndex, 1, RowTotalUnitIndex, ColUnitIndex]
@@ -277,8 +283,7 @@
            ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            ref int rowIndex,
-           string unitType,
-           List<string> companies)
+           string unitType)
         {
             foreach (var request in requests)
             {
@@ -291,7 +296,7 @@
                     var excelAddress = $"{worksheet.Cells[rowIndex, ColUnitIndex, rowIndex + numRowUnit - 1, ColUnitIndex].Address}";
                     worksheet.Cells[excelAddress].Merge = true;
                     worksheet.Cells[excelAddress].Value = request.UnitName;
-                    RenderDepartment(templateWorksheet, worksheet, departments,ref rowIndex, request, companies);
+                    RenderDepartment(templateWorksheet, worksheet, departments,ref rowIndex, request);
                 }
             }
         }
@@ -301,8 +306,7 @@
           ExcelWorksheet worksheet,
           List<Department> departments,
           ref int rowIndex,
-          AnnualManpowerForecastRequest request,
-          List<string> companies)
+          AnnualManpowerForecastRequest request)
         {
             foreach (var department in departments)
             {
@@ -311,7 +315,7 @@
                 var excelAddress = $"{worksheet.Cells[rowIndex, ColDepartmentIndex, rowIndex + department.Sections.Count, ColDepartmentIndex].Address}";
                 worksheet.Cells[excelAddress].Merge = true;
                 worksheet.Cells[excelAddress].Value = department.DepartmentName;
-                RenderSection(templateWorksheet, worksheet, department, ref rowIndex, request, companies);
+                RenderSection(templateWorksheet, worksheet, department, ref rowIndex, request);
             }
         }
 
@@ -320,23 +324,22 @@
          ExcelWorksheet worksheet,
          Department department,
          ref int rowIndex,
-         AnnualManpowerForecastRequest request,
-         List<string> companies)
+         AnnualManpowerForecastRequest request)
         {
             //Section
             foreach (var section in department.Sections)
             {
                 int colIndex = ColSectionIndex;
-                templateWorksheet.Cells[ColBodyIndex, ColSectionIndex]
+                templateWorksheet.Cells[RowBodyIndex, ColSectionIndex]
                        .Copy(worksheet.Cells[rowIndex, colIndex]);
                 worksheet.Cells[rowIndex, colIndex++].Value = section;
-                RenderCurrentHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex, companies);
-                RenderApprovedForecastHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex, companies);
-                RenderAdditionalHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex, companies);
-                RenderForecastHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex, companies);
+                RenderCurrentHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex);
+                RenderApprovedForecastHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex);
+                RenderAdditionalHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex);
+                RenderForecastHeadcount(templateWorksheet, worksheet, request, department, section, ref rowIndex, ref colIndex);
                 rowIndex++;
             }
-            RenderTotalDepartmentHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, companies);
+            RenderTotalDepartmentHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex);
         }
 
         private void RenderTotalDepartmentHeadcount(
@@ -344,29 +347,27 @@
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
-           ref int rowIndex,
-           List<string> companies)
+           ref int rowIndex)
         {
             int colIndex = ColSectionIndex;
-            templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex]
+            templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex]
                       .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = "Total Headcount";
-            RenderTotalDepartmentCurrentHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex, companies);
-            RenderTotalDepartmentApprovedForecastHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex, companies);
-            RenderTotalDepartmentAdditionalHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex, companies);
-            RenderTotalDepartmentForecastHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex, companies);
+            RenderTotalDepartmentCurrentHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex);
+            RenderTotalDepartmentApprovedForecastHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex);
+            RenderTotalDepartmentAdditionalHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex);
+            RenderTotalDepartmentForecastHeadcount(templateWorksheet, worksheet, request, department, ref rowIndex, ref colIndex);
             rowIndex++;
         }
 
 
-        private static void RenderTotalDepartmentCurrentHeadcount(
+        private void RenderTotalDepartmentCurrentHeadcount(
            ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
            ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
            )
         {
             int grandtotal = 0;
@@ -383,26 +384,25 @@
                         expatCurrentHeadcount += detail.ExpatCurrentHeadcount;
                     }
                 }
-                templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1, ColBodyIndex + 1, ColSectionIndex + NumColCompany]
+                templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1, RowBodyIndex + 1, ColSectionIndex + NumColCompany]
                       .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localCurrentHeadcount);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(expatCurrentHeadcount);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localCurrentHeadcount + expatCurrentHeadcount);
                 grandtotal += localCurrentHeadcount + expatCurrentHeadcount;
             }
-            templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1]
                       .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderTotalDepartmentApprovedForecastHeadcount(
+        private void RenderTotalDepartmentApprovedForecastHeadcount(
            ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
            ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
            )
         {
             int grandtotal = 0;
@@ -419,7 +419,7 @@
                         expatApprovedHeadcount += detail.ExpatApprovedHeadcount;
                     }
                 }
-                templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1, ColBodyIndex + 1, ColSectionIndex + NumColCompany]
+                templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1, RowBodyIndex + 1, ColSectionIndex + NumColCompany]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localApprovedHeadcount);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(expatApprovedHeadcount);
@@ -427,19 +427,18 @@
                 grandtotal += localApprovedHeadcount + expatApprovedHeadcount;
                 
             }
-            templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1]
                       .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderTotalDepartmentAdditionalHeadcount(
+        private void RenderTotalDepartmentAdditionalHeadcount(
            ExcelWorksheet templateWorksheet,
           ExcelWorksheet worksheet,
           AnnualManpowerForecastRequest request,
           Department department,
           ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
           )
         {
             int grandtotal = 0;
@@ -456,26 +455,25 @@
                         expatAddition += detail.ExpatAddition;
                     }
                 }
-                templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1, ColBodyIndex + 1, ColSectionIndex + NumColCompany]
+                templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1, RowBodyIndex + 1, ColSectionIndex + NumColCompany]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localAddition);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(expatAddition);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localAddition + expatAddition);
                 grandtotal += localAddition + expatAddition;
             }
-            templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1]
                       .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderTotalDepartmentForecastHeadcount(
+        private void RenderTotalDepartmentForecastHeadcount(
            ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
            ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
           )
         {
             int grandtotal = 0;
@@ -492,28 +490,27 @@
                         expatForecast += detail.ExpatApprovedHeadcount + detail.ExpatAddition;
                     }
                 }
-                templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1, ColBodyIndex + 1, ColSectionIndex + NumColCompany]
+                templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1, RowBodyIndex + 1, ColSectionIndex + NumColCompany]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localForecast);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(expatForecast);
                 worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(localForecast + expatForecast);
                 grandtotal += localForecast + expatForecast;
             }
-            templateWorksheet.Cells[ColBodyIndex + 1, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex + 1, ColSectionIndex + 1]
                      .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
 
-        private static void RenderCurrentHeadcount(
+        private void RenderCurrentHeadcount(
            ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
            string section,
            ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
            )
         {
             var grandtotal = 0;
@@ -527,7 +524,7 @@
                     {
                         grandtotal += detail.TotalCurrentHeadcount;
                         checkNone++;
-                        templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1 , ColBodyIndex, ColSectionIndex + NumColCompany]
+                        templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1 , RowBodyIndex, ColSectionIndex + NumColCompany]
                             .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalCurrentHeadcount);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatCurrentHeadcount);
@@ -536,25 +533,24 @@
                 }
                 if(checkNone == 0)
                 {
-                    templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                    templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                     colIndex += NumColCompany;
                 }
             }
-            templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1]
                            .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderApprovedForecastHeadcount(
+        private void RenderApprovedForecastHeadcount(
           ExcelWorksheet templateWorksheet,
            ExcelWorksheet worksheet,
            AnnualManpowerForecastRequest request,
            Department department,
            string section,
            ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
            )
         {
             var grandtotal = 0;
@@ -568,7 +564,7 @@
                     {
                         grandtotal += detail.TotalCurrentHeadcount;
                         checkNone++;
-                        templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                        templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalApprovedHeadcount);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatApprovedHeadcount);
@@ -577,25 +573,24 @@
                 }
                 if (checkNone == 0)
                 {
-                    templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                    templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                     colIndex += NumColCompany;
                 }
             }
-            templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1]
                            .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderAdditionalHeadcount(
+        private void RenderAdditionalHeadcount(
           ExcelWorksheet templateWorksheet,
           ExcelWorksheet worksheet,
           AnnualManpowerForecastRequest request,
           Department department,
           string section,
           ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
           )
         {
             var grandtotal = 0;
@@ -609,7 +604,7 @@
                     {
                         grandtotal += detail.TotalCurrentHeadcount;
                         checkNone++;
-                        templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                        templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalAddition);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatAddition);
@@ -618,25 +613,24 @@
                 }
                 if (checkNone == 0)
                 {
-                    templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                    templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                     colIndex += NumColCompany;
                 }
             }
-            templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1]
                            .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
 
-        private static void RenderForecastHeadcount(
+        private void RenderForecastHeadcount(
           ExcelWorksheet templateWorksheet,
           ExcelWorksheet worksheet,
           AnnualManpowerForecastRequest request,
           Department department,
           string section,
           ref int rowIndex,
-           ref int colIndex,
-           List<string> companies
+           ref int colIndex
           )
         {
             var grandtotal = 0;
@@ -650,7 +644,7 @@
                     {
                         grandtotal += detail.TotalCurrentHeadcount;
                         checkNone++;
-                        templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                        templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalApprovedHeadcount + detail.LocalAddition);
                         worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatApprovedHeadcount + detail.ExpatAddition);
@@ -659,12 +653,12 @@
                 }
                 if (checkNone == 0)
                 {
-                    templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1, ColBodyIndex, ColSectionIndex + NumColCompany]
+                    templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
                     colIndex += NumColCompany;
                 }
             }
-            templateWorksheet.Cells[ColBodyIndex, ColSectionIndex + 1]
+            templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1]
                           .Copy(worksheet.Cells[rowIndex, colIndex]);
             worksheet.Cells[rowIndex, colIndex++].Value = grandtotal;
         }
@@ -749,20 +743,20 @@
                 worksheet.Cells[excelAddress].Merge = true;
                 worksheet.Cells[excelAddress].Value = company;
 
-                templateWorksheet.Cells[ColBodyIndex - 1, ColBodyIndex, ColBodyIndex - 1, ColBodyIndex + NumColCompany]
-                    .Copy(worksheet.Cells[ColBodyIndex - 1, unitColIndex, ColBodyIndex - 1, unitColIndex + NumColCompany]);
-                worksheet.Cells[ColBodyIndex - 1, unitColIndex].Value = "Local";
-                worksheet.Cells[ColBodyIndex - 1, unitColIndex + 1].Value = "Expat";
-                worksheet.Cells[ColBodyIndex - 1, unitColIndex + NumColCompany - 1].Value = "Total";
+                templateWorksheet.Cells[RowBodyIndex - 1, ColBodyIndex, RowBodyIndex - 1, ColBodyIndex + NumColCompany]
+                    .Copy(worksheet.Cells[RowBodyIndex - 1, unitColIndex, RowBodyIndex - 1, unitColIndex + NumColCompany]);
+                worksheet.Cells[RowBodyIndex - 1, unitColIndex].Value = "Local";
+                worksheet.Cells[RowBodyIndex - 1, unitColIndex + 1].Value = "Expat";
+                worksheet.Cells[RowBodyIndex - 1, unitColIndex + NumColCompany - 1].Value = "Total";
                 unitColIndex += NumColCompany;
             }
-            templateWorksheet.Cells[RowHeaderIndex + 1, ColGrandTotalIndex, ColBodyIndex - 1, ColGrandTotalIndex]
-                    .Copy(worksheet.Cells[RowHeaderIndex + 1, unitColIndex, ColBodyIndex - 1, unitColIndex]);
+            templateWorksheet.Cells[RowHeaderIndex + 1, ColGrandTotalIndex, RowBodyIndex - 1, ColGrandTotalIndex]
+                    .Copy(worksheet.Cells[RowHeaderIndex + 1, unitColIndex, RowBodyIndex - 1, unitColIndex]);
         }       
 
-        private List<string> GetCompanies()
+        private void GetCompanies()
         {
-            var companies = new List<string>();
+            companies = new List<string>();
             foreach (var item in requests)
             {
                 foreach (var detail in item.Details)
@@ -773,7 +767,6 @@
                     }
                 }
             }
-            return companies;
         }
 
         private List<string> GetUnitTypes()

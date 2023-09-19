@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 
 import Filter from './Filter';
-import DataGrid from './DataGrid';
+import DataGrid from '../../../manpower/annual-request/summary/components/DataGrid';
 
 import DataService from '@jsroot/common/dataService';
 import Site from '@jsroot/common/site';

@@ -7,5 +7,6 @@
         public int PeriodId { get; set; }
         public string UnitType { get; set; }
         public int Year { get; set; }
+        public string PeriodName { get; set; }
     }
 }

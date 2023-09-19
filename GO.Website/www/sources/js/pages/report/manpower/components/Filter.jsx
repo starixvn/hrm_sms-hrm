@@ -24,7 +24,8 @@ const Filter = ({ periods, onSubmit, exportExcel, periodSelected }) => {
         return {
             periodId: period ? period.value : 0,
             unitType: unitType.value,
-            year: periodSelected.year
+            year: periodSelected.year,
+            periodName: periodSelected.name
         };
     };
 

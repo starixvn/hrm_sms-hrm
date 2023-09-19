@@ -23,11 +23,11 @@
             return excel.Export();
         }
 
-        public byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> request, int year)
+        public byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> request, int year, string periodName)
         {
             const string ExcelTemplatePath = "ExcelTemplates/ManpowerForecast.xlsx";
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
-            var excel = new ManpowerForecastReportExcel(templatePath, request, year);
+            var excel = new ManpowerForecastReportExcel(templatePath, request, year, periodName);
             return excel.Export();
         }
     }

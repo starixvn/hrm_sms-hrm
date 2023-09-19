@@ -58,7 +58,7 @@ namespace GO.Website.Controllers.Report
                 UnitType = filter.UnitType
             });
 
-            var bytes = excelService.ExportManpowerForecastReport(requests, filter.Year);
+            var bytes = excelService.ExportManpowerForecastReport(requests, filter.Year, filter.PeriodName);
             var reportName = $"ManpowerForecast_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
