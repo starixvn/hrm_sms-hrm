@@ -80,7 +80,7 @@ export default class AppContainer extends Component {
                         <td>{LangHelper.getResource('Nickname')}</td>
                         <td>{LangHelper.getResource('FullName')}</td>
                         <td>{LangHelper.getResource('JobLevel')}</td>
-                        <td>Local / Expat</td>
+                        <td>{LangHelper.getResource('Category')}</td>
                         <td>{LangHelper.getResource('Unit')}</td>
                         <td>{LangHelper.getResource('Department')}</td>
                         <td>{LangHelper.getResource('Section')}</td>

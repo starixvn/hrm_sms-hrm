@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GO.Website.Constants;
-using GO.Website.Criteria.Report.Manpower;
-using GO.Website.Filters;
-using GO.Website.Models.Report.Manpower;
-using GO.Website.Services;
-using HRM.UserControl.Client.Core.Enumerables;
-using HRM.UserControl.Client.Core.Session;
-using Microsoft.AspNetCore.Mvc;
-
-namespace GO.Website.Controllers.Report
+﻿namespace GO.Website.Controllers.Report
 {
+    using System;
+    using System.Threading.Tasks;
+    using GO.Website.Constants;
+    using GO.Website.Criteria.Report.Manpower;
+    using GO.Website.Filters;
+using GO.Website.Models.Report.Manpower;
+    using GO.Website.Services;
+    using HRM.UserControl.Client.Core.Enumerables;
+    using HRM.UserControl.Client.Core.Session;
+    using Microsoft.AspNetCore.Mvc;
+
     [GOPermission(FunctionKey = FunctionKey.ManpowerForecastReport, Policy = Policy.Read)]
     public class ManpowerForecastReportController : Controller
     {
@@ -29,6 +27,7 @@ namespace GO.Website.Controllers.Report
             this.manpowerForecastService = manpowerForecastService;
             this.excelService = excelService;
         }
+
         public IActionResult Index()
         {
             return View("~/Views/Report/ManpowerForecastReport.cshtml");
