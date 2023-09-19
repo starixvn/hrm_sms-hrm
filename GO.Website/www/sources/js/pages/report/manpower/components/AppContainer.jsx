@@ -70,6 +70,7 @@ const AppContainer = () => {
             <Filter periods={periods}
                 onSubmit={getMemberRequests}
                 exportExcel={exportExcel}
+                periodSelected={periodSelected}
             />
             <DataGrid requests={requests}
                 companies={companies}

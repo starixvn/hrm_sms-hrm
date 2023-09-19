@@ -176,7 +176,7 @@
                 TotalSupervisor = totalSupervisor,
                 TotalEmployee = totalEmployee,
                 TotalJobTypeSupervisor = totalJobTypeSupervisor,
-                TotalJobTypeloyeEmployee = totalJobTypeEmployee,
+                TotalJobTypeEmployee = totalJobTypeEmployee,
                 GrandTotal = grandTotal
             };
         }
@@ -290,7 +290,7 @@
                 TotalSupervisor = totalSupervisor,
                 TotalEmployee = totalEmployee,
                 TotalJobTypeSupervisor = totalJobTypeSupervisor,
-                TotalJobTypeloyeEmployee = totalJobTypeEmployee,
+                TotalJobTypeEmployee = totalJobTypeEmployee,
                 GrandTotal = grandTotal
             };
         }

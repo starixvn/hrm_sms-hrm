@@ -1,5 +1,6 @@
 ﻿namespace GO.Website.Criteria.Report.Manpower
 {
+    using System.Xml.Serialization;
     using Fanex.Data.Repository;
 
     public class GetManpowerForecastReportCriteria : CriteriaBase

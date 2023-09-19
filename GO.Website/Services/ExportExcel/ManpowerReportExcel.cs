@@ -101,7 +101,7 @@
             RenderTotalRow(templateWorksheet, worksheet,ref rowIndex, gridUnitData.TotalSupervisor);
 
             rows = gridUnitData.Employees;
-            totalJobTypes = gridUnitData.TotalJobTypeloyeEmployee;
+            totalJobTypes = gridUnitData.TotalJobTypeEmployee;
 
             RenderRows(templateWorksheet, worksheet, ref rowIndex, rows, totalJobTypes);
 
@@ -118,7 +118,7 @@
             RenderCountryTotalRow(templateWorksheet, worksheet, ref rowIndex, gridCountryData.TotalSupervisor);
 
             rows = gridCountryData.Employees;
-            totalJobTypes = gridCountryData.TotalJobTypeloyeEmployee;
+            totalJobTypes = gridCountryData.TotalJobTypeEmployee;
             RenderCountryRows(templateWorksheet, worksheet, ref rowIndex, rows, totalJobTypes);
 
             RenderCountryTotalRow(templateWorksheet, worksheet, ref rowIndex, gridCountryData.TotalEmployee);

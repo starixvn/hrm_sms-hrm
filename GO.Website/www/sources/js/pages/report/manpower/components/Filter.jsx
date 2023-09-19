@@ -4,7 +4,7 @@ import Select from 'react-select';
 
 import LangHelper from '@jsroot/common/langHelper';
 
-const Filter = ({ periods, onSubmit, exportExcel }) => {
+const Filter = ({ periods, onSubmit, exportExcel, periodSelected }) => {
     const [period, setPeriod] = useState(null);
     const [unitType, setUnitType] = useState({ value: 'BU,PU', label: 'PU - BU' });
 
@@ -23,7 +23,8 @@ const Filter = ({ periods, onSubmit, exportExcel }) => {
     const getParams = () => {
         return {
             periodId: period ? period.value : 0,
-            unitType: unitType.value
+            unitType: unitType.value,
+            year: periodSelected.year
         };
     };
 

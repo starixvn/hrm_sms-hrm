@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GO.Website.Constants;
 using GO.Website.Criteria.Report.Manpower;
 using GO.Website.Filters;
+using GO.Website.Models.Report.Manpower;
 using GO.Website.Services;
 using HRM.UserControl.Client.Core.Enumerables;
 using HRM.UserControl.Client.Core.Session;
@@ -34,22 +35,30 @@ namespace GO.Website.Controllers.Report
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetRequests([FromBody] GetManpowerForecastReportCriteria criteria)
+        public async Task<IActionResult> GetRequests([FromBody] Filter filter)
         {
-            criteria.UserId = userControlSession.UserId;
-            criteria.SiteId = userControlSession.SiteId;
-            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(criteria);
+            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(new GetManpowerForecastReportCriteria
+            {
+                UserId = userControlSession.UserId,
+                SiteId = userControlSession.SiteId,
+                PeriodId = filter.PeriodId,
+                UnitType = filter.UnitType
+            });
             return Json(requests);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportExcel([FromBody] GetManpowerForecastReportCriteria criteria)
+        public async Task<IActionResult> ExportExcel([FromBody] Filter filter)
         {
-            criteria.UserId = userControlSession.UserId;
-            criteria.SiteId = userControlSession.SiteId;
-            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(criteria);
+            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(new GetManpowerForecastReportCriteria
+            {
+                UserId = userControlSession.UserId,
+                SiteId = userControlSession.SiteId,
+                PeriodId = filter.PeriodId,
+                UnitType = filter.UnitType
+            });
 
-            var bytes = excelService.ExportManpowerForecastReport(requests);
+            var bytes = excelService.ExportManpowerForecastReport(requests, filter.Year);
             var reportName = $"ManpowerForecast_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
