@@ -88,7 +88,8 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                 if (row.length === 0) {
                     cell.push(<td key={`${item.name}-jobtype`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
                         {
-                           isMultipleData &&                           <span className={`fa ${showHideJobOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
+                           isMultipleData &&
+                           <span className={`fa ${showHideJobOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
                                 onClick={() => handleShowHideJobCells(jobType)} />
                         }
                         {jobType}

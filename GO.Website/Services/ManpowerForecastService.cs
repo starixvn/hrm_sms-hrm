@@ -213,7 +213,7 @@
             return await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public async Task<IEnumerable<AnnualManpowerForecastRequestDetail>> GetPreviousApprovedManpowerForecastAsync(int periodId)
+        public async Task<IEnumerable<AnnualManpowerForecastRequestDetail>> GetPreviousApprovedManpowerForecastAsync(short periodId)
         {
             var criteria = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria
             {

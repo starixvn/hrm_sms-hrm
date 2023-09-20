@@ -1,4 +1,4 @@
-﻿namespace GO.Website.Controllers.Manpower
+﻿namespace GO.Website.Controllers.Report
 {
     using System;
     using System.Collections.Generic;
@@ -25,7 +25,7 @@
             { "Support Unit", "SU" }
         };
 
-        private readonly Dictionary<string, string[]> jobLevelTypes = new()
+        private readonly Dictionary<string, string[]> shortJobLevelTypes = new()
         {
             { "Supervisor", new[] { "M", "P" } },
             { "Employee", new[] { "E" } }
@@ -50,7 +50,7 @@
         [HttpPost]
         public async Task<IActionResult> GetData()
         {
-            var criteria = new GetManpowerReportCriteria();
+            var criteria = new GetJobLevelSummaryReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
 
             var listUnits = await baseService.GetDataAsync<string>(new GetUnitCriteria());
@@ -64,13 +64,13 @@
             var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelsType, employeeInfos);
             var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, employeeInfos);
 
-            return Json(new { employeeInfos, gridCountryData, gridUnitData, jobLevelsType });
+            return Json(new { employeeInfos, gridCountryData, gridUnitData, jobLevelTypes });
         }
 
         [HttpPost]
         public async Task<IActionResult> ExportExcel()
         {
-            var criteria = new GetManpowerReportCriteria();
+            var criteria = new GetJobLevelSummaryReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
             var listUnits = await baseService.GetDataAsync<string>(new GetUnitCriteria());
             var listJobLevels = await baseService.GetDataAsync<string>(new GetJobLevelCriteria());
@@ -84,7 +84,7 @@
             var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelsType, numEmployeeInfos);
             var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, numEmployeeInfos);
 
-            var bytes = excelService.ExportManpowerReport(gridUnitData, gridCountryData);
+            var bytes = excelService.ExportJobLevelSummaryReport(gridUnitData, gridCountryData);
             var reportName = $"JobLevelSummaryReportByUnitAndCountry_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
@@ -97,28 +97,31 @@
                 var unitNames = units.Where(x => x[..LengthJobLevelType].Contains(unitType.Value)).ToArray();
                 dictionaryUnits.Add(unitType.Key, unitNames);
             }
+
             return dictionaryUnits;
         }
 
         private Dictionary<string, string[]> GetJobLevels(IEnumerable<string> jobLevels)
         {
             var dictionaryJobLevels = new Dictionary<string, string[]>();
-            foreach (var jobLevelType in jobLevelTypes)
+            foreach (var jobLevelType in shortJobLevelTypes)
             {
                 var jobLevelNames = new List<string>();
                 foreach (var item in jobLevelType.Value)
                 {
                     jobLevelNames.AddRange(jobLevels.Where(x => x[..1].Contains(item)).ToList());
                 }
+
                 dictionaryJobLevels.Add(jobLevelType.Key, jobLevelNames.ToArray());
             }
+
             return dictionaryJobLevels;
         }
 
         private Dictionary<string, string[]> GetJobLevelTypes(IEnumerable<string> jobLevels)
         {
             var dictionaryJobLevelTypes = new Dictionary<string, string[]>();
-            foreach (var jobLevelType in jobLevelTypes)
+            foreach (var jobLevelType in shortJobLevelTypes)
             {
                 var jobLevelNames = new List<string>();
                 foreach (var item in jobLevelType.Value)
@@ -129,31 +132,33 @@
 
                 dictionaryJobLevelTypes.Add(jobLevelType.Key, SortJobLevel(jobLevelNames));
             }
+
             return dictionaryJobLevelTypes;
         }
 
         private static string[] SortJobLevel(IEnumerable<string> jobLevelNames)
         {
-            var sortJobLevel = new List<string>();
+            var sortJobLevels = new List<string>();
             foreach (var range in jobLevelNames.Select(item => int.Parse(item[1..])))
             {
-                sortJobLevel.AddRange(jobLevelNames.Where(x => int.Parse(x[1..]).Equals(range) && sortJobLevel.All(y => y != x)).ToList());
+                sortJobLevels.AddRange(jobLevelNames.Where(x => int.Parse(x[1..]).Equals(range) && sortJobLevels.All(y => y != x)).ToList());
             }
-            return sortJobLevel.ToArray();
+
+            return sortJobLevels.ToArray();
         }
 
         private static GridData GroupDataByCountry(
             Dictionary<string, string[]> jobLevels,
             Dictionary<string, string[]> units,
-            Dictionary<string, string[]> jobLevelsType,
+            Dictionary<string, string[]> jobLevelTypes,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
             IList<string> countries = employeeInfos.Where(emp => !string.IsNullOrWhiteSpace(emp.Country))
                 .Select(emp => emp.Country).Distinct().OrderBy(item => item).ToList();
             var (supervisors, totalSupervisor) = GroupDataByCountry(jobLevels.ElementAt(0).Value, countries, units, employeeInfos);
             var (employees, totalEmployee) = GroupDataByCountry(jobLevels.ElementAt(1).Value, countries, units, employeeInfos);
-            var totalJobTypeSupervisor = GetTotalByJobType(countries, units, jobLevelsType.ElementAt(0).Value, employeeInfos.ToList());
-            var totalJobTypeEmployee = GetTotalByJobType(countries, units, jobLevelsType.ElementAt(1).Value, employeeInfos.ToList());
+            var totalJobTypeSupervisor = GetTotalByJobType(countries, units, jobLevelTypes.ElementAt(0).Value, employeeInfos.ToList());
+            var totalJobTypeEmployee = GetTotalByJobType(countries, units, jobLevelTypes.ElementAt(1).Value, employeeInfos.ToList());
             var grandTotal = GetGrandTotal(countries, totalSupervisor, totalEmployee);
             var headers = countries.Select(country => new RowItem
             {
@@ -265,17 +270,17 @@
             return (rows, totalRow);
         }
 
-        public static GridData GroupDataByUnit(
+        private static GridData GroupDataByUnit(
             Dictionary<string, string[]> jobLevels,
             Dictionary<string, string[]> units,
-            Dictionary<string, string[]> jobLevelsType,
+            Dictionary<string, string[]> jobLevelTypes,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
             var  (supervisors, totalSupervisor) = GroupDataByUnit(jobLevels.ElementAt(0).Value, units, employeeInfos);
             var (employees, totalEmployee) = GroupDataByUnit(jobLevels.ElementAt(1).Value, units, employeeInfos);
             var grandTotal = GetGrandTotal(units, totalSupervisor, totalEmployee);
-            var totalJobTypeSupervisor = GetTotalByJobType(units, jobLevelsType.ElementAt(0).Value, employeeInfos);
-            var totalJobTypeEmployee = GetTotalByJobType(units, jobLevelsType.ElementAt(1).Value, employeeInfos);
+            var totalJobTypeSupervisor = GetTotalByJobType(units, jobLevelTypes.ElementAt(0).Value, employeeInfos);
+            var totalJobTypeEmployee = GetTotalByJobType(units, jobLevelTypes.ElementAt(1).Value, employeeInfos);
             var headers = units.Select(group => new RowItem
             {
                 Name = group.Key,
@@ -297,15 +302,16 @@
 
         private static string GetJobTypeLevel(IEnumerable<string> jobLevels)
         {
-            var jobType = string.Empty;
+            var jobTypes = new List<string>();
             foreach (var item in jobLevels)
             {
-                if (!jobType.Contains(item[..1]))
+                if (!jobTypes.Contains(item[..1]))
                 {
-                    jobType = string.Concat(jobType, jobType != string.Empty ? string.Concat(", ", item[..1]) : item[..1]);
+                    jobTypes.Add(item[..1]);
                 }
             }
-            return jobType;
+
+            return string.Join(", ", jobTypes);
         }
 
         private static (IList<RowItem>, RowItem) GroupDataByUnit(
@@ -364,12 +370,13 @@
                 }
                 rows.Add(row);
             }
+
             return (rows, totalRow);
         }
 
         private static List<RowItem> GetTotalByJobType(
             Dictionary<string, string[]> units,
-            IEnumerable<string> jobLevelsType,
+            IEnumerable<string> jobLevelTypes,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
             var totalJobType = jobLevelsType.Select(jobType => 

@@ -34,30 +34,33 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetRequests([FromBody] Filter filter)
+        public async Task<IActionResult> GetRequests([FromBody] GetManpowerForecastReportParam param)
         {
-            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(new GetManpowerForecastReportCriteria
+            var criteria = new GetManpowerForecastReportCriteria
             {
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,
-                PeriodId = filter.PeriodId,
-                UnitType = filter.UnitType
-            });
+                PeriodId = param.PeriodId,
+                UnitType = param.UnitType
+            };
+            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(criteria);
+
             return Json(requests);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportExcel([FromBody] Filter filter)
+        public async Task<IActionResult> ExportExcel([FromBody] GetManpowerForecastReportParam param)
         {
-            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(new GetManpowerForecastReportCriteria
+            var criteria = new GetManpowerForecastReportCriteria
             {
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,
-                PeriodId = filter.PeriodId,
-                UnitType = filter.UnitType
-            });
+                PeriodId = param.PeriodId,
+                UnitType = param.UnitType
+            };
+            var requests = await manpowerForecastService.GetManpowerForecastReportAsync(criteria);
 
-            var bytes = excelService.ExportManpowerForecastReport(requests, filter.Year, filter.PeriodName);
+            var bytes = excelService.ExportManpowerForecastReport(requests, param.Year, param.PeriodName);
             var reportName = $"ManpowerForecast_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }

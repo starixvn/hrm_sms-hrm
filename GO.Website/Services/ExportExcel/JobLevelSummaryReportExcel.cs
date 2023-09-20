@@ -5,7 +5,7 @@
     using GO.Website.Models.Report.Manpower;
     using OfficeOpenXml;
 
-    public class ManpowerReportExcel : ExcelBase
+    public class JobLevelSummaryReportExcel : ExcelBase
     {
         private readonly GridData gridUnitData;
         private readonly GridData gridCountryData;
@@ -17,7 +17,7 @@
         private const byte Two = 2;
         private const byte Three = 3;
 
-        public ManpowerReportExcel(
+        public JobLevelSummaryReportExcel(
                string templatePath,
                GridData gridUnitData,
                GridData gridCountryData) : base(templatePath, 0, "Summary")

@@ -4,7 +4,7 @@
 
     public class GetPreviousApprovedManpowerForecastByPeriodIdCriteria : CriteriaBase
     {
-        public int PeriodId { get; set; }
+        public short PeriodId { get; set; }
 
         public override string GetSettingKey() => "ManpowerForecast_GetPreviousApprovedRequest";
 

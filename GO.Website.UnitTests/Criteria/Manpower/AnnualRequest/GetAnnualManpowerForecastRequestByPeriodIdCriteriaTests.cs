@@ -21,10 +21,10 @@
 
         [Theory]
         [InlineData(1)]
-        public void IsValid_WhenCalledWithParamValid_ReturnTrue(int periodId)
+        public void IsValid_WhenCalledWithParamValid_ReturnTrue(short periodId)
         {
             // Arrange
-            var criteria = new GetAnnualManpowerForecastRequestByPeriodIdCriteria()
+            var criteria = new GetAnnualManpowerForecastRequestByPeriodIdCriteria
             {
                 PeriodId = periodId
             };

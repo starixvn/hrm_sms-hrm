@@ -9,7 +9,7 @@
         public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
         {
             // Arrange
-            var criteria = new GetManpowerReportCriteria();
+            var criteria = new GetJobLevelSummaryReportCriteria();
             var expected = "Report_Manpower_Get";
 
             // Act
@@ -23,7 +23,7 @@
         public void IsValid_WhenCalled_ReturnTrue()
         {
             // Arrange
-            var criteria = new GetManpowerReportCriteria();
+            var criteria = new GetJobLevelSummaryReportCriteria();
 
             // Act
             var actual = criteria.IsValid();

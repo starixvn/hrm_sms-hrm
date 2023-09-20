@@ -40,7 +40,7 @@
             var controller = GetController();
             var employeeInfos = fixture.Create<IEnumerable<EmployeeInfo>>();
 
-            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetManpowerReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             //Act
             var result = await controller.GetData();
 
@@ -72,7 +72,7 @@
                 }
             };
 
-            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetManpowerReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             //Act
             var result = await controller.GetData();
 
@@ -108,7 +108,7 @@
                 }
             };
 
-            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetManpowerReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             //Act
             var result = await controller.GetData();
 
@@ -145,7 +145,7 @@
                 }
             };
 
-            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetManpowerReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             //Act
             var result = await controller.GetData();
 
@@ -176,7 +176,7 @@
             var expected = fixture.Create<byte[]>();
             var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}.xlsx";
 
-            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetManpowerReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             excelService.ExportManpowerReport(Arg.Any<GridData>(), Arg.Any<GridData>()).Returns(expected);
             //Act
             var result = await controller.ExportExcel();

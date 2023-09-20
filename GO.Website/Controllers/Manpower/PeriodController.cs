@@ -53,7 +53,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetById([FromBody] GetPeriodCriteriaByIdCriteria criteria)
+        public async Task<IActionResult> GetById([FromBody] GetPeriodByIdCriteria criteria)
         {
             var(periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
             foreach (var period in periods)

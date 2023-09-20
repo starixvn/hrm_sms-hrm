@@ -4,7 +4,7 @@
 
     public class GetAnnualManpowerForecastRequestByPeriodIdCriteria : CriteriaBase
     {
-        public int PeriodId { get; set; }
+        public short PeriodId { get; set; }
 
         public override string GetSettingKey() => "Manpower_AnnualRequestForm_GetByPeriodId";
 

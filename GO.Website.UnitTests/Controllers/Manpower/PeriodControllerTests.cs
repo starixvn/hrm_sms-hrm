@@ -94,7 +94,7 @@
         {
             // Arrange
             var controller = GetController();
-            var criteria = fixture.Create<GetPeriodCriteriaByIdCriteria>();
+            var criteria = fixture.Create<GetPeriodByIdCriteria>();
             var periods = fixture.Create<IEnumerable<ManpowerPeriod>>();
             var processSettings = fixture.Create<IEnumerable<MapnowerPeriodProcessSetting>>();
 

@@ -3,13 +3,13 @@
     using GO.Website.Criteria.Manpower.Period;
     using Xunit;
 
-    public class GetPeriodCriteriaByIdCriteriaTests
+    public class GetPeriodByIdCriteriaTests
     {
         [Fact]
         public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()
         {
             // Arrange
-            var criteria = new GetPeriodCriteriaByIdCriteria();
+            var criteria = new GetPeriodByIdCriteria();
             var expected = "Manpower_Period_GetById";
 
             // Act
@@ -24,7 +24,7 @@
         public void IsValid_WhenCalledWithParamValid_ReturnTrue(short periodId)
         {
             // Arrange
-            var criteria = new GetPeriodCriteriaByIdCriteria()
+            var criteria = new GetPeriodByIdCriteria()
             {
                 PeriodId = periodId
             };
@@ -40,7 +40,7 @@
         public void IsValid_WhenCalledWithParamInValid_ReturnFalse()
         {
             // Arrange
-            var criteria = new GetPeriodCriteriaByIdCriteria()
+            var criteria = new GetPeriodByIdCriteria()
             {
                 PeriodId = 0
             };

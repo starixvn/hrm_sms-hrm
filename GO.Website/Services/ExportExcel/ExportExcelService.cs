@@ -15,11 +15,11 @@
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        public byte[] ExportManpowerReport(GridData gridUnitData, GridData gridCountryData)
+        public byte[] ExportJobLevelSummaryReport(GridData gridUnitData, GridData gridCountryData)
         {
             const string ExcelTemplatePath = "ExcelTemplates/JobLevelSummaryReportByUnitAndCountry.xlsx";
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
-            var excel = new ManpowerReportExcel(templatePath, gridUnitData, gridCountryData);
+            var excel = new JobLevelSummaryReportExcel(templatePath, gridUnitData, gridCountryData);
             return excel.Export();
         }
 

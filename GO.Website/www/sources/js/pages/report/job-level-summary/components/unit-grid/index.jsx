@@ -4,7 +4,7 @@ import TotalRow from './TotalRow';
 import GrandTotalRow from './GrandTotalRow';
 import LangHelper from '@jsroot/common/langHelper';
 
-const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
+const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelTypes }) => {
     const { headers, supervisors, employees, totalSupervisor, totalEmployee, grandTotal, totalJobTypeSupervisor, totalJobTypeEmployee } = data;
 
     const showHideJobs = () => {
@@ -55,9 +55,9 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
         }
     };
 
-    const renderRows = (rows, jobLevelsType, totalJobType) => {
+    const renderRows = (rows, jobLevelTypes, totalJobType) => {
         const trs = [];
-        jobLevelsType.map(jobType => {
+        jobLevelTypes.map(jobType => {
             trs.push(<Row key={jobType}
                 data={rows}
                 jobType={jobType}
@@ -132,9 +132,9 @@ const Grid = ({ employeeInfos, data, detail, onShowDetail, jobLevelsType }) => {
             </thead>
             <tbody>
                 <GrandTotalRow data={grandTotal} showHideOptions={showHideOptions} />
-                {renderRows(supervisors, jobLevelsType.Supervisor, totalJobTypeSupervisor)}
+                {renderRows(supervisors, jobLevelTypes.Supervisor, totalJobTypeSupervisor)}
                 <TotalRow data={totalSupervisor} showHideOptions={showHideOptions} />
-                {renderRows(employees, jobLevelsType.Employee, totalJobTypeEmployee)}
+                {renderRows(employees, jobLevelTypes.Employee, totalJobTypeEmployee)}
                 <TotalRow data={totalEmployee} showHideOptions={showHideOptions} />
             </tbody>
         </table>
