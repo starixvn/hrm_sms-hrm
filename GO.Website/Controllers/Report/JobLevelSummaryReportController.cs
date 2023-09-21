@@ -4,14 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Core.Services;
     using Constants;
-    using GO.Website.Criteria.Report;
     using Filters;
+    using GO.Core.Services;
+    using GO.Website.Criteria.Report;
     using GO.Website.Models.Report.Manpower;
-    using Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using Microsoft.AspNetCore.Mvc;
+    using Services;
 
     [GOPermission(FunctionKey = FunctionKey.JobLevelSummaryReport, Policy = Policy.Read)]
     public class JobLevelSummaryReportController : BaseController
@@ -59,10 +59,10 @@
             var units = GetUnit(listUnits.ToList());
             var enumJobLevels = listJobLevels.ToList();
             var jobLevels = GetJobLevels(enumJobLevels);
-            var jobLevelsType = GetJobLevelTypes(enumJobLevels);
+            var jobLevelTypes = GetJobLevelTypes(enumJobLevels);
 
-            var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelsType, employeeInfos);
-            var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, employeeInfos);
+            var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelTypes, employeeInfos);
+            var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelTypes, employeeInfos);
 
             return Json(new { employeeInfos, gridCountryData, gridUnitData, jobLevelTypes });
         }
@@ -276,7 +276,7 @@
             Dictionary<string, string[]> jobLevelTypes,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
-            var  (supervisors, totalSupervisor) = GroupDataByUnit(jobLevels.ElementAt(0).Value, units, employeeInfos);
+            var (supervisors, totalSupervisor) = GroupDataByUnit(jobLevels.ElementAt(0).Value, units, employeeInfos);
             var (employees, totalEmployee) = GroupDataByUnit(jobLevels.ElementAt(1).Value, units, employeeInfos);
             var grandTotal = GetGrandTotal(units, totalSupervisor, totalEmployee);
             var totalJobTypeSupervisor = GetTotalByJobType(units, jobLevelTypes.ElementAt(0).Value, employeeInfos);
@@ -379,10 +379,15 @@
             IEnumerable<string> jobLevelTypes,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
-            var totalJobType = jobLevelsType.Select(jobType => 
-                new RowItem { Name = jobType, Cells = units.Select(item => 
-                    new GroupCellItem { Name = item.Key, Cells = item.Value.Select(unit => 
-                        new CellItem { Name = unit }).ToList() }).ToList() }).ToList();
+            var totalJobType = jobLevelTypes.Select(jobType => new RowItem
+            {
+                Name = jobType,
+                Cells = units.Select(item => new GroupCellItem
+                {
+                    Name = item.Key,
+                    Cells = item.Value.Select(unit => new CellItem { Name = unit }).ToList()
+                }).ToList()
+            }).ToList();
 
             foreach (var item in totalJobType)
             {
@@ -431,10 +436,15 @@
             IEnumerable<string> jobLevelsType,
             IEnumerable<EmployeeInfo> employeeInfos)
         {
-            var totalJobType = jobLevelsType.Select(item => 
-                new RowItem { Name = item, Cells = countries.Select(country => 
-                    new GroupCellItem { Name = country, Cells = units.Select(unit => 
-                        new CellItem { Name = unit.Key }).ToList() }).ToList() }).ToList();
+            var totalJobType = jobLevelsType.Select(item => new RowItem
+            {
+                Name = item,
+                Cells = countries.Select(country => new GroupCellItem
+                {
+                    Name = country,
+                    Cells = units.Select(unit => new CellItem { Name = unit.Key }).ToList()
+                }).ToList()
+            }).ToList();
 
             foreach (var item in totalJobType)
             {
