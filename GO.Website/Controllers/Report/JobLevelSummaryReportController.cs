@@ -4,14 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Constants;
-    using Filters;
     using GO.Core.Services;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Report;
+    using GO.Website.Filters;
     using GO.Website.Models.Report.Manpower;
+    using GO.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using Microsoft.AspNetCore.Mvc;
-    using Services;
 
     [GOPermission(FunctionKey = FunctionKey.JobLevelSummaryReport, Policy = Policy.Read)]
     public class JobLevelSummaryReportController : BaseController
@@ -53,13 +53,12 @@
             var criteria = new GetJobLevelSummaryReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
 
-            var listUnits = await baseService.GetDataAsync<string>(new GetUnitCriteria());
-            var listJobLevels = await baseService.GetDataAsync<string>(new GetJobLevelCriteria());
+            var listUnits = await GetUnitAsync();
+            var listJobLevels = await GetJobLevelAsync();
+            var units = GetUnit(listUnits);
 
-            var units = GetUnit(listUnits.ToList());
-            var enumJobLevels = listJobLevels.ToList();
-            var jobLevels = GetJobLevels(enumJobLevels);
-            var jobLevelTypes = GetJobLevelTypes(enumJobLevels);
+            var jobLevels = GetJobLevels(listJobLevels);
+            var jobLevelTypes = GetJobLevelTypes(listJobLevels);
 
             var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelTypes, employeeInfos);
             var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelTypes, employeeInfos);
@@ -72,24 +71,35 @@
         {
             var criteria = new GetJobLevelSummaryReportCriteria();
             var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
-            var listUnits = await baseService.GetDataAsync<string>(new GetUnitCriteria());
-            var listJobLevels = await baseService.GetDataAsync<string>(new GetJobLevelCriteria());
+            var listUnits = await GetUnitAsync();
+            var listJobLevels = await GetJobLevelAsync();
 
             var units = GetUnit(listUnits.ToList());
-            var enumJobLevels = listJobLevels.ToList();
-            var jobLevels = GetJobLevels(enumJobLevels);
-            var jobLevelsType = GetJobLevelTypes(enumJobLevels);
+            var jobLevels = GetJobLevels(listJobLevels);
+            var jobLevelTypes = GetJobLevelTypes(listJobLevels);
 
             var numEmployeeInfos = employeeInfos.ToList();
-            var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelsType, numEmployeeInfos);
-            var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelsType, numEmployeeInfos);
+            var gridCountryData = GroupDataByCountry(jobLevels, units, jobLevelTypes, numEmployeeInfos);
+            var gridUnitData = GroupDataByUnit(jobLevels, units, jobLevelTypes, numEmployeeInfos);
 
             var bytes = excelService.ExportJobLevelSummaryReport(gridUnitData, gridCountryData);
             var reportName = $"JobLevelSummaryReportByUnitAndCountry_{DateTime.Today:yyyyMMdd}";
             return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
 
-        private Dictionary<string, string[]> GetUnit(IEnumerable<string> units)
+        private async Task<IList<string>> GetUnitAsync()
+        {
+            var units = await baseService.GetDataAsync<string>(new GetUnitCriteria());
+            return units.ToList();
+        }
+
+        private async Task<IList<string>> GetJobLevelAsync()
+        {
+            var jobLevels = await baseService.GetDataAsync<string>(new GetJobLevelCriteria());
+            return jobLevels.ToList();
+        }
+
+        private Dictionary<string, string[]> GetUnit(IList<string> units)
         {
             var dictionaryUnits = new Dictionary<string, string[]>();
             foreach (var unitType in unitTypes)
@@ -101,7 +111,7 @@
             return dictionaryUnits;
         }
 
-        private Dictionary<string, string[]> GetJobLevels(IEnumerable<string> jobLevels)
+        private Dictionary<string, string[]> GetJobLevels(IList<string> jobLevels)
         {
             var dictionaryJobLevels = new Dictionary<string, string[]>();
             foreach (var jobLevelType in shortJobLevelTypes)
@@ -118,7 +128,7 @@
             return dictionaryJobLevels;
         }
 
-        private Dictionary<string, string[]> GetJobLevelTypes(IEnumerable<string> jobLevels)
+        private Dictionary<string, string[]> GetJobLevelTypes(IList<string> jobLevels)
         {
             var dictionaryJobLevelTypes = new Dictionary<string, string[]>();
             foreach (var jobLevelType in shortJobLevelTypes)
@@ -136,7 +146,7 @@
             return dictionaryJobLevelTypes;
         }
 
-        private static string[] SortJobLevel(IEnumerable<string> jobLevelNames)
+        private static string[] SortJobLevel(IList<string> jobLevelNames)
         {
             var sortJobLevels = new List<string>();
             foreach (var range in jobLevelNames.Select(item => int.Parse(item[1..])))
@@ -201,7 +211,7 @@
                         Name = country,
                         Cells = new List<CellItem>
                         {
-                            new()
+                            new CellItem
                             {
                                 Total = totalSupervisor.Cells.First(sup => country.Equals(sup.Name)).Cells.Sum(cell => cell.Total)
                                     + totalEmployee.Cells.First(emp => country.Equals(emp.Name)).Cells.Sum(cell => cell.Total)

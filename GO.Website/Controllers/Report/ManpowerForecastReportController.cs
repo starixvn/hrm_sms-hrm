@@ -2,11 +2,11 @@
 {
     using System;
     using System.Threading.Tasks;
-    using Constants;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Report.Manpower;
-    using Filters;
+    using GO.Website.Filters;
     using GO.Website.Models.Report.Manpower;
-    using Services;
+    using GO.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;

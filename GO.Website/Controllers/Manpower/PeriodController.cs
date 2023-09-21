@@ -2,11 +2,11 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using Filters;
     using GO.Core.Extensions.XML;
     using GO.Core.Services;
-    using Constants;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Manpower.Period;
+    using GO.Website.Filters;
     using GO.Website.Models.Manpower.Period;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -43,7 +43,7 @@
         [HttpPost]
         public async Task<IActionResult> GetPeriods([FromBody] GetPeriodCriteria criteria)
         {
-            var(periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
+            var (periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
             foreach (var period in periods)
             {
                 period.Settings = processSettings.Where(x => x.PeriodId == period.PeriodId).ToList();
@@ -55,7 +55,7 @@
         [HttpPost]
         public async Task<IActionResult> GetById([FromBody] GetPeriodByIdCriteria criteria)
         {
-            var(periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
+            var (periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
             foreach (var period in periods)
             {
                 period.Settings = processSettings.Where(x => x.PeriodId == period.PeriodId).ToList();

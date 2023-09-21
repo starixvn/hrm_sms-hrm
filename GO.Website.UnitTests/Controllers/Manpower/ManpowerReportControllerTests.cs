@@ -1,17 +1,17 @@
 ﻿namespace GO.Website.UnitTests.Controllers.Manpower
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using AutoFixture;
     using GO.Core.Services;
-    using GO.Website.Controllers.Manpower;
+    using GO.Website.Controllers.Report;
     using GO.Website.Criteria.Report;
     using GO.Website.Models.Report.Manpower;
     using GO.Website.Services;
     using Microsoft.AspNetCore.Mvc;
     using NSubstitute;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Xunit;
 
     public class ManpowerReportControllerTests
@@ -177,7 +177,7 @@
             var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}.xlsx";
 
             baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
-            excelService.ExportManpowerReport(Arg.Any<GridData>(), Arg.Any<GridData>()).Returns(expected);
+            excelService.ExportJobLevelSummaryReport(Arg.Any<GridData>(), Arg.Any<GridData>()).Returns(expected);
             //Act
             var result = await controller.ExportExcel();
 

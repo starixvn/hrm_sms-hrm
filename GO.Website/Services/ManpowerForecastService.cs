@@ -270,6 +270,6 @@
                 || (request.Details.Any(x => param.Details.Any(y => y.LocalAddition != x.LocalAddition || y.ExpatAddition != x.ExpatAddition))));
         }
 
-        private bool IsEqual(string strA = null, string strB = null) => string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase) == 0;
+        private static bool IsEqual(string strA = null, string strB = null) => string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase) == 0;
     }
 }
