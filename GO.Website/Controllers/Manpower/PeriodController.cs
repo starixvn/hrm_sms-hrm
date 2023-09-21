@@ -2,11 +2,10 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Website.Filters;
+    using Filters;
     using GO.Core.Extensions.XML;
-    using GO.Core.Models;
     using GO.Core.Services;
-    using GO.Website.Constants;
+    using Constants;
     using GO.Website.Criteria.Manpower.Period;
     using GO.Website.Models.Manpower.Period;
     using HRM.UserControl.Client.Core.Enumerables;
@@ -30,13 +29,13 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
+            var isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
             return View("~/Views/Manpower/Period/Index.cshtml", isHost);
         }
 
         public IActionResult Detail(int id)
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
+            var isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_PeriodManagement, Policy.Host);
             ViewBag.periodId = id;
             return View("~/Views/Manpower/Period/Detail.cshtml", isHost);
         }
@@ -44,7 +43,7 @@
         [HttpPost]
         public async Task<IActionResult> GetPeriods([FromBody] GetPeriodCriteria criteria)
         {
-            (var periods, var processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
+            var(periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
             foreach (var period in periods)
             {
                 period.Settings = processSettings.Where(x => x.PeriodId == period.PeriodId).ToList();
@@ -56,7 +55,7 @@
         [HttpPost]
         public async Task<IActionResult> GetById([FromBody] GetPeriodCriteriaByIdCriteria criteria)
         {
-            (var periods, var processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
+            var(periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
             foreach (var period in periods)
             {
                 period.Settings = processSettings.Where(x => x.PeriodId == period.PeriodId).ToList();
@@ -72,7 +71,7 @@
             command.SettingXml = command.Settings != null && command.Settings.Any() ? command.Settings.ToXML().ToString() : string.Empty;
             command.IsActive = true;
             command.CreatedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }
@@ -83,7 +82,7 @@
         {
             command.SettingXml = command.Settings != null && command.Settings.Any() ? command.Settings.ToXML().ToString() : string.Empty;
             command.ModifiedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }
@@ -93,7 +92,7 @@
         public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusPeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }
@@ -103,7 +102,7 @@
         public async Task<IActionResult> Delete([FromBody] DeletePeriodCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }

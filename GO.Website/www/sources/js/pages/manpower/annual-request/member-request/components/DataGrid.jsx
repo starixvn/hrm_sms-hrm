@@ -11,8 +11,8 @@ const DataGrid = ({ requests }) => {
         return (
             <HeaderRow>
                 <HeaderCell colWidth={3}>{LangHelper.getResource('SymbolNo')}</HeaderCell>
-                <HeaderCell colWidth={10}>{LangHelper.getResource('UnitHead')}</HeaderCell>
                 <HeaderCell colWidth={8}>{LangHelper.getResource('Unit')}</HeaderCell>
+                <HeaderCell colWidth={10}>{LangHelper.getResource('Created By')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Verifier')}</HeaderCell>
                 <HeaderCell colWidth={10}>{LangHelper.getResource('Approver')}</HeaderCell>
                 <HeaderCell colWidth={5}>{LangHelper.getResource('Status')}</HeaderCell>
@@ -26,8 +26,8 @@ const DataGrid = ({ requests }) => {
             return requests.map((item, index) =>
                 <Row key={item.requestId}>
                     <Cell className="text-center">{index + 1}</Cell>
-                    <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
                     <Cell>{item.unitName}</Cell>
+                    <Cell>{`${item.creator.fullName} (${item.creator.nickname})`}</Cell>
                     <Cell>{item.verifier != null ? `${item.verifier.fullName} (${item.verifier.nickname})` : ''}</Cell>
                     <Cell>{item.approver != null ? `${item.approver.fullName} (${item.approver.nickname})` : ''}</Cell>
                     <Cell className="text-center">{getAnnualRequestStatus(item.statusId)}</Cell>

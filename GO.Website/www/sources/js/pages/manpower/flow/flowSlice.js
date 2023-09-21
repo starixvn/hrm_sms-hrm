@@ -1,4 +1,5 @@
 ﻿import { createSlice } from '@reduxjs/toolkit';
+import { ManpowerFlow } from '@jsroot/common/constants';
 
 const siteSlice = createSlice({
     name: 'manpowerFlow',
@@ -33,12 +34,17 @@ const siteSlice = createSlice({
                 isActive: employee.isActive,
                 isDeleted: employee.isDeleted
             };
-            const index = state.flows.findIndex(x => x.processId === processId);
-            if (index < 0) {
+            if (flow.processId === ManpowerFlow.UnitHead) {
                 state.flows.push(flow);
-            } else {
-                if (state.flows[index].siteId !== employee.siteId || state.flows[index].empId !== employee.empId) {
-                    state.flows[index] = flow;
+            }
+            else {
+                const index = state.flows.findIndex(x => x.processId === processId);
+                if (index < 0) {
+                    state.flows.push(flow);
+                } else {
+                    if (state.flows[index].siteId !== employee.siteId || state.flows[index].empId !== employee.empId) {
+                        state.flows[index] = flow;
+                    }
                 }
             }
         },

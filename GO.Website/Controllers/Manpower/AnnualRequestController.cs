@@ -1,14 +1,13 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
     using System.Threading.Tasks;
-    using GO.Website.Filters;
-    using GO.Core.Models;
-    using GO.Website.Constants;
+    using Filters;
+    using Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Criteria.Manpower.AnnualRequest;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
-    using GO.Website.Services;
+    using Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
@@ -38,7 +37,7 @@
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> GetDataForCreateAnnualRequest(string unitName)
         {
-            (var period, var details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
+            var (period, details) = await manpowerForecastService.GetDataForCreateAnnualRequestAsync(userControlSession.UserId, unitName);
             return Json(new { period, details });
         }
 
@@ -46,7 +45,7 @@
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> Create([FromBody] CreateAnnualManpowerForecastRequestParam param)
         {
-            CommandResult commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
+            var commandResult = await manpowerForecastService.CreateAnnualRequestAsync(userControlSession.UserId, param);
             return Json(commandResult);
         }
 
@@ -54,7 +53,7 @@
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
         public async Task<IActionResult> Update([FromBody] UpdateAnnualManpowerForecastRequestParam param)
         {
-            CommandResult commandResult = await manpowerForecastService.UpdateAnnualRequestAsync(userControlSession.UserId, param);
+            var commandResult = await manpowerForecastService.UpdateAnnualRequestAsync(userControlSession.UserId, param);
             return Json(commandResult);
         }
 
@@ -113,7 +112,7 @@
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy = Policy.Host)]
         public IActionResult MemberRequestSummary()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy.Host);
+            var isHost = userControlSession.HasPermissionOnFunction(FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy.Host);
             return View("~/Views/Manpower/AnnualRequest/MemberRequestSummary.cshtml", isHost);
         }
 
@@ -151,8 +150,8 @@
             return Json(requests);
         }
 
-        private bool IsEditOnUnitHead(AnnualManpowerForecastRequest request)
-            => request.Creator.CreatorId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.UnitHead;
+        private static bool IsEditOnUnitHead(AnnualManpowerForecastRequest request)
+            => request.CurrentProcessId == PeriodProcess.UnitHead;
 
         private bool IsEditOnVerify(AnnualManpowerForecastRequest request)
            => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verifier;

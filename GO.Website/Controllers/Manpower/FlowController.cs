@@ -2,13 +2,12 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using GO.Website.Filters;
+    using Filters;
     using GO.Core.Extensions.XML;
-    using GO.Core.Models;
     using GO.Core.Services;
-    using GO.Website.Constants;
+    using Constants;
     using GO.Website.Criteria.Manpower;
-    using GO.Website.Models;
+    using Models;
     using GO.Website.Models.Manpower;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
@@ -31,7 +30,7 @@
 
         public IActionResult Index()
         {
-            bool isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_FlowManagement, Policy.Host);
+            var isHost = userControlSession.HasPermissionOnFunction(FunctionKey.ManpowerForecast_FlowManagement, Policy.Host);
             return View("~/Views/Manpower/Flow/Index.cshtml", isHost);
         }
 
@@ -68,7 +67,7 @@
                 FlowXml = param.Flows != null && param.Flows.Any() ? param.Flows.ToXML().ToString() : string.Empty,
                 ModifiedBy = userControlSession.UserId
             };
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }
@@ -78,7 +77,7 @@
         public async Task<IActionResult> Delete([FromBody] DeleteFlowCommand command)
         {
             command.ModifiedBy = userControlSession.UserId;
-            CommandResult commandResult = await baseService.ExecuteNonQueryAsync(command);
+            var commandResult = await baseService.ExecuteNonQueryAsync(command);
 
             return Json(commandResult);
         }

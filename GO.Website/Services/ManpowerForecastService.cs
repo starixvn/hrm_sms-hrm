@@ -8,15 +8,15 @@
     using GO.Core.Extensions.XML;
     using GO.Core.Models;
     using GO.Core.Services;
-    using GO.Website.Constants;
-    using GO.Website.Criteria.Manpower;
-    using GO.Website.Criteria.Manpower.AnnualRequest;
-    using GO.Website.Criteria.Report.Manpower;
-    using GO.Website.Models;
-    using GO.Website.Models.Manpower;
-    using GO.Website.Models.Manpower.AnnualRequest;
-    using GO.Website.Models.Manpower.Period;
-    using GO.Website.Repositories;
+    using Constants;
+    using Criteria.Manpower;
+    using Criteria.Manpower.AnnualRequest;
+    using Criteria.Report.Manpower;
+    using Models;
+    using Models.Manpower;
+    using Models.Manpower.AnnualRequest;
+    using Models.Manpower.Period;
+    using Repositories;
     using Microsoft.AspNetCore.Hosting;
 
     public class ManpowerForecastService : IManpowerForecastService
