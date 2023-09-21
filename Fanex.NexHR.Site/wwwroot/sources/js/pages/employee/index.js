@@ -1,7 +1,7 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
-
+import tippy from 'tippy.js';
 import '../../shared/multiselect-tree-view';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/employee.search.in.team';
@@ -44,6 +44,7 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
         }).then(response => {
             unblockUI();
             $('#contact-list').html(response.data);
+            initTooltip();
             if ($('table#data #pagination').length > 0) {
                 initPagination();
                 $('#ItemsPerPageOption').on('change', function () {
@@ -61,6 +62,21 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
             floatThead('table#data');
             initSortTable();
         }).catch(axiosError);
+    }
+
+    function initTooltip() {
+        tippy('.avatar-tooltip', {
+            maxWidth: 'none',
+            animation: 'fade',
+            arrow: true,
+            placement: 'auto',
+            appendTo: document.getElementById('tippy-avatar'),
+            allowHTML: true,
+            content: (reference) => {
+                const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
+                return '<img src="' + path + '" />';
+            }
+        });
     }
 
     function initSortTable() {
