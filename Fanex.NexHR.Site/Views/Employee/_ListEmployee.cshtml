@@ -92,8 +92,7 @@
                     <td>@employee.Code</td>
                     <td class="align-left">@employee.FullName</td>
                     <td>
-                        <a href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
-                    </td>
+                        <a class="avatar-tooltip" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
                     <td>
                         @if (employee.JoinedDate.HasValue)
                         {

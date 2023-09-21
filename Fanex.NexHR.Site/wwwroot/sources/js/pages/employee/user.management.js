@@ -2,7 +2,7 @@
 import 'floatthead/dist/jquery.floatThead';
 import 'chosen-js/chosen.jquery';
 import axios from 'axios';
-
+import tippy from 'tippy.js';
 import '../../../../sources/libs/SimplePagination/jquery.simplePagination.js';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -55,6 +55,19 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
             unblockUI();
             $('#user-management').html(response.data);
             checkDisabledUser();
+
+            tippy('.avatar-tooltip', {
+                maxWidth: 'none',
+                animation: 'fade',
+                arrow: true,
+                placement: 'auto',
+                appendTo: document.getElementById('tippy-avatar'),
+                allowHTML: true,
+                content: (reference) => {
+                    const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
+                    return '<img src="' + path + '" />';
+                }
+            });
 
             if ($('table#data #pagination').length > 0) {
                 initPagination();
