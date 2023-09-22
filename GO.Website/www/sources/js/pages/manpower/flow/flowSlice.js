@@ -34,7 +34,8 @@ const siteSlice = createSlice({
                 isActive: employee.isActive,
                 isDeleted: employee.isDeleted
             };
-            if (flow.processId === ManpowerFlow.UnitHead) {
+            const indexEmpId = state.flows.findIndex(x => x.empId === employee.empId);
+            if (indexEmpId < 0 && flow.processId === ManpowerFlow.UnitHead) {
                 state.flows.push(flow);
             }
             else {
@@ -42,7 +43,9 @@ const siteSlice = createSlice({
                 if (index < 0) {
                     state.flows.push(flow);
                 } else {
-                    if (state.flows[index].siteId !== employee.siteId || state.flows[index].empId !== employee.empId) {
+                    if (state.flows[index].siteId !== employee.siteId ||
+                        state.flows[index].empId !== employee.empId &&
+                        state.flows[index].processId !== ManpowerFlow.UnitHead) {
                         state.flows[index] = flow;
                     }
                 }

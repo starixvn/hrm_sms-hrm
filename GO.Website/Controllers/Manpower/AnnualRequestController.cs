@@ -1,5 +1,7 @@
 ﻿namespace GO.Website.Controllers.Manpower
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Filters;
     using Constants;
@@ -11,19 +13,23 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using GO.Core.Services;
 
     [Route("ManpowerForecast/AnnualRequest/[action]/{id?}")]
     public class AnnualRequestController : BaseController
     {
         private readonly IUserControlSession userControlSession;
         private readonly IManpowerForecastService manpowerForecastService;
+        private readonly IBaseService baseService;
 
         public AnnualRequestController(
             IUserControlSession userControlSession,
-            IManpowerForecastService manpowerForecastService)
+            IManpowerForecastService manpowerForecastService,
+            IBaseService baseService)
         {
             this.userControlSession = userControlSession;
             this.manpowerForecastService = manpowerForecastService;
+            this.baseService = baseService;
         }
 
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
@@ -70,8 +76,8 @@
             {
                 return NotFound();
             }
-
-            request.IsEdit = IsEditOnUnitHead(request) || IsEditOnVerify(request) || IsEditOnApprove(request);
+            var flows = await baseService.GetDataAsync<ManpowerFlow>(new GetFlowCriteria());
+            request.IsEdit = IsEditOnUnitHead(flows, request) || IsEditOnVerify(flows, request) || IsEditOnApprove(flows, request);
             return Json(request);
         }
 
@@ -101,9 +107,10 @@
         {
             criteria.UserId = userControlSession.UserId;
             var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
+            var flows = await baseService.GetDataAsync<ManpowerFlow>(new GetFlowCriteria());
             foreach(var request in requests)
             {
-                request.IsEdit = IsEditOnUnitHead(request) || IsEditOnVerify(request) || IsEditOnApprove(request);
+                request.IsEdit = IsEditOnUnitHead(flows, request) || IsEditOnVerify(flows, request) || IsEditOnApprove(flows, request);
             }
 
             return Json(requests);
@@ -150,13 +157,13 @@
             return Json(requests);
         }
 
-        private static bool IsEditOnUnitHead(AnnualManpowerForecastRequest request)
-            => request.CurrentProcessId == PeriodProcess.UnitHead;
+        private bool IsEditOnUnitHead(IEnumerable<ManpowerFlow> flows, AnnualManpowerForecastRequest request)
+            => flows.Any(x => x.UserId == userControlSession.UserId && x.ProcessId == request.CurrentProcessId && x.UnitName == request.UnitName);
 
-        private bool IsEditOnVerify(AnnualManpowerForecastRequest request)
-           => request.Verifier.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Verifier;
+        private bool IsEditOnVerify(IEnumerable<ManpowerFlow> flows, AnnualManpowerForecastRequest request)
+           => flows.Any(x => x.UserId == userControlSession.UserId && x.ProcessId == request.CurrentProcessId && x.UnitName == request.UnitName);
 
-        private bool IsEditOnApprove(AnnualManpowerForecastRequest request)
-           => request.Approver.UserId == userControlSession.UserId && request.CurrentProcessId == PeriodProcess.Approver;
+        private bool IsEditOnApprove(IEnumerable<ManpowerFlow> flows, AnnualManpowerForecastRequest request)
+           => flows.Any(x => x.UserId == userControlSession.UserId && x.ProcessId == request.CurrentProcessId && x.UnitName == request.UnitName);
     }
 }

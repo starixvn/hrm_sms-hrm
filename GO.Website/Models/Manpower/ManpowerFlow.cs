@@ -24,6 +24,8 @@
         public string CompanyName { get; set; }
 
         public int EmpId { get; set; }
+        [XmlIgnore]
+        public int UserId { get; set; }
 
         [XmlIgnore]
         public string Code { get; set; }
