@@ -1,5 +1,12 @@
 .popup-avatar {
     box-shadow: 0 0 5px #000;
+    width: auto !important;
+    max-width: 300px;
+
+    img{
+        min-width: 113px;
+        min-height: 151px;
+    }
 
     .ui-widget-header {
         border: none;
@@ -31,7 +38,7 @@
         color: #fff;
         position: absolute;
         z-index: 2;
-        top: 225px;
+        top: -23px;
         left: 50%;
         transform: translate(-50%, -50%);
     }
