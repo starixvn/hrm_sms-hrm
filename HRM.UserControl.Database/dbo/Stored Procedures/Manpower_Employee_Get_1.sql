@@ -2,6 +2,8 @@
 CREATE PROCEDURE [dbo].[Manpower_Employee_Get] @Keyword NVARCHAR(100) = NULL
 	,@CompanyId SMALLINT = NULL
 	,@StatusId TINYINT = NULL
+	,@Category BIT = NULL
+	,@Sections VARCHAR(MAX) = NULL
 	,@PageIndex SMALLINT = NULL
 	,@PageSize SMALLINT = NULL
 	,@TotalRows INT = 0 OUTPUT
@@ -17,8 +19,16 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @tblSections TABLE (SectionId INT)
 	DECLARE @RowStart INT
 		,@RowEnd INT
+
+	IF ISNULL(@Sections, '') <> ''
+	BEGIN
+		INSERT INTO @tblSections (SectionId)
+		SELECT val
+		FROM dbo.fnc_strSplit(@Sections, ',')
+	END
 
 	SELECT @PageIndex = @PageIndex - 1
 		,@RowStart = @PageIndex * @PageSize + 1
@@ -95,6 +105,10 @@ BEGIN
 			OR c.CompanyId = @CompanyId
 		)
 		AND (
+			@Category IS NULL
+			OR emp.IsLocal = @Category
+		)
+		AND (
 			@StatusId IS NULL
 			OR (
 				@StatusId = 1
@@ -105,6 +119,12 @@ BEGIN
 				AND exclude.EmpId IS NOT NULL
 				)
 			)
+		AND(@Sections IS NULL 
+			OR EXISTS (
+			SELECT 1
+			FROM @tblSections AS tblsc
+			WHERE section.SectionId = tblsc.SectionId
+			))
 		AND emp.IsActive = 1
 		AND emp.IsDeleted = 0
 

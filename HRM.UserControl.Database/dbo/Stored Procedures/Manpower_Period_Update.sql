@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Manpower_Period_Update] @PeriodId INT
+CREATE PROCEDURE [dbo].[Manpower_Period_Update] @PeriodId SMALLINT
 	,@Name NVARCHAR(200)
 	,@SettingXml VARCHAR(MAX)
 	,@ModifiedBy INT

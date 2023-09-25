@@ -200,5 +200,10 @@
     <Build Include="dbo\Stored Procedures\GO_UserRole_Get.sql" />
     <Build Include="dbo\Stored Procedures\GO_User_GetUserSiteByUserId.sql" />
     <Build Include="dbo\Stored Procedures\AutoJob_ManpowerForecast_GetDataToSendNotification.sql" />
+    <Build Include="dbo\Stored Procedures\Report_ManpowerForecast_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Report_JobLevelSummary_Get.sql" />
+    <Build Include="dbo\Stored Procedures\Manpower_GetUnit.sql" />
+    <Build Include="dbo\Stored Procedures\Manpower_GetSection.sql" />
+    <Build Include="dbo\Stored Procedures\Manpower_GetJobLevel.sql" />
   </ItemGroup>
 </Project>

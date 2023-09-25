@@ -89,7 +89,6 @@ BEGIN
 			rq.StatusId IN (@PendingStatusId, @VerifiedStatusId)
 			AND unit.ApproverId = approver.UserId
 			)
-	WHERE rq.CreatedBy = @UserId
 	ORDER BY rq.CreatedDate DESC
 
 	DROP TABLE #tmpUnit

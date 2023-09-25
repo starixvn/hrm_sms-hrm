@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[ManpowerForecast_GetPreviousApprovedRequest] @PeriodId INT
+CREATE PROCEDURE [dbo].[ManpowerForecast_GetPreviousApprovedRequest] @PeriodId SMALLINT
 AS
 /*  
 Created: 20230622@Tim.Trinh
@@ -13,7 +13,7 @@ BEGIN
 
 	DECLARE @ApprovedStatusId TINYINT = 3
 		,@Year INT
-		,@PrevPeriodId INT
+		,@PrevPeriodId SMALLINT
 		,@EndDateOfYear DATE
 
 	SELECT @Year = p.[Year]

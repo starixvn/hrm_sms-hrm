@@ -29,28 +29,28 @@ BEGIN
 	SET @Keyword = '%' + ISNULL(@Keyword, '') + '%'
 
 	SELECT ROW_NUMBER() OVER (
-			ORDER BY u.UserId
-				,u.Username DESC
+			ORDER BY emp.UserId
+				,emp.Username DESC
 			) AS RowNum
-		,u.UserId
-		,u.Username
-		,u.Code
-		,u.Nickname
-		,u.FullName
-		,u.IsActive
-		,u.IsDeleted
+		,emp.UserId
+		,emp.Username
+		,emp.Code
+		,emp.Nickname
+		,emp.FullName
+		,emp.IsActive
+		,emp.IsDeleted
 		,s.SiteName
 		,c.[Name] AS CompanyName
 	INTO #tblUser
 	FROM dbo.[User] AS u WITH (NOLOCK)
-		LEFT JOIN dbo.HRM_Employee AS emp WITH (NOLOCK) ON u.UserId = emp.UserId
-		LEFT JOIN dbo.[Site] AS s WITH (NOLOCK) ON emp.SiteId = s.SiteId
-		LEFT JOIN dbo.Company AS c WITH (NOLOCK) ON s.CompanyId = c.CompanyId
+		INNER JOIN dbo.HRM_Employee AS emp WITH (NOLOCK) ON u.UserId = emp.UserId
+		INNER JOIN dbo.[Site] AS s WITH (NOLOCK) ON emp.SiteId = s.SiteId
+		INNER JOIN dbo.Company AS c WITH (NOLOCK) ON s.CompanyId = c.CompanyId
 	WHERE (
-			ISNULL(u.Username, '') LIKE @Keyword
-			OR ISNULL(u.Code, '') LIKE @Keyword
-			OR ISNULL(u.Nickname, '') LIKE @Keyword
-			OR ISNULL(u.FullName, '') LIKE @Keyword
+			ISNULL(emp.Username, '') LIKE @Keyword
+			OR ISNULL(emp.Code, '') LIKE @Keyword
+			OR ISNULL(emp.Nickname, '') LIKE @Keyword
+			OR ISNULL(emp.FullName, '') LIKE @Keyword
 			)
 		AND EXISTS (
 			SELECT 1
@@ -60,14 +60,16 @@ BEGIN
 				AND s.SiteId = @SiteId
 			)
 		AND (
-			emp.EmpId IS NULL
-			OR EXISTS (
+			--emp.EmpId IS NULL
+			EXISTS (
 				SELECT 1
 				FROM dbo.UserMapping AS um WITH (NOLOCK)
 				WHERE emp.SiteId = um.SiteId
-					AND emp.UserId = um.UserId
 					AND emp.EmpId = um.RefId
-					AND um.UserId = ISNULL(um.NewUserId, um.UserId)
+					AND (
+						emp.UserId = um.UserId
+						OR emp.UserId = um.NewUserId
+						)
 				)
 			)
 		AND (

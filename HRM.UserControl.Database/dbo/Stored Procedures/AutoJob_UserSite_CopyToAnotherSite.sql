@@ -40,4 +40,21 @@ BEGIN
 	WHERE tous.SiteId = @ToSiteId
 		AND fromus.SiteId = @FromSiteId
 		AND tous.IsActive != fromus.IsActive
+
+	INSERT INTO dbo.UserMapping (
+		UserId
+		,SiteId
+		,RefId
+		)
+	SELECT fromum.UserId
+		,@ToSiteId
+		,fromum.RefId
+	FROM dbo.UserMapping AS fromum WITH (NOLOCK)
+	WHERE fromum.SiteId = @FromSiteId
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.UserMapping AS toum WITH (NOLOCK)
+			WHERE toum.SiteId = @ToSiteId
+				AND fromum.UserId = toum.UserId
+			)
 END

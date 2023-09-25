@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Manpower_AnnualRequestForm_GetByPeriodId] @PeriodId INT
+CREATE PROCEDURE [dbo].[Manpower_AnnualRequestForm_GetByPeriodId] @PeriodId SMALLINT
 AS
 /*  
 Created: 20230705@Brian.Nguyen

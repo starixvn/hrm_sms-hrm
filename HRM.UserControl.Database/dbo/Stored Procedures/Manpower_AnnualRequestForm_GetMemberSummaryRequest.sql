@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [dbo].[Manpower_AnnualRequestForm_GetMemberSummaryRequest] @PeriodId INT
+CREATE PROCEDURE [dbo].[Manpower_AnnualRequestForm_GetMemberSummaryRequest] @PeriodId SMALLINT
 	,@UserId INT
 	,@UnitType NVARCHAR(100) = NULL
 AS
