@@ -119,6 +119,12 @@ BEGIN
 				AND emp.ResignedDate > @EndDateOfYear
 				)
 			)
+		AND NOT EXISTS (
+			SELECT 1
+			FROM dbo.Manpower_ExcludedEmployee AS exclude WITH (NOLOCK)
+			WHERE emp.SiteId = exclude.SiteId
+				AND emp.EmpId = exclude.EmpId
+			)
 	GROUP BY s.SiteId
 		,unit.[Name] 
 		,dept.[Name] 

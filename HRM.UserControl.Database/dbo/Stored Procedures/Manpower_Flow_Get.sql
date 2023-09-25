@@ -18,6 +18,7 @@ BEGIN
 		,c.CompanyId
 		,c.[Name] AS CompanyName
 		,emp.EmpId
+		,emp.UserId
 		,emp.Code
 		,emp.Nickname
 		,emp.FullName
