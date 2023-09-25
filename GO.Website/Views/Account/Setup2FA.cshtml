@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Two-factor Authentication";
+}
+@section Breadcrumb {
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Two-factor Authentication</li>
+    </ol>
+}
+@section Styles {
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/dev/pages/account/setup-2fa.chunk.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/pro/pages/admin/setup-2fa.chunk.css" asp-append-version="true" />
+    </environment>
+}
+@section Scripts {
+    <environment include="Development">
+        <script src="~/js/dev/pages/account/setup-2fa.chunk.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/pro/pages/account/setup-2fa.chunk.js" asp-append-version="true"></script>
+    </environment>
+}
+<div id="app-container"></div>

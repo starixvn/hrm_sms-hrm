@@ -59,6 +59,7 @@
     <None Include="Views\Error\AccessDenied.cshtml" />
     <None Include="Views\Error\InternalError.cshtml" />
     <None Include="Views\Error\PageNotFound.cshtml" />
+    <None Include="wwwroot\css\images\otp\apple.svg" />
   </ItemGroup>
 
   <ItemGroup>

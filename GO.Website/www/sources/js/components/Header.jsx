@@ -141,6 +141,7 @@ export default class Header extends Component {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <Dropdown.Item href={Site.resolveClientUrl('auth/logout')}><i className="fa fa-power-off" /> Sign Out</Dropdown.Item>
+                                    <Dropdown.Item href={Site.resolveClientUrl('Account/Setup2FA')}><i className="fa fa-shield" /> Two-factor Authentication</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
