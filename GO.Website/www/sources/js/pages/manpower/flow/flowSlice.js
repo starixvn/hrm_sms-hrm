@@ -34,18 +34,18 @@ const siteSlice = createSlice({
                 isActive: employee.isActive,
                 isDeleted: employee.isDeleted
             };
-            const indexEmpId = state.flows.findIndex(x => x.empId === employee.empId);
-            if (indexEmpId < 0 && flow.processId === ManpowerFlow.UnitHead) {
-                state.flows.push(flow);
-            }
-            else {
+
+            if (flow.processId === ManpowerFlow.UnitHead) {
+                const index = state.flows.findIndex(x => x.siteId === employee.siteId && x.empId === employee.empId);
+                if (index < 0) {
+                    state.flows.push(flow);
+                }
+            } else {
                 const index = state.flows.findIndex(x => x.processId === processId);
                 if (index < 0) {
                     state.flows.push(flow);
                 } else {
-                    if (state.flows[index].siteId !== employee.siteId ||
-                        state.flows[index].empId !== employee.empId &&
-                        state.flows[index].processId !== ManpowerFlow.UnitHead) {
+                    if (state.flows[index].siteId !== employee.siteId || state.flows[index].empId !== employee.empId) {
                         state.flows[index] = flow;
                     }
                 }
