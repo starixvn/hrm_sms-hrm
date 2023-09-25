@@ -8,6 +8,8 @@
   <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="EmailTemplates\ManpowerForecast\NotiEditToUnitHead.txt" />
+    <None Remove="ExcelTemplates\JobLevelSummaryReportByUnitAndCountry.xlsx" />
+    <None Remove="ExcelTemplates\ManpowerForecast.xlsx" />
     <None Remove="logs\log.txt" />
     <None Remove="www\sources\css\components\react-tree-multiselect\_multiselect-treeview.scss" />
     <None Remove="www\sources\js\components\react-tree-multiselect\buildData.js" />
@@ -21,6 +23,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="EmailTemplates\ManpowerForecast\NotiEditToUnitHead.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTemplates\JobLevelSummaryReportByUnitAndCountry.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTemplates\ManpowerForecast.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="logs\log.txt">
