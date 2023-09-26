@@ -1,6 +1,6 @@
 ﻿.navbar-fixed {
     position: relative;
-    height: 52px;
+    height: 50px;
     z-index: 999;
 
     .navbar {
@@ -19,16 +19,24 @@
             margin-right: 34px;
             border-right: 1px solid #E3E3E3;
 
+            @include mobile {
+                width: 160px;
+                margin-right: 0;
+            }
+
             .navbar-brand {
-                height: 52px;
-                padding: 12px 0px 0;
+                height: 50px;
+                line-height: 38px;
                 float: unset;
                 display: block;
 
                 img {
-                    height: 24px;
                     width: auto;
                     position: relative;
+
+                    @include mobile {
+                        width: 152px;
+                    }
                 }
             }
         }
@@ -64,6 +72,12 @@
                 box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
                 border: 0;
 
+                @include mobile {
+                    position: unset;
+                    background-color: #eaecef;
+                    box-shadow: none;
+                }
+
                 li {
                     a {
                         font-size: 14px;
@@ -73,6 +87,10 @@
                         display: block;
                         padding: 3px 15px;
                         white-space: nowrap;
+
+                        @include mobile {
+                            white-space: normal;
+                        }
 
                         &:hover {
                             color: #0047BA;
@@ -101,7 +119,6 @@
                 text-decoration: none;
                 line-height: 46px;
                 padding: 3px 16px;
-                color: #b6bfd8;
                 font-size: 14px;
                 font-weight: 600;
                 color: #535353;
@@ -128,7 +145,7 @@
     }
 
     .user-info {
-        margin-top: 3px;
+        margin-top: 7px;
 
         .dropdown {
             .btn {

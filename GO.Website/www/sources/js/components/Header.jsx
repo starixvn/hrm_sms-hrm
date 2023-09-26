@@ -12,7 +12,8 @@ export default class Header extends Component {
             user: null,
             sites: [],
             menus: [],
-            expended: false
+            expended: false,
+            showSideMenu: false
         };
     }
 
@@ -72,11 +73,17 @@ export default class Header extends Component {
         });
     };
 
+    showSideMenu = () => {
+        this.setState(prevState => {
+            return { showSideMenu: !prevState.showSideMenu };
+        });
+    };
+
     isActive = (menuItem, currentUrl) => (menuItem.url !== null && menuItem.url.toLowerCase().localeCompare(currentUrl) === 0)
         || menuItem.childs.filter(child => child.url.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
 
     render() {
-        const { user, sites, menus, expended } = this.state;
+        const { user, sites, menus, expended, showSideMenu } = this.state;
         const currentUrl = window.location.pathname.toLowerCase();
 
         let nickname = '';
@@ -147,15 +154,20 @@ export default class Header extends Component {
                         </div>
                     </nav>
                 </div>
-                <ul className="side-nav fixed">
-                    {
-                        sites.map(site => <li key={site.siteId}>
-                            <a onClick={event => this.onClick(event, site.siteURL)}>
-                                {site.siteName}
-                            </a>
-                        </li>)
-                    }
-                </ul>
+                <div className={`${showSideMenu ? 'show-side-menu' : ''}`} >
+                    <ul className="side-nav fixed">
+                        {
+                            sites.map(site => <li key={site.siteId}>
+                                <a onClick={event => this.onClick(event, site.siteURL)}>
+                                    {site.siteName}
+                                </a>
+                            </li>)
+                        }
+                    </ul>
+                    <div className="side-menu-switch " onClick={this.showSideMenu}>
+                        <i className="fa fa-angle-right"></i>
+                    </div>
+                </div>
             </>
         );
     }
