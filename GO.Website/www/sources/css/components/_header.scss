@@ -27,7 +27,6 @@
                 margin-bottom: 0;
                 position: relative;
                 height: calc(100vh - 62px);
-
             }
         }
 
@@ -93,6 +92,19 @@
                     transform: rotateY(180deg) translateX(3px);
                 }
             }
+        }
+    }
+
+    .handle-click-out-side {
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: -62px;
+        width: 100vw;
+        z-index: -9999999;
+
+        &.menu-header {
+            top: 0
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import axios from 'axios';
-
 import Site from '@jsroot/common/site';
 
 export default class Header extends Component {
@@ -101,6 +100,9 @@ export default class Header extends Component {
                             </a>
                         </div>
                         <div className={`pull-left nav-hamberger ${expended ? 'expended' : ''}`}>
+                            {expended &&
+                                <div className='handle-click-out-side menu-header' onClick={this.handleToggle}></div>
+                            }
                             <div className="toggle-btn" onClick={this.handleToggle}>
                                 <span className="lines" />
                             </div>
@@ -155,6 +157,7 @@ export default class Header extends Component {
                     </nav>
                 </div>
                 <div className={`side-menu ${showSideMenu ? 'show-side-menu' : ''}`} >
+                    <div className='handle-click-out-side' onClick={this.showSideMenu}></div>
                     <ul className="side-nav fixed">
                         {
                             sites.map(site => <li key={site.siteId}>
