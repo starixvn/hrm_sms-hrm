@@ -2662,7 +2662,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Let&apos;s Talk.
+        ///   Looks up a localized string similar to Letstalk.
         /// </summary>
         public static string LetsTalk {
             get {
