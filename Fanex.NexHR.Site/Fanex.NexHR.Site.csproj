@@ -287,9 +287,7 @@
     <Content Include="App_Data\Emails\Leave.Request.cshtml" />
     <Content Include="App_Data\Emails\MemoNotification.cshtml" />
     <Content Include="App_Data\Emails\MessageNotification.cshtml" />
-    <Content Include="App_Data\Emails\ReeditRequest.cshtml" />
     <Content Include="App_Data\Emails\RemindUseAL.cshtml" />
-    <Content Include="App_Data\Emails\RequestApproval.cshtml" />
     <Content Include="App_Data\Emails\StatisticALBalance.cshtml" />
     <Content Include="App_Data\SpNames.xml">
       <SubType>Designer</SubType>

@@ -1,7 +1,6 @@
 ﻿namespace GO.Letstalk.WebAPI.Controllers
 {
     using GO.Letstalk.WebAPI.Extentions;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
     public class WhoamiController : Controller

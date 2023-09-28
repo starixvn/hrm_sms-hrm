@@ -38,6 +38,7 @@
             {
                 jwt = GenerateAccessToken(username);
             }
+
             return jwt;
         }
 

@@ -24,8 +24,7 @@
         public NotifyController(
             ILogger<NotifyController> logger,
             List<WebhookConfiguration> webhookConfigurations,
-            Func<int, ILetstalkService> letstalkService
-            )
+            Func<int, ILetstalkService> letstalkService)
         {
             this.logger = logger;
             this.webhookConfigurations = webhookConfigurations;
@@ -64,7 +63,6 @@
             };
 
             var conversationIds = conversationId.Contains(";") ? conversationId.Split(";").ToList() : new List<string> { conversationId };
-
             var botConfigs = webhookConfigurations.FirstOrDefault(config => config.BotId == botId);
             if (botConfigs != null && botConfigs.IsAllowedSet)
             {

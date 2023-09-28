@@ -189,13 +189,13 @@
                     { "token", botConfig.ApiKey }
                  },
                  encodeData: false);
+
             return result.Token;
         }
 
         private static void ValidateInputParam(string paramName, object paramValue)
         {
-            if (paramValue == null
-                || (paramValue is string && string.IsNullOrWhiteSpace(paramValue as string)))
+            if (paramValue == null || (paramValue is string && string.IsNullOrWhiteSpace(paramValue as string)))
             {
                 throw new ArgumentNullException(paramName);
             }
