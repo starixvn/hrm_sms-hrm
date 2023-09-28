@@ -3,10 +3,11 @@ import { createRoot } from 'react-dom/client';
 
 import Layout from '@jsroot/components/Layout';
 import AppContainer from './components/AppContainer';
+import Otp from './components/Otp';
 
 const root = createRoot(document.getElementById('app-container'));
 root.render(
     <Layout>
-        <AppContainer />
+        <Otp />
     </Layout>
 );

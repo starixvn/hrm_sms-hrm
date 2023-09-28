@@ -1,5 +1,8 @@
 ﻿@import "~react-toastify/dist/ReactToastify.css";
 @import '../../abstracts/mixins';
+@import '../../components/_buttons';
+@import '../../components/_modal';
+
 
 $primary-color: #1973b2;
 $text-color: #333;
@@ -7,6 +10,38 @@ $border-color: #d9d9d9;
 
 body {
     counter-reset: section;
+}
+
+.intro {
+    margin-bottom: 2px;
+    font-size: 14px;
+    color: $text-color;
+}
+
+.otp-info {
+    font-size: 16px;
+    font-weight: bold;
+    color: #18aa3a;
+    line-height: 40px;
+}
+
+.otp {
+    border-radius: 5px;
+    box-shadow: 0 2px 3px 1px rgba(0,0,0,.2);
+    background-color: #fff;
+    padding: 16px 10px;
+    margin-top: 10px;
+    line-height: 20px;
+
+    .title {
+        font-size: 16px;
+    }
+
+    .info {
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 5px;
+    }
 }
 
 .setup-2fa {
@@ -111,6 +146,9 @@ body {
                 @include border-radius(5px);
                 border: 1px solid $border-color;
                 margin-bottom: 5px;
+                height: auto;
+                width: 200px; 
+                padding: 5px;
             }
 
             .text-username {
@@ -139,6 +177,21 @@ body {
 
             .col-right {
                 margin-left: 36px;
+            }
+        }
+
+        .manualVerifyOtpCode {
+            margin-top: 10px;
+
+            .otp-code {
+                margin-left: 10px;
+                width: 200px;
+            }
+
+            .btn-veridyOtpCode {
+                margin-left: 10px;
+                width: 62px;
+                border-radius: 2px;
             }
         }
 

@@ -22,6 +22,7 @@ namespace GO.Website
     using GO.Website.Models;
     using GO.Website.Repositories;
     using GO.Website.Services;
+    using GO.Website.Services.Interfaces;
     using HRM.UserControl.Client.AspNetCore.Configurations;
     using HRM.UserControl.Client.AspNetCore.Session;
     using HRM.UserControl.Client.Core;
@@ -178,6 +179,9 @@ namespace GO.Website
             var mailConfigs = Configuration.GetSection("MailConfigs").Get<MailConfigs>();
             services.AddSingleton(mailConfigs);
 
+            var otpConfig = Configuration.GetSection("OtpConfig").Get<OtpConfig>();
+            services.AddSingleton(otpConfig);
+
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IUserControlSettings>(new UserControlSettings(Configuration));
             services.AddSingleton<ILogger, Logger>();
@@ -200,6 +204,8 @@ namespace GO.Website
             services.AddSingleton<ITodolistService, TodolistService>();
             services.AddSingleton<IFeedbackService, FeedbackService>();
             services.AddSingleton<IManpowerForecastService, ManpowerForecastService>();
+            services.AddSingleton<IUserOtpService, UserOtpService>();
+            services.AddSingleton<ITwoFactorAuthenticatorService, TwoFactorAuthenticatorService>();
         }
     }
 }
