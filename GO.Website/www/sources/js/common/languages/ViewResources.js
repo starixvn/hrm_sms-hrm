@@ -15,6 +15,8 @@
     Confirmation: 'Confirmation',
     ConfirmationChangeSecretKey: 'Confirmation Change Secret Key',
     Country: 'Country',
+    CreatedBy: 'Created By',
+    CreatedDate: 'Created Date',
     CurrentHeadcount: 'Current Headcount ',
     Department: 'Department',
     Expat: 'Expat',

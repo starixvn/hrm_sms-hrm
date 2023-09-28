@@ -112,7 +112,7 @@
 
                     foreach (var request in requests)
                     {
-                        request.Details = details.Where(x => x.RequestId == request.RequestId).ToList();
+                        request.Details = details.Where(x => x.RequestId == request.RequestId || x.UnitName == request.UnitName).ToList();
                     }
 
                     return requests;

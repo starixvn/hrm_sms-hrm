@@ -20,5 +20,7 @@
         public EmployeeInfo Creator { get; set; }
         public EmployeeInfo Verifier { get; set; }
         public EmployeeInfo Approver { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

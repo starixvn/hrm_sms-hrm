@@ -19,7 +19,6 @@ export default class DateTimeService {
     }
 
     static toClientTimezone(date) {
-        console.log(dayjs(date), dayjs(date, LongDateTimeFormat));
         return dayjs(date, LongDateTimeFormat).add(ClientTimezone, 'hour');
     }
 }

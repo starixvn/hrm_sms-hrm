@@ -612,7 +612,14 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 rowSpanUnitType += rowSpanUnit;
                 unitRow.push(<tr key={request.unitName}>
                     <td className="bold unit fixed-body fixed-body-unit" rowSpan={rowSpanUnit}>
-                        <a className="link-unitname" href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${request.requestId}`)}>{request.unitName}</a>
+                        {
+                            request.requestId > 0 &&
+                            <a className="link-unitname" href={Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/Detail/${request.requestId}`)}>{request.unitName}</a>
+                        }
+                        {
+                            request.requestId <= 0 &&
+                            <a>{request.unitName}</a>
+                        }
                     </td>
                 </tr>);
                 unitRow.push(departmentRow);

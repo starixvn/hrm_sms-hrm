@@ -79,15 +79,8 @@ const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, on
                         onChange={value => setCompany(value)}
                     />
                 </Form.Group>
-                <Form.Group>
-                    <Form.Label>{LangHelper.getResource('Category')}</Form.Label>
-                    <Select className={`react-select-container`} classNamePrefix="react-select"
-                        options={categoryOptions} value={category} isSearchable={false}
-                        onChange={value => setCategory(value)}
-                    />
-                </Form.Group>
                 {
-                    sectionsTree != null &&
+                    sectionsTree !== null &&
                     <Form.Group>
                         <Form.Label>{LangHelper.getResource('Section')}</Form.Label>
                         <TreeMultiselect data={sectionsTree}
@@ -95,6 +88,13 @@ const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, on
                             onChange={handleSectionChange} />
                     </Form.Group>
                 }
+                <Form.Group>
+                    <Form.Label>{LangHelper.getResource('Category')}</Form.Label>
+                    <Select className={`react-select-container`} classNamePrefix="react-select"
+                        options={categoryOptions} value={category} isSearchable={false}
+                        onChange={value => setCategory(value)}
+                    />
+                </Form.Group>
                 <Form.Group>
                     <Form.Label>{LangHelper.getResource('Status')}</Form.Label>
                     <Select className={`react-select-container`}
