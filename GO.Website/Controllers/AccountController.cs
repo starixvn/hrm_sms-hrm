@@ -1,6 +1,8 @@
 ﻿namespace GO.Website.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using Core.Services;
     using Criteria.Account;
@@ -9,6 +11,8 @@
     using GO.Website.Services.Interfaces;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Mvc;
 
     public class AccountController : BaseController
@@ -42,6 +46,8 @@
         public async Task<IActionResult> GetAccountOTP()
         {
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            var user = await userService.GetByIdAsync(userControlSession.UserId);
+            userOtp.RecoveryCode = twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, "brian.nguyen@starixsoft.com", userOtp.SecretKey);
             return Json(userOtp);
         }
 
@@ -65,7 +71,7 @@
 
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria{UserId = userControlSession.UserId, SiteId = userControlSession.SiteId});
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
-            
+
             if (TryValidateModel(viewModel) && isOTPValid)
             {
                 await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
@@ -102,6 +108,33 @@
                 Enabled = !userOtp.Enabled
             });
             return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyOTP([FromBody] SetupOTPViewModel viewModel)
+        {
+            ModelState.Clear();
+
+            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
+
+            if (TryValidateModel(viewModel) && isOTPValid)
+            {
+                await DoLoginAsync(userControlSession.UserId);
+            }
+
+            return Json(isOTPValid);
+        }
+
+        protected internal virtual async Task DoLoginAsync(int userId)
+        {
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, userId.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
 
         private async Task<string> GetOtpSetupCode(string email)

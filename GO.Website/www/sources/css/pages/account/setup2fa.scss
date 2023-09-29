@@ -25,6 +25,58 @@ body {
     line-height: 40px;
 }
 
+
+.manualQRCode {
+    .text-key {
+        display: inline-block;
+        border: 1px solid $border-color;
+        padding: 10px 6px;
+        color: #f57d14;
+        font-weight: bold;
+    }
+
+    .example {
+        display: flex;
+        padding-top: 16px;
+    }
+
+    .col-right {
+        margin-left: 36px;
+    }
+}
+
+.panel {
+    .panel-title > button {
+        position: relative;
+        color: #0b599c;
+        font-weight: bold;
+        font-size: 14px;
+
+        &:hover, &:focus {
+            text-decoration: none;
+        }
+
+        &:before {
+            position: absolute;
+            left: 0px;
+            top: 12px;
+            margin-right: 8px;
+            content: "";
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 6px 3px 0 3px;
+            border-color: #0b599c transparent transparent transparent;
+        }
+    }
+
+    .panel-body {
+        p {
+            margin: 0;
+        }
+    }
+}
+
 .otp {
     border-radius: 5px;
     box-shadow: 0 2px 3px 1px rgba(0,0,0,.2);
@@ -43,12 +95,21 @@ body {
         margin: 0 0 5px;
     }
 
-    .enable-otp {
-        display: flex;
+    .info-header{
+        margin-top: 10px;
     }
 
-    .switch-enable-otp{
+    .enable-otp {
+        display: flex;
+        border-bottom: 1px solid;
+    }
+
+    .switch-enable-otp {
         margin-left: 10px;
+    }
+
+    .example {
+        margin-bottom: 10px;
     }
 }
 
@@ -169,25 +230,6 @@ body {
             }
         }
 
-        .manualQRCode {
-            .text-key {
-                display: inline-block;
-                border: 1px solid $border-color;
-                padding: 10px 6px;
-                color: #f57d14;
-                font-weight: bold;
-            }
-
-            .example {
-                display: flex;
-                padding-top: 16px;
-            }
-
-            .col-right {
-                margin-left: 36px;
-            }
-        }
-
         .manualVerifyOtpCode {
             margin-top: 10px;
             margin-left: 10px;
@@ -226,38 +268,6 @@ body {
 
         .fieldset[disabled] {
             opacity: 0.3;
-        }
-    }
-
-    .panel {
-        .panel-title > button {
-            position: relative;
-            color: #0b599c;
-            font-weight: bold;
-            font-size: 14px;
-
-            &:hover, &:focus {
-                text-decoration: none;
-            }
-
-            &:before {
-                position: absolute;
-                left: 0px;
-                top: 12px;
-                margin-right: 8px;
-                content: "";
-                width: 0;
-                height: 0;
-                border-style: solid;
-                border-width: 6px 3px 0 3px;
-                border-color: #0b599c transparent transparent transparent;
-            }
-        }
-
-        .panel-body {
-            p {
-                margin: 0;
-            }
         }
     }
 }

@@ -1,45 +1,11 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React from 'react';
 import QRCode from "react-qr-code";
 import { Button, Form, Accordion } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
-import DataService from '@jsroot/common/dataService';
 
-const SetupOtp = (getAccountOTP) => {
-    const [setupOtp, setSetupOtp] = useState(null);
-    const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
-    const [isVeridyOtp, setIsVeridyOtp] = useState(false);
-
-    useEffect(() => {
-        const getSetupOtp = async () => {
-            Site.blockUI();
-            const url = Site.resolveClientUrl('Account/SetupOtp');
-            await DataService.postDataAsync(url).then(response => {
-                setSetupOtp(response.data);
-            }).then(() => Site.unblockUI());
-        };
-
-        getSetupOtp();
-    }, []);
-
-    const verifySetupOtp = async () => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Account/VerifySetupOTP');
-        await DataService.postDataAsync(url, setupOtp).then(response => {
-            setIsVeridyOtp(response.data);
-            setIsShowMessageVeridyOtp(true);
-            if (response.data) {
-                toast.success('Your Authenticator App is verified.');
-                setTimeout(() => {
-                    getAccountOTP();
-                }, 3000);
-            } else {
-                toast.error('Your OTP is invalid or expired.');
-            }
-        }).then(() => Site.unblockUI());
-    };
+const SetupOtp = ({verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOtp}) => {
 
     const renderSetup2Fa = () => {
         return <div className="setup-2fa">
