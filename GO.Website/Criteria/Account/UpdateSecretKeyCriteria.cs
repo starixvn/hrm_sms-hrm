@@ -9,7 +9,7 @@
         public int SiteId { get; set; }
         public string SecretKey { get; set; }
 
-        public override string GetSettingKey() => "User_UpdateSecretKey";
+        public override string GetSettingKey() => "UserOTP_UpdateSecretKey";
 
         public override bool IsValid() => UserId > 0 && SiteId > 0;
     }

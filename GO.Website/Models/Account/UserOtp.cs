@@ -6,5 +6,6 @@
         public int SiteId { get; set; }
         public string SecretKey { get; set; }
         public bool Enabled { get; set; }
+        public bool IsOTPRegistered { get; set; }
     }
 }

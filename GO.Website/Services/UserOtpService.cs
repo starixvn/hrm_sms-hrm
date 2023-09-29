@@ -27,16 +27,9 @@
             return result.IsSuccessful;
         }
 
-        public async Task<bool> UpdateOTPStatusAsync(int userId, int siteId, bool isOTPRegistered)
+        public async Task<bool> UpdateOTPStatusAsync(UpdateStatusUserOTPCommand command)
         {
-            var criteria = new UpdateStatusUserOTPCommand
-            {
-                UserId = userId,
-                SiteId = siteId,
-                IsOTPRegistered = isOTPRegistered
-            };
-
-            var result = await baseService.ExecuteNonQueryAsync(criteria);
+            var result = await baseService.ExecuteNonQueryAsync(command);
 
             return result.IsSuccessful;
         }

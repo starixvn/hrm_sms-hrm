@@ -7,6 +7,7 @@
         public int SiteId { get; set; }
         public int UserId { get; set; }
         public bool IsOTPRegistered { get; set; }
+        public bool Enabled { get; set; }
 
         public override string GetSettingKey() => "UserOTP_UpdateStatus";
 

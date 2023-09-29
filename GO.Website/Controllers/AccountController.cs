@@ -39,6 +39,12 @@
             return View();
         }
 
+        public async Task<IActionResult> GetAccountOTP()
+        {
+            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            return Json(userOtp);
+        }
+
         public async Task<IActionResult> SetupOtp()
         {
             var user = await userService.GetByIdAsync(userControlSession.UserId);
@@ -59,25 +65,48 @@
 
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria{UserId = userControlSession.UserId, SiteId = userControlSession.SiteId});
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
-
-            if (!TryValidateModel(viewModel) || !isOTPValid)
+            
+            if (TryValidateModel(viewModel) && isOTPValid)
             {
-                return Forbid();
+                await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
+                {
+                    UserId = userControlSession.UserId,
+                    SiteId = userControlSession.SiteId,
+                    IsOTPRegistered = true,
+                    Enabled = true
+                });
             }
 
-            await userOtpService.UpdateOTPStatusAsync(userOtp.UserId, userOtp.SiteId, true);
-            return new OkResult();
+            return Json(isOTPValid);
         }
 
-        public async Task<IActionResult> ResetOtpDevice()
+        public async Task<IActionResult> ResetSetupOtp([FromBody] UserOtp userOtp)
         {
-            var result =  await userOtpService.UpdateOTPStatusAsync(userControlSession.UserId, userControlSession.SiteId, false);
+            var result =  await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
+            {
+                UserId = userControlSession.UserId,
+                SiteId = userControlSession.SiteId,
+                IsOTPRegistered = !userOtp.IsOTPRegistered,
+                Enabled = userOtp.Enabled
+            });
+            return Json(result);
+        }
+
+        public async Task<IActionResult> UpdateStatusOTP([FromBody] UserOtp userOtp)
+        {
+            var result = await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
+            {
+                UserId = userControlSession.UserId,
+                SiteId = userControlSession.SiteId,
+                IsOTPRegistered = userOtp.IsOTPRegistered,
+                Enabled = !userOtp.Enabled
+            });
             return Json(result);
         }
 
         private async Task<string> GetOtpSetupCode(string email)
         {
-            var secretKey = Guid.NewGuid().ToString("N")[..12];
+            var secretKey = Guid.NewGuid().ToString("N");
             await userOtpService.UpdateSecretKeyAsync(userControlSession.UserId, userControlSession.SiteId, secretKey);
 
             return twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, email, secretKey);

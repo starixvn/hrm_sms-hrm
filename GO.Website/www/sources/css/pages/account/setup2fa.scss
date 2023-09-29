@@ -42,6 +42,14 @@ body {
         width: 100%;
         margin: 0 0 5px;
     }
+
+    .enable-otp {
+        display: flex;
+    }
+
+    .switch-enable-otp{
+        margin-left: 10px;
+    }
 }
 
 .setup-2fa {
@@ -147,7 +155,7 @@ body {
                 border: 1px solid $border-color;
                 margin-bottom: 5px;
                 height: auto;
-                width: 200px; 
+                width: 200px;
                 padding: 5px;
             }
 
@@ -182,16 +190,19 @@ body {
 
         .manualVerifyOtpCode {
             margin-top: 10px;
+            margin-left: 10px;
 
             .otp-code {
-                margin-left: 10px;
                 width: 200px;
             }
 
             .btn-veridyOtpCode {
                 margin-left: 10px;
-                width: 62px;
                 border-radius: 2px;
+            }
+
+            .inValidOtp {
+                box-shadow: 0 0 1px 1px red;
             }
         }
 

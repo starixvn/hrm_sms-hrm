@@ -77,7 +77,7 @@
         <Setting Key="Report_ManpowerForecast_Get" SpName="Report_ManpowerForecast_Get" DbName="bodb_IUC" Plain="0" />
     </Function>
     <Function Name="UserOTP">
-        <Setting Key="User_UpdateSecretKey" SpName="User_UpdateSecretKey" DbName="bodb_IUC" Plain="0" />
+        <Setting Key="UserOTP_UpdateSecretKey" SpName="UserOTP_UpdateSecretKey" DbName="bodb_IUC" Plain="0" />
         <Setting Key="UserOTP_GetById" SpName="UserOTP_GetById" DbName="bodb_IUC" Plain="0" />
         <Setting Key="UserOTP_UpdateStatus" SpName="UserOTP_UpdateStatus" DbName="bodb_IUC" Plain="0" />
     </Function>
