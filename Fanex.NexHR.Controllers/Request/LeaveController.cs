@@ -428,6 +428,7 @@
                 ToDate = request.ToDate,
                 TotalDays = request.TotalDays,
                 HalfDayOff = request.IsHalfDay,
+                IsHospitalApplication = request.IsHospitalApplication,
                 VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
                 ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
                 RefNo = request.RefNO,

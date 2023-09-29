@@ -57,6 +57,8 @@
 
         public bool HalfDayOff { get; set; }
 
+        public bool IsHospitalApplication { get; set; }
+
         public string LeaveTypeName { get; set; }
 
         public string LeaveTypeDescription

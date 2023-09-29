@@ -29,6 +29,8 @@
 
         public DateTime ToDate { get; set; }
 
+        public bool IsHospitalApplication { get; set; }
+
         public int LeaveTypeId { get; set; }
 
         [SpParam(Ignored = true)]

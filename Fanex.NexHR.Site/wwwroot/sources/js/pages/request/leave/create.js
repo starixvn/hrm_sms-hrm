@@ -134,6 +134,8 @@ const LeaveRequest = (function ($) {
             initDatepicker();
             LeaveRequest.enableControlForEdit();
 
+            LeaveRequest.enableCheckboxHospitalizationLeave();
+
             LeaveRequest.halfDayOff.change(function () {
                 LeaveRequest.bindHalfDay();
             });
@@ -260,6 +262,7 @@ const LeaveRequest = (function ($) {
                     RequestType: RequestType.Leave,
                     FromDate: LeaveRequest.fromDate.val(),
                     ToDate: LeaveRequest.toDate.val(),
+                    IsHospitalApplication: $('#IsHospitalApplication').prop('checked'),
                     LeaveTypeId: leaveTypeId,
                     LeaveTypeName: LeaveRequest.leaveTypeId.find(':selected').text(),
                     TotalDays: LeaveRequest.totalDays.val(),
@@ -353,6 +356,7 @@ const LeaveRequest = (function ($) {
             LeaveRequest.getLeaveTypeInfo();
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
+            LeaveRequest.enableCheckboxHospitalizationLeave();
         },
         bindHalfDay: function () {
             if (LeaveRequest.halfDayOff.prop('checked')) {
@@ -379,6 +383,14 @@ const LeaveRequest = (function ($) {
 
             LeaveRequest.toDate.val(LeaveRequest.fromDate.val());
             LeaveRequest.toDate.datepicker('disable').prop('disabled', false);
+        },
+        enableCheckboxHospitalizationLeave: function () {
+            const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
+            if (leaveTypeId === LeaveType.HospitalizationLeave) {
+                $('#grbHospitalizationLeave').show();
+            } else {
+                $('#grbHospitalizationLeave').hide();
+            }
         },
         disableControlForHalfDay: function () {
             $('.time-businesstrip').hide();
@@ -598,6 +610,10 @@ const LeaveRequest = (function ($) {
                     if (fromDate.isAfter(toDate)) {
                         errorString.push('Time is invalid.');
                     }
+                }
+
+                if (leaveTypeId === LeaveType.HospitalizationLeave && $('#IsHospitalApplication').prop('checked') === false) {
+                    errorString.push('Applicable for stay in Hospital only field is required.');
                 }
             }
 

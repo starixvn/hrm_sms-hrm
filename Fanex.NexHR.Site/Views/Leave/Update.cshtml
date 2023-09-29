@@ -55,7 +55,7 @@
                     <span class="numberbalance" id="lblKeepInViewByHourBalance">@Model.EmployeeLeaveBalance.KeepInViewByHourBalance.ToString("0.#")</span> hour(s)
                 </span>
             </span>
-            @if(Model.EnableHospitalizationLeaveBalance)
+            @if (Model.EnableHospitalizationLeaveBalance)
             {
                 <br />
                 <span id="hospitalizationLeaveBalance">
@@ -67,7 +67,7 @@
                     </span>
                 </span>
             }
-            @if(Model.EnableSickLeaveBalance)
+            @if (Model.EnableSickLeaveBalance)
             {
                 <br />
                 <span id="sickLeaveBalance">
@@ -123,13 +123,22 @@
                 @Html.CheckBoxFor(model => model.HalfDayOff)
             </div>
         </div>
+        <div id="grbHospitalizationLeave" class="form-group" style="display: none;">
+            <div class="label-form">
+                @Html.LabelFor(model => model.IsHospitalApplication, "Applicable for stay in Hospital only", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxFor(model => model.IsHospitalApplication)
+            </div>
+        </div>
         <div class="form-group">
             <div class="label-form">
                 @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new {
+                    new
+                         {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
                         mindate = Model.MinDate.ToString("yyyy/MM/dd"),
@@ -154,7 +163,8 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new {
+                    new
+                         {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
                         mindate = Model.MinDate.ToString("yyyy/MM/dd"),
