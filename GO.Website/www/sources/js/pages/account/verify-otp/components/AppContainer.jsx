@@ -1,13 +1,9 @@
-﻿import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+﻿import React, { useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
 
-import SweetModalDialog from '@jsroot/components/SweetModalDialog';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 import DataService from '@jsroot/common/dataService';
-import SetupOtp from './SetupOtp';
-import Otp from './Otp';
 
 const AppContainer = () => {
     const [otp, setOtp] = useState(null);
@@ -15,17 +11,56 @@ const AppContainer = () => {
     const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
 
     const verifyOtp = async () => {
-        Site.blockUI();
         const url = Site.resolveClientUrl('Account/VerifyOTP');
-        await DataService.postDataAsync(url, otp).then(response => {
-
-        }).then(() => Site.unblockUI());
+        await DataService.postDataAsync(url, { otp: otp }).then(response => {
+            setIsVeridyOtp(response.data);
+            setIsShowMessageVeridyOtp(true);
+            if (response.data) {
+                window.location = Site.resolveClientUrl('Home/Index');
+            }
+        });
     };
 
-    return (
-        <>
+    const reLogin = () => window.location = Site.resolveClientUrl('Auth/Login');
 
-        </>
+    return (
+        <div>
+            <div className="header">
+                <a className="logo" href={Site.resolveClientUrl('home/index')}>
+                    <img src={Site.resolveClientUrl('css/images/logo.svg')} alt="GO System" />
+                </a>
+            </div>
+            <div className="block -otp-code-validation">
+                <div className="circle-large">
+                    <span className="icon-otp fa fa-shield"></span>
+                </div>
+                <h1 className="title">{LangHelper.getResource('OTPCodeValidation')}</h1>
+                <div className="intro -otp">
+                    <p>{LangHelper.getResource('IntroVerifyOtp')}</p>
+                    <p className="text-special">
+                        <span>{LangHelper.getResource('IntroSpecialVerifyOtp')}</span>
+                    </p>
+                </div>
+                <div className="group">
+                    {
+                        !isVeridyOtp && isShowMessageVeridyOtp &&
+                        <Form.Label className="msg-error">{LangHelper.getResource('MessageErrorVerifyOtp')}</Form.Label>
+                    }
+                    <Form.Control type="text" size="sm"
+                        name="otp-code" className={`${!isVeridyOtp && isShowMessageVeridyOtp ? 'inValidOtp' : ''} form-control encrypt`} autoComplete="off"
+                        maxLength="6" onChange={event => setOtp(event.target.value)}
+                    />
+                </div>
+                <div className="group list-button">
+                    <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={reLogin}>
+                        {LangHelper.getResource('Cancel')}
+                    </Button>
+                    <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={verifyOtp}>
+                        {LangHelper.getResource('Validate OTP')}
+                    </Button>
+                </div>
+            </div>
+        </div>
     );
 }
 

@@ -61,12 +61,12 @@ const AppContainer = () => {
             setIsVeridyOtp(response.data);
             setIsShowMessageVeridyOtp(true);
             if (response.data) {
-                toast.success('Your Authenticator App is verified.');
+                toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
                 setTimeout(() => {
                     getAccountOTP();
                 }, 3000);
             } else {
-                toast.error('Your OTP is invalid or expired.');
+                toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
             }
         }).then(() => Site.unblockUI());
     };
@@ -121,7 +121,7 @@ const AppContainer = () => {
                 changeSecretKeyModalDialog.show &&
                 <SweetModalDialog
                     title={LangHelper.getResource('Confirmation')}
-                    contents={<div>The system will no longer accept the secret key generated on the registered device. Do you want to proceed?</div>}
+                    contents={<div>{LangHelper.getResource('ContentReSetupOtp')}</div>}
                     buttons={[
                         <Button variant="primary" size="sm" key="ok"
                             onClick={resetSetupOtp}

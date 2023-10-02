@@ -1,7 +1,5 @@
 ﻿namespace GO.Website.Controllers
 {
-    using System.Collections.Generic;
-    using System.Security.Claims;
     using System.Threading.Tasks;
     using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Models;
@@ -48,22 +46,21 @@
             model.BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString();
             model.NetSessionId = HttpContext.Session.Id;
 
-            LoginResult loginResult = await authService.LoginAsync(model);
-            if (loginResult.IsSuccessfull)
+            var loginResult = await authService.LoginAsync(model);
+            if (!loginResult.IsSuccessfull)
             {
-                userControlSession.UserId = loginResult.UserId;
-                userControlSession.SiteId = userControlSettings.SiteId;
-                userControlSession.OnUserId = loginResult.OnUserId;
-                userControlSession.JwtToken = loginResult.JwtToken;
-                userControlSession.MenuItems = await userService.GetMenuItemAsync();
-                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSettings.SiteId, userControlSession.UserId);
-
-                await DoLoginAsync(loginResult.UserId);
-
-                return Json(new CommandResult { Code = 0, Message = string.Empty });
+                return Json(new CommandResult { Code = 1, Message = loginResult.ErrorMessage });
             }
 
-            return Json(new CommandResult { Code = 1, Message = loginResult.ErrorMessage });
+            userControlSession.UserId = loginResult.UserId;
+            userControlSession.SiteId = userControlSettings.SiteId;
+            userControlSession.OnUserId = loginResult.OnUserId;
+            userControlSession.JwtToken = loginResult.JwtToken;
+            userControlSession.MenuItems = await userService.GetMenuItemAsync();
+            userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSettings.SiteId, userControlSession.UserId);
+
+            return Json(new CommandResult { Code = 0, Message = string.Empty });
+
         }
 
         public async Task<IActionResult> Logout()
@@ -72,17 +69,6 @@
             userControlSession.ClearAll();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
-        }
-
-        protected internal virtual async Task DoLoginAsync(int userId)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
     }
 }

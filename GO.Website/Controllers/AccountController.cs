@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Core.Services;
     using Criteria.Account;
+    using Filters;
     using GO.Website.Models;
     using GO.Website.Models.Account;
     using GO.Website.Services.Interfaces;
@@ -15,7 +16,7 @@
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Mvc;
 
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
         private readonly IUserControlSession userControlSession;
         private readonly IUserOtpService userOtpService;
@@ -38,33 +39,51 @@
             this.baseService = baseService;
             this.otpConfig = otpConfig;
         }
+
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Setup2Fa()
         {
             return View();
+        }        
+        
+        public async Task<IActionResult> VerifyOTP()
+        {
+            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            if (userOtp is not { Enabled: true })
+            {
+                await DoLoginAsync(userControlSession.UserId);
+            }
+            return userControlSession.UserId > 0 && userControlSession.SiteId > 0 && userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
         }
 
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAccountOTP()
         {
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
             var user = await userService.GetByIdAsync(userControlSession.UserId);
-            userOtp.RecoveryCode = twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, "brian.nguyen@starixsoft.com", userOtp.SecretKey);
+            if (userOtp != null && !string.IsNullOrWhiteSpace(userOtp.SecretKey))
+            {
+                userOtp.RecoveryCode = twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, user.Email, userOtp.SecretKey);
+            }
             return Json(userOtp);
         }
 
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> SetupOtp()
         {
             var user = await userService.GetByIdAsync(userControlSession.UserId);
 
             var setupOtpViewModel = new SetupOTPViewModel
             {
-                TextCode = await GetOtpSetupCode("brian.nguyen@starixsoft.com"),
+                TextCode = await GetOtpSetupCode(user.Email),
                 AppName = otpConfig.AppName,
-                Email = "brian.nguyen@starixsoft.com"
+                Email = user.Email
             };
             return Json(setupOtpViewModel);
         }
 
         [HttpPost]
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> VerifySetupOTP([FromBody] SetupOTPViewModel viewModel)
         {
             ModelState.Clear();
@@ -86,6 +105,7 @@
             return Json(isOTPValid);
         }
 
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> ResetSetupOtp([FromBody] UserOtp userOtp)
         {
             var result =  await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
@@ -93,11 +113,12 @@
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,
                 IsOTPRegistered = !userOtp.IsOTPRegistered,
-                Enabled = userOtp.Enabled
+                Enabled = !userOtp.Enabled
             });
             return Json(result);
         }
 
+        [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateStatusOTP([FromBody] UserOtp userOtp)
         {
             var result = await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand

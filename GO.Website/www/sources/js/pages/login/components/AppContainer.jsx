@@ -53,7 +53,7 @@ export default class AppContainer extends Component {
             const url = Site.resolveClientUrl('auth/login');
             await DataService.postDataAsync(url, model).then(response => {
                 if (response.data.isSuccessful) {
-                    window.location = Site.resolveClientUrl('home/index');
+                    window.location = Site.resolveClientUrl('account/verifyotp');
                 } else {
                     this.setState({ result: response.data, isSubmiting: false });
                 }

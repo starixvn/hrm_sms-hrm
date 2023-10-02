@@ -8,7 +8,7 @@ const Otp = ({ accountOTP, changeStatusOTP, handleOpenchangeSecretKeyModalDialog
     return (
         <div className="otp">
             <div className="enable-otp">
-                <p>Enable OTP Security</p>
+                <p>{LangHelper.getResource('EnableOTPSecurity')}</p>
                 <div className='custom-control custom-switch switch-enable-otp'>
                     <input
                         type='checkbox'
