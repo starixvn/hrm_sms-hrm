@@ -5,7 +5,7 @@ import { Button, Form, Accordion } from 'react-bootstrap';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 
-const SetupOtp = ({verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOtp}) => {
+const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOtp, messageError}) => {
 
     const renderSetup2Fa = () => {
         return <div className="setup-2fa">
@@ -90,13 +90,19 @@ const SetupOtp = ({verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOtp
                             </Form.Row>
                             <Form.Row>
                                 <Form.Control type="text" size="sm"
-                                    name="otp-code" className={`${!isVeridyOtp && isShowMessageVeridyOtp ? 'inValidOtp' : ''} otp-code`} id="otp-code" autoComplete="off"
+                                    name="otp-code" className={`${(!isVeridyOtp && isShowMessageVeridyOtp) || messageError != null ? 'inValidOtp' : ''} otp-code`} id="otp-code" autoComplete="off"
                                     onChange={event => setupOtp.otp = event.target.value}
-                                />
+                                />                                
                                 <Button variant="primary" size="sm" className="mr-3 btn-veridyOtpCode" type="submit" onClick={verifySetupOtp}>
                                     {LangHelper.getResource('Verify')}
                                 </Button>
                             </Form.Row>
+                            {
+                                messageError != null &&
+                                <Form.Row>
+                                    <Form.Label className="msg-error">{messageError}</Form.Label>
+                                </Form.Row>
+                            }
                         </div>
                     </div>
                 </li>

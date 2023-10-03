@@ -86,8 +86,6 @@
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> VerifySetupOTP([FromBody] SetupOTPViewModel viewModel)
         {
-            ModelState.Clear();
-
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria{UserId = userControlSession.UserId, SiteId = userControlSession.SiteId});
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
 
@@ -134,8 +132,6 @@
         [HttpPost]
         public async Task<IActionResult> VerifyOTP([FromBody] SetupOTPViewModel viewModel)
         {
-            ModelState.Clear();
-
             var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
 

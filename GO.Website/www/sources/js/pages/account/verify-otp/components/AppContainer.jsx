@@ -9,16 +9,25 @@ const AppContainer = () => {
     const [otp, setOtp] = useState(null);
     const [isVeridyOtp, setIsVeridyOtp] = useState(false);
     const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
+    const [messageError, setMessageError] = useState(null);
 
     const verifyOtp = async () => {
-        const url = Site.resolveClientUrl('Account/VerifyOTP');
-        await DataService.postDataAsync(url, { otp: otp }).then(response => {
-            setIsVeridyOtp(response.data);
-            setIsShowMessageVeridyOtp(true);
-            if (response.data) {
-                window.location = Site.resolveClientUrl('Home/Index');
-            }
-        });
+        if (otp !== null && otp !== '') {
+            const url = Site.resolveClientUrl('Account/VerifyOTP');
+            await DataService.postDataAsync(url, { otp: otp }).then(response => {
+                setIsVeridyOtp(response.data);
+                setIsShowMessageVeridyOtp(true);
+                setMessageError(null);
+                if (response.data) {
+                    window.location = Site.resolveClientUrl('Home/Index');
+                }
+            });
+        }
+        else {
+            setIsVeridyOtp(false);
+            setIsShowMessageVeridyOtp(false);
+            setMessageError('The OTP code field is required.');
+        }
     };
 
     const reLogin = () => window.location = Site.resolveClientUrl('Auth/Login');
@@ -50,6 +59,10 @@ const AppContainer = () => {
                         name="otp-code" className={`${!isVeridyOtp && isShowMessageVeridyOtp ? 'inValidOtp' : ''} form-control encrypt`} autoComplete="off"
                         maxLength="6" onChange={event => setOtp(event.target.value)}
                     />
+                    {
+                        messageError != null &&
+                        <Form.Label className="msg-error">{messageError}</Form.Label>
+                    }
                 </div>
                 <div className="group list-button">
                     <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={reLogin}>

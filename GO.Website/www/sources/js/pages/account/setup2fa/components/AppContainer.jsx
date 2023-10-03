@@ -15,6 +15,7 @@ const AppContainer = () => {
     const [setupOtp, setSetupOtp] = useState(null);
     const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
     const [isVeridyOtp, setIsVeridyOtp] = useState(false);
+    const [messageError, setMessageError] = useState(null);
 
     const handleClosechangeSecretKeyModalDialog = () => {
         setChangeSecretKeyModalDialog({ show: false });
@@ -55,20 +56,28 @@ const AppContainer = () => {
     };
 
     const verifySetupOtp = async () => {
-        Site.blockUI();
-        const url = Site.resolveClientUrl('Account/VerifySetupOTP');
-        await DataService.postDataAsync(url, setupOtp).then(response => {
-            setIsVeridyOtp(response.data);
-            setIsShowMessageVeridyOtp(true);
-            if (response.data) {
-                toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
-                setTimeout(() => {
-                    getAccountOTP();
-                }, 3000);
-            } else {
-                toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
-            }
-        }).then(() => Site.unblockUI());
+        if (setupOtp.otp !== null && setupOtp.otp !== '') {
+            Site.blockUI();
+            const url = Site.resolveClientUrl('Account/VerifySetupOTP');
+            await DataService.postDataAsync(url, setupOtp).then(response => {
+                setIsVeridyOtp(response.data);
+                setIsShowMessageVeridyOtp(true);
+                setMessageError(null);
+                if (response.data) {
+                    toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
+                    setTimeout(() => {
+                        getAccountOTP();
+                    }, 3000);
+                } else {
+                    toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
+                }
+            }).then(() => Site.unblockUI());
+        }
+        else {
+            setIsVeridyOtp(false);
+            setIsShowMessageVeridyOtp(false);
+            setMessageError('The OTP code field is required.');
+        }
     };
 
     const getAccountOTP = async () => {
@@ -115,6 +124,7 @@ const AppContainer = () => {
                     setupOtp={setupOtp}
                     isShowMessageVeridyOtp={isShowMessageVeridyOtp}
                     isVeridyOtp={isVeridyOtp}
+                    messageError={messageError}
                    />
             }
             {

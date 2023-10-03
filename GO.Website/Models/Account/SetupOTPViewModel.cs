@@ -6,7 +6,6 @@
     {
         public string TextCode { get; set; }
 
-        [Required]
         public string Otp { get; set; }
 
         public string Email { get; set; }
