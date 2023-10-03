@@ -2004,4 +2004,7 @@
   <data name="ResignedReason" xml:space="preserve">
     <value>Resigned Reason</value>
   </data>
+  <data name="Waive" xml:space="preserve">
+    <value>Waive</value>
+  </data>
 </root>

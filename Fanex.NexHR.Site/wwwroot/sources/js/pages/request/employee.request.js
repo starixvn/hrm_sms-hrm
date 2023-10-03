@@ -329,37 +329,25 @@ $(function () {
                     let requests = [],
                         modal = $(this),
                         comment = $(this).find('textarea#Comment').val(),
-                        isValid = true,
-                        chkIgnore = $(this).find('#chk-ignore-all'),
-                        chkRecord = $(this).find('#chk-record-all');
+                        chkIgnore = $(this).find('#chk-ignore-all')
 
-                    if (!chkIgnore.prop('checked') && !chkRecord.prop('checked')) {
-                        isValid = false;
-                    } else {
-                        objSelected.each(function () {
-                            const request = this;
-                            const role = request.getAttribute('roleId');
+                    objSelected.each(function () {
+                        const request = this;
+                        const role = request.getAttribute('roleId');
 
-                            if (role != RoleSystem.Approver) {
-                                toastr.error('You don\'t have permission to approve some requests', '', toastOptions());
-                                isValid = false;
-                            }
+                        if (role != RoleSystem.Approver) {
+                            toastr.error('You don\'t have permission to approve some requests', '', toastOptions());
+                        }
 
-                            requests.push({
-                                RequestId: parseInt(request.getAttribute('Id'), 10),
-                                RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
-                            });
+                        requests.push({
+                            RequestId: parseInt(request.getAttribute('Id'), 10),
+                            RequestTypeID: parseInt(request.getAttribute('RequestTypeID'), 10)
                         });
-                    }
+                    });
 
-                    if (!isValid) {
-                        $(this).find('.validation-summary-valid').show()
-                            .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b>.');
-                    } else {
-                        $(this).find('.validation-summary-valid').hide();
-                        processMultiRequests(requests, comment, RoleSystem.Approver, RequestCommand.Approve, chkIgnore.prop('checked'));
-                        modal.dialog('close');
-                    }
+                    $(this).find('.validation-summary-valid').hide();
+                    processMultiRequests(requests, comment, RoleSystem.Approver, RequestCommand.Approve, chkIgnore.prop('checked'));
+                    modal.dialog('close');
                 }
             },
             {

@@ -5461,6 +5461,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waive.
+        /// </summary>
+        public static string Waive {
+            get {
+                return ResourceManager.GetString("Waive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
         public static string Warning {
