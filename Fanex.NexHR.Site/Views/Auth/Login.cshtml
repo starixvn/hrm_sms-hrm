@@ -26,9 +26,10 @@
         @title
     </title>
     <link href="~/wwwroot/sources/styles/login.css" rel="stylesheet" />
+    <script src="~/wwwroot/dist/js/auth.index.js" defer></script>
 </head>
 <body>
-    <div id="panel">
+    <div id="panel-login">
         <div class="header-login">
             <div class="header-container">
                 <div>
@@ -50,30 +51,31 @@
                 </div>
             </div>
         </div>
-        <div id="formContainer">
-            @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
-            {
-                @Html.ValidationSummary()
-                <div class="textbox-outer">
-                    <div class="username-icon">
+        @*<div id="formContainer">
+                @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
+                {
+                    @Html.ValidationSummary()
+                    <div class="textbox-outer">
+                        <div class="username-icon">
+                        </div>
+                        <div class="username-field">
+                            @Html.TextBoxFor(model => model.Username, new { placeholder = "Username" })
+                        </div>
                     </div>
-                    <div class="username-field">
-                        @Html.TextBoxFor(model => model.Username, new { placeholder = "Username" })
+                    <div class="textbox-outer">
+                        <div class="password-icon">
+                        </div>
+                        <div class="password-field">
+                            @Html.TextBoxFor(model => model.Password, new { placeholder = "Password", type = "Password" })
+                        </div>
                     </div>
-                </div>
-                <div class="textbox-outer">
-                    <div class="password-icon">
+                    <div class="signin-button">
+                        <input type="submit" name="submit" class="button" value="LOGIN" />
                     </div>
-                    <div class="password-field">
-                        @Html.TextBoxFor(model => model.Password, new { placeholder = "Password", type = "Password" })
-                    </div>
-                </div>
-                <div class="signin-button">
-                    <input type="submit" name="submit" class="button" value="LOGIN" />
-                </div>
-            }
-        </div>
+                }
+            </div>*@
     </div>
+    @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/wwwroot/dist/js/login.js"></script>
 </body>
 </html>

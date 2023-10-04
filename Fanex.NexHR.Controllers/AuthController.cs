@@ -5,6 +5,7 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.Data;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Services;
@@ -71,8 +72,7 @@
                     EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
                     if (employee == null)
                     {
-                        ModelState.AddModelError(string.Empty, "User has not been mapped.");
-                        return View(model);
+                        return new CustomJsonResult { Data = "User has not been mapped.", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                     }
 
                     userControlSession.UserId = loginResult.UserId;
@@ -85,15 +85,15 @@
 
                     userControlSession.Set(SessionKey.Employee, employee);
                     FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
-                    return RedirectToAction("Index", "Home");
+                    return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, loginResult.ErrorMessage);
+                    return new CustomJsonResult { Data = loginResult , JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
             }
 
-            return View(model);
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]

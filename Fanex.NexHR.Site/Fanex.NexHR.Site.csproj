@@ -400,6 +400,8 @@
     <Content Include="wwwroot\dist\styles\unit.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\index.js" />
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\auth\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\auth\Login.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />

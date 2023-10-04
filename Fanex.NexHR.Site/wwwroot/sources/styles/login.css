@@ -3,8 +3,9 @@
     font-family: abel,arial,Helvetica,"myriad Pro",tahoma;
 }
 
-#panel {
+#panel-login {
     background: url("images/panel_bg.png") repeat-x scroll 0 0 transparent;
+    background-position: bottom;
     border: 1px solid #EAE9E9;
     border-radius: 7px 7px 7px 7px;
     box-shadow: 1px 3px 5px 1px #ccc;
@@ -83,6 +84,9 @@ input[type="text"], input[type="password"] {
     height: 40px;
     padding-left: 10px;
     width: 384px;
+}
+input[type="text"]:focus, input[type="password"]:focus{
+    outline : none;
 }
 
 input[type="submit"], input[type="reset"], input[type="button"], a.button, button[type="button"] {
@@ -179,6 +183,11 @@ input[type="submit"], input[type="reset"], input[type="button"], a.button, butto
 
 .field-validation-error {
     color: #FF0000;
+}
+
+.validation-summary-errors ul {
+    list-style : none;
+    padding-left : 20px;
 }
 
 .field-validation-valid {
