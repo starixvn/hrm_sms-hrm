@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using Core.Services;
     using Criteria.Account;
+    using GO.Website.Models.Account;
     using Interfaces;
 
     public class UserOtpService: IUserOtpService
@@ -32,6 +33,12 @@
             var result = await baseService.ExecuteNonQueryAsync(command);
 
             return result.IsSuccessful;
+        }
+
+        public async Task<UserOtp> GetUserOTPById(int userId, int siteId)
+        {
+            var result = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userId, SiteId = siteId });
+            return result;
         }
     }
 }

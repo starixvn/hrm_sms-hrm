@@ -4,12 +4,12 @@
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using Core.Services;
     using Criteria.Account;
     using Filters;
     using GO.Website.Models;
     using GO.Website.Models.Account;
     using GO.Website.Services.Interfaces;
+    using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Authentication;
@@ -18,25 +18,26 @@
 
     public class AccountController : Controller
     {
+        private readonly IUserControlSettings userControlSettings;
         private readonly IUserControlSession userControlSession;
         private readonly IUserOtpService userOtpService;
         private readonly OtpConfig otpConfig;
         private readonly ITwoFactorAuthenticatorService twoFactorAuthService;
         private readonly IUserService userService;
-        private readonly IBaseService baseService;
+
         public AccountController(
+            IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
             ITwoFactorAuthenticatorService twoFactorAuthService,
             IUserOtpService userOtpService,
             IUserService userService,
-            IBaseService baseService,
             OtpConfig otpConfig)
         {
+            this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
             this.twoFactorAuthService = twoFactorAuthService;
             this.userOtpService = userOtpService;
             this.userService = userService;
-            this.baseService = baseService;
             this.otpConfig = otpConfig;
         }
 
@@ -48,18 +49,18 @@
         
         public async Task<IActionResult> VerifyOTP()
         {
-            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
-            if (userOtp is not { Enabled: true })
+            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
+            if (!otpConfig.Enable || userOtp is not { Enabled: true } )
             {
                 await DoLoginAsync(userControlSession.UserId);
             }
-            return userControlSession.UserId > 0 && userControlSession.SiteId > 0 && userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
+            return userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
         }
 
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAccountOTP()
         {
-            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
             var user = await userService.GetByIdAsync(userControlSession.UserId);
             if (userOtp != null && !string.IsNullOrWhiteSpace(userOtp.SecretKey))
             {
@@ -86,7 +87,7 @@
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> VerifySetupOTP([FromBody] SetupOTPViewModel viewModel)
         {
-            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria{UserId = userControlSession.UserId, SiteId = userControlSession.SiteId});
+            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
 
             if (TryValidateModel(viewModel) && isOTPValid)
@@ -132,7 +133,7 @@
         [HttpPost]
         public async Task<IActionResult> VerifyOTP([FromBody] SetupOTPViewModel viewModel)
         {
-            var userOtp = await baseService.GetDataEntityAsync<UserOtp>(new GetUserOTPByIdCriteria { UserId = userControlSession.UserId, SiteId = userControlSession.SiteId });
+            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
 
             if (TryValidateModel(viewModel) && isOTPValid)
@@ -145,6 +146,8 @@
 
         protected internal virtual async Task DoLoginAsync(int userId)
         {
+            userControlSession.MenuItems = await userService.GetMenuItemAsync();
+            userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSettings.SiteId, userControlSession.UserId);
             var claims = new List<Claim>
             {
                 new(ClaimTypes.NameIdentifier, userId.ToString())

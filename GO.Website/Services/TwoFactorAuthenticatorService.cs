@@ -2,7 +2,6 @@
 using GO.Website.Models;
 using GO.Website.Services.Interfaces;
 using Google.Authenticator;
-using Microsoft.Extensions.Options;
 
 namespace GO.Website.Services
 {
