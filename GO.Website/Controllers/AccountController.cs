@@ -54,7 +54,7 @@
             {
                 await DoLoginAsync(userControlSession.UserId);
             }
-            return userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
+            return otpConfig.Enable && userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
         }
 
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
