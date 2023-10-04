@@ -15,6 +15,14 @@
             this.hostingEnvironment = hostingEnvironment;
         }
 
+        public byte[] ExportAnnualManpowerForecastRequestForm(AnnualManpowerForecastRequest request)
+        {
+            const string ExcelTemplatePath = "ExcelTemplates/AnnualManpowerForecastRequestForm.xlsx";
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
+            var excel = new AnnualManpowerForecastRequestFormExcel(templatePath, request);
+            return excel.Export();
+        }
+
         public byte[] ExportJobLevelSummaryReport(GridData gridUnitData, GridData gridCountryData)
         {
             const string ExcelTemplatePath = "ExcelTemplates/JobLevelSummaryReportByUnitAndCountry.xlsx";
@@ -23,11 +31,11 @@
             return excel.Export();
         }
 
-        public byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> request, int year, string periodName)
+        public byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> requests, int year, string periodName)
         {
             const string ExcelTemplatePath = "ExcelTemplates/ManpowerForecast.xlsx";
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
-            var excel = new ManpowerForecastReportExcel(templatePath, request, year, periodName);
+            var excel = new ManpowerForecastReportExcel(templatePath, requests, year, periodName);
             return excel.Export();
         }
     }

@@ -8,6 +8,8 @@ import UnitGrid from '../../create/components/UnitGrid';
 import CompanyGrid from '../../create/components/CompanyGrid';
 import LogModalDialog from './LogModalDialog';
 
+import DataService from '@jsroot/common/dataService';
+import Site from '@jsroot/common/site';
 import { ActionCreators } from '../../action';
 import { ManpowerFlow, AnnualManpowerForecastRequestStatus } from '@jsroot/common/constants';
 import LangHelper from '@jsroot/common/langHelper';
@@ -100,6 +102,17 @@ const AppContainer = ({ getAnnualRequestById,
             ...request,
             statusId: statusId
         });
+    };
+
+    const handleExportExcel = event => {
+        event.preventDefault();
+
+        Site.blockUI();
+        const url = Site.resolveClientUrl(`ManpowerForecast/AnnualRequest/ExportExcelDetail/${window.requestId}`);
+        DataService.getFileAsync(url).then(response => {
+            const fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
+            Site.downloadFile(response.data, fileName);
+        }).then(() => Site.unblockUI());
     };
 
     const handleGoBack = () => history.back();
@@ -214,6 +227,9 @@ const AppContainer = ({ getAnnualRequestById,
                 logDetailModalDialog.show &&
                 <LogModalDialog />
             }
+            <Button variant="primary" size="sm" className="mr-3 mt-3" type="submit" onClick={handleExportExcel}>
+                {LangHelper.getResource('ExportExcel')}
+            </Button>
             <Button variant="secondary" size="sm" className="mr-3 mt-3" onClick={handleGoBack}>
                 {LangHelper.getResource('Back')}
             </Button>

@@ -6,8 +6,10 @@
 
     public interface IExportExcelService
     {
+        byte[] ExportAnnualManpowerForecastRequestForm(AnnualManpowerForecastRequest request);
+
         byte[] ExportJobLevelSummaryReport(GridData gridUnitData, GridData gridCountryData);
 
-        byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> request, int year, string periodName);
+        byte[] ExportManpowerForecastReport(IEnumerable<AnnualManpowerForecastRequest> requests, int year, string periodName);
     }
 }

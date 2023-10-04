@@ -3,17 +3,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Filters;
-    using Constants;
+    using GO.Core.Services;
+    using GO.Website.Constants;
     using GO.Website.Criteria.Manpower;
     using GO.Website.Criteria.Manpower.AnnualRequest;
+    using GO.Website.Filters;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Manpower.AnnualRequest;
-    using Services;
+    using GO.Website.Services;
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using GO.Core.Services;
 
     [Route("ManpowerForecast/AnnualRequest/[action]/{id?}")]
     public class AnnualRequestController : BaseController
@@ -21,15 +21,18 @@
         private readonly IUserControlSession userControlSession;
         private readonly IManpowerForecastService manpowerForecastService;
         private readonly IBaseService baseService;
+        private readonly IExportExcelService excelService;
 
         public AnnualRequestController(
             IUserControlSession userControlSession,
             IManpowerForecastService manpowerForecastService,
-            IBaseService baseService)
+            IBaseService baseService,
+            IExportExcelService excelService)
         {
             this.userControlSession = userControlSession;
             this.manpowerForecastService = manpowerForecastService;
             this.baseService = baseService;
+            this.excelService = excelService;
         }
 
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Host)]
@@ -78,7 +81,18 @@
             }
             var flows = await baseService.GetDataAsync<ManpowerFlow>(new GetFlowCriteria());
             request.IsEdit = IsEditOnUnitHead(flows, request) || IsEditOnVerify(flows, request) || IsEditOnApprove(flows, request);
+
             return Json(request);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportExcelDetail(int id)
+        {
+            var request = await manpowerForecastService.GetAnnualRequestByIdAsync(id);
+
+            var bytes = excelService.ExportAnnualManpowerForecastRequestForm(request);
+            var reportName = $"AnnualManpowerForecastRequestForm_{request.UnitName}";
+            return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
 
         [GOPermission(FunctionKey = FunctionKey.MyAnnualManpowerForecastRequestForm, Policy = Policy.Read)]
@@ -108,7 +122,7 @@
             criteria.UserId = userControlSession.UserId;
             var requests = await manpowerForecastService.GetMemberAnnualRequestAsync(criteria);
             var flows = await baseService.GetDataAsync<ManpowerFlow>(new GetFlowCriteria());
-            foreach(var request in requests)
+            foreach (var request in requests)
             {
                 request.IsEdit = IsEditOnUnitHead(flows, request) || IsEditOnVerify(flows, request) || IsEditOnApprove(flows, request);
             }
@@ -146,7 +160,6 @@
             var requests = await manpowerForecastService.UpdateStatusAnnualRequestAsync(command);
             return Json(requests);
         }
-
 
         [HttpPost]
         [GOPermission(FunctionKey = FunctionKey.MemberAnnualManpowerForecastRequestSummary, Policy = Policy.Host)]

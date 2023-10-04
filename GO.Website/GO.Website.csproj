@@ -8,6 +8,7 @@
   <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="EmailTemplates\ManpowerForecast\NotiEditToUnitHead.txt" />
+    <None Remove="ExcelTemplates\AnnualManpowerForecastRequestForm.xlsx" />
     <None Remove="ExcelTemplates\JobLevelSummaryReportByUnitAndCountry.xlsx" />
     <None Remove="ExcelTemplates\ManpowerForecast.xlsx" />
     <None Remove="logs\log.txt" />
@@ -23,6 +24,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="EmailTemplates\ManpowerForecast\NotiEditToUnitHead.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTemplates\AnnualManpowerForecastRequestForm.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ExcelTemplates\JobLevelSummaryReportByUnitAndCountry.xlsx">
