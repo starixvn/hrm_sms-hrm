@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
-    using Criteria.Account;
-    using Filters;
+    using GO.Website.Criteria.Account;
+    using GO.Website.Filters;
     using GO.Website.Models;
     using GO.Website.Models.Account;
     using GO.Website.Services.Interfaces;
@@ -24,6 +24,7 @@
         private readonly OtpConfig otpConfig;
         private readonly ITwoFactorAuthenticatorService twoFactorAuthService;
         private readonly IUserService userService;
+
 
         public AccountController(
             IUserControlSettings userControlSettings,
@@ -45,8 +46,8 @@
         public IActionResult Setup2Fa()
         {
             return View();
-        }        
-        
+        }
+
         public async Task<IActionResult> VerifyOTP()
         {
             var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
@@ -107,7 +108,7 @@
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> ResetSetupOtp([FromBody] UserOtp userOtp)
         {
-            var result =  await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
+            var result = await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
             {
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,

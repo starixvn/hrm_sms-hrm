@@ -16,10 +16,11 @@
         private const byte DeptColIndex = 2;
         private const byte SectionColIndex = 3;
         private const byte TotalFixedCols = 6;
+        private const byte StartCompanyColIndex = 7;
 
         private readonly Dictionary<string, (short firstCol, short lastCol)> companyColIndex = new()
         {
-            { "CTI", (7, 18) },
+            { "CTI", (StartCompanyColIndex, 18) },
             { "SMS", (20, 31) },
             { "Total", (33, 44) }
         };
@@ -50,9 +51,9 @@
 
         protected internal override void RenderHeader(ExcelWorksheet templateWorksheet, ExcelWorksheet worksheet)
         {
-            templateWorksheet.Cells[HeaderRowIndex, 1, BodyRowIndex - 1, companyColIndex.First().Value.firstCol - 1]
-                .Copy(worksheet.Cells[HeaderRowIndex, 1, BodyRowIndex - 1, companyColIndex.First().Value.firstCol - 1]);
-            short colIndex = companyColIndex.First().Value.firstCol;
+            templateWorksheet.Cells[HeaderRowIndex, 1, BodyRowIndex - 1, StartCompanyColIndex - 1]
+                .Copy(worksheet.Cells[HeaderRowIndex, 1, BodyRowIndex - 1, StartCompanyColIndex - 1]);
+            short colIndex = StartCompanyColIndex;
             foreach (var company in companyNames)
             {
                 var companyTemplate = companyColIndex.First(item => item.Key.Equals(company, StringComparison.OrdinalIgnoreCase));
@@ -102,7 +103,7 @@
                         rowIndex++;
                     }
 
-                    FillTotalSectionRow(templateWorksheet, worksheet, department.Key, section, rowIndex, companyColIndex.First().Value.firstCol);
+                    FillTotalSectionRow(templateWorksheet, worksheet, department.Key, section, rowIndex, StartCompanyColIndex);
 
                     excelAddress = $"{worksheet.Cells[startSectionRowIndex, SectionColIndex, rowIndex, SectionColIndex].Address}";
                     worksheet.Cells[excelAddress].Merge = true;
@@ -110,7 +111,7 @@
                     rowIndex++;
                 }
 
-                FillTotalDepartmentRow(templateWorksheet, worksheet, department.Key, rowIndex, companyColIndex.First().Value.firstCol);
+                FillTotalDepartmentRow(templateWorksheet, worksheet, department.Key, rowIndex, StartCompanyColIndex);
 
                 excelAddress = $"{worksheet.Cells[startDeptRowIndex, DeptColIndex, rowIndex, DeptColIndex].Address}";
                 worksheet.Cells[excelAddress].Merge = true;
@@ -159,12 +160,12 @@
                 templateWorksheet.Cells[BodyRowIndex, companyTemplate.Value.firstCol, BodyRowIndex, companyTemplate.Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var detail = request.Details.FirstOrDefault(item => item.CompanyName.Equals(company, StringComparison.OrdinalIgnoreCase)
-                    && item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase)
-                    && item.SectionName.Equals(section, StringComparison.OrdinalIgnoreCase)
-                    && item.JobLevel.Equals(jobLevel, StringComparison.OrdinalIgnoreCase));
+                var detail = request.Details.FirstOrDefault(item => company.Equals(item.CompanyName, StringComparison.OrdinalIgnoreCase)
+                    && department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase)
+                    && section.Equals(item.SectionName, StringComparison.OrdinalIgnoreCase)
+                    && jobLevel.Equals(item.JobLevel, StringComparison.OrdinalIgnoreCase));
 
-                if(detail != null)
+                if (detail != null)
                 {
                     SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.ExpatCurrentHeadcount);
                     SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.LocalCurrentHeadcount);
@@ -195,9 +196,9 @@
                 templateWorksheet.Cells[BodyRowIndex, companyColIndex.Last().Value.firstCol, BodyRowIndex, companyColIndex.Last().Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var details = request.Details.Where(item => item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase)
-                    && item.SectionName.Equals(section, StringComparison.OrdinalIgnoreCase)
-                    && item.JobLevel.Equals(jobLevel, StringComparison.OrdinalIgnoreCase)).ToList();
+                var details = request.Details.Where(item => department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase)
+                    && section.Equals(item.SectionName, StringComparison.OrdinalIgnoreCase)
+                    && jobLevel.Equals(item.JobLevel, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount));
@@ -231,9 +232,9 @@
                 templateWorksheet.Cells[TotalSectionRowIndex, companyTemplate.Value.firstCol, TotalSectionRowIndex, companyTemplate.Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var details = request.Details.Where(item => item.CompanyName.Equals(company, StringComparison.OrdinalIgnoreCase)
-                    && item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase)
-                    && item.SectionName.Equals(section, StringComparison.OrdinalIgnoreCase));
+                var details = request.Details.Where(item => company.Equals(item.CompanyName, StringComparison.OrdinalIgnoreCase)
+                    && department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase)
+                    && section.Equals(item.SectionName, StringComparison.OrdinalIgnoreCase));
 
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount));
@@ -259,8 +260,8 @@
                 templateWorksheet.Cells[TotalSectionRowIndex, companyColIndex.Last().Value.firstCol, TotalSectionRowIndex, companyColIndex.Last().Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var details = request.Details.Where(item => item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase)
-                    && item.SectionName.Equals(section, StringComparison.OrdinalIgnoreCase)).ToList();
+                var details = request.Details.Where(item => department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase)
+                    && section.Equals(item.SectionName, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount));
@@ -293,8 +294,8 @@
                 templateWorksheet.Cells[TotalDeptRowIndex, companyTemplate.Value.firstCol, TotalDeptRowIndex, companyTemplate.Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var details = request.Details.Where(item => item.CompanyName.Equals(company, StringComparison.OrdinalIgnoreCase)
-                    && item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase));
+                var details = request.Details.Where(item => company.Equals(item.CompanyName, StringComparison.OrdinalIgnoreCase)
+                    && department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase));
 
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount));
@@ -320,7 +321,7 @@
                 templateWorksheet.Cells[TotalDeptRowIndex, companyColIndex.Last().Value.firstCol, TotalDeptRowIndex, companyColIndex.Last().Value.lastCol]
                     .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalColPerCompany]);
 
-                var details = request.Details.Where(item => item.DepartmentName.Equals(department, StringComparison.OrdinalIgnoreCase)).ToList();
+                var details = request.Details.Where(item => department.Equals(item.DepartmentName, StringComparison.OrdinalIgnoreCase)).ToList();
 
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount));
@@ -342,7 +343,7 @@
 
         private static void SetCellValue(ExcelRange cell, int value)
         {
-            if(value > 0)
+            if (value > 0)
             {
                 cell.Value = value;
             }

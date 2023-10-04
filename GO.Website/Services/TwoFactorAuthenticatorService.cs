@@ -1,10 +1,10 @@
-﻿using System;
-using GO.Website.Models;
-using GO.Website.Services.Interfaces;
-using Google.Authenticator;
-
-namespace GO.Website.Services
+﻿namespace GO.Website.Services
 {
+    using System;
+    using GO.Website.Models;
+    using GO.Website.Services.Interfaces;
+    using Google.Authenticator;
+
     public class TwoFactorAuthenticatorService : ITwoFactorAuthenticatorService
     {
         public string SetupGoogleAuthInfo(OtpConfig config, string email, string secretKey)
