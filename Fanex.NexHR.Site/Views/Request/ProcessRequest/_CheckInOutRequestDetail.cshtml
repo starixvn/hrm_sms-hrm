@@ -11,7 +11,6 @@
             <th>@Labels.Reason</th>
             <th>@Labels.Remark</th>
             <th>@Labels.ViolationIgnored</th>
-            <th>@Labels.ViolationRecorded</th>
         </tr>
     </thead>
     <tbody>
@@ -57,9 +56,6 @@
                     var disciplineTypeId = (byte)DisciplineType.MissingCheckInOut;
                 }
                 <input type="radio" class="chk-ignore" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
-            </td>
-            <td class="violationRecorded">
-                <input type="radio" class="chk-record" />
             </td>
         </tr>
     </tbody>

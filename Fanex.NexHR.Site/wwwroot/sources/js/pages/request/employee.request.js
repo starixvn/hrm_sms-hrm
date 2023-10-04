@@ -60,28 +60,23 @@ $(function () {
                 class: 'btn btn-primary',
                 click: function () {
                     let ignoredDisciplines = [],
-                        comment = $(this).find('textarea#Comment').val(),
-                        isValid = true;
+                        comment = $(this).find('textarea#Comment').val();
 
-                    $(this).find('table.table tbody tr').each(function () {
-                        let $tr = $(this),
-                            chkIgnore = $tr.find('.chk-ignore'),
-                            chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore'),
-                            chkWeekendLeaveRecord = $tr.find('.chk-weekend-record');
+                        $(this).find('table.table tbody tr').each(function () {
+                            let $tr = $(this),
+                                chkIgnore = $tr.find('.chk-ignore'),
+                                chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore');
 
-                        if (chkIgnore.length === 1) {
-                            ignoredDisciplines.push({
-                                WorkDate: chkIgnore.data('workdate'),
-                                EmployeeId: employeeId,
-                                DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
-                                IsIgnored: chkIgnore.prop('checked')
-                            });
-                        }
+                            if (chkIgnore.length === 1) {
+                                ignoredDisciplines.push({
+                                    WorkDate: chkIgnore.data('workdate'),
+                                    EmployeeId: employeeId,
+                                    DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
+                                    IsIgnored: chkIgnore.prop('checked')
+                                });
+                            }
 
-                        if (chkWeekendLeaveIgnore.length === 1) {
-                            if (!chkWeekendLeaveIgnore.prop('checked') && !chkWeekendLeaveRecord.prop('checked')) {
-                                isValid = false;
-                            } else {
+                            if (chkWeekendLeaveIgnore.length === 1) {
                                 ignoredDisciplines.push({
                                     WorkDate: chkWeekendLeaveIgnore.data('workdate'),
                                     EmployeeId: employeeId,
@@ -89,17 +84,11 @@ $(function () {
                                     IsIgnored: chkWeekendLeaveIgnore.prop('checked')
                                 });
                             }
-                        }
-                    });
+                        });
 
-                    if (!isValid) {
-                        $(this).find('.validation-summary-valid').show()
-                            .html('You must select <b>Violation Ignored</b> or <b>Violation Recorded</b> on each type of request.');
-                    } else {
-                        $(this).find('.validation-summary-valid').hide();
-                        processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines, viewType);
-                        $(this).dialog('close');
-                    }
+                    $(this).find('.validation-summary-valid').hide();
+                    processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines, viewType);
+                    $(this).dialog('close');
                 }
             },
             {
@@ -135,10 +124,8 @@ $(function () {
 
             let chkIgnoreAll = $('.chk-ignoreAll'),
                 chkWeekendLeaveIgnoreAll = $('.chk-weekend-ignoreAll'),
-                chkWeekendLeaveRecordAll = $('.chk-weekend-recordAll'),
                 chkIgnores = $('.chk-ignore'),
-                chkWeekendLeaveIgnores = $('.chk-weekend-ignore'),
-                chkWeekendLeaveRecords = $('.chk-weekend-record');
+                chkWeekendLeaveIgnores = $('.chk-weekend-ignore');
 
             chkIgnoreAll.on('change', function () {
                 const checked = $(this).prop('checked');
@@ -147,16 +134,7 @@ $(function () {
 
             chkWeekendLeaveIgnoreAll.on('change', function () {
                 const checked = $(this).prop('checked');
-                chkWeekendLeaveRecordAll.prop('checked', !checked);
                 chkWeekendLeaveIgnores.prop('checked', checked);
-                chkWeekendLeaveRecords.prop('checked', !checked);
-            });
-
-            chkWeekendLeaveRecordAll.on('change', function () {
-                const checked = $(this).prop('checked');
-                chkWeekendLeaveIgnoreAll.prop('checked', !checked);
-                chkWeekendLeaveRecords.prop('checked', checked);
-                chkWeekendLeaveIgnores.prop('checked', !checked);
             });
 
             let updateParent = function ($parent, $childs) {
@@ -166,28 +144,14 @@ $(function () {
 
             $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
                 let chkIgnore = $(this).find('.chk-ignore'),
-                    chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
-                    chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
+                    chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore');
 
                 chkIgnore.on('change', function () {
                     updateParent(chkIgnoreAll, chkIgnores);
                 });
 
-
                 chkWeekendLeaveIgnore.on('change', function () {
                     updateParent(chkWeekendLeaveIgnoreAll, chkWeekendLeaveIgnores);
-                    if ($(this).prop('checked')) {
-                        chkWeekendLeaveRecord.prop('checked', false);
-                        updateParent(chkWeekendLeaveRecordAll, chkWeekendLeaveRecords);
-                    }
-                });
-
-                chkWeekendLeaveRecord.on('change', function () {
-                    updateParent(chkWeekendLeaveRecordAll, chkWeekendLeaveRecords);
-                    if ($(this).prop('checked')) {
-                        chkWeekendLeaveIgnore.prop('checked', false);
-                        updateParent(chkWeekendLeaveIgnoreAll, chkWeekendLeaveIgnores);
-                    }
                 });
             });
         }).then(() => unblockUI()).catch(axiosError);
