@@ -24,8 +24,6 @@
         <tr>
             <th>@Labels.Type</th>
             <th>@Labels.Ignore <br /><input class="chk-ignoreAll" type="radio" /></th>
-            <th>@Labels.Record <br /><input class="chk-recordAll" type="radio" /></th>
-
             @if (!isNotExistsWeekendLeave)
             {
                 <th>@Labels.Type</th>
@@ -110,16 +108,6 @@
                             <input class="chk-ignore" type="radio" 
                                    data-workdate="@item.WorkDate.Date.ToString("d")"
                                    data-disciplinetypeid="@item.DisciplineTypeId" />
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </td>
-                    <td rowspan="@rowspan" class="td-active">
-                        @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave || item.IsSevenDaysLeave)
-                        {
-                            <input class="chk-record" type="radio" />
                         }
                         else
                         {

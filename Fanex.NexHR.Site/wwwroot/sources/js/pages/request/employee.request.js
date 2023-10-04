@@ -66,21 +66,16 @@ $(function () {
                     $(this).find('table.table tbody tr').each(function () {
                         let $tr = $(this),
                             chkIgnore = $tr.find('.chk-ignore'),
-                            chkRecord = $tr.find('.chk-record'),
                             chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore'),
                             chkWeekendLeaveRecord = $tr.find('.chk-weekend-record');
 
                         if (chkIgnore.length === 1) {
-                            if ((!chkIgnore.prop('checked') && !chkRecord.prop('checked') && viewType != "HRSpace")) {
-                                isValid = false;
-                            } else {
-                                ignoredDisciplines.push({
-                                    WorkDate: chkIgnore.data('workdate'),
-                                    EmployeeId: employeeId,
-                                    DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
-                                    IsIgnored: chkIgnore.prop('checked')
-                                });
-                            }
+                            ignoredDisciplines.push({
+                                WorkDate: chkIgnore.data('workdate'),
+                                EmployeeId: employeeId,
+                                DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
+                                IsIgnored: chkIgnore.prop('checked')
+                            });
                         }
 
                         if (chkWeekendLeaveIgnore.length === 1) {
@@ -139,26 +134,15 @@ $(function () {
             renderProcessRequestDialog(requestId, requestTypeId, roleId, employeeId, command, title, viewType);
 
             let chkIgnoreAll = $('.chk-ignoreAll'),
-                chkRecordAll = $('.chk-recordAll'),
                 chkWeekendLeaveIgnoreAll = $('.chk-weekend-ignoreAll'),
                 chkWeekendLeaveRecordAll = $('.chk-weekend-recordAll'),
                 chkIgnores = $('.chk-ignore'),
-                chkRecords = $('.chk-record'),
                 chkWeekendLeaveIgnores = $('.chk-weekend-ignore'),
                 chkWeekendLeaveRecords = $('.chk-weekend-record');
 
             chkIgnoreAll.on('change', function () {
                 const checked = $(this).prop('checked');
-                chkRecordAll.prop('checked', !checked);
                 chkIgnores.prop('checked', checked);
-                chkRecords.prop('checked', !checked);
-            });
-
-            chkRecordAll.on('change', function () {
-                const checked = $(this).prop('checked');
-                chkIgnoreAll.prop('checked', !checked);
-                chkRecords.prop('checked', checked);
-                chkIgnores.prop('checked', !checked);
             });
 
             chkWeekendLeaveIgnoreAll.on('change', function () {
@@ -182,25 +166,13 @@ $(function () {
 
             $('#dialogProcessRequest').find('table.table tbody tr').each(function () {
                 let chkIgnore = $(this).find('.chk-ignore'),
-                    chkRecord = $(this).find('.chk-record'),
                     chkWeekendLeaveIgnore = $(this).find('.chk-weekend-ignore'),
                     chkWeekendLeaveRecord = $(this).find('.chk-weekend-record');
 
                 chkIgnore.on('change', function () {
                     updateParent(chkIgnoreAll, chkIgnores);
-                    if ($(this).prop('checked')) {
-                        chkRecord.prop('checked', false);
-                        updateParent(chkRecordAll, chkRecords);
-                    }
                 });
 
-                chkRecord.on('change', function () {
-                    updateParent(chkRecordAll, chkRecords);
-                    if ($(this).prop('checked')) {
-                        chkIgnore.prop('checked', false);
-                        updateParent(chkIgnoreAll, chkIgnores);
-                    }
-                });
 
                 chkWeekendLeaveIgnore.on('change', function () {
                     updateParent(chkWeekendLeaveIgnoreAll, chkWeekendLeaveIgnores);
