@@ -11,6 +11,7 @@ export default class Header extends Component {
             user: null,
             sites: [],
             menus: [],
+            otpConfig: null,
             expended: false,
             showSideMenu: false
         };
@@ -30,6 +31,11 @@ export default class Header extends Component {
         url = Site.resolveClientUrl('home/getMenus');
         await this.getDataAsync(url).then(response => {
             this.setState({ menus: response.data });
+        });
+
+        url = Site.resolveClientUrl('home/GetOtpConfig');
+        await this.getDataAsync(url).then(response => {
+            this.setState({ otpConfig: response.data });
         });
     }
 
@@ -82,7 +88,7 @@ export default class Header extends Component {
         || menuItem.childs.filter(child => child.url.toLowerCase().localeCompare(currentUrl) === 0).length > 0;
 
     render() {
-        const { user, sites, menus, expended, showSideMenu } = this.state;
+        const { user, sites, menus, expended, showSideMenu, otpConfig } = this.state;
         const currentUrl = window.location.pathname.toLowerCase();
 
         let nickname = '';
@@ -150,7 +156,10 @@ export default class Header extends Component {
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                     <Dropdown.Item href={Site.resolveClientUrl('auth/logout')}><i className="fa fa-power-off" /> Sign Out</Dropdown.Item>
-                                    <Dropdown.Item href={Site.resolveClientUrl('Account/Setup2FA')}><i className="fa fa-shield" /> Two-factor Authentication</Dropdown.Item>
+                                    {
+                                        otpConfig !== null && otpConfig.enable &&
+                                        <Dropdown.Item href={Site.resolveClientUrl('Account/Setup2FA')}><i className="fa fa-shield" /> Two-factor Authentication</Dropdown.Item>
+                                    }
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>

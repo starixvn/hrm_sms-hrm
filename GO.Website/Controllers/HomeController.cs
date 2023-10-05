@@ -22,19 +22,22 @@
         private readonly IAuthService authService;
         private readonly IUserService userService;
         private readonly IBaseService baseService;
+        private readonly OtpConfig otpConfig;
 
         public HomeController(
             IUserControlSettings userControlSettings,
             IUserControlSession userControlSession,
             IAuthService authService,
             IUserService userService,
-            IBaseService baseService)
+            IBaseService baseService,
+            OtpConfig otpConfig)
         {
             this.userControlSettings = userControlSettings;
             this.userControlSession = userControlSession;
             this.authService = authService;
             this.baseService = baseService;
             this.userService = userService;
+            this.otpConfig = otpConfig;
         }
 
         public IActionResult Index()
@@ -76,6 +79,11 @@
             user.UserId = 0;
             user.Password = string.Empty;
             return Json(user);
+        }
+
+        public IActionResult GetOtpConfig()
+        {
+            return Json(otpConfig);
         }
 
         public IActionResult GetMenus()
