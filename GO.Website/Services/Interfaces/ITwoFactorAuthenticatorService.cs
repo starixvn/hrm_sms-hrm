@@ -1,11 +1,9 @@
-﻿namespace GO.Website.Services.Interfaces
+﻿namespace GO.Website.Services
 {
-    using GO.Website.Models;
-
     public interface ITwoFactorAuthenticatorService
     {
-        string SetupGoogleAuthInfo(OtpConfig config, string email, string secretKey);
+        string GenerateSetupCode(string email, string secretKey);
 
-        bool ValidateOTPCode(OtpConfig config, string secretKey, string otpCode);
+        bool ValidateOTPCode(string secretKey, string otpCode);
     }
 }

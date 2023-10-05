@@ -4,18 +4,18 @@ import { Button, Accordion } from 'react-bootstrap';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 
-const Otp = ({ accountOTP, changeStatusOTP, handleOpenchangeSecretKeyModalDialog}) => {
+const Otp = ({ accountOTP, onChangeStatusOTP, onChangeSecretKey }) => {
     return (
         <div className="otp">
             <div className="enable-otp">
-                <p>{LangHelper.getResource('EnableOTPSecurity')}</p>
+                <p>{LangHelper.getResource('EnableOTP')}</p>
                 <div className='custom-control custom-switch switch-enable-otp'>
                     <input
                         type='checkbox'
                         className='custom-control-input'
                         id='customSwitchesChecked'
                         defaultChecked={accountOTP.enabled}
-                        onChange={changeStatusOTP}
+                        onChange={onChangeStatusOTP}
                     />
                     <label className='custom-control-label' htmlFor='customSwitchesChecked'></label>
                 </div>
@@ -60,7 +60,7 @@ const Otp = ({ accountOTP, changeStatusOTP, handleOpenchangeSecretKeyModalDialog
                         </Accordion>
                     </div>
                 </div>
-                <Button variant="primary" size="sm" className="mr-3 btn-change-secret-key" type="submit" onClick={handleOpenchangeSecretKeyModalDialog}>
+                <Button variant="primary" size="sm" className="mr-3 btn-change-secret-key" type="submit" onClick={onChangeSecretKey}>
                     {LangHelper.getResource('ChangeSecretKey')}
                 </Button>
             </div>

@@ -1,8 +1,6 @@
 ﻿namespace GO.Website.Models.Account
 {
-    using System.ComponentModel.DataAnnotations;
-
-    public class SetupOTPViewModel
+    public class SetupOTP
     {
         public string TextCode { get; set; }
 

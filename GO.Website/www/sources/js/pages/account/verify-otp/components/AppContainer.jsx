@@ -7,25 +7,24 @@ import DataService from '@jsroot/common/dataService';
 
 const AppContainer = () => {
     const [otp, setOtp] = useState(null);
-    const [isVeridyOtp, setIsVeridyOtp] = useState(false);
-    const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
+    const [isVerifyOtp, setIsVerifyOtp] = useState(false);
+    const [isShowMessageVerifyOtp, setIsShowMessageVerifyOtp] = useState(false);
     const [messageError, setMessageError] = useState(null);
 
     const verifyOtp = async () => {
         if (otp !== null && otp !== '') {
             const url = Site.resolveClientUrl('Account/VerifyOTP');
             await DataService.postDataAsync(url, { otp: otp }).then(response => {
-                setIsVeridyOtp(response.data);
-                setIsShowMessageVeridyOtp(true);
+                setIsVerifyOtp(response.data);
+                setIsShowMessageVerifyOtp(true);
                 setMessageError(null);
                 if (response.data) {
                     window.location = Site.resolveClientUrl('Home/Index');
                 }
             });
-        }
-        else {
-            setIsVeridyOtp(false);
-            setIsShowMessageVeridyOtp(false);
+        } else {
+            setIsVerifyOtp(false);
+            setIsShowMessageVerifyOtp(false);
             setMessageError('The OTP code field is required.');
         }
     };
@@ -52,11 +51,11 @@ const AppContainer = () => {
                 </div>
                 <div className="group">
                     {
-                        !isVeridyOtp && isShowMessageVeridyOtp &&
+                        !isVerifyOtp && isShowMessageVerifyOtp &&
                         <Form.Label className="msg-error">{LangHelper.getResource('MessageErrorVerifyOtp')}</Form.Label>
                     }
                     <Form.Control type="text" size="sm"
-                        name="otp-code" className={`${!isVeridyOtp && isShowMessageVeridyOtp ? 'inValidOtp' : ''} form-control encrypt`} autoComplete="off"
+                        name="otp-code" className={`${!isVerifyOtp && isShowMessageVerifyOtp ? 'inValidOtp' : ''} form-control encrypt`} autoComplete="off"
                         maxLength="6" onChange={event => setOtp(event.target.value)}
                     />
                     {
@@ -69,7 +68,7 @@ const AppContainer = () => {
                         {LangHelper.getResource('Cancel')}
                     </Button>
                     <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={verifyOtp}>
-                        {LangHelper.getResource('Validate OTP')}
+                        {LangHelper.getResource('ValidateOTP')}
                     </Button>
                 </div>
             </div>

@@ -3,10 +3,10 @@
     public class UserOtp
     {
         public int UserId { get; set; }
-        public int SiteId { get; set; }
+        public short SiteId { get; set; }
         public string SecretKey { get; set; }
         public string RecoveryCode { get; set; }
         public bool Enabled { get; set; }
-        public bool IsOTPRegistered { get; set; }
+        public bool IsRegistered { get; set; }
     }
 }

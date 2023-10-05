@@ -11,19 +11,20 @@ import Otp from './Otp';
 
 const AppContainer = () => {
     const [accountOTP, setAccountOTP] = useState(null);
-    const [changeSecretKeyModalDialog, setChangeSecretKeyModalDialog] = useState({ show: false });     
+    const [changeSecretKeyModalDialog, setChangeSecretKeyModalDialog] = useState({ show: false });
     const [setupOtp, setSetupOtp] = useState(null);
-    const [isShowMessageVeridyOtp, setIsShowMessageVeridyOtp] = useState(false);
-    const [isVeridyOtp, setIsVeridyOtp] = useState(false);
+    const [isShowMessageVerifyOtp, setIsShowMessageVerifyOtp] = useState(false);
+    const [isVerifyOtp, setIsVerifyOtp] = useState(false);
     const [messageError, setMessageError] = useState(null);
 
-    const handleClosechangeSecretKeyModalDialog = () => {
+    const handleCloseChangeSecretKeyModalDialog = () => {
         setChangeSecretKeyModalDialog({ show: false });
     }
 
-    const handleOpenchangeSecretKeyModalDialog = () => {
+    const handleOpenChangeSecretKeyModalDialog = () => {
         setChangeSecretKeyModalDialog({ show: true });
     }
+
     useEffect(() => {
         const getSetupOtp = async () => {
             Site.blockUI();
@@ -38,7 +39,7 @@ const AppContainer = () => {
             const url = Site.resolveClientUrl('Account/GetAccountOTP');
             await DataService.postDataAsync(url).then(response => {
                 setAccountOTP(response.data);
-                if (response.data == null || !response.data.isOTPRegistered) {
+                if (response.data == null || !response.data.isRegistered) {
                     getSetupOtp();
                 }
             }).then(() => Site.unblockUI());
@@ -60,8 +61,8 @@ const AppContainer = () => {
             Site.blockUI();
             const url = Site.resolveClientUrl('Account/VerifySetupOTP');
             await DataService.postDataAsync(url, setupOtp).then(response => {
-                setIsVeridyOtp(response.data);
-                setIsShowMessageVeridyOtp(true);
+                setIsVerifyOtp(response.data);
+                setIsShowMessageVerifyOtp(true);
                 setMessageError(null);
                 if (response.data) {
                     toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
@@ -72,10 +73,9 @@ const AppContainer = () => {
                     toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
                 }
             }).then(() => Site.unblockUI());
-        }
-        else {
-            setIsVeridyOtp(false);
-            setIsShowMessageVeridyOtp(false);
+        } else {
+            setIsVerifyOtp(false);
+            setIsShowMessageVerifyOtp(false);
             setMessageError('The OTP code field is required.');
         }
     };
@@ -93,7 +93,7 @@ const AppContainer = () => {
         const url = Site.resolveClientUrl('Account/ResetSetupOtp');
         await DataService.postDataAsync(url, accountOTP).then(response => {
             if (response.data) {
-                handleClosechangeSecretKeyModalDialog();
+                handleCloseChangeSecretKeyModalDialog();
                 getAccountOTP();
                 getSetupOtp();
             }
@@ -110,22 +110,22 @@ const AppContainer = () => {
     return (
         <>
             {
-                accountOTP !== null && accountOTP.isOTPRegistered &&
+                accountOTP !== null && accountOTP.isRegistered &&
                 <Otp
                     accountOTP={accountOTP}
-                    changeStatusOTP={changeStatusOTP}
-                    handleOpenchangeSecretKeyModalDialog={handleOpenchangeSecretKeyModalDialog}
+                    onChangeStatusOTP={changeStatusOTP}
+                    onChangeSecretKey={handleOpenChangeSecretKeyModalDialog}
                 />
             }
             {
-                (accountOTP == null || !accountOTP.isOTPRegistered) &&
+                (accountOTP == null || !accountOTP.isRegistered) &&
                 <SetupOtp
                     verifySetupOtp={verifySetupOtp}
                     setupOtp={setupOtp}
-                    isShowMessageVeridyOtp={isShowMessageVeridyOtp}
-                    isVeridyOtp={isVeridyOtp}
+                    isShowMessageVerifyOtp={isShowMessageVerifyOtp}
+                    isVerifyOtp={isVerifyOtp}
                     messageError={messageError}
-                   />
+                />
             }
             {
                 changeSecretKeyModalDialog.show &&
@@ -139,15 +139,15 @@ const AppContainer = () => {
                             {LangHelper.getResource('OK')}
                         </Button>,
                         <Button variant="secondary" size="sm" key="cancel"
-                            onClick={handleClosechangeSecretKeyModalDialog}
+                            onClick={handleCloseChangeSecretKeyModalDialog}
                         >
                             {LangHelper.getResource('Cancel')}
                         </Button>
                     ]}
-                    onClose={handleClosechangeSecretKeyModalDialog}
+                    onClose={handleCloseChangeSecretKeyModalDialog}
                 />
             }
-            
+
         </>
     );
 }

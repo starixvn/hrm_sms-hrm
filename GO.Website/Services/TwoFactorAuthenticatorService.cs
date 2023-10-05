@@ -2,21 +2,27 @@
 {
     using System;
     using GO.Website.Models;
-    using GO.Website.Services.Interfaces;
     using Google.Authenticator;
 
     public class TwoFactorAuthenticatorService : ITwoFactorAuthenticatorService
     {
-        public string SetupGoogleAuthInfo(OtpConfig config, string email, string secretKey)
+        private readonly OtpConfig otpConfig;
+
+        public TwoFactorAuthenticatorService(OtpConfig otpConfig)
+        {
+            this.otpConfig = otpConfig;
+        }
+
+        public string GenerateSetupCode(string email, string secretKey)
         {
             var twoFactorAuthen = new TwoFactorAuthenticator();
-            var setupInfo = twoFactorAuthen.GenerateSetupCode(config.AppName, email, secretKey, false);
+            var setupInfo = twoFactorAuthen.GenerateSetupCode(otpConfig.AppName, email, secretKey, false);
             return setupInfo.ManualEntryKey;
         }
 
-        public bool ValidateOTPCode(OtpConfig config, string secretKey, string otpCode)
+        public bool ValidateOTPCode(string secretKey, string otpCode)
         {
-            var timeExpireOTP = TimeSpan.FromSeconds(config.OtpExpireTime);
+            var timeExpireOTP = TimeSpan.FromSeconds(otpConfig.OtpExpireTime);
 
             var twoFactorAuthenticator = new TwoFactorAuthenticator();
 

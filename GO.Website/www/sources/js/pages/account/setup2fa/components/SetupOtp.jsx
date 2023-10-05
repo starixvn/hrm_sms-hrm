@@ -5,8 +5,7 @@ import { Button, Form, Accordion } from 'react-bootstrap';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 
-const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOtp, messageError}) => {
-
+const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVerifyOtp, isVerifyOtp, messageError}) => {
     const renderSetup2Fa = () => {
         return <div className="setup-2fa">
             <p className="intro">The OTP will be required when you make log in to GO system. You will need to register for the <strong>Mobile Authenticator App</strong> before enabling the OTP.</p>
@@ -86,14 +85,14 @@ const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVeridyOtp, isVeridyOt
                             <Form.Row>
                             </Form.Row>
                             <Form.Row>
-                                <Form.Label>{LangHelper.getResource('OTP Code')}</Form.Label>
+                                <Form.Label>{LangHelper.getResource('OTPCode')}</Form.Label>
                             </Form.Row>
                             <Form.Row>
                                 <Form.Control type="text" size="sm"
-                                    name="otp-code" className={`${(!isVeridyOtp && isShowMessageVeridyOtp) || messageError != null ? 'inValidOtp' : ''} otp-code`} id="otp-code" autoComplete="off"
+                                    name="otp-code" className={`${(!isVerifyOtp && isShowMessageVerifyOtp) || messageError != null ? 'inValidOtp' : ''} otp-code`} id="otp-code" autoComplete="off"
                                     onChange={event => setupOtp.otp = event.target.value}
-                                />                                
-                                <Button variant="primary" size="sm" className="mr-3 btn-veridyOtpCode" type="submit" onClick={verifySetupOtp}>
+                                />
+                                <Button variant="primary" size="sm" className="mr-3 btn-verifyOtpCode" type="submit" onClick={verifySetupOtp}>
                                     {LangHelper.getResource('Verify')}
                                 </Button>
                             </Form.Row>

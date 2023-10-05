@@ -22,8 +22,6 @@
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsExcluded { get; set; }
-        public bool IsOTPRegistered { get; set; }
-
         public string TeamCode { get; set; }
         public string TeamName { get; set; }
         public string SectionCode { get; set; }

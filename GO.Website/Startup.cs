@@ -22,7 +22,6 @@ namespace GO.Website
     using GO.Website.Models;
     using GO.Website.Repositories;
     using GO.Website.Services;
-    using GO.Website.Services.Interfaces;
     using HRM.UserControl.Client.AspNetCore.Configurations;
     using HRM.UserControl.Client.AspNetCore.Session;
     using HRM.UserControl.Client.Core;

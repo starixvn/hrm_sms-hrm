@@ -8,7 +8,7 @@
     using GO.Website.Filters;
     using GO.Website.Models;
     using GO.Website.Models.Account;
-    using GO.Website.Services.Interfaces;
+    using GO.Website.Services;
     using HRM.UserControl.Client.Core.Configurations;
     using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
@@ -24,7 +24,6 @@
         private readonly OtpConfig otpConfig;
         private readonly ITwoFactorAuthenticatorService twoFactorAuthService;
         private readonly IUserService userService;
-
 
         public AccountController(
             IUserControlSettings userControlSettings,
@@ -50,23 +49,25 @@
 
         public async Task<IActionResult> VerifyOTP()
         {
-            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
-            if (!otpConfig.Enable || userOtp is not { Enabled: true } )
+            var userOtp = await userOtpService.GetUserOTPByIdAsync(userControlSession.UserId, userControlSession.SiteId);
+            if (!otpConfig.Enable || userOtp is not { Enabled: true })
             {
                 await DoLoginAsync(userControlSession.UserId);
             }
+
             return otpConfig.Enable && userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
         }
 
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAccountOTP()
         {
-            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
+            var userOtp = await userOtpService.GetUserOTPByIdAsync(userControlSession.UserId, userControlSession.SiteId);
             var user = await userService.GetByIdAsync(userControlSession.UserId);
             if (userOtp != null && !string.IsNullOrWhiteSpace(userOtp.SecretKey))
             {
-                userOtp.RecoveryCode = twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, user.Email, userOtp.SecretKey);
+                userOtp.RecoveryCode = twoFactorAuthService.GenerateSetupCode(user.Email, userOtp.SecretKey);
             }
+
             return Json(userOtp);
         }
 
@@ -74,30 +75,29 @@
         public async Task<IActionResult> SetupOtp()
         {
             var user = await userService.GetByIdAsync(userControlSession.UserId);
-
-            var setupOtpViewModel = new SetupOTPViewModel
+            var model = new SetupOTP
             {
                 TextCode = await GetOtpSetupCode(user.Email),
                 AppName = otpConfig.AppName,
                 Email = user.Email
             };
-            return Json(setupOtpViewModel);
+            return Json(model);
         }
 
         [HttpPost]
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> VerifySetupOTP([FromBody] SetupOTPViewModel viewModel)
+        public async Task<IActionResult> VerifySetupOTP([FromBody] SetupOTP model)
         {
-            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
-            var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
+            var userOtp = await userOtpService.GetUserOTPByIdAsync(userControlSession.UserId, userControlSession.SiteId);
+            var isOTPValid = twoFactorAuthService.ValidateOTPCode(userOtp.SecretKey, model.Otp);
 
-            if (TryValidateModel(viewModel) && isOTPValid)
+            if (isOTPValid)
             {
                 await userOtpService.UpdateOTPStatusAsync(new UpdateStatusUserOTPCommand
                 {
                     UserId = userControlSession.UserId,
                     SiteId = userControlSession.SiteId,
-                    IsOTPRegistered = true,
+                    IsRegistered = true,
                     Enabled = true
                 });
             }
@@ -112,7 +112,7 @@
             {
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,
-                IsOTPRegistered = !userOtp.IsOTPRegistered,
+                IsRegistered = !userOtp.IsRegistered,
                 Enabled = !userOtp.Enabled
             });
             return Json(result);
@@ -125,19 +125,19 @@
             {
                 UserId = userControlSession.UserId,
                 SiteId = userControlSession.SiteId,
-                IsOTPRegistered = userOtp.IsOTPRegistered,
+                IsRegistered = userOtp.IsRegistered,
                 Enabled = !userOtp.Enabled
             });
             return Json(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyOTP([FromBody] SetupOTPViewModel viewModel)
+        public async Task<IActionResult> VerifyOTP([FromBody] SetupOTP model)
         {
-            var userOtp = await userOtpService.GetUserOTPById(userControlSession.UserId, userControlSession.SiteId);
-            var isOTPValid = twoFactorAuthService.ValidateOTPCode(otpConfig, userOtp.SecretKey, viewModel.Otp);
+            var userOtp = await userOtpService.GetUserOTPByIdAsync(userControlSession.UserId, userControlSession.SiteId);
+            var isOTPValid = twoFactorAuthService.ValidateOTPCode(userOtp.SecretKey, model.Otp);
 
-            if (TryValidateModel(viewModel) && isOTPValid)
+            if (TryValidateModel(model) && isOTPValid)
             {
                 await DoLoginAsync(userControlSession.UserId);
             }
@@ -163,7 +163,7 @@
             var secretKey = Guid.NewGuid().ToString("N");
             await userOtpService.UpdateSecretKeyAsync(userControlSession.UserId, userControlSession.SiteId, secretKey);
 
-            return twoFactorAuthService.SetupGoogleAuthInfo(otpConfig, email, secretKey);
+            return twoFactorAuthService.GenerateSetupCode(email, secretKey);
         }
     }
 }

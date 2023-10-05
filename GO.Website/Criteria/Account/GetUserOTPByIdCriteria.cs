@@ -5,7 +5,7 @@
     public class GetUserOTPByIdCriteria : CriteriaBase
     {
         public int UserId { get; set; }
-        public int SiteId { get; set; }
+        public short SiteId { get; set; }
 
         public override string GetSettingKey() => "UserOTP_GetById";
 

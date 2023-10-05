@@ -55,7 +55,6 @@
             userControlSession.JwtToken = loginResult.JwtToken;
 
             return Json(new CommandResult { Code = 0, Message = string.Empty });
-
         }
 
         public async Task<IActionResult> Logout()

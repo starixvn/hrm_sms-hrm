@@ -3,7 +3,6 @@
 @import '../../components/_buttons';
 @import '../../components/_modal';
 
-
 $primary-color: #1973b2;
 $text-color: #333;
 $border-color: #d9d9d9;
@@ -24,7 +23,6 @@ body {
     color: #18aa3a;
     line-height: 40px;
 }
-
 
 .manualQRCode {
     .text-key {
@@ -95,13 +93,17 @@ body {
         margin: 0 0 5px;
     }
 
-    .info-header{
+    .info-header {
         margin-top: 10px;
     }
 
     .enable-otp {
         display: flex;
         border-bottom: 1px solid;
+
+        p {
+            font-weight: bold;
+        }
     }
 
     .switch-enable-otp {
@@ -114,7 +116,12 @@ body {
 }
 
 .setup-2fa {
-    margin-top: 12px;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px 1px rgba(0,0,0,.2);
+    background-color: #fff;
+    padding: 16px 10px;
+    margin-top: 10px;
+    line-height: 20px;
 
     .intro {
         margin-bottom: 2px;
@@ -238,7 +245,7 @@ body {
                 width: 200px;
             }
 
-            .btn-veridyOtpCode {
+            .btn-verifyOtpCode {
                 margin-left: 10px;
                 border-radius: 2px;
             }
@@ -247,7 +254,7 @@ body {
                 box-shadow: 0 0 1px 1px red;
             }
 
-            .msg-error{
+            .msg-error {
                 color: red;
             }
         }
