@@ -27,7 +27,7 @@
         thead {
             position: -webkit-sticky;
             position: sticky;
-            top: -1px;
+            top: 0;
             z-index: 2;
 
             tr {
@@ -121,17 +121,17 @@
             box-shadow: inset 0.5px 0px 1px 0px #b7b7b7;
 
             &-unit {
-                left: -1px;
+                left: 0;
                 width: 150px;
             }
 
             &-department {
-                left: 147px;
+                left: 150px;
                 width: 130px;
             }
 
             &-section {
-                left: 276px;
+                left: 280px;
                 width: 230px;
             }
         }
@@ -142,27 +142,27 @@
             box-shadow: inset 0.5px 0px 1px 0px #b7b7b7;
 
             &-unittype {
-                left: -1px;
+                left: 0;
                 background-color: #FFFFFF !important;
             }
 
             &-total-unittype {
-                left: -1px;
+                left: 0;
                 background-color: #CCFFFF !important;
             }
 
             &-unit {
-                left: 73px;
+                left: 80px;
                 background-color: #FFFFFF !important;
             }
 
             &-department {
-                left: 147px;
+                left: 150px;
                 background-color: #FFFFFF !important;
             }
 
             &-section {
-                left: 276px;
+                left: 280px;
                 background-color: #FFFFFF !important;
             }
 

@@ -7,7 +7,7 @@
 @import '../../../components/react-select';
 @import '../../../components/modal';
 
-.react-select__menu{
+.react-select__menu {
     z-index: 999 !important;
 }
 
@@ -23,21 +23,74 @@
     max-width: 100%;
     max-height: 65vh;
 
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    }
+
+    &::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #dbdbdb;
+    }
+
     table {
+        margin-bottom: 0;
+
+        tr td:last-child:not(.fixed-body), tr:not(:last-child) th:last-child {
+            border-right: 1px solid #b7b7b7 !important;
+        }
+
+        tbody {
+            tr:nth-child(-n+4) td {
+                border-top: none !important;
+            }
+
+            tr td {
+                &.text-left, &.fixed-body-total-unittype {
+                    border-right: 1px solid #b7b7b7 !important;
+                }
+
+                &:nth-child(2) {
+                    border-left: none !important;
+                }
+            }
+        }
+
         thead {
             position: -webkit-sticky;
             position: sticky;
-            top: -1px;
+            top: 0;
             z-index: 2;
 
             tr {
-                box-shadow: inset 0 1px 0 #b7b7b7, inset 0 -1px 0 #b7b7b7;
-
                 th {
-                    border-left-color: #b7b7b7 !important;
                     width: max-content;
                     color: #2c2c2c;
                     background-clip: padding-box;
+                }
+
+                &:first-child th {
+                    border-top: 1px solid #b7b7b7 !important;
+
+                    &:nth-child(3) {
+                        border-right: 1px solid #b7b7b7 !important;
+                    }
+
+                    &:nth-child(4) {
+                        border-left: none !important;
+                    }
+                }
+
+                &:not(:first-child) th:first-child{
+                    border-left: none !important;
+                }
+
+                &:last-child th {
+                    border-bottom: 1px solid #b7b7b7 !important;
                 }
             }
         }
@@ -47,17 +100,7 @@
         }
 
         .hide-border {
-            position: relative;
-
-            &:before {
-                content: "";
-                position: absolute;
-                top: -3px;
-                height: 3px;
-                left: 0;
-                right: 0;
-                background: #fff;
-            }
+            border-bottom: 1px solid #b7b7b7 !important;
         }
 
         td {
@@ -118,20 +161,19 @@
             position: sticky;
             z-index: 9999;
             background-color: #F8CBB5 !important;
-            box-shadow: inset 0.5px 0px 1px 0px #b7b7b7;
 
             &-unit {
-                left: -1px;
+                left: 0;
                 width: 150px;
             }
 
             &-department {
-                left: 147px;
+                left: 150px;
                 width: 130px;
             }
 
             &-section {
-                left: 276px;
+                left: 280px;
                 width: 230px;
             }
         }
@@ -139,30 +181,29 @@
         .fixed-body {
             position: sticky;
             z-index: 1;
-            box-shadow: inset 0.5px 0px 1px 0px #b7b7b7;
 
             &-unittype {
-                left: -1px;
+                left: 0;
                 background-color: #FFFFFF !important;
             }
 
             &-total-unittype {
-                left: -1px;
+                left: 0;
                 background-color: #CCFFFF !important;
             }
 
             &-unit {
-                left: 73px;
+                left: 75px;
                 background-color: #FFFFFF !important;
             }
 
             &-department {
-                left: 147px;
+                left: 150px;
                 background-color: #FFFFFF !important;
             }
 
             &-section {
-                left: 276px;
+                left: 280px;
                 background-color: #FFFFFF !important;
             }
 
@@ -171,13 +212,13 @@
             }
 
             &-total-department {
-                left: 276px;
+                left: 280px;
                 background-color: #CCFFCC !important;
             }
         }
     }
 }
 
-.form-group-width{
+.form-group-width {
     width: unset !important;
 }

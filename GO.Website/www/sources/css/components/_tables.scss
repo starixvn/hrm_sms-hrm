@@ -68,6 +68,19 @@ input[type="checkbox"] {
 
 .table {
     border-color: #c4c4c4;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    tr, th, td {
+        border-right-width: 0 !important;
+        border-bottom-width: 0 !important;
+        border-left: 1px solid #b7b7b7 !important;
+        border-top: 1px solid #b7b7b7 !important;
+    }
+
+    tr:last-child td {
+        border-bottom: 1px solid #b7b7b7 !important;
+    }
 
     thead {
         tr {
@@ -80,7 +93,6 @@ input[type="checkbox"] {
                 color: #fff;
                 font-weight: 600;
                 padding: 8px;
-                border-left: 1px solid #dee2e6 !important;
                 border-bottom-width: 1px;
                 vertical-align: middle;
                 text-align: center;
