@@ -88,7 +88,6 @@ module.exports = {
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
-        //[`${jsDistPath}/login`]: `${jsSourcePath}/login.js`,
         [`${jsDistPath}/auth.index`]: `${jsSourcePath}/auth/index.jsx`,
         [`${jsDistPath}/home.index`]: `${jsSourcePath}/home.index.js`,
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,

@@ -453,7 +453,6 @@
     <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\addtimerecord.js" />
-    <Content Include="wwwroot\sources\js\pages\login.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
     <Content Include="wwwroot\sources\js\pages\memo\tinymce.plugins.js" />

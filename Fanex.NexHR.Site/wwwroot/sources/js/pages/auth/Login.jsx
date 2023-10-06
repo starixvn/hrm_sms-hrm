@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import axios from 'axios';
 import { axiosError, resolveClientUrl } from '../../shared/common.functions';
+
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -8,7 +9,7 @@ export default class Login extends Component {
         this.state = {
             fields: {},
             errors: {},
-            errMsg : "",
+            errMsg : '',
             isShowErr : false
         };
         
@@ -18,14 +19,14 @@ export default class Login extends Component {
         let fields = this.state.fields;
         let errors = {};
         let formIsValid = true;
-        if (!fields["username"]) {
+        if (!fields['username']) {
             formIsValid = false;
-            errors["username"] = "The Username field is required.";
+            errors['username'] = 'The Username field is required.';
         }
 
-        if (!fields["password"]) {
+        if (!fields['password']) {
             formIsValid = false;
-            errors["password"] = "The Password field is required.";
+            errors['password'] = 'The Password field is required.';
         }
 
         this.setState({ errors: errors });
@@ -33,21 +34,21 @@ export default class Login extends Component {
     }
 
 
-    HandleLogin = (e) => {
+    handleLogin = (e) => {
         e.preventDefault();
-
+        const { fields } = this.state;
         if (this.handleValidation()) {
-            axios.post(resolveClientUrl("Auth/Login"), {
-                Username: this.state.fields['username'],
-                Password: btoa(this.state.fields['password'])
+            axios.post(resolveClientUrl('Auth/Login'), {
+                Username: fields['username'],
+                Password: btoa(fields['password'])
             }).then(response => {
                 const { data } = response;
                 if (data.isSuccessfull) {
                     this.setState({
-                        errMsg: "",
+                        errMsg: '',
                         isShowErr: false
                     })
-                    window.location.href = ("/");
+                    window.location.href = ('/');
                 } else {
                     this.setState({
                         errMsg: data.errorMessage,
@@ -69,14 +70,15 @@ export default class Login extends Component {
     }
    
     render() {
+        const { isShowErr, errors, errMsg } = this.state;
         return (
-            <form onSubmit={this.HandleLogin} id="formContainer">
+            <form onSubmit={this.handleLogin} id="formContainer">
                 {
-                    this.state.isShowErr && <div className="validation-summary-errors">
+                    isShowErr && <div className="validation-summary-errors">
                         <ul>
-                            <li>{this.state.errors["username"]}</li>
-                            <li>{this.state.errors["password"]}</li>
-                            <li>{this.state.errMsg}</li>
+                            <li>{errors["username"]}</li>
+                            <li>{errors["password"]}</li>
+                            <li>{errMsg}</li>
                         </ul>
                     </div>
                 }
@@ -84,14 +86,14 @@ export default class Login extends Component {
                     <div className="username-icon">
                     </div>
                     <div className="username-field">
-                        <input type="text" placeholder="Username" onChange={this.handleChange.bind(this, "username")} />
+                        <input type="text" placeholder="Username" onChange={this.handleChange.bind(this, 'username')} />
                     </div>
                 </div>
                 <div className="textbox-outer">
                     <div className="password-icon">
                     </div>
                     <div className="password-field">
-                        <input type="password" placeholder="Password" onChange={this.handleChange.bind(this, "password")} />
+                        <input type="password" placeholder="Password" onChange={this.handleChange.bind(this, 'password')} />
                     </div>
                 </div>
                 <div className="signin-button">
