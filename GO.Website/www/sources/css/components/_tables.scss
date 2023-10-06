@@ -26,22 +26,12 @@ input[type="checkbox"] {
     }
 }
 
-.table-title {
-    border-color: #c4c4c4;
-}
-
 .table-container {
     .header-content {
         border-color: #c4c4c4;
     }
 
     .body-content {
-        border-color: #c4c4c4;
-
-        td {
-            border-color: #c4c4c4 !important;
-        }
-
         tr {
             &:nth-child(2n) {
                 th, td {
@@ -67,35 +57,41 @@ input[type="checkbox"] {
 }
 
 .table {
-    border-color: #c4c4c4;
     border-collapse: separate;
     border-spacing: 0;
+    margin-bottom: 0;
+    border: none;
 
     tr, th, td {
-        border-right-width: 0 !important;
-        border-bottom-width: 0 !important;
-        border-left: 1px solid #b7b7b7 !important;
-        border-top: 1px solid #b7b7b7 !important;
+        border-right: none;
+        border-bottom: none;
+        border-left: 1px solid $border-table-grey;
+        border-top: 1px solid $border-table-grey;
     }
 
-    tr:last-child td {
-        border-bottom: 1px solid #b7b7b7 !important;
+    tr {
+        &:last-child td {
+            border-bottom: 1px solid $border-table-grey;
+        }
+
+        th:last-child, td:last-child:not([rowspan]) {
+            border-right: 1px solid $border-table-grey;
+        }
     }
 
     thead {
         tr {
             td, th {
-                &:first-child {
-                    border-left: 0;
-                }
-
                 background: #6b7f89;
                 color: #fff;
                 font-weight: 600;
                 padding: 8px;
-                border-bottom-width: 1px;
                 vertical-align: middle;
                 text-align: center;
+            }
+
+            th {
+                border-bottom: none;
             }
         }
     }
@@ -104,7 +100,6 @@ input[type="checkbox"] {
         tr {
             td {
                 background: #fff;
-                border: 1px solid #b7b7b7;
                 vertical-align: middle;
                 padding: 4px 5px;
             }

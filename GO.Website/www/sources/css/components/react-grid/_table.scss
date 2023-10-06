@@ -30,18 +30,8 @@ $bgTotal: $bgSummaryTotal;
                 vertical-align: middle;
                 text-align: center;
                 background: $bgHeaderTableLevel2;
-                border: 1px solid $colorBorderTable;
-                border-top: 1px solid $colorBorderTable;
                 color: #363636;
                 padding: 8px;
-
-                &:first-child {
-                    border-left-color: $colorBorderTable;
-                }
-
-                &:last-child {
-                    border-right-color: $colorBorderTable;
-                }
             }
         }
     }
@@ -49,7 +39,6 @@ $bgTotal: $bgSummaryTotal;
     > tbody {
         tr {
             td {
-                border: 1px solid $colorBorderTable;
                 color: $black;
                 padding: 4px 5px;
                 background: $white;

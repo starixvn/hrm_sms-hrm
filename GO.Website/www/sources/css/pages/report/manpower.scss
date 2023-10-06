@@ -7,7 +7,7 @@
 @import '../../components/react-select';
 @import '../../components/modal';
 
-.react-select__menu{
+.react-select__menu {
     z-index: 999 !important;
 }
 
@@ -31,10 +31,7 @@
             z-index: 2;
 
             tr {
-                box-shadow: inset 0 1px 0 #b7b7b7, inset 0 -1px 0 #b7b7b7;
-
                 th {
-                    border-left-color: #b7b7b7 !important;
                     width: max-content;
                     color: #2c2c2c;
                     background-clip: padding-box;
@@ -178,6 +175,6 @@
     }
 }
 
-.form-group-width{
+.form-group-width {
     width: unset !important;
 }
