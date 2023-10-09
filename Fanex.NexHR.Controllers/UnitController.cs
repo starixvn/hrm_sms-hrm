@@ -3,6 +3,7 @@
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Unit;
@@ -26,28 +27,20 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.UnitManagement)]
-        public ActionResult Index(bool? isActive = null)
+        public ActionResult Index()
         {
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
-            var model = new UnitViewModel
-            {
-                IsActive = isActive,
-                Units = unitService.GetUnit(isActive: isActive)
-            };
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
 
-            return View(model);
+            return View(hasPermission);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.UnitManagement)]
-        public ActionResult Index(UnitViewModel model)
+        public ActionResult GetUnit(UnitViewModel model)
         {
-            if (model != null)
-            {
-                model.Units = unitService.GetUnit(isActive: model.IsActive);
-            }
+            var units = unitService.GetUnit(isActive: model.IsActive);
 
-            return View(model);
+            return new CustomJsonResult { Data = units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
@@ -79,20 +72,14 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Edit(int id)
         {
-            Unit unit = unitService.GetById(id);
-            if (unit == null)
-            {
-                return RedirectToAction("PageNotFound", "Error");
-            }
+            return View(id);
+        }
 
-            var model = new EditUnitViewModel
-            {
-                UnitId = id,
-                Code = unit.Code,
-                Name = unit.Name,
-                IsActive = unit.IsActive,
-            };
-            return View(model);
+        [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
+        public ActionResult GetById(int id)
+        {
+            Unit unit = unitService.GetById(id);
+            return new CustomJsonResult { Data = unit, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

@@ -1,17 +1,20 @@
 ﻿@using Fanex.NexHR.Models
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Unit
-@model UnitViewModel
+@model bool
 @{
     ViewBag.Title = @Labels.UnitManagement;
-    var hasPermission = (bool)ViewBag.HasPermission; ;
-    var totalColumn = hasPermission ? 6 : 4;
+    //var hasPermission = (bool)ViewBag.HasPermission; ;
+    //var totalColumn = hasPermission ? 6 : 4;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/unit.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/unit.index.js"></script>
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/wwwroot/dist/js/unit.home.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
@@ -19,85 +22,4 @@
 
 <h2 class="page-title">@ViewBag.Title</h2>
 
-@using (Html.BeginForm("index", "unit", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
-{
-    <div class="form-horizontal clearfix">
-        <div class="form-group">
-            <div class="label-form label--xs">
-                @Html.Label(@Labels.Status, new { @class = "control-label" })
-            </div>
-            <div class="select-form">
-                @{
-                    var status = new List<SelectListItem>
-                        {
-                        new SelectListItem() {Text = "All", Value = "", Selected = !Model.IsActive.HasValue },
-                        new SelectListItem() {Text = "Active", Value = "true", Selected = Model.IsActive.HasValue && Model.IsActive.Value},
-                        new SelectListItem() {Text = "Inactive", Value = "false", Selected = Model.IsActive.HasValue  && !Model.IsActive.Value}
-                     };
-                }
-                @Html.DropDownList("IsActive", status, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group form-group--m">
-            <button type="submit" class="btn btn-primary">@Labels.Search</button>
-            @if (hasPermission)
-            {
-                <a class="btn btn-request" href="@Url.Action("create", "unit")">
-                    <span class="fa fa-plus"></span> @Labels.NewUnit
-                </a>
-            }
-        </div>
-    </div>
-}
-<table class="table table-custom" id="data" style="width: auto; min-width: 700px;">
-    <thead>
-        <tr>
-            <th>@Labels.SymbolCount</th>
-            <th>@Labels.Code</th>
-            <th>@Labels.Unit</th>
-            <th>@Labels.Active</th>
-            @if (hasPermission)
-            {
-                <th>@Labels.Edit</th>
-                <th>@Labels.Delete</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Units.Any())
-        {
-            int index = 1;
-            foreach (Unit unit in Model.Units)
-            {
-                <tr id="row_@(unit.Id)">
-                    <td>@(index++)</td>
-                    <td>@unit.Code</td>
-                    <td>@unit.Name</td>
-                    <td>
-                        @if (unit.IsActive)
-                        {
-                            <i class="fa fa-check fa-lg icon-check"></i>
-                        }
-                    </td>
-                    @if (hasPermission)
-                    {
-                        <td>
-                            <a href="@Url.Action("edit", "unit", new { Id = unit.Id})">
-                                <i class="fa fa-pencil fa-lg icon-edit"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="javascript:;">
-                                <i class="fa fa-times fa-lg icon-delete" data-unit-id="@unit.Id"></i>
-                            </a>
-                        </td>
-                    }
-                </tr>
-            }
-        }
-        else
-        {
-            @RazorHelper.DisplayNoInformation(colspan: totalColumn)
-        }
-    </tbody>
-</table>
+<div id="index-unit"></div>

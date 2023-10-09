@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Unit
-@model EditUnitViewModel
+@model int
 @{
     ViewBag.Title = @Labels.EditUnit;
 }
@@ -9,6 +9,7 @@
     <link href="~/wwwroot/dist/styles/unit.create.css" rel="stylesheet" />
 }
 @section js{
+    <script>window.unitId = @Model;</script>
     <script src="~/wwwroot/dist/js/unit.edit.js"></script>
 }
 
@@ -18,7 +19,8 @@
     <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Edit</h2>
-@using (Html.BeginForm("Edit", "Unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
+<div id="edit-unit"></div>
+@*@using (Html.BeginForm("Edit", "Unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
 {
     <div class="card">
         @Html.ValidationSummary()
@@ -54,4 +56,4 @@
             </div>
         </div>
     </div>
-}
+}*@

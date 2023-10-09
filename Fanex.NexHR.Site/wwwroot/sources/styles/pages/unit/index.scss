@@ -4,3 +4,24 @@
 @import '../../layout/_filter.scss';
 @import '../../layout/_table.scss';
 @import '../../components/jquery-ui-dialog';
+
+.filter{
+    max-width : 700px;
+}
+
+.btn{
+    &:focus, &:active {
+        outline : none;
+        border : none;
+    }
+}
+.btn-request{
+    margin-left : 5px;
+}
+.form-group {
+    margin-bottom: 0 !important;
+}
+.table-custom{
+    width: auto;
+    max-width : 700px;
+}
