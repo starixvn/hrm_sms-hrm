@@ -260,7 +260,7 @@
         {
             //Arrange
             var service = GetManpowerForecastService();
-            var periodId = fixture.Create<int>();
+            var periodId = fixture.Create<short>();
             var expected = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
             var criteria = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 

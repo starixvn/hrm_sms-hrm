@@ -44,7 +44,7 @@
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Setup2Fa()
         {
-            return View();
+            return View("~/Views/Account/Setup2FA.cshtml");
         }
 
         public async Task<IActionResult> VerifyOTP()
@@ -55,7 +55,7 @@
                 await DoLoginAsync(userControlSession.UserId);
             }
 
-            return otpConfig.Enable && userOtp is { Enabled: true } ? View() : RedirectToAction("index", "Home");
+            return otpConfig.Enable && userOtp is { Enabled: true } ? View("~/Views/Account/VerifyOTP.cshtml") : RedirectToAction("index", "Home");
         }
 
         [GOAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -137,7 +137,7 @@
             var userOtp = await userOtpService.GetUserOTPByIdAsync(userControlSession.UserId, userControlSession.SiteId);
             var isOTPValid = twoFactorAuthService.ValidateOTPCode(userOtp.SecretKey, model.Otp);
 
-            if (TryValidateModel(model) && isOTPValid)
+            if (isOTPValid)
             {
                 await DoLoginAsync(userControlSession.UserId);
             }

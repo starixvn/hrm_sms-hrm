@@ -10,7 +10,7 @@
         {
             // Arrange
             var criteria = new GetJobLevelSummaryReportCriteria();
-            var expected = "Report_Manpower_Get";
+            var expected = "Report_JobLevelSummary_Get";
 
             // Act
             var actual = criteria.GetSettingKey();

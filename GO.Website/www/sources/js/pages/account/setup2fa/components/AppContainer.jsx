@@ -19,18 +19,20 @@ const AppContainer = () => {
 
     const handleCloseChangeSecretKeyModalDialog = () => {
         setChangeSecretKeyModalDialog({ show: false });
-    }
+    };
 
     const handleOpenChangeSecretKeyModalDialog = () => {
         setChangeSecretKeyModalDialog({ show: true });
-    }
+    };
 
     useEffect(() => {
         const getSetupOtp = async () => {
             Site.blockUI();
             const url = Site.resolveClientUrl('Account/SetupOtp');
             await DataService.postDataAsync(url).then(response => {
-                setSetupOtp(response.data);
+                if (response !== undefined) {
+                    setSetupOtp(response.data);
+                }
             }).then(() => Site.unblockUI());
         };
 
@@ -38,9 +40,11 @@ const AppContainer = () => {
             Site.blockUI();
             const url = Site.resolveClientUrl('Account/GetAccountOTP');
             await DataService.postDataAsync(url).then(response => {
-                setAccountOTP(response.data);
-                if (response.data == null || !response.data.isRegistered) {
-                    getSetupOtp();
+                if (response !== undefined) {
+                    setAccountOTP(response.data);
+                    if (response.data == null || !response.data.isRegistered) {
+                        getSetupOtp();
+                    }
                 }
             }).then(() => Site.unblockUI());
         };
@@ -52,7 +56,9 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/SetupOtp');
         await DataService.postDataAsync(url).then(response => {
-            setSetupOtp(response.data);
+            if (response !== undefined) {
+                setSetupOtp(response.data);
+            }
         }).then(() => Site.unblockUI());
     };
 
@@ -61,16 +67,18 @@ const AppContainer = () => {
             Site.blockUI();
             const url = Site.resolveClientUrl('Account/VerifySetupOTP');
             await DataService.postDataAsync(url, setupOtp).then(response => {
-                setIsVerifyOtp(response.data);
-                setIsShowMessageVerifyOtp(true);
-                setMessageError(null);
-                if (response.data) {
-                    toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
-                    setTimeout(() => {
-                        getAccountOTP();
-                    }, 3000);
-                } else {
-                    toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
+                if (response !== undefined) {
+                    setIsVerifyOtp(response.data);
+                    setIsShowMessageVerifyOtp(true);
+                    setMessageError(null);
+                    if (response.data) {
+                        toast.success(LangHelper.getResource('MessageSuccessVerifySetupOtp'));
+                        setTimeout(() => {
+                            getAccountOTP();
+                        }, 3000);
+                    } else {
+                        toast.error(LangHelper.getResource('MessageErrorVerifySetupOtp'));
+                    }
                 }
             }).then(() => Site.unblockUI());
         } else {
@@ -84,7 +92,9 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/GetAccountOTP');
         await DataService.postDataAsync(url).then(response => {
-            setAccountOTP(response.data);
+            if (response !== undefined) {
+                setAccountOTP(response.data);
+            }
         }).then(() => Site.unblockUI());
     };
 
@@ -92,10 +102,12 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/ResetSetupOtp');
         await DataService.postDataAsync(url, accountOTP).then(response => {
-            if (response.data) {
-                handleCloseChangeSecretKeyModalDialog();
-                getAccountOTP();
-                getSetupOtp();
+            if (response !== undefined) {
+                if (response.data) {
+                    handleCloseChangeSecretKeyModalDialog();
+                    getAccountOTP();
+                    getSetupOtp();
+                }
             }
         }).then(() => Site.unblockUI());
     };
@@ -104,6 +116,9 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/UpdateStatusOTP');
         await DataService.postDataAsync(url, accountOTP).then(response => {
+            if (response !== undefined) {
+                accountOTP.enabled = !accountOTP.enabled;
+            }
         }).then(() => Site.unblockUI());
     };
 
@@ -147,7 +162,6 @@ const AppContainer = () => {
                     onClose={handleCloseChangeSecretKeyModalDialog}
                 />
             }
-
         </>
     );
 }

@@ -1,9 +1,9 @@
 ﻿namespace GO.Website.UnitTests.Controllers.Manpower
 {
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using AutoFixture;
+    using Core.Services;
     using GO.Core.Models;
     using GO.Website.Constants;
     using GO.Website.Controllers.Manpower;
@@ -22,6 +22,8 @@
     {
         private IUserControlSession userControlSession;
         private IManpowerForecastService manpowerForecastService;
+        private IBaseService baseService;
+        private IExportExcelService excelService;
         private readonly Fixture fixture = new();
 
         [Fact]
@@ -73,8 +75,8 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualPeriods = jsonResult.Value.GetType().GetProperty("period").GetValue(jsonResult.Value);
-            var actualDetails = jsonResult.Value.GetType().GetProperty("details").GetValue(jsonResult.Value);
+            var actualPeriods = jsonResult.Value.GetType().GetProperty("period")?.GetValue(jsonResult.Value);
+            var actualDetails = jsonResult.Value.GetType().GetProperty("details")?.GetValue(jsonResult.Value);
             Assert.Equal(periods, actualPeriods);
             Assert.Equal(actualDetails, details);
         }
@@ -149,8 +151,7 @@
             // Arrange
             var controller = GetController();
             var requestId = fixture.Create<int>();
-            AnnualManpowerForecastRequest request = null;
-            manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns(request);
+            manpowerForecastService.GetAnnualRequestByIdAsync(requestId).Returns((AnnualManpowerForecastRequest)null);
 
             //Act
             var result = await controller.GetById(requestId);
@@ -375,10 +376,14 @@
         {
             userControlSession = Substitute.For<IUserControlSession>();
             manpowerForecastService = Substitute.For<IManpowerForecastService>();
+            baseService = Substitute.For<IBaseService>();
+            excelService = Substitute.For<IExportExcelService>();
 
             return new AnnualRequestController(
                 userControlSession,
-                manpowerForecastService
+                manpowerForecastService,
+                baseService,
+                excelService
             );
         }
 

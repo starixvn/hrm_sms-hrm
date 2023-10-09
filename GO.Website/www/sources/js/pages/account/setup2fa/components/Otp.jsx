@@ -16,6 +16,7 @@ const Otp = ({ accountOTP, onChangeStatusOTP, onChangeSecretKey }) => {
                         id='customSwitchesChecked'
                         defaultChecked={accountOTP.enabled}
                         onChange={onChangeStatusOTP}
+                        data-testid="customSwitchesChecked"
                     />
                     <label className='custom-control-label' htmlFor='customSwitchesChecked'></label>
                 </div>

@@ -30,7 +30,7 @@
 
             // Assert
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Equal("~/Views/Report/Manpower.cshtml", viewResult.ViewName);
+            Assert.Equal("~/Views/Report/JobLevelSummaryReport.cshtml", viewResult.ViewName);
         }
 
         [Fact]
@@ -71,14 +71,17 @@
                     JobLevel = "M3-A"
                 }
             };
-
+            var unit = new List<string> { "PU01" };
+            var joblevels = new List<string> { "M3-A" };
             baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<string>(Arg.Any<GetUnitCriteria>()).Returns(unit);
+            baseService.GetDataAsync<string>(Arg.Any<GetJobLevelCriteria>()).Returns(joblevels);
             //Act
             var result = await controller.GetData();
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualGridCountryData = jsonResult.Value.GetType().GetProperty("gridCountryData").GetValue(jsonResult.Value);
+            var actualGridCountryData = jsonResult.Value.GetType().GetProperty("gridCountryData")?.GetValue(jsonResult.Value);
             var viewResult = Assert.IsType<GridData>(actualGridCountryData);
             Assert.Equal("M3-A", viewResult.Supervisors.First().Name);
             Assert.Equal("test", viewResult.Supervisors.First().Cells.First().Name);
@@ -107,8 +110,11 @@
                     JobLevel = "E3-A"
                 }
             };
-
+            var unit = new List<string> { "PU01" };
+            var joblevels = new List<string> { "E3-A" };
             baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<string>(Arg.Any<GetUnitCriteria>()).Returns(unit);
+            baseService.GetDataAsync<string>(Arg.Any<GetJobLevelCriteria>()).Returns(joblevels);
             //Act
             var result = await controller.GetData();
 
@@ -145,13 +151,17 @@
                 }
             };
 
+            var unit = new List<string> { "PU01" };
+            var joblevels = new List<string> { "M3-A", "E3-A" };
             baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
+            baseService.GetDataAsync<string>(Arg.Any<GetUnitCriteria>()).Returns(unit);
+            baseService.GetDataAsync<string>(Arg.Any<GetJobLevelCriteria>()).Returns(joblevels);
             //Act
             var result = await controller.GetData();
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualGridUnitData = jsonResult.Value.GetType().GetProperty("gridUnitData").GetValue(jsonResult.Value);
+            var actualGridUnitData = jsonResult.Value.GetType().GetProperty("gridUnitData")?.GetValue(jsonResult.Value);
             var viewResultUnit = Assert.IsType<GridData>(actualGridUnitData);
             Assert.Equal("E3-A", viewResultUnit.Employees.First().Name);
             Assert.Equal("PU01", viewResultUnit.Employees.First().Cells.First().Cells.First().Name);
@@ -159,7 +169,7 @@
             Assert.Equal("PU01", viewResultUnit.TotalEmployee.Cells.First().Cells.First().Name);
             Assert.Equal(1, viewResultUnit.TotalEmployee.Cells.First().Cells.First().TotalExpat);
 
-            var actualGridCountryData = jsonResult.Value.GetType().GetProperty("gridCountryData").GetValue(jsonResult.Value);
+            var actualGridCountryData = jsonResult.Value.GetType().GetProperty("gridCountryData")?.GetValue(jsonResult.Value);
             var viewResultCountry = Assert.IsType<GridData>(actualGridCountryData);
             Assert.Equal("M3-A", viewResultCountry.Supervisors.First().Name);
             Assert.Equal("test", viewResultCountry.Supervisors.First().Cells.First().Name);
@@ -174,7 +184,7 @@
             var controller = GetController();
             var employeeInfos = fixture.Create<IEnumerable<EmployeeInfo>>();
             var expected = fixture.Create<byte[]>();
-            var reportName = $"ManpowerReport_{DateTime.Today:yyyyMMdd}.xlsx";
+            var reportName = $"JobLevelSummaryReportByUnitAndCountry_{DateTime.Today:yyyyMMdd}.xlsx";
 
             baseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetJobLevelSummaryReportCriteria>()).Returns(employeeInfos);
             excelService.ExportJobLevelSummaryReport(Arg.Any<GridData>(), Arg.Any<GridData>()).Returns(expected);
