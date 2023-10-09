@@ -166,7 +166,9 @@ export default class Header extends Component {
                     </nav>
                 </div>
                 <div className={`side-menu ${showSideMenu ? 'show-side-menu' : ''}`} >
-                    <div className='handle-click-out-side' onClick={this.showSideMenu}></div>
+                    {showSideMenu &&
+                        <div className='handle-click-out-side' onClick={this.showSideMenu}></div>
+                    }
                     <ul className="side-nav fixed">
                         {
                             sites.map(site => <li key={site.siteId}>

@@ -6,3 +6,9 @@
 @import '../../../components/forms';
 @import '../../../components/icons';
 @import '../../../components/tables';
+
+.table tr {
+    &:last-child td {
+        border-bottom: none;
+    }
+}

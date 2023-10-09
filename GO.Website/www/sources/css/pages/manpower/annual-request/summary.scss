@@ -69,10 +69,6 @@
 
                 &:last-child th {
                     border-bottom: 1px solid $border-table-grey;
-
-                    &:last-child {
-                        border-right: none;
-                    }
                 }
             }
         }

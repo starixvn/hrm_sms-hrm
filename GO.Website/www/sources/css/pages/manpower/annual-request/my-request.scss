@@ -8,3 +8,9 @@
 .my-annual-request {
     margin-top: 1rem;
 }
+
+.table tr {
+    &:last-child td {
+        border-bottom: none;
+    }
+}

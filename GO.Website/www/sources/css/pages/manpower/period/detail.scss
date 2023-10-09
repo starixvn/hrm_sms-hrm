@@ -12,3 +12,9 @@
 .period-detail {
     margin: 1rem 0;
 }
+
+.table tr {
+    &:last-child td {
+        border-bottom: none;
+    }
+}

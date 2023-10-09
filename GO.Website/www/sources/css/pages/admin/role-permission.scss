@@ -9,3 +9,9 @@
 .form-filter {
     max-width: 720px;
 }
+
+.table tr {
+    &:last-child td {
+        border-bottom: none;
+    }
+}

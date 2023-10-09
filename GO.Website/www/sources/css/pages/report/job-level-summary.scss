@@ -13,6 +13,7 @@
     .table {
         margin-top: 16px;
         width: auto;
+        border-bottom: 1px solid $border-table-grey;
 
         thead {
             tr {
@@ -31,6 +32,10 @@
                             cursor: pointer;
                         }
                     }
+                }
+
+                &:last-child td {
+                    border-bottom: none;
                 }
             }
         }
@@ -61,6 +66,10 @@
                         background: #97b1bd99;
                         font-weight: bold;
                     }
+                }
+
+                &:last-child td {
+                    border-bottom: none;
                 }
             }
         }

@@ -8,3 +8,10 @@
 @import '../../components/tables';
 @import '../../components/react-select';
 @import '../../components/react-tree-multiselect/_multiselect-treeview';
+
+
+.table tr {
+    &:last-child td {
+        border-bottom: none;
+    }
+}
