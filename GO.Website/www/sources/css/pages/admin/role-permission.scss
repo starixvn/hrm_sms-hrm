@@ -10,8 +10,14 @@
     max-width: 720px;
 }
 
-.table tr {
-    &:last-child td {
-        border-bottom: none;
+.table {
+    thead tr:last-child th {
+        border-top: 1px solid $border-table-grey;
+    }
+
+    tr {
+        &:last-child td {
+            border-bottom: none;
+        }
     }
 }
