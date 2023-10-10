@@ -161,18 +161,9 @@ module.exports = {
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
         [`${jsDistPath}/section.index`]: `${jsSourcePath}/section/index.js`,
         [`${jsDistPath}/section.edit`]: `${jsSourcePath}/section/edit.js`,
-
-
-        //[`${jsDistPath}/unit.index`]: `${jsSourcePath}/unit/index.js`,
-        //[`${jsDistPath}/unit.edit`]: `${jsSourcePath}/unit/edit.js`,
-
         [`${jsDistPath}/unit.home`]: `${jsSourcePath}/unit/home/index.jsx`,
         [`${jsDistPath}/unit.edit`]: `${jsSourcePath}/unit/edit/index.jsx`,
         [`${jsDistPath}/unit.create`]: `${jsSourcePath}/unit/create/index.jsx`,
-
-
-
-
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
         [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,
         [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
