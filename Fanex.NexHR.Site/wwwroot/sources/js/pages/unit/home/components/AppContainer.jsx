@@ -26,7 +26,7 @@ export const AppContainer = () => {
     return (
         <Fragment>
             <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />
-            <Table data={units}/>
+            <Table data={units} hanleGetUnit={ hanleGetUnit }/>
         </Fragment>
     )
 };

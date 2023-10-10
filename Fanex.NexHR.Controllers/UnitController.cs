@@ -108,7 +108,6 @@
         public JsonResult Delete(DeleteUnitCriteria criteria)
         {
             var commandResult = unitService.Delete(criteria);
-
             return Json(commandResult);
         }
     }

@@ -1,23 +1,26 @@
 ﻿import React, { Fragment } from 'react';
 import axios from 'axios';
-import { resolveClientUrl, axiosError } from '../../../../shared/common.functions';
+import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
 export const Table = (props) => {
-    const { data } = props;
+    const { data, hanleGetUnit } = props;
     const handleViewId = (id) => {
         window.location.href = (`/unit/edit/${id}`);
     }
     const handleDeleteId = (id) => {
-        //axios.post(resolveClientUrl('Unit/Delete'), {
-        //    UnitId: id,
-        //    ModifiedBy: id
-        //}).then(response => {
-        //    const { data } = response;
-        //    console.log(data);
-        //    if (data.IsSuccessful) {
-        //    } else {
-
-        //    }
-        //}).catch(axiosError);
+        confirm('Are you sure you want to delete this unit?', () => {
+            axios.post(resolveClientUrl('Unit/Delete'), {
+                UnitId: id,
+                ModifiedBy: window._global.employeeId
+            }).then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    alert('Delete successfully!');
+                    hanleGetUnit();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
+        });
     }
     return (
         <Fragment>
