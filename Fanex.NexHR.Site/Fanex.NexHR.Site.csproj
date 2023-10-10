@@ -437,6 +437,8 @@
     <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\employeeworkfromhome\index.js" />
     <Content Include="wwwroot\sources\js\pages\joblevel\joblevel.js" />
+    <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\edit.js" />
     <Content Include="wwwroot\sources\js\pages\unit\edit\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\edit\index.jsx" />

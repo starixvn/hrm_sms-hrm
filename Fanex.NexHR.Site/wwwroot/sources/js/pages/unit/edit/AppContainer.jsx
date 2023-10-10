@@ -1,6 +1,7 @@
 ﻿import axios from 'axios';
+import toastr from 'toastr';
 import React, { useEffect, useState } from 'react';
-import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { Form } from '../Form';
 
 
@@ -10,6 +11,7 @@ export const AppContainer = () => {
     const id = url.substring(url.lastIndexOf('/') + 1);
     const [validations, setValidations] = useState({})
     const [values, setValues] = useState({
+        id : null,
         name: '',
         code: '',
         isActive: false
@@ -20,6 +22,7 @@ export const AppContainer = () => {
             const { data } = response;
             if (data) {
                 setValues({
+                    id : data.id,
                     code: data.code,
                     name: data.name,
                     isActive: data.isActive
@@ -59,10 +62,6 @@ export const AppContainer = () => {
 
         return isValid;
     }
-
-
-    
-
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -71,11 +70,27 @@ export const AppContainer = () => {
         if (!isValid) {
             return false;
         } else {
-            console.log(values);
+            axios.post(resolveClientUrl(`Unit/Edit`), {
+                UnitId: values.id,
+                Code: values.code,
+                Name: values.name,
+                IsActive: values.isActive
+            }).then(response => {
+                const { data } = response;
+                console.log(data)
+                if (data.IsSuccessful) {
+                    toastr.success('Successfully!', '', toastOptions());
+                    setTimeout(function () {
+                        document.location = resolveClientUrl("Unit/Index");
+                    }, 3000);
+                } else {
+                    toastr.error(data.Message, '', toastOptions());
+                }
+            }).catch(axiosError);
             setValidations({})
         }
     }
     return (
-        <Form setValues={setValues}  handleSubmit={handleSubmit} validations={validations.validations} data={values} />
+        <Form setValues={setValues}  handleSubmit={handleSubmit} validations={validations.validations} data={values} btn='Update'/>
     )
 };

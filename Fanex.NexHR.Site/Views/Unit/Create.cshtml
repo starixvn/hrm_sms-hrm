@@ -10,7 +10,7 @@
     <link href="~/wwwroot/dist/styles/unit.create.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/unit.edit.js"></script>
+    <script src="~/wwwroot/dist/js/unit.create.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.SASpace</a>
@@ -19,7 +19,10 @@
 }
 
 <h2 class="page-title">@Labels.Create</h2>
-@using (Html.BeginForm("Create", "Unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
+<div id="create-unit"></div>
+
+
+@*@using (Html.BeginForm("Create", "Unit", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
 {
     <div class="card">
         @Html.ValidationSummary()
@@ -54,4 +57,4 @@
             </div>
         </div>
     </div>
-}
+}*@

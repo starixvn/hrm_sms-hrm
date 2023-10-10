@@ -30,7 +30,7 @@
         public ActionResult Index()
         {
             var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
-
+            
             return View(hasPermission);
         }
 

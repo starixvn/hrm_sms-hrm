@@ -168,6 +168,7 @@ module.exports = {
 
         [`${jsDistPath}/unit.home`]: `${jsSourcePath}/unit/home/index.jsx`,
         [`${jsDistPath}/unit.edit`]: `${jsSourcePath}/unit/edit/index.jsx`,
+        [`${jsDistPath}/unit.create`]: `${jsSourcePath}/unit/create/index.jsx`,
 
 
 

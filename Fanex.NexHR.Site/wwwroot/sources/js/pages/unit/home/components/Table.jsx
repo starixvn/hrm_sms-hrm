@@ -1,9 +1,23 @@
 ﻿import React, { Fragment } from 'react';
-
+import axios from 'axios';
+import { resolveClientUrl, axiosError } from '../../../../shared/common.functions';
 export const Table = (props) => {
     const { data } = props;
     const handleViewId = (id) => {
         window.location.href = (`/unit/edit/${id}`);
+    }
+    const handleDeleteId = (id) => {
+        //axios.post(resolveClientUrl('Unit/Delete'), {
+        //    UnitId: id,
+        //    ModifiedBy: id
+        //}).then(response => {
+        //    const { data } = response;
+        //    console.log(data);
+        //    if (data.IsSuccessful) {
+        //    } else {
+
+        //    }
+        //}).catch(axiosError);
     }
     return (
         <Fragment>
@@ -40,7 +54,7 @@ export const Table = (props) => {
                                             </a>
                                         </td>
                                         <td>
-                                            <a style={{ cursor: 'pointer' }}>
+                                            <a onClick={() => handleDeleteId(item.id)} style={{ cursor: 'pointer' }}>
                                                 <i className="fa fa-times fa-lg icon-delete"></i>
                                             </a>
                                         </td>

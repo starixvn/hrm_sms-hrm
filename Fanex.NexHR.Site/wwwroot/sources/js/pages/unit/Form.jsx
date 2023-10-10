@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 
 export const Form = (props) => {
-    const { setValues , handleSubmit, validations, data } = props;
+    const { setValues , handleSubmit, validations, data, btn } = props;
 
     const { name, code, isActive } = data
     const handleGoBack = () => {
@@ -9,11 +9,7 @@ export const Form = (props) => {
     }
 
     const handleChange = (e) => {
-        if (e.target.value) {
-            setValues({ ...data, [e.target.name]: e.target.value })
-            
-        }
-        setValues({ ...data, [e.target.name]: e.target.checked })
+        setValues({ ...data, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value.trim() })
     }
     return (
         <form className="form-horizontal" onSubmit={handleSubmit }>
@@ -50,12 +46,12 @@ export const Form = (props) => {
                         <label className="control-label">Is Active</label>
                     </div>
                     <div className="input-form">
-                        <input type="checkbox" name="isActive" checked={isActive} onChange={handleChange} />
+                        <input type="checkbox" name="isActive" checked={isActive ? isActive : '' } onChange={handleChange} />
                     </div>
                 </div> 
 
                 <div className="form-group">
-                    <button type="submit" className="btn btn-primary" id="btnSubmit">Update</button>
+                    <button type="submit" className="btn btn-primary" id="btnSubmit">{ btn }</button>
                     <a className="btn btn-default" onClick={ handleGoBack }>Back</a>
                 </div>
             </div>
