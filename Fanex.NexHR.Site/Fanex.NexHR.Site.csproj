@@ -402,6 +402,12 @@
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\auth\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\auth\Login.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\create\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
@@ -433,8 +439,6 @@
     <Content Include="wwwroot\dist\styles\team.index.css" />
     <Content Include="wwwroot\dist\styles\team.index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
-    <Content Include="wwwroot\sources\js\pages\department\edit.js" />
-    <Content Include="wwwroot\sources\js\pages\department\index.js" />
     <Content Include="wwwroot\sources\js\pages\employeeworkfromhome\index.js" />
     <Content Include="wwwroot\sources\js\pages\joblevel\joblevel.js" />
     <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />

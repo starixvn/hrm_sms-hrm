@@ -1,0 +1,77 @@
+﻿import React, { Fragment } from 'react';
+import axios from 'axios';
+import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
+export const Table = (props) => {
+    const { data, hanleGetDepartment } = props;
+    const handleViewId = (id) => {
+        window.location.href = (`/department/edit/${id}`);
+    }
+    const handleDeleteId = (id) => {
+        confirm('Are you sure you want to delete this department?', () => {
+            axios.post(resolveClientUrl('Department/Delete'), {
+                DepartmentId: id,
+                ModifiedBy: window._global.employeeId
+            }).then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    alert('Delete successfully!');
+                    hanleGetDepartment();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
+        });
+    }
+    return (
+        <Fragment>
+            <table className="table table-custom">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Department</th>
+                        <th>Active</th>
+                        {
+                            window.hasPermission && <Fragment>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </Fragment>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        data.length ? data.map((item, i) => (
+                            <tr id={`row_${i}`} key={item.id}>
+                                <td>{i + 1}</td>
+                                <td>{item.code}</td>
+                                <td>{item.name}</td>
+                                <td>
+                                    {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
+                                </td>
+                                {
+                                    window.hasPermission && <Fragment>
+                                        <td>
+                                            <a onClick={() => handleViewId(item.id)}>
+                                                <i className="fa fa-pencil fa-lg icon-edit"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a onClick={() => handleDeleteId(item.id)}>
+                                                <i className="fa fa-times fa-lg icon-delete"></i>
+                                            </a>
+                                        </td>
+                                    </Fragment>
+                                }
+                            </tr>
+                        )) : <tr>
+                            <td colSpan='10'>
+                                No information available
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </Fragment>
+    )
+}

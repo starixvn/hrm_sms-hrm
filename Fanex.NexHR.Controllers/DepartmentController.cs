@@ -35,11 +35,18 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
-        public ActionResult Index(bool? isActive = null)
+        public ActionResult Index()
         {
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
-            IList<Department> departments = departmentService.GetDepartment(isActive);
-            return View(departments);
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
+            return View(hasPermission);
+        }
+
+        [HttpPost]
+        [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
+        public ActionResult GetDepartment(bool? isActive = null)
+        {
+            var departments = departmentService.GetDepartment(isActive);
+            return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
