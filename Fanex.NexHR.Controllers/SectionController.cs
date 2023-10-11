@@ -52,26 +52,23 @@
 
         [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult Index(SectionViewModel model)
+        public ActionResult GetSection(SectionViewModel model)
         {
-            if (model != null)
-            {
-                model.Sections = sectionService.GetSection(isActive: model.IsActive);
-            }
-
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
-
-            return View(model);
+            var sections = sectionService.GetSection(isActive: model.IsActive);
+            return new CustomJsonResult { Data = sections, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult Create()
         {
-            var model = new AddSectionViewModel
-            {
-                Departments = departmentService.GetDepartment()
-            };
-            return View(model);
+            return View();
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult GetDeparment()
+        {
+            var departments = departmentService.GetDepartment();
+            return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

@@ -110,6 +110,8 @@ export const AppContainer = () => {
     
     return (
         <Formik
+            validateOnBlur={false}
+            validateOnChange={false}
             enableReinitialize={true}
             initialValues={{
                 id: data.id || '',

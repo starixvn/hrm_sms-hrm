@@ -94,6 +94,8 @@ export const AppContainer = () => {
     }
     return (
         <Formik
+            validateOnBlur={false}
+            validateOnChange={false}
             initialValues={initialValues}
             validationSchema={CreateUnitSchema}
             onSubmit={onSubmit}
