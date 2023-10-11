@@ -32,7 +32,7 @@ export const Table = (props) => {
                         <th>Unit</th>
                         <th>Active</th>
                         {
-                            window.hasPermission === 'True' && <Fragment>
+                            window.hasPermission && <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
                              </Fragment>

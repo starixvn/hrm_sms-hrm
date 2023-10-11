@@ -2,32 +2,35 @@
 import toastr from 'toastr';
 import React, { useEffect, useState } from 'react';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { Form } from '../Form';
+import { isEmpty } from 'lodash';
+import { Formik, Form, Field, useFormik } from 'formik';
+import * as Yup from 'yup';
 
+const EditUnitSchema = Yup.object({
+    code: Yup.string()
+        .max(50, 'Code must be 50 characters')
+        .required('Code is required'),
+    name: Yup.string()
+        .max(200, 'Name must be 200 characters')
+        .required('Name is required')
+});
 
 export const AppContainer = () => {
-    
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
-    const [validations, setValidations] = useState({})
-    const [values, setValues] = useState({
-        id : null,
-        name: '',
-        code: '',
-        isActive: false
-    })
+    const handleGoBack = () => {
+        history.back();
+    }
+
+    const [data, setData] = useState([])
 
     const handleGetDataDetail = (id) => {
         axios(resolveClientUrl(`Unit/getById/${id}`)).then(response => {
             const { data } = response;
             if (data) {
-                setValues({
-                    id : data.id,
-                    code: data.code,
-                    name: data.name,
-                    isActive: data.isActive
-                });
+                setData(data);
             }
+            
         }).catch(axiosError);
     }
 
@@ -36,48 +39,15 @@ export const AppContainer = () => {
             handleGetDataDetail(id)
         }
     }, [id])
-    const validateAll = () => {
-        const { name, code } = values;
-        const validations = { name: '', code : '' };
-        let isValid = true;
-        if (!name) {
-            isValid = false;
-            validations.name = 'Name is required';
-        }
-        if (name && name.length > 200) {
-            isValid = false;
-            validations.name = 'Name must be 200 characters';
-        }
-        if (!code) {
-            isValid = false;
-            validations.code = 'Code is required';
-        }
-        if (code && code.length > 50) {
-            isValid = false;
-            validations.code = 'Code must be 50 characters';
-        }
-        if (!isValid) {
-            setValidations({ validations })
-        }
-
-        return isValid;
-    }
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const isValid = validateAll()
-        
-        if (!isValid) {
-            return false;
-        } else {
+    const onSubmit = (data) => {
+        if (data) {
             axios.post(resolveClientUrl(`Unit/Edit`), {
-                UnitId: values.id,
-                Code: values.code,
-                Name: values.name,
-                IsActive: values.isActive
+                UnitId: data.id,
+                Code: data.code.trim(),
+                Name: data.name.trim(),
+                IsActive: data.isActive
             }).then(response => {
                 const { data } = response;
-                console.log(data)
                 if (data.IsSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
@@ -87,10 +57,72 @@ export const AppContainer = () => {
                     toastr.error(data.Message, '', toastOptions());
                 }
             }).catch(axiosError);
-            setValidations({})
         }
     }
+
+    const renderForm = (errors) => {
+        return (
+            <div className="card">
+                {
+                    !isEmpty(errors) && <div className="validation-summary-errors">
+                        <ul>
+                            {errors.code && <li>{errors.code}</li>}
+                            {errors.name && <li>{errors.name}</li>}
+                        </ul>
+                    </div>
+                }
+                <Form className="form-horizontal">
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Code</label>
+                        </div>
+                        <div className="input-form">
+                            <Field name="code" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Name</label>
+                        </div>
+                        <div className="input-form">
+                            <Field name="name" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Is Active</label>
+                        </div>
+                        <div className="input-form">
+                            <Field type="checkbox" name="isActive" />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-primary" id="btnSubmit">Update</button>
+                        <a className="btn btn-default" onClick={handleGoBack}>Back</a>
+                    </div>
+                </Form>
+            </div>
+        )
+    }
+
+    
     return (
-        <Form setValues={setValues}  handleSubmit={handleSubmit} validations={validations.validations} data={values} btn='Update'/>
+        <Formik
+            enableReinitialize={true}
+            initialValues={{
+                id: data.id || '',
+                name: data.name || '',
+                code: data.code || '',
+                isActive: data.isActive || false
+            }}
+            validationSchema={EditUnitSchema}
+            onSubmit={onSubmit}
+        >
+            {({ errors }) => (
+                renderForm(errors)
+            )}
+        </Formik>
     )
 };

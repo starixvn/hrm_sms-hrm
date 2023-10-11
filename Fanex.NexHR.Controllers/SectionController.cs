@@ -43,16 +43,11 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult Index(bool? isActive = null)
+        public ActionResult Index()
         {
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
-            var model = new SectionViewModel
-            {
-                IsActive = isActive,
-                Sections = sectionService.GetSection(isActive: isActive)
-            };
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
 
-            return View(model);
+            return View(hasPermission);
         }
 
         [HttpPost]
