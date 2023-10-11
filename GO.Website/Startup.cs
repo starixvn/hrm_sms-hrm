@@ -87,40 +87,40 @@ namespace GO.Website
                 });
             services.AddResponseCaching();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+            services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.Cookie.Name = ".GO.Website.Cookies";
+                options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
+                options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
+                options.SlidingExpiration = true;
+                options.Events.OnSigningOut = context =>
                 {
-                    options.LoginPath = Configuration.GetSection("AuthSettings:LoginPath").Value;
-                    options.LogoutPath = Configuration.GetSection("AuthSettings:LogoutPath").Value;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
-                    options.SlidingExpiration = true;
-                    options.Cookie = new CookieBuilder
-                    {
-                        Name = ".GO.System.Cookies",
-                        SecurePolicy = CookieSecurePolicy.SameAsRequest
-                    };
-                    options.Events.OnSigningOut = context =>
-                    {
-                        context.Response.Redirect(options.LoginPath);
-                        return Task.CompletedTask;
-                    };
-                }).AddJwtBearer(x =>
+                    context.Response.Redirect(options.LoginPath);
+                    return Task.CompletedTask;
+                };
+            }).AddJwtBearer(x =>
+            {
+                byte[] secretKey = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtAuthSettings:SecretKey").Value);
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    byte[] secretKey = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtAuthSettings:SecretKey").Value);
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             services.AddSession(options =>
             {
-                options.Cookie.Name = ".GO.System.Session";
+                options.Cookie.Name = ".GO.Website.Session";
                 options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(Configuration.GetSection("AuthSettings:SessionTimeout").Value));
                 options.Cookie.IsEssential = true;
             });

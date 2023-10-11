@@ -6,7 +6,7 @@
     {
         public byte? IsActive { get; set; }
         public short PageIndex { get; set; }
-        public short? PageSize { get; set; }
+        public short PageSize { get; set; }
         public int TotalRows { get; set; }
 
         public override string GetSettingKey() => "Manpower_Period_Get";
