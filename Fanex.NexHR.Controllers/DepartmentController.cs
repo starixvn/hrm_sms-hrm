@@ -52,11 +52,17 @@
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public ActionResult Create()
         {
+            return View(new CreateDepartmentViewModel { });
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
+        public ActionResult GetUnits()
+        {
             var model = new CreateDepartmentViewModel
             {
                 Units = unitService.GetUnit()
             };
-            return View(model);
+            return new CustomJsonResult { Data = model.Units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

@@ -1,20 +1,38 @@
 ﻿import axios from 'axios';
 import toastr from 'toastr';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { Form } from '../Form';
 
 export const AppContainer = () => {
     const [validations, setValidations] = useState({})
     const [values, setValues] = useState({
-        name: '',
         code: '',
-        isActive: true
+        name: '',
+        isActive: true,
+        unitId: 0,
+        units: []
     })
 
+    const handleGetUnits = () => {
+        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
+            const { data } = response;
+            if (data) {
+                setValues(prevValues => ({
+                    ...prevValues,
+                    units: data
+                }));
+            }
+        }).catch(axiosError);
+    }
+
+    useEffect(() => {
+        handleGetUnits();
+    }, [])
+
     const validateAll = () => {
-        const { name, code } = values;
-        const validations = { name: '', code: '' };
+        const { name, code, unit } = values;
+        const validations = { name: '', code: '', unit: '' };
         let isValid = true;
         if (!name) {
             isValid = false;
@@ -32,6 +50,10 @@ export const AppContainer = () => {
             isValid = false;
             validations.code = 'Code must be 50 characters';
         }
+        //if (!unit) {
+        //    isValid = false;
+        //    validations.code = 'The Unit field is required!';
+        //}
         if (!isValid) {
             setValidations({ validations })
         }
@@ -50,10 +72,10 @@ export const AppContainer = () => {
             axios.post(resolveClientUrl(`Department/Create`), {
                 Code: values.code,
                 Name: values.name,
-                IsActive: values.isActive
+                IsActive: values.isActive,
+                UnitId: values.UnitId
             }).then(response => {
                 const { data } = response;
-                console.log(data)
                 if (data.IsSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
@@ -68,6 +90,6 @@ export const AppContainer = () => {
     }
 
     return (
-        <Form setValues={setValues} handleSubmit={handleSubmit} validations={validations.validations} data={values} btn='Create'/>
+        <Form setValues={setValues} handleSubmit={handleSubmit} validations={validations.validations} data={values} btn='Create' />
     )
 }
