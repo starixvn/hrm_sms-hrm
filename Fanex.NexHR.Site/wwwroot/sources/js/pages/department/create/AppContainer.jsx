@@ -2,26 +2,40 @@
 import toastr from 'toastr';
 import React, { useState, useEffect } from 'react';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { Form } from '../Form';
+import { isEmpty } from 'lodash';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+
+const CreateDepartmentSchema = Yup.object({
+    code: Yup.string()
+        .max(50, 'Code must be 50 characters')
+        .required('The Code field is required!'),
+    name: Yup.string()
+        .max(200, 'Name must be 200 characters')
+        .required('The Name field is required!'),
+    unitId: Yup.string()
+        .required('The Unit field is required!')
+});
 
 export const AppContainer = () => {
-    const [validations, setValidations] = useState({})
-    const [values, setValues] = useState({
+    const initialValues = {
         code: '',
         name: '',
-        isActive: true,
-        unitId: 0,
-        units: []
-    })
+        isActive: false,
+        unitId: 0
+    }
+
+    const handleGoBack = () => {
+        history.back();
+    }
+
+    const [units, setUnits] = useState([]);
 
     const handleGetUnits = () => {
         axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
             const { data } = response;
             if (data) {
-                setValues(prevValues => ({
-                    ...prevValues,
-                    units: data
-                }));
+                setUnits(data);
             }
         }).catch(axiosError);
     }
@@ -30,50 +44,15 @@ export const AppContainer = () => {
         handleGetUnits();
     }, [])
 
-    const validateAll = () => {
-        const { name, code, unit } = values;
-        const validations = { name: '', code: '', unit: '' };
-        let isValid = true;
-        if (!name) {
-            isValid = false;
-            validations.name = 'The Name field is required!';
-        }
-        if (name && name.length > 200) {
-            isValid = false;
-            validations.name = 'Name must be 200 characters';
-        }
-        if (!code) {
-            isValid = false;
-            validations.code = 'The Code field is required!';
-        }
-        if (code && code.length > 50) {
-            isValid = false;
-            validations.code = 'Code must be 50 characters';
-        }
-        //if (!unit) {
-        //    isValid = false;
-        //    validations.code = 'The Unit field is required!';
-        //}
-        if (!isValid) {
-            setValidations({ validations })
-        }
-
-        return isValid;
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const isValid = validateAll()
-
-        if (!isValid) {
-            return false;
-        } else {
+    const onSubmit = (data) => {
+        if (data) {
+            const name = data.name.trim();
+            const code = data.code.trim();
             axios.post(resolveClientUrl(`Department/Create`), {
-                Code: values.code,
-                Name: values.name,
-                IsActive: values.isActive,
-                UnitId: values.UnitId
+                Code: code,
+                Name: name,
+                IsActive: data.isActive,
+                UnitId: data.UnitId
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {
@@ -85,11 +64,80 @@ export const AppContainer = () => {
                     toastr.error(data.Message, '', toastOptions());
                 }
             }).catch(axiosError);
-            setValidations({})
         }
     }
 
+    const renderForm = (errors) => {
+        return (
+            <div className="card">
+                {
+                    !isEmpty(errors) && <div className="validation-summary-errors">
+                        <ul>
+                            {errors.code && <li>{errors.code}</li>}
+                            {errors.name && <li>{errors.name}</li>}
+                            {errors.unit && <li>{errors.unitId}</li>}
+                        </ul>
+                    </div>
+                }
+                <Form className="form-horizontal">
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Code</label>
+                        </div>
+                        <div className="input-form">
+                            <Field name="code" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Name</label>
+                        </div>
+                        <div className="input-form">
+                            <Field name="name" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Unit</label>
+                        </div>
+                        <div className="select-form">
+                            <Field name="unitId" as="select" className="form-control">
+                                <option value=""/>
+                                {units.map((unit) => (
+                                    <option key={unit.id} value={unit.id}>
+                                        {unit.name}
+                                    </option>
+                                ))}
+                            </Field>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">Is Active</label>
+                        </div>
+                        <div className="input-form">
+                            <Field type="checkbox" name="isActive" />
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-primary" id="btnSubmit">Create</button>
+                        <a className="btn btn-default" onClick={handleGoBack}>Back</a>
+                    </div>
+                </Form>
+            </div>
+        )
+    }
     return (
-        <Form setValues={setValues} handleSubmit={handleSubmit} validations={validations.validations} data={values} btn='Create' />
+        <Formik
+            initialValues={initialValues}
+            validationSchema={CreateDepartmentSchema}
+            onSubmit={onSubmit}
+        >
+            {({ errors }) => (
+                renderForm(errors)
+            )}
+        </Formik>
+
     )
 }
