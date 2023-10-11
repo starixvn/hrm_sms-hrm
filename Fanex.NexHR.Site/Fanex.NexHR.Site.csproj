@@ -563,7 +563,8 @@
     <Content Include="wwwroot\sources\js\pages\auth\Login.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\create\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\department\Form.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\edit\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />

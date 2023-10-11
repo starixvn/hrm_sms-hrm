@@ -1,7 +1,7 @@
 ﻿@using Fanex.NexHR.Core
 @using Fanex.NexHR.Resources
 @using Fanex.NexHR.ViewModels.Department
-@model EditDepartmentViewModel
+@model int
 
 @{
     ViewBag.Title = @Labels.EditDepartment;
@@ -10,6 +10,7 @@
     <link href="~/wwwroot/dist/styles/department.create.css" rel="stylesheet" />
 }
 @section js{
+    <script>window.departmentId = @Model;</script>
     <script src="~/wwwroot/dist/js/department.edit.js"></script>
 }
 @section Breadcrumb {
@@ -19,49 +20,4 @@
 }
 
 <h2 class="page-title">@Labels.Edit</h2>
-<div class="card">
-    @using (Html.BeginForm("Edit", "department", FormMethod.Post, new { @class = "form-horizontal", @id = "EditForm" }))
-    {
-        @Html.ValidationSummary()
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.Code, new { @class = "control-label" })
-                <input type="hidden" value="@Model.DepartmentId" name="DepartmentId" />
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.Code, new { maxlength = "50", @class = "form-control", @autocomplete = "off" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.Name, new { maxlength = "200", @class = "form-control", @autocomplete = "off" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.UnitId, "Unit", new { @class = "control-label" })
-            </div>
-            <div class="select-form">
-                @Html.DropDownListFor(model => model.UnitId, new SelectList(Model.Units, "Id", "Name"), string.Empty, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsActive)</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
-                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
-            </div>
-        </div>
-    }
-</div>
+<div id="department-edit" />

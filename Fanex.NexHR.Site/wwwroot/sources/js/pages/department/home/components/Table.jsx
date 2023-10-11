@@ -1,21 +1,21 @@
 ﻿import React, { Fragment } from 'react';
 import axios from 'axios';
 import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
+
 export const Table = (props) => {
-    const { data, hanleGetDepartment } = props;
+    const { data, handleGetDepartment } = props;
     const handleViewId = (id) => {
         window.location.href = (`/department/edit/${id}`);
     }
     const handleDeleteId = (id) => {
         confirm('Are you sure you want to delete this department?', () => {
             axios.post(resolveClientUrl('Department/Delete'), {
-                DepartmentId: id,
-                ModifiedBy: window._global.employeeId
+                Id: id
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     alert('Delete successfully!');
-                    hanleGetDepartment();
+                    handleGetDepartment();
                 } else {
                     alert(data.Message);
                 }
@@ -30,6 +30,7 @@ export const Table = (props) => {
                         <th>#</th>
                         <th>Code</th>
                         <th>Department</th>
+                        <th>Unit</th>
                         <th>Active</th>
                         {
                             window.hasPermission && <Fragment>
@@ -46,6 +47,7 @@ export const Table = (props) => {
                                 <td>{i + 1}</td>
                                 <td>{item.code}</td>
                                 <td>{item.name}</td>
+                                <td>{item.unit.name}</td>
                                 <td>
                                     {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
                                 </td>

@@ -7,6 +7,7 @@ import { Table } from './Table';
 export const AppContainer = () => {
     const [choose, setChoose] = useState('');
     const [departments, setDepartments] = useState([]);
+
     const handleGetDepartment = () => {
         axios.post(resolveClientUrl('Department/GetDepartment'), {
             isActive: choose

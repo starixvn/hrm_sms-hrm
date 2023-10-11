@@ -52,7 +52,7 @@ export const AppContainer = () => {
                 Code: code,
                 Name: name,
                 IsActive: data.isActive,
-                UnitId: data.UnitId
+                UnitId: data.unitId
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {
@@ -119,7 +119,6 @@ export const AppContainer = () => {
                             <Field type="checkbox" name="isActive" />
                         </div>
                     </div>
-
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary" id="btnSubmit">Create</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>

@@ -87,25 +87,16 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(int id)
+        {
+            return View(id);
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
+        public ActionResult GetById(int Id)
         {
             Department department = departmentService.GetById(Id);
-            if (department == null)
-            {
-                return RedirectToAction("PageNotFound", "Error");
-            }
-
-            IList<Unit> units = unitService.GetUnit();
-            var model = new EditDepartmentViewModel
-            {
-                DepartmentId = Id,
-                Code = department.Code,
-                Name = department.Name,
-                IsActive = department.IsActive,
-                UnitId = department.Unit != null ? department.Unit.Id : 0,
-                Units = units
-            };
-            return View(model);
+            return new CustomJsonResult { Data = department, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
