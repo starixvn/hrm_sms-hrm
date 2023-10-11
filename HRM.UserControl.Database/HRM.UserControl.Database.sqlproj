@@ -139,7 +139,6 @@
     <Build Include="dbo\Tables\HRM_JobLevel.sql" />
     <Build Include="dbo\Tables\HRM_Employee.sql" />
     <Build Include="dbo\Tables\HRM_Department.sql" />
-    <Build Include="dbo\Stored Procedures\Report_Manpower_Get.sql" />
     <Build Include="dbo\Stored Procedures\AutoJob_UserSite_CopyToAnotherSite.sql" />
     <Build Include="dbo\Stored Procedures\AutoJob_UnitHead_UpdateSchedule.sql" />
     <Build Include="dbo\Stored Procedures\AutoJob_UnitHead_UpdateInfo.sql" />
@@ -205,5 +204,9 @@
     <Build Include="dbo\Stored Procedures\Manpower_GetUnit.sql" />
     <Build Include="dbo\Stored Procedures\Manpower_GetSection.sql" />
     <Build Include="dbo\Stored Procedures\Manpower_GetJobLevel.sql" />
+    <Build Include="dbo\Tables\UserOTP.sql" />
+    <Build Include="dbo\Stored Procedures\UserOTP_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\UserOTP_UpdateSecretKey.sql" />
+    <Build Include="dbo\Stored Procedures\UserOTP_GetById.sql" />
   </ItemGroup>
 </Project>

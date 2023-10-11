@@ -67,6 +67,7 @@ BEGIN
 		,rq.UnitName
 		,@CurrentProcessId AS CurrentProcessId
 		,rq.StatusId
+		,rq.CreatedDate
 		,creator.UserId AS CreatorId
 		,creator.Code
 		,creator.Nickname

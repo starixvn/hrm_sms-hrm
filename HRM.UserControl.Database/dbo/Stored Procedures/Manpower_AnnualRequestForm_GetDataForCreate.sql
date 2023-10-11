@@ -64,7 +64,7 @@ BEGIN
 	FROM dbo.Manpower_Period WITH (NOLOCK)
 	WHERE PeriodId = @PeriodId
 
-	SELECT s.SiteId
+	SELECT DISTINCT s.SiteId
 		,s.SiteName
 		,c.CompanyId
 		,c.[Name] AS CompanyName
@@ -91,10 +91,12 @@ BEGIN
 		AND sec.IsActive = 1
 		AND sec.IsDeleted = 0
 		CROSS APPLY #tmpJobLevel AS tmpjl WITH (NOLOCK)
-		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON sec.SiteId = rqdt.SiteId
+		LEFT JOIN dbo.Manpower_AnnualRequestForm AS rq WITH (NOLOCK) ON unit.UnitName = rq.UnitName
+		AND rq.PeriodId = @PeriodId
+		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON rqdt.RequestId = rq.RequestId
+		AND sec.SiteId = rqdt.SiteId
 		AND sec.SectionId = rqdt.SectionId
 		AND rqdt.JobLevel = tmpjl.JobLevel
-	WHERE @PeriodId > 0
 	ORDER BY unit.UnitName ASC
 		,dept.[Name] ASC
 		,sec.[Name] ASC

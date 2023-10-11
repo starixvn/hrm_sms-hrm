@@ -13,7 +13,7 @@ BEGIN
 
 	DECLARE @ApprovedStatusId TINYINT = 3
 		,@Year INT
-		,@PrevPeriodId SMALLINT
+		,@PrevPeriodId SMALLINT = NULL
 		,@EndDateOfYear DATE
 
 	SELECT @Year = p.[Year]
@@ -25,7 +25,14 @@ BEGIN
 	WHERE [Year] = @Year - 1
 		AND IsActive = 1
 
-	SET @EndDateOfYear = DATEADD(DAY, - 1, CAST(@Year AS NVARCHAR(10)) + '-01-01')
+	IF ISNULL(@PrevPeriodId, 0) > 0
+	BEGIN
+		SET @EndDateOfYear = DATEADD(DAY, - 1, CAST((@Year - 1) AS NVARCHAR(10)) + '-01-01')
+	END
+	ELSE
+	BEGIN
+		SET @EndDateOfYear = DATEADD(DAY, - 1, CAST(@Year AS NVARCHAR(10)) + '-01-01')
+	END
 
 	SELECT s.SiteId
 		,s.SiteName
@@ -51,7 +58,7 @@ BEGIN
 		AND dept.IsDeleted = 0
 		INNER JOIN dbo.HRM_Unit AS unit WITH (NOLOCK) ON unit.SiteId = dept.SiteId
 		AND unit.UnitId = dept.UnitId
-		AND unit.IsActive = 0
+		AND unit.IsActive = 1
 		AND unit.IsDeleted = 0
 		INNER JOIN dbo.[Site] AS s WITH (NOLOCK) ON rqdt.SiteId = s.SiteId
 		AND s.IsActive = 1
@@ -61,7 +68,9 @@ BEGIN
 		AND rq.StatusId = @ApprovedStatusId
 
 	SELECT s.SiteId
+		,unit.UnitId
 		,unit.[Name] AS UnitName
+		,dept.DepartmentId
 		,dept.[Name] AS DepartmentName
 		,section.SectionId
 		,section.[Name] AS SectionName
@@ -74,14 +83,7 @@ BEGIN
 				WHEN emp.IsLocal = 0 THEN 1
 				ELSE 0
 				END) AS ExpatCurrentHeadcount
-		,SUM(CASE 
-				WHEN tmpprev.LocalAddition IS NULL THEN 0
-				ELSE tmpprev.LocalAddition
-				END) AS LocalAddition
-		,SUM(CASE 
-				WHEN tmpprev.ExpatAddition IS NULL THEN 0
-				ELSE tmpprev.ExpatAddition
-				END) AS ExpatAddition
+	INTO #tmpPrevCurrentHeadcount
 	FROM dbo.HRM_Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.HRM_Team AS team WITH (NOLOCK) ON emp.SiteId = team.SiteId
 		AND emp.TeamId = team.TeamId
@@ -106,11 +108,6 @@ BEGIN
 		AND emp.JobLevelId = jl.JobLevelId
 		AND jl.IsDeleted = 0
 		INNER JOIN dbo.Manpower_JobLevelMapping AS jlm WITH (NOLOCK) ON jl.[Name] = jlm.Child
-		LEFT JOIN #tmpPrevAnnualRequest AS tmpprev WITH (NOLOCK) ON s.SiteId = tmpprev.SiteId
-		AND unit.UnitId = tmpprev.UnitId
-		AND dept.DepartmentId = tmpprev.DepartmentId
-		AND section.SectionId = tmpprev.SectionId
-		AND jlm.Parent = tmpprev.JobLevel
 	WHERE emp.JoinedDate <= @EndDateOfYear
 		AND (
 			emp.IsActive = 1
@@ -126,14 +123,59 @@ BEGIN
 				AND emp.EmpId = exclude.EmpId
 			)
 	GROUP BY s.SiteId
-		,unit.[Name] 
-		,dept.[Name] 
+		,unit.UnitId
+		,unit.[Name]
+		,dept.DepartmentId
+		,dept.[Name]
 		,section.SectionId
 		,section.[Name]
 		,jlm.Parent
 	ORDER BY s.SiteId
-		,unit.[Name] 
-		,dept.[Name] 
+		,unit.[Name]
+		,dept.[Name]
 		,section.SectionId
 		,jlm.Parent
+
+	SELECT tmpcur.SiteId
+		,tmpcur.UnitName
+		,tmpcur.DepartmentName
+		,tmpcur.SectionId
+		,tmpcur.SectionName
+		,tmpcur.JobLevel
+		,tmpcur.LocalCurrentHeadcount
+		,tmpcur.ExpatCurrentHeadcount
+		,tmpprev.LocalAddition
+		,tmpprev.ExpatAddition
+	FROM #tmpPrevCurrentHeadcount AS tmpcur WITH (NOLOCK)
+		LEFT JOIN #tmpPrevAnnualRequest AS tmpprev WITH (NOLOCK) ON tmpcur.SiteId = tmpprev.SiteId
+		AND tmpcur.UnitId = tmpprev.UnitId
+		AND tmpcur.DepartmentId = tmpprev.DepartmentId
+		AND tmpcur.SectionId = tmpprev.SectionId
+		AND tmpcur.JobLevel = tmpprev.JobLevel
+
+	UNION
+	SELECT tmpprev.SiteId
+		,tmpprev.UnitName
+		,tmpprev.DepartmentName
+		,tmpprev.SectionId
+		,tmpprev.SectionName
+		,tmpprev.JobLevel
+		,0 AS LocalCurrentHeadcount
+		,0 AS ExpatCurrentHeadcount
+		,tmpprev.LocalAddition
+		,tmpprev.ExpatAddition
+	FROM #tmpPrevAnnualRequest AS tmpprev WITH (NOLOCK)
+	WHERE NOT EXISTS (
+		SELECT 1
+		FROM #tmpPrevCurrentHeadcount AS tmpcur WITH (NOLOCK)
+		WHERE tmpcur.SiteId = tmpprev.SiteId
+			AND tmpcur.UnitId = tmpprev.UnitId
+			AND tmpcur.DepartmentId = tmpprev.DepartmentId
+			AND tmpcur.SectionId = tmpprev.SectionId
+			AND tmpcur.JobLevel = tmpprev.JobLevel
+		)
+
+	DROP TABLE #tmpPrevAnnualRequest
+
+	DROP TABLE #tmpPrevCurrentHeadcount
 END

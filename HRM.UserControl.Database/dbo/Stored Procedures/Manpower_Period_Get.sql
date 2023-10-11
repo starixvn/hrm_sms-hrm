@@ -1,7 +1,7 @@
 ﻿
 CREATE PROCEDURE [dbo].[Manpower_Period_Get] @IsActive BIT = NULL
-	,@PageIndex SMALLINT = NULL
-	,@PageSize SMALLINT = NULL
+	,@PageIndex SMALLINT = 0
+	,@PageSize SMALLINT = 0
 	,@TotalRows INT = 0 OUTPUT
 AS
 /*

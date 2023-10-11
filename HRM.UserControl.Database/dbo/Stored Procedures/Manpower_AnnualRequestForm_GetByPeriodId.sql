@@ -56,6 +56,7 @@ BEGIN
 	SELECT rq.RequestId
 		,rq.UnitName
 		,rq.StatusId
+		,rq.CreatedDate
 		,creator.UserId AS CreatorId
 		,creator.Code
 		,creator.Nickname

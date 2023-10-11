@@ -113,7 +113,7 @@ BEGIN
 		,CompanyName
 	FROM #tblUser WITH (NOLOCK)
 
-	SELECT ur.UserId
+	SELECT DISTINCT ur.UserId
 		,ur.RoleId
 		,r.Code
 		,r.[Name]

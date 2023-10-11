@@ -63,13 +63,14 @@ BEGIN
 			)
 
 	SELECT rq.RequestId
-		,rq.UnitName
+		,unit.UnitName
 		,rq.StatusId
-	FROM dbo.Manpower_AnnualRequestForm AS rq WITH (NOLOCK)
-		INNER JOIN dbo.Manpower_Period AS p WITH (NOLOCK) ON rq.PeriodId = p.PeriodId
-		INNER JOIN #tmpUnit AS unit WITH (NOLOCK) ON rq.UnitName = unit.UnitName
-	WHERE rq.PeriodId = @PeriodId
-	ORDER BY rq.UnitName ASC
+		,p.PeriodId
+	FROM #tmpUnit AS unit WITH (NOLOCK)
+		LEFT JOIN dbo.Manpower_AnnualRequestForm AS rq WITH (NOLOCK) ON rq.UnitName = unit.UnitName
+		AND rq.PeriodId = @PeriodId
+		LEFT JOIN dbo.Manpower_Period AS p WITH (NOLOCK) ON rq.PeriodId = p.PeriodId
+	ORDER BY unit.UnitName ASC
 
 	SELECT rq.RequestId
 		,s.SiteId
@@ -84,8 +85,8 @@ BEGIN
 		,sec.[Name] AS SectionName
 		,SUM(rqdt.LocalAddition) AS LocalAddition
 		,SUM(rqdt.ExpatAddition) AS ExpatAddition
-	FROM dbo.Manpower_AnnualRequestForm AS rq WITH (NOLOCK)
-		INNER JOIN dbo.HRM_Unit AS unit WITH (NOLOCK) ON rq.UnitName = unit.[Name]
+	FROM #tmpUnit AS tmpunit WITH (NOLOCK)
+		INNER JOIN dbo.HRM_Unit AS unit WITH (NOLOCK) ON tmpunit.UnitName = unit.[Name]
 		INNER JOIN dbo.[Site] AS s WITH (NOLOCK) ON unit.SiteId = s.SiteId
 		AND s.IsActive = 1
 		INNER JOIN dbo.Company AS c WITH (NOLOCK) ON s.CompanyId = c.CompanyId
@@ -98,12 +99,12 @@ BEGIN
 		AND dept.DepartmentId = sec.DepartmentId
 		AND sec.IsActive = 1
 		AND sec.IsDeleted = 0
-		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON sec.SiteId = rqdt.SiteId
+		LEFT JOIN dbo.Manpower_AnnualRequestForm AS rq WITH (NOLOCK) ON rq.UnitName = tmpunit.UnitName
+		AND rq.PeriodId = @PeriodId
+		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON rq.RequestId = rqdt.RequestId
+		AND sec.SiteId = rqdt.SiteId
 		AND sec.SectionId = rqdt.SectionId
-		INNER JOIN #tmpUnit AS tem WITH (NOLOCK) ON rq.UnitName = tem.UnitName
-	WHERE rq.PeriodId = @PeriodId
-	GROUP BY rq.RequestId
-		,s.SiteId
+	GROUP BY s.SiteId
 		,s.SiteName
 		,c.CompanyId
 		,c.[Name]
@@ -113,6 +114,7 @@ BEGIN
 		,dept.[Name]
 		,sec.SectionId
 		,sec.[Name]
+		,rq.RequestId
 	ORDER BY unit.[Name] ASC
 		,dept.[Name] ASC
 		,sec.[Name] ASC

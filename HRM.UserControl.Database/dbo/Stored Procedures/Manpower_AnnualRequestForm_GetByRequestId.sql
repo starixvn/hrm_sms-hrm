@@ -125,7 +125,8 @@ BEGIN
 		AND sec.IsActive = 1
 		AND sec.IsDeleted = 0
 		CROSS APPLY #tmpJobLevel AS tmpjl WITH (NOLOCK)
-		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON sec.SiteId = rqdt.SiteId
+		LEFT JOIN dbo.Manpower_AnnualRequestFormDetail AS rqdt WITH (NOLOCK) ON rq.RequestId = rqdt.RequestId
+		AND sec.SiteId = rqdt.SiteId
 		AND sec.SectionId = rqdt.SectionId
 		AND rqdt.JobLevel = tmpjl.JobLevel
 	WHERE rq.RequestId = @RequestId
@@ -166,7 +167,8 @@ BEGIN
 		AND dept.DepartmentId = sec.DepartmentId
 		AND sec.IsActive = 1
 		AND sec.IsDeleted = 0
-		INNER JOIN dbo.Manpower_AnnualRequestFormDetail_Log AS rqdt WITH (NOLOCK) ON sec.SiteId = rqdt.SiteId
+		INNER JOIN dbo.Manpower_AnnualRequestFormDetail_Log AS rqdt WITH (NOLOCK) ON rq.RequestId = rqdt.RequestId
+		AND sec.SiteId = rqdt.SiteId
 		AND sec.SectionId = rqdt.SectionId
 		INNER JOIN dbo.[User] AS modifier WITH (NOLOCK) ON rqdt.ModifiedBy = modifier.UserId
 	WHERE rq.RequestId = @RequestId
