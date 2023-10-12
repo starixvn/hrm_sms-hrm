@@ -159,21 +159,9 @@ module.exports = {
         [`${jsDistPath}/my.working.schedule`]: `${jsSourcePath}/calendar/my.working.schedule.js`,
         [`${jsDistPath}/workingcalendar`]: `${jsSourcePath}/calendar/workingcalendar.js`,
         [`${jsDistPath}/annual.leavebalance.index`]: `${jsSourcePath}/annual-leave-balance/index.js`,
-
-
-
-        //[`${jsDistPath}/section.index`]: `${jsSourcePath}/section/index.js`,
-        //[`${jsDistPath}/section.edit`]: `${jsSourcePath}/section/edit.js`,
-
         [`${jsDistPath}/section.home`]: `${jsSourcePath}/section/home/index.jsx`,
         [`${jsDistPath}/section.create`]: `${jsSourcePath}/section/create/index.jsx`,
         [`${jsDistPath}/section.edit`]: `${jsSourcePath}/section/edit/index.jsx`,
-
-        
-
-
-
-
         [`${jsDistPath}/unit.home`]: `${jsSourcePath}/unit/home/index.jsx`,
         [`${jsDistPath}/unit.edit`]: `${jsSourcePath}/unit/edit/index.jsx`,
         [`${jsDistPath}/unit.create`]: `${jsSourcePath}/unit/create/index.jsx`,
