@@ -4,7 +4,7 @@ import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared
 export const Table = (props) => {
     const { data, hanleGetSection } = props;
     const handleViewId = (id) => {
-        window.location.href = (`/unit/edit/${id}`);
+        window.location.href = (`/section/edit/${id}`);
     }
     const handleDeleteId = (id) => {
         confirm('Are you sure you want to delete this section?', () => {

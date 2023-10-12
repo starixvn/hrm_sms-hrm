@@ -574,6 +574,8 @@
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
     <Content Include="wwwroot\sources\js\pages\section\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\edit\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\Table.jsx" />
@@ -1469,9 +1471,7 @@
     <Content Include="wwwroot\dist\styles\workingcalendars.css.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\sources\js\pages\section\edit\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\Google.Protobuf.dll" />
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.CFG.dll" />

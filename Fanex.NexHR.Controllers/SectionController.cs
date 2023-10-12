@@ -93,9 +93,15 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(int id)
         {
-            Section section = sectionService.GetById(Id);
+            return View(id);
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult GetById(int id)
+        {
+            Section section = sectionService.GetById(id);
             if (section == null)
             {
                 return RedirectToAction("PageNotFound", "Error");
@@ -104,15 +110,16 @@
             IList<Department> departments = departmentService.GetDepartment();
             var model = new EditSectionViewModel
             {
-                SectionId = Id,
+                SectionId = id,
                 Code = section.Code,
                 Name = section.Name,
                 IsActive = section.IsActive,
                 DepartmentId = section.Department != null ? section.Department.Id : 0,
                 Departments = departments
             };
-            return View(model);
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
@@ -133,7 +140,7 @@
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

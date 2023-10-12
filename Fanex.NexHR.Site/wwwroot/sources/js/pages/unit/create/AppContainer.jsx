@@ -9,11 +9,11 @@ import * as Yup from 'yup';
 
 const CreateUnitSchema = Yup.object({
     code: Yup.string()
-        .max(50, 'Code must be 50 characters')
-        .required('Code is required'),
+        .max(50, 'The Code must be 50 characters!')
+        .required('The Code field is required!'),
     name: Yup.string()
-        .max(200, 'Name must be 200 characters')
-        .required('Name is required')
+        .max(200, 'The Name must be 200 characters!')
+        .required('The Name field is required!')
 });
 export const AppContainer = () => {
     const initialValues = {
