@@ -90,10 +90,12 @@
                         border-top: none;
                     }
                 }
+            }
+        }
 
-                &:nth-child(4) td {
-                    border-top: none;
-                }
+        &.table-unit {
+            tbody tr:nth-child(4) td {
+                border-top: none;
             }
         }
     }
