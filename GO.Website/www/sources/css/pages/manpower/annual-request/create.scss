@@ -174,8 +174,10 @@
 
             .data-section {
                 background: #FFF2CC;
+            }
 
-                &[rowspan] {
+            tbody {
+                tr:nth-child(3) td {
                     border-top: none;
                 }
             }
