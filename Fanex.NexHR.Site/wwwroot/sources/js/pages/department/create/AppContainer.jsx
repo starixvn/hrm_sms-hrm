@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 
 const CreateDepartmentSchema = Yup.object({
     code: Yup.string()
-        .max(50, 'Code must be 50 characters')
+        .max(50, 'The Code must be 50 characters!')
         .required('The Code field is required!'),
     name: Yup.string()
-        .max(200, 'Name must be 200 characters')
+        .max(200, 'The Name must be 200 characters!')
         .required('The Name field is required!'),
     unit: Yup.string()
         .required('The Unit field is required!')

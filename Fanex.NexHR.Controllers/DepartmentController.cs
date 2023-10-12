@@ -96,7 +96,24 @@
         public ActionResult GetById(int Id)
         {
             Department department = departmentService.GetById(Id);
-            return new CustomJsonResult { Data = department, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+            if (department == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
+
+            IList<Unit> units = unitService.GetUnit();
+            var model = new EditDepartmentViewModel
+            {
+                DepartmentId = Id,
+                Code = department.Code,
+                Name = department.Name,
+                IsActive = department.IsActive,
+                UnitId = department.Unit != null ? department.Unit.Id : 0,
+                Units = units
+            };
+
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

@@ -43,7 +43,14 @@
 
             ViewBag.SystemRoles = systemRoles;
 
-            return View(functionTrees);
+            return View();
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.FunctionManagement)]
+        public ActionResult GetSystemRoles()
+        {
+            IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+            return new CustomJsonResult { Data = systemRoles, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

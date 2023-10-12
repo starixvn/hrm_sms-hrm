@@ -569,6 +569,10 @@
     <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
@@ -711,7 +715,6 @@
     <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\shift-manager\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\employee\supervisor\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\function.index.js" />
     <Content Include="wwwroot\sources\js\pages\account\edit.profile.js" />
     <Content Include="wwwroot\sources\js\pages\home.index.js" />
     <Content Include="wwwroot\sources\js\pages\paternity\index.js" />

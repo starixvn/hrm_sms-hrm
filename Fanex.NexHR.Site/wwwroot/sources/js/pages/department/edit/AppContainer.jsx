@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 
 const EditDepartmentSchema = Yup.object({
     code: Yup.string()
-        .max(50, 'Code must be 50 characters')
+        .max(50, 'The Code must be 50 characters!')
         .required('The Code field is required!'),
     name: Yup.string()
-        .max(200, 'Name must be 200 characters')
+        .max(200, 'The Name must be 200 characters!')
         .required('The Name field is required!'),
     unit: Yup.string()
         .required('The Unit field is required!')
@@ -25,7 +25,6 @@ export const AppContainer = () => {
     }
 
     const [data, setData] = useState([]);
-    const [units, setUnits] = useState([]);
 
     const handleGetById = (id) => {
         axios(resolveClientUrl(`department/getById/${id}`)).then(response => {
@@ -37,29 +36,19 @@ export const AppContainer = () => {
         }).catch(axiosError);
     }
 
-    const handleGetUnits = () => {
-        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
-            const { data } = response;
-            if (data) {
-                setUnits(data);
-            }
-        }).catch(axiosError);
-    }
-
     useEffect(() => {
         if (id) {
             handleGetById(id);
-            handleGetUnits();
         }
     }, [id])
-    const onSubmit = (data) => {
-        if (data) {
+    const onSubmit = (department) => {
+        if (department) {
             axios.post(resolveClientUrl(`Department/Edit`), {
-                DepartmentId: data.id,
-                Code: data.code.trim(),
-                Name: data.name.trim(),
-                IsActive: data.isActive,
-                UnitId: data.unit
+                DepartmentId: department.id,
+                Code: department.code.trim(),
+                Name: department.name.trim(),
+                IsActive: department.isActive,
+                UnitId: department.unit
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {
@@ -109,7 +98,7 @@ export const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
-                                {units.map((unit) => (
+                                {data.units && data.units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
                                         {unit.name}
                                     </option>
@@ -140,11 +129,11 @@ export const AppContainer = () => {
             validateOnChange={false}
             enableReinitialize={true}
             initialValues={{
-                id: data.id || '',
+                id: data.departmentId || '',
                 name: data.name || '',
                 code: data.code || '',
                 isActive: data.isActive || false,
-                unit: data.unit || ''
+                unit: data.unitId || ''
             }}
             validationSchema={EditDepartmentSchema}
             onSubmit={onSubmit}

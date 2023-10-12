@@ -93,7 +93,7 @@ module.exports = {
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
-        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function.index.js`,
+        [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.jsx`,
         [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/index.js`,
         [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/edit.js`,
         [`${jsDistPath}/team.edit.supervisor`]: `${jsSourcePath}/team/supervisor/index.jsx`,
