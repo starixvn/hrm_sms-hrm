@@ -35,10 +35,10 @@ const CompanyGrid = ({ period, departments, requestDetails, jobLevels, unitSelec
                         expatAddition: totalJoblevel.expatAddition + item.expatAddition,
                         localAddition: totalJoblevel.localAddition + item.localAddition,
                         totalAddition: totalJoblevel.totalAddition + item.totalAddition,
-                        expatForecastHeadcount: totalJoblevel.expatForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount,
-                        localForecastHeadcount: totalJoblevel.localForecastHeadcount + item.localAddition + item.localApprovedHeadcount,
-                        totalForecastHeadcount: totalJoblevel.totalForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount
-                            + item.localAddition + item.localApprovedHeadcount
+                        expatForecastHeadcount: totalJoblevel.expatForecastHeadcount + item.expatAddition + item.expatCurrentHeadcount,
+                        localForecastHeadcount: totalJoblevel.localForecastHeadcount + item.localAddition + item.localCurrentHeadcount,
+                        totalForecastHeadcount: totalJoblevel.totalForecastHeadcount + item.expatAddition + item.expatCurrentHeadcount
+                            + item.localAddition + item.localCurrentHeadcount
                     };
                 }
             });

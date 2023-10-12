@@ -65,10 +65,10 @@ const CompanyGrid = ({ isDetail, period, departments, companies, requestDetails,
                     expatAddition: totalSection.expatAddition + item.expatAddition,
                     localAddition: totalSection.localAddition + item.localAddition,
                     totalAddition: totalSection.totalAddition + item.totalAddition,
-                    expatForecastHeadcount: totalSection.expatForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount,
-                    localForecastHeadcount: totalSection.localForecastHeadcount + item.localAddition + item.localApprovedHeadcount,
-                    totalForecastHeadcount: totalSection.totalForecastHeadcount + item.expatAddition + item.expatApprovedHeadcount
-                        + item.localAddition + item.localApprovedHeadcount
+                    expatForecastHeadcount: totalSection.expatForecastHeadcount + item.expatAddition + item.expatCurrentHeadcount,
+                    localForecastHeadcount: totalSection.localForecastHeadcount + item.localAddition + item.localCurrentHeadcount,
+                    totalForecastHeadcount: totalSection.totalForecastHeadcount + item.expatAddition + item.expatCurrentHeadcount
+                        + item.localAddition + item.localCurrentHeadcount
                 };
             }
         });

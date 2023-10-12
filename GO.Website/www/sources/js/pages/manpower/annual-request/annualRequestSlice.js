@@ -56,7 +56,7 @@ const annualRequestSlice = createSlice({
             const index = state.requestDetails.findIndex(x => x.unitName === unitName && isEqual(x.departmentName, departmentName)
                 && isEqual(x.sectionName, sectionName) && x.jobLevel === jobLevel && x.companyName === companyName);
             if (index >= 0) {
-                state.requestDetails[index][columnName] = value;
+                state.requestDetails[index][columnName] = isNaN(value) ? 0 : value;
 
                 const expatAddition = state.requestDetails[index]['expatAddition'];
                 const localAddition = state.requestDetails[index]['localAddition'];

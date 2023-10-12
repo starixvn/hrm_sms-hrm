@@ -3,6 +3,7 @@
     using System;
     using System.Xml.Serialization;
     using GO.Core.Extensions.XML;
+    using Newtonsoft.Json;
 
     [Serializable]
     [XMLName("Row")]
@@ -40,6 +41,14 @@
         public int SectionId { get; set; }
         public string SectionName { get; set; }
         public string JobLevel { get; set; }
+
+        [XmlIgnore]
+        [JsonIgnore]
+        public int PrevLocalCurrentHeadcount { get; set; }
+
+        [XmlIgnore]
+        [JsonIgnore]
+        public int PrevExpatCurrentHeadcount { get; set; }
 
         [XmlIgnore]
         public int LocalCurrentHeadcount { get; set; }

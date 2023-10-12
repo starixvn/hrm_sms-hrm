@@ -72,8 +72,8 @@
                     {
                         item.LocalCurrentHeadcount = prevforecast.LocalCurrentHeadcount;
                         item.ExpatCurrentHeadcount = prevforecast.ExpatCurrentHeadcount;
-                        item.LocalApprovedHeadcount = prevforecast.LocalCurrentHeadcount + prevforecast.LocalAddition;
-                        item.ExpatApprovedHeadcount = prevforecast.ExpatCurrentHeadcount + prevforecast.ExpatAddition;
+                        item.LocalApprovedHeadcount = prevforecast.PrevLocalCurrentHeadcount + prevforecast.LocalAddition;
+                        item.ExpatApprovedHeadcount = prevforecast.PrevExpatCurrentHeadcount + prevforecast.ExpatAddition;
                     }
                 }
             }
@@ -112,8 +112,8 @@
                     {
                         item.LocalCurrentHeadcount = prevForecast.LocalCurrentHeadcount;
                         item.ExpatCurrentHeadcount = prevForecast.ExpatCurrentHeadcount;
-                        item.LocalApprovedHeadcount = prevForecast.LocalCurrentHeadcount + prevForecast.LocalAddition;
-                        item.ExpatApprovedHeadcount = prevForecast.ExpatCurrentHeadcount + prevForecast.ExpatAddition;
+                        item.LocalApprovedHeadcount = prevForecast.PrevLocalCurrentHeadcount + prevForecast.LocalAddition;
+                        item.ExpatApprovedHeadcount = prevForecast.PrevExpatCurrentHeadcount + prevForecast.ExpatAddition;
                     }
                 }
             }
@@ -135,8 +135,8 @@
                     {
                         detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);
                         detail.ExpatCurrentHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount);
-                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
-                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
+                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.PrevLocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
+                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.PrevExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
                     }
                 }
             }
@@ -158,8 +158,8 @@
                     {
                         detail.LocalCurrentHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount);
                         detail.ExpatCurrentHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount);
-                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.LocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
-                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.ExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
+                        detail.LocalApprovedHeadcount = prevforecast.Sum(x => x.PrevLocalCurrentHeadcount) + prevforecast.Sum(x => x.LocalAddition);
+                        detail.ExpatApprovedHeadcount = prevforecast.Sum(x => x.PrevExpatCurrentHeadcount) + prevforecast.Sum(x => x.ExpatAddition);
                     }
                 }
             }

@@ -240,18 +240,18 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
                     && isEqual(detail.sectionName, section) && company === detail.companyName) {
-                    grandtotal += detail.totalApprovedHeadcount + detail.totalAddition;
+                    grandtotal += detail.totalCurrentHeadcount + detail.totalAddition;
                     checkNone++;
 
                     row.push(
                         <td key={`${key}-local`}>
-                            {renderNumberOfHeadcount(detail.localApprovedHeadcount + detail.localAddition)}
+                            {renderNumberOfHeadcount(detail.localCurrentHeadcount + detail.localAddition)}
                         </td>,
                         <td key={`${key}-expat`}>
-                            {renderNumberOfHeadcount(detail.expatApprovedHeadcount + detail.expatAddition)}
+                            {renderNumberOfHeadcount(detail.expatCurrentHeadcount + detail.expatAddition)}
                         </td>,
                         <td key={`${key}-total`}>
-                            {renderNumberOfHeadcount(detail.totalApprovedHeadcount + detail.totalAddition)}
+                            {renderNumberOfHeadcount(detail.totalCurrentHeadcount + detail.totalAddition)}
                         </td>
                     );
                 }
@@ -391,8 +391,8 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
                 if (detail.unitName === request.unitName
                     && isEqual(detail.departmentName, deparment.departmentName)
                     && company === detail.companyName) {
-                    local += detail.localApprovedHeadcount + detail.localAddition;
-                    expat += detail.expatApprovedHeadcount + detail.expatAddition;
+                    local += detail.localCurrentHeadcount + detail.localAddition;
+                    expat += detail.expatCurrentHeadcount + detail.expatAddition;
                 }
             });
 

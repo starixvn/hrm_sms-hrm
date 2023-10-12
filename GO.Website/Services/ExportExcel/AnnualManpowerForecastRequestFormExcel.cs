@@ -179,9 +179,9 @@
                     SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.LocalAddition);
                     SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.TotalAddition);
 
-                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.ExpatApprovedHeadcount + detail.ExpatAddition);
-                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.LocalApprovedHeadcount + detail.LocalAddition);
-                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.TotalApprovedHeadcount + detail.TotalAddition);
+                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.ExpatCurrentHeadcount + detail.ExpatAddition);
+                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.LocalCurrentHeadcount + detail.LocalAddition);
+                    SetCellValue(worksheet.Cells[rowIndex, colIndex++], detail.TotalCurrentHeadcount + detail.TotalAddition);
                 }
                 else
                 {
@@ -212,9 +212,9 @@
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalAddition));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalAddition));
 
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatApprovedHeadcount + item.ExpatAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalApprovedHeadcount + item.LocalAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalApprovedHeadcount + item.TotalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount + item.ExpatAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount + item.LocalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalCurrentHeadcount + item.TotalAddition));
             }
         }
 
@@ -248,9 +248,9 @@
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalAddition));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalAddition));
 
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatApprovedHeadcount + item.ExpatAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalApprovedHeadcount + item.LocalAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalApprovedHeadcount + item.TotalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount + item.ExpatAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount + item.LocalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalCurrentHeadcount + item.TotalAddition));
 
                 colIndex++;
             }
@@ -275,9 +275,9 @@
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalAddition));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalAddition));
 
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatApprovedHeadcount + item.ExpatAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalApprovedHeadcount + item.LocalAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalApprovedHeadcount + item.TotalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount + item.ExpatAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount + item.LocalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalCurrentHeadcount + item.TotalAddition));
             }
         }
 
@@ -309,9 +309,9 @@
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalAddition));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalAddition));
 
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatApprovedHeadcount + item.ExpatAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalApprovedHeadcount + item.LocalAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalApprovedHeadcount + item.TotalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount + item.ExpatAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount + item.LocalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalCurrentHeadcount + item.TotalAddition));
 
                 colIndex++;
             }
@@ -335,9 +335,9 @@
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalAddition));
                 SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.TotalAddition));
 
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatApprovedHeadcount + item.ExpatAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalApprovedHeadcount + item.LocalAddition));
-                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalApprovedHeadcount + item.TotalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.ExpatCurrentHeadcount + item.ExpatAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex++], details.Sum(item => item.LocalCurrentHeadcount + item.LocalAddition));
+                SetCellValue(worksheet.Cells[rowIndex, colIndex], details.Sum(item => item.TotalCurrentHeadcount + item.TotalAddition));
             }
         }
 

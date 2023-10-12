@@ -124,10 +124,10 @@ const RowItem = ({ isDetail, requestDetail, total, isRenderData, isRenderTotal, 
                         {!isTableTotal && logs.length > 1 && <span className="fa fa-info-circle" onClick={handleShowLogModalDialog} />}
                     </div>
                 </td>
-                <td>{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatApprovedHeadcount)}</td>
-                <td>{renderNumberOfHeadcount(requestDetail.localAddition + requestDetail.localApprovedHeadcount)}</td>
-                <td className="highlight">{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatApprovedHeadcount +
-                    requestDetail.localAddition + requestDetail.localApprovedHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatCurrentHeadcount)}</td>
+                <td>{renderNumberOfHeadcount(requestDetail.localAddition + requestDetail.localCurrentHeadcount)}</td>
+                <td className="highlight">{renderNumberOfHeadcount(requestDetail.expatAddition + requestDetail.expatCurrentHeadcount +
+                    requestDetail.localAddition + requestDetail.localCurrentHeadcount)}</td>
             </tr>
         );
     };

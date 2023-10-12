@@ -269,8 +269,8 @@
                 {
                     if (company == detail.CompanyName)
                     {
-                        local += detail.LocalApprovedHeadcount + detail.LocalAddition;
-                        expat += detail.ExpatApprovedHeadcount + detail.TotalAddition;
+                        local += detail.LocalCurrentHeadcount + detail.LocalAddition;
+                        expat += detail.ExpatCurrentHeadcount + detail.TotalAddition;
                     }
                 }
             }
@@ -483,8 +483,8 @@
                     if (detail.UnitName == request.UnitName && detail.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
                         && company == detail.CompanyName)
                     {
-                        localForecast += detail.LocalApprovedHeadcount + detail.LocalAddition;
-                        expatForecast += detail.ExpatApprovedHeadcount + detail.ExpatAddition;
+                        localForecast += detail.LocalCurrentHeadcount + detail.LocalAddition;
+                        expatForecast += detail.ExpatCurrentHeadcount + detail.ExpatAddition;
                     }
                 }
 
@@ -558,7 +558,7 @@
                     if (detail.UnitName == request.UnitName && detail.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
                         && detail.SectionName.ToLowerInvariant() == section.ToLowerInvariant() && company == detail.CompanyName)
                     {
-                        grandtotal += detail.TotalCurrentHeadcount;
+                        grandtotal += detail.TotalApprovedHeadcount;
                         checkNone++;
                         templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
@@ -597,7 +597,7 @@
                     if (detail.UnitName == request.UnitName && detail.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
                         && detail.SectionName.ToLowerInvariant() == section.ToLowerInvariant() && company == detail.CompanyName)
                     {
-                        grandtotal += detail.TotalCurrentHeadcount;
+                        grandtotal += detail.TotalAddition;
                         checkNone++;
                         templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
@@ -641,9 +641,9 @@
                         checkNone++;
                         templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
-                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalApprovedHeadcount + detail.LocalAddition);
-                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatApprovedHeadcount + detail.ExpatAddition);
-                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.TotalApprovedHeadcount + detail.TotalAddition);
+                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.LocalCurrentHeadcount + detail.LocalAddition);
+                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.ExpatCurrentHeadcount + detail.ExpatAddition);
+                        worksheet.Cells[rowIndex, colIndex++].Value = RenderNumberOfHeadcount(detail.TotalCurrentHeadcount + detail.TotalAddition);
                     }
                 }
                 if (checkNone == 0)
