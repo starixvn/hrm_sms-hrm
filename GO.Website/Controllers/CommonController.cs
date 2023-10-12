@@ -35,6 +35,7 @@
             return Json(employees);
         }
 
+        [HttpPost]
         public async Task<IActionResult> GetManpowerPeriods()
         {
             var criteria = new GetPeriodCriteria { IsActive = 1 };

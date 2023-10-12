@@ -226,7 +226,7 @@
                     if (company == detail.CompanyName)
                     {
                         local += detail.LocalAddition;
-                        expat += detail.TotalAddition;
+                        expat += detail.ExpatAddition;
                     }
                 }
             }
@@ -637,7 +637,7 @@
                     if (detail.UnitName == request.UnitName && detail.DepartmentName.ToLowerInvariant() == department.DepartmentName.ToLowerInvariant()
                         && detail.SectionName.ToLowerInvariant() == section.ToLowerInvariant() && company == detail.CompanyName)
                     {
-                        grandtotal += detail.TotalCurrentHeadcount;
+                        grandtotal += detail.TotalCurrentHeadcount + detail.TotalAddition;
                         checkNone++;
                         templateWorksheet.Cells[RowBodyIndex, ColSectionIndex + 1, RowBodyIndex, ColSectionIndex + NumColCompany]
                            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + NumColCompany - 1]);
