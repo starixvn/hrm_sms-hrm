@@ -9,10 +9,12 @@ import * as Yup from 'yup';
 const EditDepartmentSchema = Yup.object({
     code: Yup.string()
         .max(50, 'Code must be 50 characters')
-        .required('Code is required'),
+        .required('The Code field is required!'),
     name: Yup.string()
         .max(200, 'Name must be 200 characters')
-        .required('Name is required')
+        .required('The Name field is required!'),
+    unit: Yup.string()
+        .required('The Unit field is required!')
 });
 
 export const AppContainer = () => {
@@ -22,21 +24,32 @@ export const AppContainer = () => {
         history.back();
     }
 
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]);
+    const [units, setUnits] = useState([]);
 
-    const handleGetDataDetail = (id) => {
+    const handleGetById = (id) => {
         axios(resolveClientUrl(`department/getById/${id}`)).then(response => {
             const { data } = response;
             if (data) {
                 setData(data);
+                console.log(data)
             }
-            
+        }).catch(axiosError);
+    }
+
+    const handleGetUnits = () => {
+        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
+            const { data } = response;
+            if (data) {
+                setUnits(data);
+            }
         }).catch(axiosError);
     }
 
     useEffect(() => {
         if (id) {
-            handleGetDataDetail(id)
+            handleGetById(id);
+            handleGetUnits();
         }
     }, [id])
     const onSubmit = (data) => {
@@ -45,7 +58,8 @@ export const AppContainer = () => {
                 DepartmentId: data.id,
                 Code: data.code.trim(),
                 Name: data.name.trim(),
-                IsActive: data.isActive
+                IsActive: data.isActive,
+                UnitId: data.unit
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {
@@ -68,6 +82,7 @@ export const AppContainer = () => {
                         <ul>
                             {errors.code && <li>{errors.code}</li>}
                             {errors.name && <li>{errors.name}</li>}
+                            {errors.unit && <li>{errors.unit}</li>}
                         </ul>
                     </div>
                 }
@@ -93,14 +108,13 @@ export const AppContainer = () => {
                             <label className="control-label">Unit</label>
                         </div>
                         <div className="select-form">
-                            {/*<Field name="unitId" as="select" className="form-control">*/}
-                            {/*    <option value="" />*/}
-                            {/*    {units.map((unit) => (*/}
-                            {/*        <option key={unit.id} value={unit.id}>*/}
-                            {/*            {unit.name}*/}
-                            {/*        </option>*/}
-                            {/*    ))}*/}
-                            {/*</Field>*/}
+                            <Field name="unit" as="select" className="form-control">
+                                {units.map((unit) => (
+                                    <option key={unit.id} value={unit.id}>
+                                        {unit.name}
+                                    </option>
+                                ))}
+                            </Field>
                         </div>
                     </div>
                     <div className="form-group">
@@ -122,12 +136,15 @@ export const AppContainer = () => {
 
     return (
         <Formik
+            validateOnBlur={false}
+            validateOnChange={false}
             enableReinitialize={true}
             initialValues={{
                 id: data.id || '',
                 name: data.name || '',
                 code: data.code || '',
-                isActive: data.isActive || false
+                isActive: data.isActive || false,
+                unit: data.unit || ''
             }}
             validationSchema={EditDepartmentSchema}
             onSubmit={onSubmit}

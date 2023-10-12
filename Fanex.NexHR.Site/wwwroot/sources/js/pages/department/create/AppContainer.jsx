@@ -13,7 +13,7 @@ const CreateDepartmentSchema = Yup.object({
     name: Yup.string()
         .max(200, 'Name must be 200 characters')
         .required('The Name field is required!'),
-    unitId: Yup.string()
+    unit: Yup.string()
         .required('The Unit field is required!')
 });
 
@@ -22,7 +22,7 @@ export const AppContainer = () => {
         code: '',
         name: '',
         isActive: false,
-        unitId: 0
+        unitId: ''
     }
 
     const handleGoBack = () => {
@@ -52,7 +52,7 @@ export const AppContainer = () => {
                 Code: code,
                 Name: name,
                 IsActive: data.isActive,
-                UnitId: data.unitId
+                UnitId: data.unit
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {
@@ -75,7 +75,7 @@ export const AppContainer = () => {
                         <ul>
                             {errors.code && <li>{errors.code}</li>}
                             {errors.name && <li>{errors.name}</li>}
-                            {errors.unit && <li>{errors.unitId}</li>}
+                            {errors.unit && <li>{errors.unit}</li>}
                         </ul>
                     </div>
                 }
@@ -101,7 +101,7 @@ export const AppContainer = () => {
                             <label className="control-label">Unit</label>
                         </div>
                         <div className="select-form">
-                            <Field name="unitId" as="select" className="form-control">
+                            <Field name="unit" as="select" className="form-control">
                                 <option value=""/>
                                 {units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
@@ -129,6 +129,8 @@ export const AppContainer = () => {
     }
     return (
         <Formik
+            validateOnBlur={false}
+            validateOnChange={false}
             initialValues={initialValues}
             validationSchema={CreateDepartmentSchema}
             onSubmit={onSubmit}
