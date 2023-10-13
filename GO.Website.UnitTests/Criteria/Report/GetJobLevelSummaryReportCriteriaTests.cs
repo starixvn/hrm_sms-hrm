@@ -3,7 +3,7 @@
     using GO.Website.Criteria.Report;
     using Xunit;
 
-    public class GetManpowerReportCriteriaTests
+    public class GetJobLevelSummaryReportCriteriaTests
     {
         [Fact]
         public void GetSettingKey_WhenCalled_ReturnExpectedSettingKey()

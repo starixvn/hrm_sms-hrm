@@ -1,7 +1,5 @@
-﻿namespace GO.Website.Controllers
+﻿namespace GO.Website.Controllers.Admin
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using GO.Core.Services;

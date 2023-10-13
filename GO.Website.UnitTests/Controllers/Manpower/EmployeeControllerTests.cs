@@ -14,6 +14,8 @@
     using NSubstitute;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Fanex.NexHR.ViewModels;
+    using Website.Criteria.Report;
     using Xunit;
 
     public class EmployeeControllerTests
@@ -42,7 +44,7 @@
         }
 
         [Fact]
-        public async Task GetEmployeeInfos_WhenCalled_ReturnExpectedViewData()
+        public async Task GetEmployeeInfos_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -63,7 +65,7 @@
         }
 
         [Fact]
-        public async Task GetCompanies_WhenCalled_ReturnExpectedViewData()
+        public async Task GetCompanies_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();
@@ -78,9 +80,24 @@
             var jsonResult = Assert.IsType<JsonResult>(result);
             Assert.Equal(expected, jsonResult.Value);
         }
+        
+        [Fact]
+        public async Task GetSectionInfos_WhenCalled_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var sections = fixture.Create<IEnumerable<Section>>();
+            baseService.GetDataAsync<Section>(Arg.Any<GetSectionCriteria>()).Returns(sections);
+            //Act
+            var result = await controller.GetSectionInfos();
+
+            // Assert
+            var jsonResult = Assert.IsType<JsonResult>(result);
+            Assert.IsAssignableFrom<IEnumerable<MultiSelectViewModel>>(jsonResult.Value);
+        }
 
         [Fact]
-        public async Task UpdateExclude_WhenCalled_ReturnExpectedViewData()
+        public async Task UpdateExclude_WhenCalled_ReturnExpectedData()
         {
             // Arrange
             var controller = GetController();

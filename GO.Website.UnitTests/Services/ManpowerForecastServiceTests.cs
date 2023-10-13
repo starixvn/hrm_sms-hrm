@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
+    using Constants;
     using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Criteria.Manpower;
@@ -15,7 +16,9 @@
     using GO.Website.Repositories;
     using GO.Website.Services;
     using Microsoft.AspNetCore.Hosting;
+    using Models.Manpower.AnnualRequest;
     using NSubstitute;
+    using Website.Criteria.Report.Manpower;
     using Xunit;
 
     public class ManpowerForecastServiceTests
@@ -58,7 +61,7 @@
             var criteria = new GetDataForCreateAnnualManpowerForecastRequestCriteria();
             baseService.FetchMultipleAsync<ManpowerPeriod, AnnualManpowerForecastRequestDetail>
                 (Arg.Do<GetDataForCreateAnnualManpowerForecastRequestCriteria>(x => criteria = x)).Returns(
-                new ValueTuple<IEnumerable<ManpowerPeriod>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedPeriod, expectedDetails)); ;
+                new ValueTuple<IEnumerable<ManpowerPeriod>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedPeriod, expectedDetails));
             //Act
             var actual = await service.GetDataForCreateAnnualRequestAsync(userId, unitName);
 
@@ -90,7 +93,7 @@
 
             baseService.FetchMultipleAsync<ManpowerPeriod, AnnualManpowerForecastRequestDetail>
                 (Arg.Do<GetDataForCreateAnnualManpowerForecastRequestCriteria>(x => criteria = x)).Returns(
-                new ValueTuple<IEnumerable<ManpowerPeriod>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedPeriod, expectedDetails)); ;
+                new ValueTuple<IEnumerable<ManpowerPeriod>, IEnumerable<AnnualManpowerForecastRequestDetail>>(expectedPeriod, expectedDetails));
             baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
             //Act
             var actual = await service.GetDataForCreateAnnualRequestAsync(userId, unitName);
@@ -304,6 +307,11 @@
             var service = GetManpowerForecastService();
             var expectedRequest = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
             expectedRequest.First().RequestId = 1;
+            expectedRequest.First().Details.First().RequestId = 1;
+            expectedRequest.First().Details.First().SiteId = 1;
+            expectedRequest.First().Details.First().UnitName = "test";
+            expectedRequest.First().Details.First().DepartmentName = "test";
+            expectedRequest.First().Details.First().SectionName = "test";
 
             var expectedDetail = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
             expectedDetail.First().RequestId = 1;
@@ -319,6 +327,7 @@
             expectedPrevforecasts.First().DepartmentName = "test";
             expectedPrevforecasts.First().SectionName = "test";
 
+
             var criteria = new GetMemberAnnualManpowerForecastRequestSummaryCriteria();
             var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
 
@@ -333,6 +342,124 @@
 
             //Assert
             Assert.Equal(expectedRequest, actual);
+        }
+
+        [Fact]
+        public async Task GetManpowerForecastReportAsync_WhenCalledWithTheSameForecast_ReturnExpectedData()
+        {
+            //Arrange
+            var service = GetManpowerForecastService();
+            var expectedRequest = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
+            var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
+
+            var criteria = new GetManpowerForecastReportCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+
+            manpowerForecastRepository.GetManpowerForecastReportAsync(
+                Arg.Do<GetManpowerForecastReportCriteria>(x => criteria = x)).Returns(expectedRequest);
+
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(
+                Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
+
+            //Act
+            var actual = await service.GetManpowerForecastReportAsync(criteria);
+
+            //Assert
+            Assert.Equal(expectedRequest, actual);
+        }
+
+        [Fact]
+        public async Task GetManpowerForecastReportAsync_WhenCalledWithNotTheSameForecast_ReturnExpectedData()
+        {
+            //Arrange
+            var service = GetManpowerForecastService();
+            var expectedRequest = fixture.Create<IEnumerable<AnnualManpowerForecastRequest>>();
+            expectedRequest.First().RequestId = 1;
+
+            var expectedDetail = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
+            expectedDetail.First().RequestId = 1;
+            expectedDetail.First().SiteId = 1;
+            expectedDetail.First().UnitName = "test";
+            expectedDetail.First().DepartmentName = "test";
+            expectedDetail.First().SectionName = "test";
+
+            var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
+            expectedPrevforecasts.First().RequestId = 1;
+            expectedPrevforecasts.First().SiteId = 1;
+            expectedPrevforecasts.First().UnitName = "test";
+            expectedPrevforecasts.First().DepartmentName = "test";
+            expectedPrevforecasts.First().SectionName = "test";
+
+            var criteria = new GetManpowerForecastReportCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+
+            manpowerForecastRepository.GetManpowerForecastReportAsync(
+                Arg.Do<GetManpowerForecastReportCriteria>(x => criteria = x)).Returns(expectedRequest);
+
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(
+                Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
+
+            //Act
+            var actual = await service.GetManpowerForecastReportAsync(criteria);
+
+            //Assert
+            Assert.Equal(expectedRequest, actual);
+        }
+
+        [Fact]
+        public async Task UpdateStatusMultiAnnualRequestAsync_WhenCalled_ReturnExpectedData()
+        {
+            //Arrange
+            var service = GetManpowerForecastService();
+            var expected = fixture.Create<CommandResult>();
+            var criteria = new UpdateStatusMultiAnnualManpowerForecastRequestCommand();
+
+            baseService.ExecuteNonQueryAsync(Arg.Any<UpdateStatusMultiAnnualManpowerForecastRequestCommand>())
+                .Returns(expected);
+
+            //Act
+            var actual = await service.UpdateStatusMultiAnnualRequestAsync(criteria);
+
+            //Assert
+            Assert.Equal(expected, actual);
+        }
+
+
+        [Fact]
+        public async Task UpdateAnnualRequestAsync_WhenCalled_ReturnExpectedData()
+        {
+            //Arrange
+            var service = GetManpowerForecastService();
+            var userId = fixture.Create<int>();
+            var param = fixture.Create<UpdateAnnualManpowerForecastRequestParam>();
+            var flow = fixture.Create<IEnumerable<ManpowerFlow>>();
+            flow.FirstOrDefault()!.ProcessId = PeriodProcess.UnitHead;
+            param.StatusId = AnnualManpowerForecastRequestStatus.Verified;
+            var expected = fixture.Create<CommandResult>();
+            expected.Code = 0;
+
+            var expectedAnnualManpowerForecastRequest = fixture.Create<AnnualManpowerForecastRequest>();
+            expectedAnnualManpowerForecastRequest.Details.First().SiteId = 1;
+            expectedAnnualManpowerForecastRequest.Details.First().SectionId = 1;
+            expectedAnnualManpowerForecastRequest.Details.First().JobLevel = "test";
+            var expectedPrevforecasts = fixture.Create<IEnumerable<AnnualManpowerForecastRequestDetail>>();
+            expectedPrevforecasts.First().SiteId = 1;
+            expectedPrevforecasts.First().SectionId = 1;
+            expectedPrevforecasts.First().JobLevel = "test";
+
+            var criteria = new GetAnnualManpowerForecastRequestByIdCriteria();
+            var criteriaForecast = new GetPreviousApprovedManpowerForecastByPeriodIdCriteria();
+
+            manpowerForecastRepository.GetAnnualRequestByIdAsync(Arg.Do<GetAnnualManpowerForecastRequestByIdCriteria>(x => criteria = x)).Returns(expectedAnnualManpowerForecastRequest);
+            baseService.GetDataAsync<AnnualManpowerForecastRequestDetail>(Arg.Do<GetPreviousApprovedManpowerForecastByPeriodIdCriteria>(x => criteriaForecast = x)).Returns(expectedPrevforecasts);
+            baseService.ExecuteNonQueryAsync(Arg.Any<UpdateAnnualManpowerForecastRequestCommand>()).Returns(expected);
+            baseService.GetDataAsync<ManpowerFlow>(Arg.Any<GetFlowByUnitCriteria>()).Returns(flow);
+            mailService.SendMailAsync(Arg.Any<MailModel>()).Returns(Task.CompletedTask);
+            //Act
+            var actual = await service.UpdateAnnualRequestAsync(userId, param);
+
+            //Assert
+            Assert.Equal(expected, actual);
         }
 
         #region Helpers
