@@ -29,8 +29,15 @@
             this.ucfunctionService = ucfunctionService;
         }
 
+
         [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
-        public ActionResult Index(short? roleId = null)
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
+        public ActionResult GetFunctions(short? roleId = null)
         {
             IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
             var functionTrees = new TreeFunctionViewModel
@@ -41,9 +48,7 @@
                 FunctionPermissions = ucfunctionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, roleId ?? systemRoles.First().RoleId)
             };
 
-            ViewBag.SystemRoles = systemRoles;
-
-            return View();
+            return new CustomJsonResult { Data = functionTrees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.FunctionManagement)]

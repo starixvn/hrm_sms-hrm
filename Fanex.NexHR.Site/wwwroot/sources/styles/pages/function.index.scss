@@ -14,6 +14,10 @@
     width: auto !important;
     min-width: 600px;
 
+    .th-read {
+        border-left: none !important;
+    }
+
     tbody {
         tr {
             &.root-row {
