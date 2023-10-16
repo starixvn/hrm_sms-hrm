@@ -18,6 +18,40 @@ export const Table = (props) => {
     const handleCheckboxChange = () => {
     };
 
+    const renderTableRows = (items) => {
+        return items.map((item, i) => (
+            <Fragment key={i}>
+                <tr id={`row_${i}`} className={item.level === 0 ? 'root-row' : 'child-row'}>
+                    <td className="align-left">
+                        {item.level > 0 && (
+                            <Fragment>
+                                {Array.from({ length: item.level.length - 1 }).map((_, i) => (
+                                    <span key={i} style={{ opacity: 0 }} className="icon-child-level" >&#9495;</span>
+                                ))}
+                                <span className="icon-child-level">&#9495;</span>
+                            </Fragment>
+                        )}
+                        {item.functionName}
+                    </td>
+                    <td>
+                        <input
+                            type="checkbox"
+                            checked={checkActive(item.functionId, 'read')}
+                            onChange={handleCheckboxChange}
+                        />
+                    </td>
+                    <td>
+                        <input
+                            type="checkbox"
+                            checked={checkActive(item.functionId, 'host')}
+                            onChange={handleCheckboxChange}
+                        />
+                    </td>
+                </tr>
+                {item.childs && renderTableRows(item.childs)}
+            </Fragment>
+        ));
+    };
     return (
         <Fragment>
             <table className="table table-custom">
@@ -33,52 +67,7 @@ export const Table = (props) => {
                 </thead>
                 <tbody>
                     {data.functions ? (
-                        data.functions.map((item, i) => (
-                            <React.Fragment key={i}>
-                                <tr id={`row_${i}`} className={item.level === 0 ? 'root-row' : 'child-row'}>
-                                    <td className="align-left">{item.functionName}</td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={checkActive(item.functionId, 'read')}
-                                            onChange={handleCheckboxChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={checkActive(item.functionId, 'host')}
-                                            onChange={handleCheckboxChange}
-                                        />
-                                    </td>
-                                </tr>
-                                {item.childs ? (
-                                    item.childs.map((item, i) => (
-                                        <React.Fragment key={i}>
-                                            <tr id={`row_${i}`} className={item.level === 0 ? 'root-row' : 'child-row'}>
-                                                <td className="align-left">
-                                                    <span class="icon-child-level">&#9495;</span>
-                                                    {item.functionName}</td>
-                                                <td>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checkActive(item.functionId, 'read')}
-                                                        onChange={handleCheckboxChange}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={checkActive(item.functionId, 'host')}
-                                                        onChange={handleCheckboxChange}
-                                                    />
-                                                </td>
-                                            </tr>
-                                        </React.Fragment>
-                                    ))
-                                ) : ''}
-                            </React.Fragment>
-                        ))
+                        renderTableRows(data.functions)
                     ) : (
                         <tr>
                             <td colSpan="3">No information available</td>

@@ -14,8 +14,13 @@
     width: auto !important;
     min-width: 600px;
 
-    .th-read {
-        border-left: none !important;
+    thead {
+        position: sticky;
+        top: -10px;
+
+        .th-read {
+            border-left: none !important;
+        }
     }
 
     tbody {

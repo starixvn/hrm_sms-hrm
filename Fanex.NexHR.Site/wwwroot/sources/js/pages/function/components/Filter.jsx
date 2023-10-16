@@ -1,10 +1,9 @@
-﻿import { Field } from 'formik';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
 import axios from 'axios';
 
 export const Filter = (props) => {
-    const { setChoose, submit } = props;
+    const { setRole, submit } = props;
     const [systemRoles, setSystemRoles] = useState([]);
 
     const handleGetSystemRoles = () => {
@@ -15,7 +14,8 @@ export const Filter = (props) => {
     }
 
     const handleSelectChange = (event) => {
-
+        setRole(event.target.value);
+        event.target.form.dispatchEvent(new Event('submit', { cancelable: true }));
     };
 
     useEffect(() => {
@@ -23,14 +23,14 @@ export const Filter = (props) => {
     }, [])
 
     return (
-        <form className="filter">
+        <form className="filter" onSubmit={submit}>
             <div className="form-horizontal clearfix">
-                <div className="form-group">
-                    <div className="label-form">
+                <div className="form-group form-group--m">
+                    <div className="label-form label--xxs">
                         <label className="control-label">Role</label>
                     </div>
                     <div className="select-form">
-                        <select name="unit" as="select" className="form-control" onChange={handleSelectChange}>
+                        <select name="role" as="select" className="form-control" onChange={handleSelectChange}>
                             {systemRoles.map((role) => (
                                 <option key={role.roleId} value={role.roleId}>
                                     {role.name}

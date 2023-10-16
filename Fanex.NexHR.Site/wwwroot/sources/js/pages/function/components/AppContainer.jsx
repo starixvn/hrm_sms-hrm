@@ -5,11 +5,12 @@ import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
 import { Table } from './Table';
 
 export const AppContainer = () => {
-    const [choose, setChoose] = useState('');
+    const [role, setRole] = useState('');
     const [functions, setFunctions] = useState([]);
+
     const handleGetFunctions = () => {
         axios.post(resolveClientUrl('Function/GetFunctions'), {
-            roleId: null
+            roleId: role
         }).then(response => {
             setFunctions(response.data)
         }).catch(axiosError);
@@ -20,16 +21,20 @@ export const AppContainer = () => {
     }, [])
 
     const handleFilterForm = (e) => {
+        console.log(window.hasPermission);
         e.preventDefault();
-        //handleGetSystemRoles();
+        handleGetFunctions();
     }
     return (
         <Fragment>
-            <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />
+            <Filter setRole={setRole} role={role} submit={handleFilterForm} />
             <Table data={functions} />
-            <div className="form-group">
-                <button type="submit" className="btn btn-primary" id="btnSubmit">Save</button>
-            </div>
+            {
+                functions.isHost &&
+                <div className="form-group">
+                    <button type="submit" className="btn btn-primary" id="btnSubmit">Save</button>
+                </div>
+            }
         </Fragment>
     )
 };
