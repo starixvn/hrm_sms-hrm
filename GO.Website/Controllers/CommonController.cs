@@ -1,6 +1,7 @@
 ﻿namespace GO.Website.Controllers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using GO.Core.Services;
     using GO.Website.Criteria;
@@ -36,10 +37,13 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetManpowerPeriods()
+        public async Task<IActionResult> GetManpowerPeriods([FromBody] GetPeriodCriteria criteria)
         {
-            var criteria = new GetPeriodCriteria { IsActive = 1 };
-            var periods = await baseService.GetDataAsync<ManpowerPeriod>(criteria);
+            var (periods, processSettings) = await baseService.FetchMultipleAsync<ManpowerPeriod, MapnowerPeriodProcessSetting>(criteria);
+            foreach (var period in periods)
+            {
+                period.Settings = processSettings.Where(x => x.PeriodId == period.PeriodId).ToList();
+            }
 
             return Json(periods);
         }

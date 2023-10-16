@@ -62,8 +62,9 @@ const AppContainer = () => {
 
     useEffect(() => {
         const getPeriods = async () => {
+            const params = { isActive: 1 };
             const url = Site.resolveClientUrl('Common/GetManpowerPeriods');
-            await DataService.postDataAsync(url).then(response => {
+            await DataService.postDataAsync(url, params).then(response => {
                 setPeriods(response.data);
             });
         };

@@ -270,7 +270,7 @@
                     if (company == detail.CompanyName)
                     {
                         local += detail.LocalCurrentHeadcount + detail.LocalAddition;
-                        expat += detail.ExpatCurrentHeadcount + detail.TotalAddition;
+                        expat += detail.ExpatCurrentHeadcount + detail.ExpatAddition;
                     }
                 }
             }

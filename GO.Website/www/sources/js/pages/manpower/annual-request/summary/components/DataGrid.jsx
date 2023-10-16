@@ -108,7 +108,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const unitType = request.unitName.slice(0, 2);
         companies.map(company => {
             let checkNone = 0;
-            const key = `section-CurrentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
+            const key = `section-currentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
@@ -137,7 +137,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
 
-        const key = `section-CurrentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
+        const key = `section-currentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
         rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
@@ -149,7 +149,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const unitType = request.unitName.slice(0, 2);
         companies.map(company => {
             let checkNone = 0;
-            const key = `section-ApprovedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
+            const key = `section-approvedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
@@ -179,7 +179,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
 
-        const key = `section-ApprovedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
+        const key = `section-approvedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
         rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
@@ -192,7 +192,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
         companies.map(company => {
             let checkNone = 0;
-            const key = `section-Additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
+            const key = `section-additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
@@ -222,7 +222,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
             }
         });
 
-        const key = `section-Additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
+        const key = `section-additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
         rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
 
         return rows;
@@ -235,7 +235,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
 
         companies.map(company => {
             let checkNone = 0;
-            const key = `section-Forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
+            const key = `section-forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
 
             request.details.map(detail => {
                 if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
@@ -425,7 +425,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         );
     };
 
-    const calculaTotalCurrentHeadcountUnitType = (company, unitType) => {
+    const calculateTotalCurrentHeadcountUnitType = (company, unitType) => {
         let local = 0;
         let expat = 0;
         requests.map(request => {
@@ -445,7 +445,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const rows = [];
         let grandtotal = 0;
         companies.map(company => {
-            const { local, expat } = calculaTotalCurrentHeadcountUnitType(company, unitType);
+            const { local, expat } = calculateTotalCurrentHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalcurrentheadcount`;
             rows.push(
                 <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
@@ -461,7 +461,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return rows;
     };
 
-    const calculaTotalApprovedHeadcountUnitType = (company, unitType) => {
+    const calculateTotalApprovedHeadcountUnitType = (company, unitType) => {
         let local = 0;
         let expat = 0;
         requests.map(request => {
@@ -481,7 +481,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const rows = [];
         let grandtotal = 0;
         companies.map(company => {
-            const { local, expat } = calculaTotalApprovedHeadcountUnitType(company, unitType);
+            const { local, expat } = calculateTotalApprovedHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalApprovedforecast`;
             rows.push(
                 <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
@@ -496,7 +496,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return rows;
     };
 
-    const calculaTotalAdditionalHeadcountUnitType = (company, unitType) => {
+    const calculateTotalAdditionalHeadcountUnitType = (company, unitType) => {
         let local = 0;
         let expat = 0;
         requests.map(request => {
@@ -516,7 +516,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const rows = [];
         let grandtotal = 0;
         companies.map(company => {
-            const { local, expat } = calculaTotalAdditionalHeadcountUnitType(company, unitType);
+            const { local, expat } = calculateTotalAdditionalHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalAdditionalHeadcount`;
             rows.push(
                 <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
@@ -532,15 +532,15 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return rows;
     };
 
-    const calculaTotalForecastHeadcountUnitType = (company, unitType) => {
+    const calculateTotalForecastHeadcountUnitType = (company, unitType) => {
         let local = 0;
         let expat = 0;
         requests.map(request => {
             if (unitType === request.unitName.slice(0, 2)) {
                 request.details.map(detail => {
                     if (company === detail.companyName) {
-                        local += detail.localApprovedHeadcount + detail.localAddition;
-                        expat += detail.expatApprovedHeadcount + detail.expatAddition;
+                        local += detail.localCurrentHeadcount + detail.localAddition;
+                        expat += detail.expatCurrentHeadcount + detail.expatAddition;
                     }
                 });
             }
@@ -552,7 +552,7 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         const rows = [];
         let grandtotal = 0;
         companies.map(company => {
-            const { local, expat } = calculaTotalForecastHeadcountUnitType(company, unitType);
+            const { local, expat } = calculateTotalForecastHeadcountUnitType(company, unitType);
             const key = `unitType-${company}-${unitType}-totalForecastHeadcount`;
             rows.push(
                 <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
