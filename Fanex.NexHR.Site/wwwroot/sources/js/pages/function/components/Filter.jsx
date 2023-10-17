@@ -3,7 +3,7 @@ import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
 import axios from 'axios';
 
 export const Filter = (props) => {
-    const { setRole, submit } = props;
+    const { setRoleId, submit } = props;
     const [systemRoles, setSystemRoles] = useState([]);
 
     const handleGetSystemRoles = () => {
@@ -14,7 +14,7 @@ export const Filter = (props) => {
     }
 
     const handleSelectChange = (event) => {
-        setRole(event.target.value);
+        setRoleId(event.target.value);
         event.target.form.dispatchEvent(new Event('submit', { cancelable: true }));
     };
 
@@ -30,7 +30,7 @@ export const Filter = (props) => {
                         <label className="control-label">Role</label>
                     </div>
                     <div className="select-form">
-                        <select name="role" as="select" className="form-control" onChange={handleSelectChange}>
+                        <select name="roleId" as="select" className="form-control" onChange={handleSelectChange}>
                             {systemRoles.map((role) => (
                                 <option key={role.roleId} value={role.roleId}>
                                     {role.name}

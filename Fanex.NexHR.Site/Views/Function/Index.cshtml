@@ -1,10 +1,17 @@
-﻿@{
+﻿@using HRM.UserControl.Client.Core.Enumerables
+@{
     ViewBag.Title = Labels.FunctionManagement;
+    var read = (byte)Policy.Read;
+    var host = (byte)Policy.Host;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/function.index.css" rel="stylesheet" />
 }
 @section js{
+    <script type="text/javascript">
+        window.read = "@read",
+            window.host = "@host";
+    </script>
     <script src="~/wwwroot/dist/js/function.index.js"></script>
 }
 @section Breadcrumb {
