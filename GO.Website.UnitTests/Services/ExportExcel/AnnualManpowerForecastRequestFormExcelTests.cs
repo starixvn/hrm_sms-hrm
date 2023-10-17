@@ -9,18 +9,13 @@
 
     public class AnnualManpowerForecastRequestFormExcelTests
     {
-        private readonly FakeExcelPackage excelPackage = new FakeExcelPackage();
+        private readonly FakeExcelPackage excelPackage = new ();
         private AnnualManpowerForecastRequest request;
-        private const string templatePath = "ExcelTemplates/AnnualManpowerForecastRequestForm.xlsx";
         private readonly Fixture fixture = new();
         private const byte HeaderRowIndex = 3;
         private const byte BodyRowIndex = 6;
-        private const byte TotalSectionRowIndex = 7;
-        private const byte TotalDeptRowIndex = 8;
-        private const byte TotalColPerCompany = 12;
         private const byte DeptColIndex = 2;
         private const byte SectionColIndex = 3;
-        private const byte TotalFixedCols = 6;
         private const byte StartCompanyColIndex = 7;
 
         [Fact]
@@ -91,10 +86,11 @@
         private AnnualManpowerForecastRequestFormExcelTestable CreateExcel()
         {
             request = fixture.Create<AnnualManpowerForecastRequest>();
-            foreach (var detail in request.Details)
-            {
+            foreach (var detail in request.Details) {
                 detail.CompanyName = "CTI";
             }
+            request.Details.Last().CompanyName = "SMS";
+
             var excel = Substitute.For<AnnualManpowerForecastRequestFormExcelTestable>(string.Empty, request);
             return excel;
         }

@@ -49,28 +49,5 @@
                 }
             }
         }
-
-        protected internal virtual void DrawBorderCell(ExcelRange cell)
-        {
-            cell.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-            cell.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-            cell.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-            cell.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-        }
-
-        protected internal virtual void StyleDefault(ExcelWorksheet worksheet)
-        {
-            const byte FontSize = 8;
-            const string FontName = "Tahoma";
-            worksheet.Cells.Style.Font.Name = FontName;
-            worksheet.Cells.Style.Font.Size = FontSize;
-            worksheet.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-        }
-
-        protected internal virtual void SetBackgroundColor(ExcelRange cell, Color color)
-        {
-            cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cell.Style.Fill.BackgroundColor.SetColor(color);
-        }
     }
 }

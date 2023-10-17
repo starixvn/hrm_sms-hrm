@@ -1,6 +1,7 @@
 ﻿namespace GO.Website.UnitTests.Controllers.Admin
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
     using HRM.UserControl.Client.Core.Models;
@@ -40,6 +41,8 @@
             var roleId = fixture.Create<short>();
             userControlSession.SiteId = fixture.Create<short>();
 
+            fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList().ForEach(b => fixture.Behaviors.Remove(b));
+            fixture.Behaviors.Add(new OmitOnRecursionBehavior());
             var functions = fixture.Create<IList<Function>>();
             var hierarchyFunctions = fixture.Create<IList<Function>>();
             var permissions = fixture.Create<IList<FunctionPermission>>();
@@ -56,8 +59,8 @@
             var actualPermissions = jsonResult.Value.GetType().GetProperty("permissions")?.GetValue(jsonResult.Value);
             var actualHierarchyFunctions = jsonResult.Value.GetType().GetProperty("hierarchyFunctions")?.GetValue(jsonResult.Value);
             Assert.Equal(functions, actualFunctions);
-            Assert.Equal(hierarchyFunctions, actualPermissions);
-            Assert.Equal(permissions, actualHierarchyFunctions);
+            Assert.Equal(hierarchyFunctions, actualHierarchyFunctions);
+            Assert.Equal(permissions, actualPermissions);
         }
 
         [Fact]
