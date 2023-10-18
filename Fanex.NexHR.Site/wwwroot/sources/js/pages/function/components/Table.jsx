@@ -1,43 +1,74 @@
 ﻿import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
-import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
+import toastr from 'toastr';
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 
 export const Table = (props) => {
     const { data } = props;
-    //  console.log(data)
-
     const [checkboxes, setCheckboxes] = useState([]);
-
-    const onSubmit = (e) => {
-        axios.post(resolveClientUrl(`Function/AssignPermission`), {
-            roleId: roleId
-        }).then(response => {
-            const { data } = response;
-            if (data.IsSuccessful) {
-                toastr.success('Successfully!', '', toastOptions());
-            } else {
-                toastr.error(data.Message, '', toastOptions());
-            }
-        }).catch(axiosError);
-    }
 
     useEffect(() => {
         setCheckboxes(functionList(data.functions));
     }, [data.functions])
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        axios.post(resolveClientUrl(`Function/AssignPermission`), {
+            roleId: data.roleId,
+            permissions: checkboxes
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Successfully!', '', toastOptions());
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    }
+
+    function getFunctionPermission(functionId) {
+        return data.functionPermissions ? data.functionPermissions.find((item) => item.functionId === functionId) : null;
+    }
+
+    function createChildObject(item, functionPermission) {
+        return {
+            parentId: item.parentId,
+            functionId: item.functionId,
+            functionName: item.functionName,
+            isRead: functionPermission ? functionPermission.isRead : false,
+            isHost: functionPermission ? functionPermission.isHost : false,
+            level: item.level,
+            policy: item.policy
+        };
+    }
+
     function functionList(functions) {
-        const updatedList = functions ? functions.map((item1) => {
-            const functionPermission = data.functionPermissions ? data.functionPermissions.find((item2) => item2.functionId === item1.functionId) : null;
-            return {
-                functionId: item1.functionId,
-                functionName: item1.functionName,
+        if (!functions) {
+            return null;
+        }
+
+        const updatedList = functions.flatMap((item) => {
+            const functionPermission = getFunctionPermission(item.functionId);
+
+            const updatedChildList = item.childs.map((item2) => {
+                const functionPermission2 = getFunctionPermission(item2.functionId);
+                return createChildObject(item2, functionPermission2);
+            });
+
+            const updatedItem1 = {
+                functionId: item.functionId,
+                functionName: item.functionName,
                 isRead: functionPermission ? functionPermission.isRead : false,
                 isHost: functionPermission ? functionPermission.isHost : false,
-                level: item1.level,
-                policy: item1.policy,
-                childs: item1.childs.length > 0 ? [functionList(item1.childs)] : []
+                level: item.level,
+                policy: item.policy,
+                childIds: item.childs.length > 0 ? item.childs.map((itemChild) => {
+                    return itemChild.functionId;
+                }) : null
             };
-        }) : null;
+
+            return [updatedItem1, ...updatedChildList];
+        });
 
         return updatedList;
     }
@@ -46,18 +77,85 @@ export const Table = (props) => {
         const updatedCheckboxes = checkboxes.map((checkbox) => {
             if (checkbox.functionId === functionId) {
                 if (permission === 'read') {
-                    const updatedCheckbox = { ...checkbox, isRead: event.target.checked };
-                    return updatedCheckbox;
-                } else if (permission === 'host') {
-                    return { ...checkbox, isHost: event.target.checked };
-                }
-            }
+                    const updatedCheckbox = {
+                        ...checkbox,
+                        isRead: event.target.checked,
+                        isHost: false
+                    };
+                    if (checkbox.childIds) {
+                        updatedCheckbox.childIds.forEach((id) => {
+                            const childCheckbox = checkboxes.find((child) => child.functionId === id);
+                            if (childCheckbox) {
+                                childCheckbox.isRead = event.target.checked;
+                                childCheckbox.isHost = false;
+                            }
+                        });
+                    }
 
-            if (checkbox.childs.length > 0) {
-                checkboxes.childs = checkbox.childs.map((checkboxChild) => ({
-                    ...checkboxChild,
-                    isRead: event.target.checked
-                }));
+                    if (checkbox.parentId) {
+                        const childCheckbox = checkboxes.find((child) => child.functionId === checkbox.parentId);
+                        if (!event.target.checked) {
+                            let isFlagged = false;
+
+                            childCheckbox.childIds.forEach((id) => {
+                                if (id !== checkbox.functionId) {
+                                    const childCheckbox2 = checkboxes.find((child) => child.functionId === id);
+                                    if (childCheckbox2.isRead) {
+                                        isFlagged = true;
+                                        return;
+                                    }
+                                }
+                            });
+                            childCheckbox.isRead = isFlagged;
+                            if (!isFlagged) {
+                                childCheckbox.isHost = isFlagged;
+                            }
+                        }
+                        else {
+                            childCheckbox.isRead = true;
+                        }
+                    }
+
+                    return updatedCheckbox;
+
+                } else if (permission === 'host') {
+                    const updatedCheckbox = {
+                        ...checkbox,
+                        isHost: event.target.checked,
+                        isRead: event.target.checked ? true : checkbox.isRead
+                    };
+                    if (checkbox.childIds) {
+                        updatedCheckbox.childIds.forEach((id) => {
+                            const childCheckbox = checkboxes.find((child) => child.functionId === id);
+                            if (childCheckbox) {
+                                childCheckbox.isHost = event.target.checked;
+                                childCheckbox.isRead = true;
+                            }
+                        });
+                    }
+                    if (checkbox.parentId) {
+                        const childCheckbox = checkboxes.find((child) => child.functionId === checkbox.parentId);
+                        if (!event.target.checked) {
+                            let isFlagged = false;
+
+                            childCheckbox.childIds.forEach((id) => {
+                                if (id !== checkbox.functionId) {
+                                    const childCheckbox2 = checkboxes.find((child) => child.functionId === id);
+                                    if (childCheckbox2.isHost) {
+                                        isFlagged = true;
+                                        return;
+                                    }
+                                }
+                            });
+                            childCheckbox.isHost = isFlagged;
+                        }
+                        else {
+                            childCheckbox.isHost = true;
+                            childCheckbox.isRead = true;
+                        }
+                    }
+                    return updatedCheckbox;
+                }
             }
             return checkbox;
         });
@@ -123,7 +221,7 @@ export const Table = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {checkboxes.length > 0 ?
+                        {checkboxes ?
                             renderTableRows(checkboxes)
                             : (
                                 <tr>

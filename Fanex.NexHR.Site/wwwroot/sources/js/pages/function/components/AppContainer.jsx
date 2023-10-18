@@ -27,7 +27,7 @@ export const AppContainer = () => {
     return (
         <Fragment>
             <Filter setRoleId={setRoleId} roleId={roleId} submit={handleFilterForm} />
-            {data.functions && <Table data={data} />}
+            <Table data={data} />
         </Fragment>
     )
 };
