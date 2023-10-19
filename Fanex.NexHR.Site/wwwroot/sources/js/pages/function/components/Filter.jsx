@@ -3,7 +3,7 @@ import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
 import axios from 'axios';
 
 export const Filter = (props) => {
-    const { setRoleId, submit } = props;
+    const { setRoleId } = props;
     const [systemRoles, setSystemRoles] = useState([]);
 
     const handleGetSystemRoles = () => {
@@ -23,7 +23,7 @@ export const Filter = (props) => {
     }, [])
 
     return (
-        <form className="filter" onSubmit={submit}>
+        <form className="filter" >
             <div className="form-horizontal clearfix">
                 <div className="form-group form-group--m">
                     <div className="label-form label--xxs">

@@ -1047,7 +1047,6 @@
     <Content Include="wwwroot\sources\styles\components\_modal.scss" />
     <Content Include="wwwroot\sources\styles\layout\_toastify.scss" />
     <Content Include="wwwroot\sources\styles\components\_checbox-switch.scss" />
-    <Content Include="Views\Function\_FunctionTrees.cshtml" />
     <Content Include="wwwroot\sources\styles\layout\_toastr.scss" />
     <Content Include="Views\Function\Index.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />

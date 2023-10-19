@@ -18,15 +18,11 @@ export const AppContainer = () => {
 
     useEffect(() => {
         handleGetFunctions();
-    }, [])
+    }, [roleId]);
 
-    const handleFilterForm = (e) => {
-        e.preventDefault();
-        handleGetFunctions();
-    }
     return (
         <Fragment>
-            <Filter setRoleId={setRoleId} roleId={roleId} submit={handleFilterForm} />
+            <Filter setRoleId={setRoleId} roleId={roleId} />
             <Table data={data} />
         </Fragment>
     )
