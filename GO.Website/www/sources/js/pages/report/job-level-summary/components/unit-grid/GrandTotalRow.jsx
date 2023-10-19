@@ -1,5 +1,7 @@
 ﻿import React from 'react';
 
+import { renderNumber } from '../../common.funcs';
+
 const GrandTotalRow = ({ data, showHideOptions }) => {
     return (
         <>
@@ -17,13 +19,13 @@ const GrandTotalRow = ({ data, showHideOptions }) => {
                             totalExpat += unit.totalExpat;
 
                             if (showHideOption.show) {
-                                cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-expat`} className="text-center" >{unit.totalExpat}</td>);
-                                cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-local`} className="text-center" >{unit.totalLocal}</td>);
+                                cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-expat`} className="text-center">{renderNumber(unit.totalExpat)}</td>);
+                                cells.push(<td key={`grand-total-${gunit.name}-${unit.name}-local`} className="text-center">{renderNumber(unit.totalLocal)}</td>);
                             }
                         });
 
-                        cells.push(<td key={`grand-total-${gunit.name}-expat`} className="text-center">{totalExpat}</td>);
-                        cells.push(<td key={`grand-total-${gunit.name}-local`} className="text-center">{totalLocal}</td>);
+                        cells.push(<td key={`grand-total-${gunit.name}-expat`} className="text-center">{renderNumber(totalExpat)}</td>);
+                        cells.push(<td key={`grand-total-${gunit.name}-local`} className="text-center">{renderNumber(totalLocal)}</td>);
 
                         return cells;
                     })
@@ -43,11 +45,13 @@ const GrandTotalRow = ({ data, showHideOptions }) => {
                             totalExpat += unit.totalExpat;
 
                             if (showHideOption.show) {
-                                cells.push(<td colSpan={2} key={`grand-total-${gunit.name}-${unit.name}-total`} className="text-center" >{unit.totalExpat + unit.totalLocal}</td>);
+                                cells.push(<td colSpan={2} key={`grand-total-${gunit.name}-${unit.name}-total`} className="text-center">
+                                    {renderNumber(unit.totalExpat + unit.totalLocal)}
+                                </td>);
                             }
                         });
 
-                        cells.push(<td colSpan={2} key={`grand-total-${gunit.name}-total`} className="text-center">{totalExpat + totalLocal}</td>);
+                        cells.push(<td colSpan={2} key={`grand-total-${gunit.name}-total`} className="text-center">{renderNumber(totalExpat + totalLocal)}</td>);
 
                         return cells;
                     })

@@ -1,5 +1,7 @@
 ﻿import React from 'react';
 
+import { renderNumber } from '../../common.funcs';
+
 const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells, onClick }) => {
     const renderCell = (value, jobLevel, country, gunit) =>
         value > 0 ? <div className="cursor-pointer" onClick={event => onClick(event, jobLevel, country, gunit)}>{value}</div> : '';
@@ -9,7 +11,9 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
     const getRowSpanJobType = () => {
         let countColSpan = 0;
         data.map(item => {
-            if (item.name.slice(0, 2) === jobType) countColSpan++;
+            if (item.name.slice(0, 2) === jobType) {
+                countColSpan++;
+            }
         });
         return isMultipleData ? countColSpan + 1 : countColSpan;
     };
@@ -18,16 +22,16 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
         const total = [];
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
-                let cell = [];
-                cell.push(<td key={`${item.name}-totalrow-jobtotal-name`} colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
+                const cells = [];
+                cells.push(<td key={`${item.name}-totalrow-jobtotal-name`} colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
                 item.cells.map(country => {
                     let totalCompany = 0;
                     country.cells.map(gunit => {
                         totalCompany += gunit.total;
                     });
-                    cell.push(<td colSpan={3} key={`${country.name}-${jobType}-total`} className="text-center col-total">{totalCompany}</td>);
+                    cells.push(<td colSpan={3} key={`${country.name}-${jobType}-total`} className="text-center col-total">{renderNumber(totalCompany)}</td>);
                 })
-                total.push(<tr key={`${item.name}-totalrow-jobtotal`}>{cell}</tr>);
+                total.push(<tr key={`${item.name}-totalrow-jobtotal`}>{cells}</tr>);
             }
         });
         return total;
@@ -37,15 +41,15 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
         const total = [];
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
-                let cell = [];
-                cell.push(<td key={`${item.name}-totalrow-name`} className="text-center col-job-level">Total</td>);
+                const cells = [];
+                cells.push(<td key={`${item.name}-totalrow-name`} className="text-center col-job-level">Total</td>);
                 item.cells.map(country => {
                     country.cells.map(gunit => {
-                        cell.push(<td key={`${country.name}-${gunit.name}-${jobType}-total`} className="text-center col-total">{gunit.total}</td>);
+                        cells.push(<td key={`${country.name}-${gunit.name}-${jobType}-total`} className="text-center col-total">{renderNumber(gunit.total)}</td>);
                     });
                 })
                 
-                total.push(<tr key={`${item.name}-totalrow`} >{cell}</tr>);
+                total.push(<tr key={`${item.name}-totalrow`}>{cells}</tr>);
             }
         });
         return total;
@@ -56,7 +60,7 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
         data.map(item => {
             if (item.name.slice(0, 2) === jobType) {
                 const showHideOption = showHideOptions.find(x => x.key === jobType);
-                let cells = [];
+                const cells = [];
                 if (row.length === 0) {
                     cells.push(<td key={`${item.name}-jobtype-row-name`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
                         {
@@ -75,7 +79,7 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
 
                     item.cells.map(country => {
                         country.cells.map(unit => {
-                            cells.push(<td key={`${item.name}-${country.name}-${unit.name}`} className="col-total text-center">
+                            cells.push(<td key={`${item.name}-${country.name}-${unit.name}`} className={`${isMultipleData ? '' : 'col-total'} text-center`}>
                                 {renderCell(unit.total, item.name, country.name, unit.name)}
                             </td>);
                         });
@@ -89,15 +93,9 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, handleShowHideCells
 
     return (
         <>
-            {
-                renderbody()
-            }
-            {
-                renderTotal()
-            }
-            {
-                renderJobTotal()
-            }
+            {renderbody()}
+            {renderTotal()}
+            {renderJobTotal()}
         </>
     );
 };

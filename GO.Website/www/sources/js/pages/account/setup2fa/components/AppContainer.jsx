@@ -25,7 +25,6 @@ const AppContainer = () => {
         setChangeSecretKeyModalDialog({ show: true });
     };
 
-
     const getSetupOtp = async () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/SetupOtp');
@@ -82,9 +81,7 @@ const AppContainer = () => {
         Site.blockUI();
         const url = Site.resolveClientUrl('Account/UpdateStatusOTP');
         await DataService.postDataAsync(url, accountOTP).then(response => {
-            if (response !== undefined) {
-                accountOTP.enabled = !accountOTP.enabled;
-            }
+            accountOTP.enabled = !accountOTP.enabled;
         }).then(() => Site.unblockUI());
     };
 
@@ -93,11 +90,9 @@ const AppContainer = () => {
             Site.blockUI();
             const url = Site.resolveClientUrl('Account/GetAccountOTP');
             await DataService.postDataAsync(url).then(response => {
-                if (response != undefined) {
-                    setAccountOTP(response.data);
-                    if (response.data == null || !response.data.isRegistered) {
-                        getSetupOtp();
-                    }
+                setAccountOTP(response.data);
+                if (response.data == null || !response.data.isRegistered) {
+                    getSetupOtp();
                 }
             }).then(() => Site.unblockUI());
         };

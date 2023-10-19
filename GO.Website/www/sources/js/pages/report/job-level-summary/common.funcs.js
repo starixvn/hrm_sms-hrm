@@ -1,0 +1,1 @@
+﻿export const renderNumber = number => number !== 0 ? number : '';

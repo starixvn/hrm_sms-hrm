@@ -5,7 +5,7 @@ import { Button, Form, Accordion } from 'react-bootstrap';
 import LangHelper from '@jsroot/common/langHelper';
 import Site from '@jsroot/common/site';
 
-const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVerifyOtp, isVerifyOtp, messageError}) => {
+const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVerifyOtp, isVerifyOtp, messageError }) => {
     const renderSetup2Fa = () => {
         return <div className="setup-2fa">
             <p className="intro">The OTP will be required when you make log in to GO system. You will need to register for the <strong>Mobile Authenticator App</strong> before enabling the OTP.</p>
@@ -107,7 +107,7 @@ const SetupOtp = ({ verifySetupOtp, setupOtp, isShowMessageVerifyOtp, isVerifyOt
                 </li>
             </ul>
         </div>;
-    }
+    };
 
     return (
         <>

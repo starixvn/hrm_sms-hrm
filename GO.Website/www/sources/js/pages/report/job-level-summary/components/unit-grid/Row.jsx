@@ -1,5 +1,7 @@
 ﻿import React from 'react';
 
+import { renderNumber } from '../../common.funcs';
+
 const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions, handleShowHideJobCells, onClick }) => {
     const renderCell = (value, jobLevel, unitName, isLocal) =>
         value > 0 ? <div className="cursor-pointer" onClick={event => onClick(event, jobLevel, unitName, isLocal)}>{value}</div> : '';
@@ -8,7 +10,9 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
     const getRowSpanJobType = () => {
         let countColSpan = 0;
         data.map(item => {
-            if (item.name.slice(0, 2) === jobType) countColSpan++;
+            if (item.name.slice(0, 2) === jobType) {
+                countColSpan++
+            };
         });
         return isMultipleData ? countColSpan + 1 : countColSpan;
     };
@@ -17,8 +21,8 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
         const total = [];
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
-                let cell = [];
-                cell.push(<td key={`${item.name}-totaljobtype`} colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
+                const cells = [];
+                cells.push(<td key={`${item.name}-totaljobtype`} colSpan={2} className="text-center col-job-level bold">Total {jobType}</td>);
                 item.cells.map(gunit => {
                     let totalLocal = 0,
                         totalExpat = 0;
@@ -29,15 +33,15 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                         totalExpat += unit.totalExpat;
 
                         if (showHideOption.show) {
-                            cell.push(<td colSpan={2} key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
-                                {unit.totalExpat + unit.totalLocal}
+                            cells.push(<td colSpan={2} key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
+                                {renderNumber(unit.totalExpat + unit.totalLocal)}
                             </td>);
                         }
                     });
 
-                    cell.push(<td colSpan={2} key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat + totalLocal}</td>);
+                    cells.push(<td colSpan={2} key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{renderNumber(totalExpat + totalLocal)}</td>);
                 });
-                total.push(<tr key={`${item.name}-totaljobType`}>{cell}</tr>);
+                total.push(<tr key={`${item.name}-totaljobType`}>{cells}</tr>);
             }
         });
         return total;
@@ -47,8 +51,8 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
         const total = [];
         totalJobType.map(item => {
             if (item.name.slice(0, 2) === jobType && isMultipleData) {
-                let cell = [];
-                cell.push(<td key={`${item.name}-totaljobLevel`} className="text-center col-job-level">Total</td>);
+                const cells = [];
+                cells.push(<td key={`${item.name}-totaljobLevel`} className="text-center col-job-level">Total</td>);
                 item.cells.map(gunit => {
                     let totalLocal = 0,
                         totalExpat = 0;
@@ -59,34 +63,34 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                         totalExpat += unit.totalExpat;
 
                         if (showHideOption.show) {
-                            cell.push(
+                            cells.push(
                                 <td key={`${item.name}-${gunit.name}-${unit.name}-expat`} className="text-center">
-                                    {unit.totalExpat}
+                                    {renderNumber(unit.totalExpat)}
                                 </td>
                             );
-                            cell.push(<td key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
-                                {unit.totalLocal}
+                            cells.push(<td key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
+                                {renderNumber(unit.totalLocal)}
                             </td>);
                         }
                     });
 
-                    cell.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
-                    cell.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
+                    cells.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{renderNumber(totalExpat)}</td>);
+                    cells.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{renderNumber(totalLocal)}</td>);
                 });
-                total.push(<tr key={`${item.name}-totaljoblevel`}>{cell}</tr>);
+                total.push(<tr key={`${item.name}-totaljoblevel`}>{cells}</tr>);
             }
         });
         return total;
     }
 
-    const renderbody = () => {
-        const row = [];
+    const renderBody = () => {
+        const rows = [];
         data.map(item => {
             if (item.name.slice(0, 2) === jobType) {
                 const showHideJobOption = showHideJobOptions.find(x => x.key === jobType);
-                let cell = [];
-                if (row.length === 0) {
-                    cell.push(<td key={`${item.name}-jobtype`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
+                const cells = [];
+                if (rows.length === 0) {
+                    cells.push(<td key={`${item.name}-jobtype`} className={`${isMultipleData ? '' : 'text-center'} col-job-level bold`} rowSpan={getRowSpanJobType()}>
                         {
                            isMultipleData &&
                            <span className={`fa ${showHideJobOption.show ? 'fa-minus-square-o' : 'fa-plus-square-o'}`}
@@ -96,7 +100,7 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                     </td>);
                 }
                 if (showHideJobOption.show || !isMultipleData) {
-                    cell.push(<td key={`${item.name}-data`} className="text-center col-job-level">
+                    cells.push(<td key={`${item.name}-data`} className="text-center col-job-level">
                         {isMultipleData ? item.name : 'Total'}
                     </td>);
                     item.cells.map(gunit => {
@@ -109,39 +113,33 @@ const Row = ({ data, jobType, totalJobType, showHideOptions, showHideJobOptions,
                             totalExpat += unit.totalExpat;
 
                             if (showHideOption.show) {
-                                cell.push(
+                                cells.push(
                                     <td key={`${item.name}-${gunit.name}-${unit.name}-expat`} className="text-center">
                                         {renderCell(unit.totalExpat, item.name, unit.name, false)}
                                     </td>
                                 );
-                                cell.push(<td key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
+                                cells.push(<td key={`${item.name}-${gunit.name}-${unit.name}-local`} className="text-center">
                                     {renderCell(unit.totalLocal, item.name, unit.name, true)}
                                 </td>);
                             }
                         });
 
-                        cell.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{totalExpat}</td>);
-                        cell.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{totalLocal}</td>);
+                        cells.push(<td key={`${item.name}-${gunit.name}-total-expat`} className="text-center col-total">{renderNumber(totalExpat)}</td>);
+                        cells.push(<td key={`${item.name}-${gunit.name}-total-local`} className="text-center col-total">{renderNumber(totalLocal)}</td>);
                     });
                 }
 
-                row.push(<tr key={`${item.name}-row-data`}>{cell}</tr>);
+                rows.push(<tr key={`${item.name}-row-data`}>{cells}</tr>);
             }
         });
-        return row;
+        return rows;
     }
 
     return (
         <>
-            {
-                renderbody()
-            }
-            {
-                renderTotal()
-            }
-            {
-                renderJobTotal()
-            }
+            {renderBody()}
+            {renderTotal()}
+            {renderJobTotal()}
         </>
     );
 };
