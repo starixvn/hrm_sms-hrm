@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
@@ -27,18 +28,16 @@
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
         public ActionResult Index()
         {
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
-            return View();
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
+            return View(hasPermission);
         }
 
         [ValidateInput(false)]
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
         public ActionResult GetJobLevel()
         {
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
             IList<JobLevel> jobLevel = jobLevelService.GetJobLevel();
-
-            return PartialView("~/Views/JobLevel/_JobLevelGrid.cshtml", jobLevel);
+            return new CustomJsonResult { Data = jobLevel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]

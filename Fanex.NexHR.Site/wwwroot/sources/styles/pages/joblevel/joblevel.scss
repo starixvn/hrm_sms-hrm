@@ -18,6 +18,11 @@
 .form-horizontal .form-group.form-group--m {
     width: auto;
 }
+
 .content_scroll .filter {
     width: 827px;
+}
+
+.filter, .table-custom {
+    width: 700px !important;
 }

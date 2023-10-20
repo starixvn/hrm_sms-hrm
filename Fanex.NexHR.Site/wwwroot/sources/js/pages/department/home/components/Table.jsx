@@ -4,10 +4,10 @@ import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared
 
 export const Table = (props) => {
     const { data, handleGetDepartment } = props;
-    const handleViewId = (id) => {
+    const handleEdit = (id) => {
         window.location.href = (`/department/edit/${id}`);
     }
-    const handleDeleteId = (id) => {
+    const handleDelete = (id) => {
         confirm('Are you sure you want to delete this department?', () => {
             axios.post(resolveClientUrl('Department/Delete'), {
                 Id: id
@@ -22,6 +22,8 @@ export const Table = (props) => {
             }).catch(axiosError);
         });
     }
+    const colSpan = window.hasPermission ? 7 : 5;
+
     return (
         <Fragment>
             <table className="table table-custom">
@@ -54,23 +56,22 @@ export const Table = (props) => {
                                 {
                                     window.hasPermission && <Fragment>
                                         <td>
-                                            <a onClick={() => handleViewId(item.id)}>
+                                            <a onClick={() => handleEdit(item.id)}>
                                                 <i className="fa fa-pencil fa-lg icon-edit"></i>
                                             </a>
                                         </td>
                                         <td>
-                                            <a onClick={() => handleDeleteId(item.id)}>
+                                            <a onClick={() => handleDelete(item.id)}>
                                                 <i className="fa fa-times fa-lg icon-delete"></i>
                                             </a>
                                         </td>
                                     </Fragment>
                                 }
                             </tr>
-                        )) : <tr>
-                            <td colSpan='10'>
-                                No information available
-                            </td>
-                        </tr>
+                        )) :
+                            <tr>
+                                <td colSpan={colSpan}>No information available</td>
+                            </tr>
                     }
                 </tbody>
             </table>

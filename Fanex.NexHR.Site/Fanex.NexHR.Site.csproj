@@ -581,6 +581,8 @@
     <Content Include="wwwroot\sources\js\pages\function\components\NestedCheckboxes.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
@@ -1179,7 +1181,6 @@
     <Content Include="Views\Report\Overtime\_ListMonthlyOvertimeDetails.cshtml" />
     <Content Include="Views\Account\_HistoryDetail.cshtml" />
     <Content Include="Views\JobLevel\Index.cshtml" />
-    <Content Include="Views\JobLevel\_JobLevelGrid.cshtml" />
     <Content Include="wwwroot\sources\styles\pages\joblevel\joblevel.scss" />
     <Content Include="Views\EmployeeWorkFromHome\_Create.cshtml" />
     <Content Include="Views\EmployeeWorkFromHome\_Edit.cshtml" />

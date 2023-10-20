@@ -194,7 +194,7 @@ module.exports = {
         [`${jsDistPath}/department.home`]: `${jsSourcePath}/department/home/index.jsx`,
         [`${jsDistPath}/department.create`]: `${jsSourcePath}/department/create/index.jsx`,
         [`${jsDistPath}/department.edit`]: `${jsSourcePath}/department/edit/index.jsx`,
-        [`${jsDistPath}/joblevel`]: `${jsSourcePath}/joblevel/joblevel.js`,
+        [`${jsDistPath}/joblevel.index`]: `${jsSourcePath}/joblevel/index.jsx`,
         [`${jsDistPath}/employee.workfromhome`]: `${jsSourcePath}/employeeworkfromhome/index.js`,
         [`${jsDistPath}/hospitalization.leave.balance.index`]: `${jsSourcePath}/hospitalization-leave-balance/index.js`,
         [`${jsDistPath}/sick.leave.balance.index`]: `${jsSourcePath}/sick-leave-balance/index.js`,

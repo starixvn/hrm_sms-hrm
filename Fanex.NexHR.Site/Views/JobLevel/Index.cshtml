@@ -1,61 +1,20 @@
 ﻿@using Fanex.NexHR.Resources
 
-@model JobLevel
+@model bool
 @{
     ViewBag.Title = @Labels.JobLevelManagement;
-    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/joblevel.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/joblevel.js"></script>
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/wwwroot/dist/js/joblevel.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@if (hasPermission)
-{
-    using (Html.BeginForm("GetJobLevel", "joblevel", FormMethod.Get, new { @class = "filter", style = "width: 700px;" }))
-    {
-        <button id="btnNewJobLevel" class="btn btn-request" type="button">
-            <span class="fa fa-plus"></span> @Labels.CreateJobLevel
-        </button>
-    }
-}
-
-<div id="data"></div>
-
-<div id="create-dialog" style="display: none" class="dialog-form">
-    @Html.ValidationSummary()
-    <form>
-        <div class="form-horizontal clearfix">
-            <div class="form-group">
-                <div class="label-form">
-                    <label class="control-label" for="name">@Labels.JobLevel</label>
-                </div>
-                <div class="input-form">
-                    <input type="text" name="name" id="name" class="form-control" autocomplete="off" />
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div id="edit-dialog" style="display: none" class="dialog-form">
-    @Html.ValidationSummary()
-    <form>
-        <div class="form-horizontal clearfix">
-            <div class="form-group">
-                <div class="label-form">
-                    <label class="control-label" for="name">@Labels.JobLevel</label>
-                </div>
-                <div class="input-form">
-                    <input type="text" name="name" id="name" class="form-control" autocomplete="off"  />
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
+<div id="job-level" />
