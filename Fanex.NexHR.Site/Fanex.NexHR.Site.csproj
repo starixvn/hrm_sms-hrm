@@ -569,8 +569,16 @@
     <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\ExtensionControl.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\Checkbox.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\NestedCheckboxes.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />

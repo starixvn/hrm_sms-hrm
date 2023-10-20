@@ -37,15 +37,22 @@
         [HRMPermission(Policy.Read, FunctionKey.ExtensionNumber)]
         public ActionResult Index()
         {
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
+
+            return View(hasPermission);
+        }
+
+        [HRMPermission(Policy.Read, FunctionKey.ExtensionNumber)]
+        public ActionResult GetExtensionNo()
+        {
             IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo();
 
             var model = (from item in lstEntity
                          group item by item.TeamName into g
                          select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
-
-            return View(model);
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create()

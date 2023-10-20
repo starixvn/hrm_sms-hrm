@@ -166,9 +166,19 @@ module.exports = {
         [`${jsDistPath}/unit.edit`]: `${jsSourcePath}/unit/edit/index.jsx`,
         [`${jsDistPath}/unit.create`]: `${jsSourcePath}/unit/create/index.jsx`,
         [`${jsDistPath}/annual.leavebalance.employee.create.edit`]: `${jsSourcePath}/annual-leave-balance/employee.create.edit.js`,
-        [`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,
-        [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
-        [`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/external.group.js`,
+
+
+
+        /*[`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,*/
+        //[`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
+        //[`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/external.group.js`,
+
+        [`${jsDistPath}/extensionno.home`]: `${jsSourcePath}/extension-no/home/index.jsx`,
+        [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create/index.jsx`,
+
+
+
+
         [`${jsDistPath}/discipline.summary`]: `${jsSourcePath}/discipline/summary.js`,
         [`${jsDistPath}/discipline.detail`]: `${jsSourcePath}/discipline/details.js`,
         [`${jsDistPath}/message`]: `${jsSourcePath}/message/message.js`,
