@@ -78,7 +78,6 @@ export default class DataGrid extends PureComponent {
         return (
             <Table
                 minWidth={720}
-                maxWidth={document.getElementById('app-container').clientWidth}
                 autoWidth
                 header={this.buildHeader()}
                 body={this.buildBody()}

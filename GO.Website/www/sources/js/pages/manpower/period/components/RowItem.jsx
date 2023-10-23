@@ -47,6 +47,7 @@ const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
                 <input type='checkbox'
                     checked={isActive} disabled={!window.hasHostPermissionOnPeriod}
                     onChange={handleChangeStatus}
+                    data-testid="input-element"
                 />
             </Cell>
             <Cell className="text-center">
