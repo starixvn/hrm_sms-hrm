@@ -7,6 +7,10 @@ export const ExtensionControl = () => {
         window.location = resolveClientUrl("ExtensionNo/Create");
     }
 
+    const handleCreateExtensionGroup = () => {
+        window.location = resolveClientUrl("ExtensionNo/ExternalGroup");
+    }
+
     return (
         <Fragment>
             {
@@ -15,7 +19,7 @@ export const ExtensionControl = () => {
                     <a className="btn btn-request" onClick={ handleCreateExtension }>
                         <span className="fa fa-plus"></span> New Extension Number
                     </a>
-                    <a className="btn btn-primary"> Manage External Group</a >
+                    <a className="btn btn-primary" onClick={handleCreateExtensionGroup}> Manage External Group</a >
                 </div>
             }
         </Fragment>

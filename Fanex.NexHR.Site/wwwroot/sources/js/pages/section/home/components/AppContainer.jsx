@@ -23,6 +23,7 @@ export const AppContainer = () => {
         e.preventDefault();
         hanleGetSection();
     }
+   
     return (
         <Fragment>
             <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />

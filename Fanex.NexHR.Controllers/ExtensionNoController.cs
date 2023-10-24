@@ -80,14 +80,7 @@
                     };
 
                     CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    if (result.IsSuccessful)
-                    {
-                        return RedirectToAction("Index", "ExtensionNo");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, result.Message);
-                    }
+                    return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
             }
 
@@ -154,9 +147,15 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult ExternalGroup()
         {
+            return View();
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
+        public ActionResult GetAllExternalGroup()
+        {
             IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: false);
 
-            return View(group);
+            return new CustomJsonResult { Data = group, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]

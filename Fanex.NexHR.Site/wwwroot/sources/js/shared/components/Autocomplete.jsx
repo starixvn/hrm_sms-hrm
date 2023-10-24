@@ -1,5 +1,6 @@
-﻿import React, { Component } from 'react';
+﻿import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { debounce } from 'lodash';
 
 export default class Autocomplete extends Component {
     static propTypes = {
@@ -7,7 +8,10 @@ export default class Autocomplete extends Component {
         className: PropTypes.string,
         isDisabled: PropTypes.bool,
         onInput: PropTypes.func,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        form: PropTypes.object,
+        field: PropTypes.object,
+        nameInput: PropTypes.string,
     };
 
     static defaultProps = {
@@ -19,7 +23,10 @@ export default class Autocomplete extends Component {
         },
         onChange: function () {
             // This is intentional
-        }
+        },
+        form: {},
+        field: {},
+        nameInput: ''
     };
 
     componentDidMount() {
@@ -51,9 +58,13 @@ export default class Autocomplete extends Component {
         });
     };
 
+
+
     handleInput = event => {
         this.props.onInput(event.target.value);
     };
+
+
 
     handleChange = (event, ui) => {
         let value = 0,
@@ -66,19 +77,33 @@ export default class Autocomplete extends Component {
                 value = '';
             }
         }
-
         this.props.onChange({ value, label });
+        if (this.props.form.setFieldValue) {
+            this.props.form.setFieldValue(this.props.nameInput, value);
+        }
+        
     };
 
     render() {
         return (
-            <input
-                ref={el => this.el = el}
-                type="text"
-                className={this.props.className}
-                disabled={this.props.isDisabled}
-                onInput={this.handleInput}
-            />
+            <Fragment>
+                {
+                    this.props.form && this.props.field && this.props.nameInput ? <input
+                        ref={el => this.el = el}
+                        className={this.props.className}
+                        disabled={this.props.isDisabled}
+                        onInput={this.handleInput}
+                        type="text"
+                        {...this.props.field}
+                    /> : <input
+                        ref={el => this.el = el}
+                        type="text"
+                        className={this.props.className}
+                        disabled={this.props.isDisabled}
+                        onInput={this.handleInput}
+                    />
+                }
+            </Fragment>
         );
     }
 }

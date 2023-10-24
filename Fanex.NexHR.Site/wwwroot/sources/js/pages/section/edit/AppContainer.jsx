@@ -8,9 +8,11 @@ import * as Yup from 'yup';
 
 const EditSectionSchema = Yup.object({
     code: Yup.string()
+        .trim('The Code field is required!')
         .max(50, 'The Code must be 50 characters!')
         .required('The Code field is required!'),
     name: Yup.string()
+        .trim('The Name field is required!')
         .max(200, 'The Name must be 200 characters!')
         .required('The Name field is required!'),
     department: Yup.string().required('The The Department field is required!')

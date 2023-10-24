@@ -22,7 +22,7 @@ export const Filter = (props) => {
                     </div>
                 </div>
                 {
-                    window.hasPermission &&
+                    window.hasPermission === 'True' &&
                     <div className="form-group form-group--m">
                         <button type="submit" className="btn btn-primary">Search</button>
                         <a className="btn btn-request" onClick={ handleCreateUnit }>

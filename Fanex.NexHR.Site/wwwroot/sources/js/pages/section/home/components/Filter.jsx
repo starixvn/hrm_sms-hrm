@@ -6,6 +6,7 @@ export const Filter = (props) => {
     const handleCreateUnit = () => {
         window.location = resolveClientUrl("Section/Create");
     }
+    console.log(window.hasPermission)
     return (
         <form className="filter" onSubmit={submit}>
             <div className="form-horizontal clearfix">
@@ -22,8 +23,7 @@ export const Filter = (props) => {
                     </div>
                 </div>
                 {
-                    window.hasPermission &&
-                    <div className="form-group form-group--m">
+                    window.hasPermission === 'True' && <div className="form-group form-group--m">
                         <button type="submit" className="btn btn-primary">Search</button>
                         <a className="btn btn-request" onClick={handleCreateUnit}>
                             <span className="fa fa-plus">

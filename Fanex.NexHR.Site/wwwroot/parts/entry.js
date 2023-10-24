@@ -171,8 +171,9 @@ module.exports = {
 
         /*[`${jsDistPath}/extensionno.index`]: `${jsSourcePath}/extension-no/index.js`,*/
         //[`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create.js`,
-        //[`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/external.group.js`,
 
+
+        [`${jsDistPath}/external.group`]: `${jsSourcePath}/extension-no/group/index.jsx`,
         [`${jsDistPath}/extensionno.home`]: `${jsSourcePath}/extension-no/home/index.jsx`,
         [`${jsDistPath}/extensionno.create`]: `${jsSourcePath}/extension-no/create/index.jsx`,
 

@@ -1,7 +1,7 @@
 ﻿import React, { Fragment } from 'react';
 
 export const Table = (props) => {
-    const { data } = props;
+    const { data, handleDeleteRow } = props;
     let index = 1
     return (
         <table className="table table-custom" id="data">
@@ -52,7 +52,7 @@ export const Table = (props) => {
                                                     <i className="fa fa-pencil fa-lg icon-edit" style={{ cursor: 'pointer' }}></i>
                                                 </td>
                                                 <td>
-                                                    <i className="fa fa-times fa-lg icon-delete" style={{ cursor: 'pointer' }}></i>
+                                                    <i className="fa fa-times fa-lg icon-delete" onClick={() => handleDeleteRow(item.employeeExtensionId) } style={{ cursor: 'pointer' }}></i>
                                                 </td>
                                             </Fragment>
                                         }
