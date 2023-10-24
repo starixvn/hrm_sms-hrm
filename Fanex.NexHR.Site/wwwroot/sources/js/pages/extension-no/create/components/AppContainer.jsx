@@ -15,8 +15,10 @@ export const AppContainer = () => {
     const [selectEmployee, setSelectEmployee] = useState(null);
     const CreateExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
+            .trim('The ExtensionNo field is required!')
             .required('The ExtensionNo field is required!'),
         Employee: checked ? Yup.string()
+            .trim('The Employee field is required!')
             .required('The Employee field is required!') : false
     });
     const handleGoBack = () => {
