@@ -3,7 +3,7 @@ import axios from 'axios';
 import { resolveClientUrl, axiosError, confirm, alert } from '../../../shared/common.functions';
 
 export const Table = (props) => {
-    const { data, setEditModal, editJobLevel } = props;
+    const { data, setEditModal, editJobLevel, reloadTable } = props;
 
     const handleDelete = (id) => {
         confirm('Are you sure you want to delete?', () => {
@@ -13,7 +13,7 @@ export const Table = (props) => {
                 const { data } = response;
                 if (data.IsSuccessful) {
                     alert('Delete successfully!');
-                    handleGetJobLevel();
+                    reloadTable();
                 } else {
                     alert(data.Message);
                 }

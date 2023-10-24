@@ -584,6 +584,7 @@
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Create.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Edit.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />

@@ -24,6 +24,10 @@ export const AppContainer = () => {
         }).catch(axiosError);
     }
 
+    const reloadTable = () => {
+        handleGetJobLevel();
+    }
+
     useEffect(() => {
         handleGetJobLevel();
     }, []);
@@ -42,9 +46,9 @@ export const AppContainer = () => {
                     </Button>
                 </div>
             }
-            <Create createModal={createModal} setCreateModal={setCreateModal} />
-            <Edit editModal={editModal} setEditModal={setEditModal} id={idJobLevelEdit} name={nameJobLevelEdit} />
-            <Table data={jobLevel} setEditModal={setEditModal} editJobLevel={handleEditInfo} />
+            <Create createModal={createModal} setCreateModal={setCreateModal} reloadTable={reloadTable} />
+            <Edit editModal={editModal} setEditModal={setEditModal} id={idJobLevelEdit} name={nameJobLevelEdit} reloadTable={reloadTable} />
+            <Table data={jobLevel} setEditModal={setEditModal} editJobLevel={handleEditInfo} reloadTable={reloadTable}/>
         </Fragment>
     )
 };

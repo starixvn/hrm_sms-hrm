@@ -12,7 +12,7 @@ const CreateSchema = Yup.object({
 });
 
 export const Create = (props) => {
-    const { createModal, setCreateModal } = props;
+    const { createModal, setCreateModal, reloadTable } = props;
 
     const handleClose = () => {
         setCreateModal(false);
@@ -27,6 +27,7 @@ export const Create = (props) => {
                 if (data.IsSuccessful) {
                     handleClose();
                     alert('Create successfully!');
+                    reloadTable();
                 } else {
                     alert(data.Message);
                 }
@@ -58,7 +59,7 @@ export const Create = (props) => {
     }
 
     return (
-        <Draggable>
+        <Draggable handle=".modal-header" >
             <Modal show={createModal} onHide={handleClose} keyboard={false} backdrop="static">
                 <Formik
                     validateOnBlur={false}

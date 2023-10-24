@@ -12,7 +12,7 @@ const EditSchema = Yup.object({
 });
 
 export const Edit = (props) => {
-    const { editModal, setEditModal, id, name } = props;
+    const { editModal, setEditModal, id, name, reloadTable } = props;
 
     const handleClose = () => {
         setEditModal(false);
@@ -28,6 +28,7 @@ export const Edit = (props) => {
                 if (data.IsSuccessful) {
                     handleClose();
                     alert('Edit successfully!');
+                    reloadTable();
                 } else {
                     alert(data.Message);
                 }
@@ -59,7 +60,7 @@ export const Edit = (props) => {
     }
 
     return (
-        <Draggable>
+        <Draggable handle=".modal-header">
             <Modal show={editModal} onHide={handleClose} keyboard={false} backdrop="static">
                 <Formik
                     validateOnBlur={false}
