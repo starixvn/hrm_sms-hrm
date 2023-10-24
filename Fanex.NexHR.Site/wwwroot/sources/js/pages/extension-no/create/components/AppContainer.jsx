@@ -25,12 +25,10 @@ export const AppContainer = () => {
         history.back();
     }
 
-
-
-    const getEmployees = (query) => {
+    const getEmployees = query => {
         if (query) {
             axios.get(resolveClientUrl('employee/getemployees'), {
-                params: { query: query }
+                params: { query }
             }).then(response => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
@@ -45,9 +43,7 @@ export const AppContainer = () => {
                 setEmployee(employeeOptions);
             }).catch(axiosError);
         }
-    }
-
-
+    };
 
     const getGroupExtension = (checked) => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {

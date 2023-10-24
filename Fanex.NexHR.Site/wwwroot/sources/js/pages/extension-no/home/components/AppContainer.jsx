@@ -30,13 +30,17 @@ export const AppContainer = () => {
         
     }
 
+    const handleEditExtention = (id, isInternal) => {
+        window.location = resolveClientUrl(`ExtensionNo/Edit/${id}?isInternal=${isInternal}`);
+    }
+
     useEffect(() => {
         getExtensionNo();
     }, [])
     return (
         <Fragment>
             <ExtensionControl />
-            <Table data={data} handleDeleteRow={ handleDeleteExtention }/>
+            <Table data={data} handleDeleteRow={handleDeleteExtention} handleEditRow={handleEditExtention }/>
         </Fragment>
     )
 };

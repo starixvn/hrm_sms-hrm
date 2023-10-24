@@ -1,6 +1,7 @@
 ﻿import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
+import { debounce } from '../../shared/common.functions';
+
 
 export default class Autocomplete extends Component {
     static propTypes = {
@@ -59,12 +60,9 @@ export default class Autocomplete extends Component {
     };
 
 
-
     handleInput = event => {
         this.props.onInput(event.target.value);
     };
-
-
 
     handleChange = (event, ui) => {
         let value = 0,

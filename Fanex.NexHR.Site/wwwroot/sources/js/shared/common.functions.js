@@ -435,6 +435,21 @@ function sortTable(table, th) {
     }
 }
 
+function debounce(func, wait) {
+    let timeout;
+    return function (...theArgs) {
+        const context = this,
+            args = theArgs;
+
+        const later = () => {
+            func.apply(context, args);
+        };
+
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait || 500);
+    };
+}
+
 export {
     showMessage,
     fadeOutMessage,
@@ -457,5 +472,6 @@ export {
     initTooltip,
     downloadFile,
     sortTable,
-    showFullAvatar
+    showFullAvatar,
+    debounce
 };

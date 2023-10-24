@@ -90,48 +90,45 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(int id, bool isInternal)
         {
-            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(id, isInternal);
-            IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(isInternal: isInternal);
+            ViewBag.Id = id;
+            ViewBag.IsInternal = isInternal;
 
-            if (groups != null)
-            {
-                ViewBag.Group = groups.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
-            }
-
-            return View(model);
+            return View();
         }
+
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
+        public ActionResult GetExtentionById(int id, bool isInternal)
+        {
+            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(id, isInternal);
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(ExtensionNoModel model)
         {
-            CheckExternalEmployee(model);
-            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: model.IsInternal);
-            ViewBag.Group = group.Select(x => new SelectListItem { Text = x.TeamName, Value = x.TeamId.ToString() }).ToList();
-            if (ModelState.IsValid)
+            if (model != null)
             {
-                var criteria = new UpdateExtensionNumberMemberCriteria
+                CheckExternalEmployee(model);
+                if (ModelState.IsValid)
                 {
-                    FullName = model.FullName,
-                    NickName = model.NickName,
-                    ExtensionNo = model.ExtensionNo,
-                    IsInternal = model.IsInternal,
-                    ExtId = model.EmployeeExtensionId,
-                    EmpId = model.EmpId,
-                    TeamId = model.TeamId
-                };
-                CommandResult result = baseService.ExecuteNonQuery(criteria);
-                if (result.IsSuccessful)
-                {
-                    return RedirectToAction("Index", "ExtensionNo");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
+                    var criteria = new UpdateExtensionNumberMemberCriteria
+                    {
+                        FullName = model.FullName,
+                        NickName = model.NickName,
+                        ExtensionNo = model.ExtensionNo,
+                        IsInternal = model.IsInternal,
+                        ExtId = model.EmployeeExtensionId,
+                        EmpId = model.EmpId,
+                        TeamId = model.TeamId
+                    };
+                    CommandResult result = baseService.ExecuteNonQuery(criteria);
+                    return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
             }
-
-            return View(model);
+            return View();
         }
 
         [HttpPost]
