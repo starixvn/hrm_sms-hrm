@@ -26,8 +26,8 @@ export const AppContainer = () => {
     }
     return (
         <Fragment>
-            <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />
-            <Table data={departments} handleGetDepartment={handleGetDepartment }/>
+            <Filter setChoose={setChoose} submit={handleFilterForm} />
+            <Table data={departments} handleGetDepartment={handleGetDepartment} />
         </Fragment>
     )
 };

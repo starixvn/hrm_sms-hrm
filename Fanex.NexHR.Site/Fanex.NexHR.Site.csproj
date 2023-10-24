@@ -579,12 +579,12 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
-    <Content Include="wwwroot\sources\js\pages\function\components\Checkbox.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
-    <Content Include="wwwroot\sources\js\pages\function\components\NestedCheckboxes.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Create.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
@@ -603,7 +603,6 @@
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
     <Content Include="wwwroot\sources\js\pages\employeeworkfromhome\index.js" />
-    <Content Include="wwwroot\sources\js\pages\joblevel\joblevel.js" />
     <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\edit\AppContainer.jsx" />

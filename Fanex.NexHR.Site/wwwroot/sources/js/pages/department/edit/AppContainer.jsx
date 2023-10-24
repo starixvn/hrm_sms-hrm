@@ -7,10 +7,10 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 const EditDepartmentSchema = Yup.object({
-    code: Yup.string()
+    code: Yup.string().trim()
         .max(50, 'The Code must be 50 characters!')
         .required('The Code field is required!'),
-    name: Yup.string()
+    name: Yup.string().trim()
         .max(200, 'The Name must be 200 characters!')
         .required('The Name field is required!'),
     unit: Yup.string()

@@ -5,13 +5,11 @@
 @import '../../components/buttons-new';
 @import '../../components/jquery-ui-dialog';
 
-#create-dialog, #edit-dialog {
-    .form-group {
-        width: 100%;
+.form-group {
+    width: 100%;
 
-        .input-form, .select-form {
-            width: calc(100% - 8rem);
-        }
+    .input-form, .select-form {
+        width: calc(100% - 8rem);
     }
 }
 
@@ -25,4 +23,22 @@
 
 .filter, .table-custom {
     width: 700px !important;
+}
+
+.table-custom thead {
+    position: sticky;
+    top: -10px;
+}
+
+.modal-dialog {
+    top: 36%;
+    left: 4%;
+
+    .modal-content {
+        width: 425px;
+
+        .modal-header {
+            cursor: move;
+        }
+    }
 }
