@@ -590,6 +590,12 @@
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Edit.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Create.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Edit.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
@@ -622,7 +628,6 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\holiday\edit.js" />
     <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
-    <Content Include="wwwroot\sources\js\pages\jobtitle\jobtitle.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
     <Content Include="wwwroot\sources\js\pages\addtimerecord.js" />
     <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />

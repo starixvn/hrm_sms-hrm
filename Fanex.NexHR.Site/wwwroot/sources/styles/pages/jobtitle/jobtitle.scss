@@ -5,7 +5,7 @@
 @import '../../components/buttons-new';
 @import '../../components/jquery-ui-dialog';
 
-#create-dialog, #edit-dialog {
+.form-group {
     .form-group {
         width: 100%;
 
@@ -17,7 +17,30 @@
 
 .form-horizontal .form-group.form-group--m {
     width: auto;
+    display: flex;
+    gap: 5px;
 }
-.content_scroll .filter {
-    width: 827px;
+
+.content_scroll .filter, .table-custom {
+    width: 827px !important;
 }
+
+.table-custom thead {
+    position: sticky;
+    top: -10px;
+}
+
+.modal-dialog {
+    top: 36%;
+    left: 4%;
+
+    .modal-content {
+        width: 425px;
+
+        .modal-header {
+            cursor: move;
+        }
+    }
+}
+
+

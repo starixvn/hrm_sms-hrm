@@ -98,11 +98,11 @@ export const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
-                                {data.units && data.units.map((unit) => (
+                                {data.units ? data.units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
                                         {unit.name}
                                     </option>
-                                ))}
+                                )) : ''}
                             </Field>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ export const AppContainer = () => {
                             <label className="control-label">Is Active</label>
                         </div>
                         <div className="input-form">
-                            <Field type="checkbox" name="isActive" />
+                            <Field type="checkbox" name="isActive" style={{ cursor: 'pointer' }} />
                         </div>
                     </div>
                     <div className="form-group">

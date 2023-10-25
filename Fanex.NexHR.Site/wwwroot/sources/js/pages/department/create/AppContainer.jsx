@@ -116,7 +116,7 @@ export const AppContainer = () => {
                             <label className="control-label">Is Active</label>
                         </div>
                         <div className="input-form">
-                            <Field type="checkbox" name="isActive" />
+                            <Field type="checkbox" name="isActive" style={{ cursor: 'pointer' }}/>
                         </div>
                     </div>
                     <div className="form-group">

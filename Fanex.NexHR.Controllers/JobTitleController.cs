@@ -6,6 +6,7 @@
     using Core.Enums;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Lookup;
@@ -37,10 +38,15 @@
         [HRMPermission(Policy.Read, FunctionKey.JobTitleManagement)]
         public ActionResult JobTitleManagement()
         {
-            IList<SelectListItem> jobCategories = GetJobCategories();
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
+            var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
+            return View(hasPermission);
+        }
 
-            return View(jobCategories);
+        [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]
+        public ActionResult GetJobCategory()
+        {
+            IList<SelectListItem> jobCategories = GetJobCategories();
+            return new CustomJsonResult { Data = jobCategories, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
@@ -48,9 +54,7 @@
         public ActionResult GetJobTitles(string jobTitle)
         {
             IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
-            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
-
-            return PartialView("~/Views/JobTitle/_JobTitleGrid.cshtml", jobTitles);
+            return new CustomJsonResult { Data = jobTitles, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.JobTitleManagement)]

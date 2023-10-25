@@ -173,6 +173,7 @@ export const Table = (props) => {
                                 checked={item.isRead}
                                 onChange={(event) => handleCheckboxChange(event, item.functionId, 'read')}
                                 disabled={disabled}
+                                style={{ cursor: 'pointer' }}
                             />
                         }
                     </td>
@@ -183,6 +184,7 @@ export const Table = (props) => {
                                 checked={item.isHost}
                                 onChange={(event) => handleCheckboxChange(event, item.functionId, 'host')}
                                 disabled={disabled}
+                                style={{ cursor: 'pointer' }}
                             />
                         }
                     </td>

@@ -112,7 +112,7 @@ module.exports = {
         [`${jsDistPath}/account.index`]: `${jsSourcePath}/account/index.js`,
         [`${jsDistPath}/account.edit.profile`]: `${jsSourcePath}/account/edit.profile.js`,
         [`${jsDistPath}/account.changepwd`]: `${jsSourcePath}/account/changepwd.js`,
-        [`${jsDistPath}/jobtitle`]: `${jsSourcePath}/jobtitle/jobtitle.js`,
+        [`${jsDistPath}/jobtitle.index`]: `${jsSourcePath}/jobtitle/index.jsx`,
         [`${jsDistPath}/report.monthlyworkinghours`]: `${jsSourcePath}/report/monthlyworkinghours.js`,
         [`${jsDistPath}/report.weeklyworkinghours`]: `${jsSourcePath}/report/weeklyworkinghours.js`,
         [`${jsDistPath}/report.dailyworkinghours`]: `${jsSourcePath}/report/dailyworkinghours.js`,

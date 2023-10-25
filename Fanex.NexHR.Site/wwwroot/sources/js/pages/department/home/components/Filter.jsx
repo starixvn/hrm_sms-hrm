@@ -21,16 +21,16 @@ export const Filter = (props) => {
                         </select>
                     </div>
                 </div>
-                {
-                    window.hasPermission &&
-                    <div className="form-group form-group--m">
-                        <button type="submit" className="btn btn-primary">Search</button>
+                <div className="form-group form-group--m">
+                    <button type="submit" className="btn btn-primary">Search</button>
+                    {
+                        window.hasPermission &&
                         <a className="btn btn-request" onClick={handleCreateDepartment}>
                             <span className="fa fa-plus" />
                             &nbsp;New Department
                         </a>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </form>
     )
