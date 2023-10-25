@@ -6,76 +6,69 @@ import { renderNumberOfHeadcount } from '../../../common.funcs';
 import { isEqual } from '@jsroot/common/string.funcs';
 
 const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
-    const MaxStep = 4;
+    if (companies.length === 0) {
+        companies = [''];
+    }
 
-    const renderFirstRowHeader = () => {
-        const year = periodSelected.year;
-        const totalCompany = companies.length;
-        const defaultWidth = 280 * totalCompany;
-        return (
+    const year = periodSelected ? periodSelected.year : 0;
+    const bodyRows = [];
+    const totalDeptHeadcounts = [];
+
+    const buildHeader = () => {
+        const rows = [];
+
+        rows.push(
             <tr key="first-row-header">
                 <th className="name-step-background hide-border fixed-header fixed-header-unit" rowSpan={3} colSpan={2}>{LangHelper.getResource('Unit')}</th>
                 <th className="name-step-background hide-border fixed-header fixed-header-department" rowSpan={3}>{LangHelper.getResource('Deparment')}</th>
                 <th className="name-step-background section hide-border fixed-header fixed-header-section" rowSpan={3}>{LangHelper.getResource('Section')}</th>
-                <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {(year - 1) + LangHelper.getResource('ManpowerHeadcountCurrent')}
-                </th>
-                <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {(year - 1) + LangHelper.getResource('ApprovedForecastHeadcount')}
-                </th>
-                <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {LangHelper.getResource('AdditionalHeadcount')}
-                </th>
-                <th className="name-step-background" style={{ width: defaultWidth }} colSpan={3 * totalCompany + 1}>
-                    {year + LangHelper.getResource('ManpowerHeadcountForecast')}
-                </th>
-            </tr>);
-    };
-
-    const renderSecondRowHeader = () => {
-        const headers = [];
-        for (let step = 0; step < MaxStep; step++) {
-            companies.map(company => {
-                headers.push(<th className="name-company-background" key={`${company}-${step}`} colSpan={3}>{company}</th>);
-            });
-
-            headers.push(
-                <th className="name-step-background grand-total hide-border"
-                    key={`grand-total-${step}`} rowSpan={2}
-                >{LangHelper.getResource('GrandTotal')}</th>
-            );
-        }
-        return headers;
-    };
-
-    const renderThirdRowHeader = () => {
-        const headers = [];
-        for (let step = 0; step < MaxStep; step++) {
-            companies.map(company => {
-                headers.push(
-                    <th className="name-company-background" key={`${company}-${step}-local`} >{LangHelper.getResource('Local')}</th>,
-                    <th className="name-company-background" key={`${company}-${step}-expat`}>{LangHelper.getResource('Expat')}</th>,
-                    <th className="name-company-background" key={`${company}-${step}-total`}>{LangHelper.getResource('Total')}</th>
-                );
-            });
-        }
-
-        return headers;
-    };
-
-    const buildHeader = () => {
-        const row = [];
-        row.push(renderFirstRowHeader());
-        row.push(
-            <tr key="second-row-header">
-                {renderSecondRowHeader()}
-            </tr>,
-            <tr key="third-row-header">
-                {renderThirdRowHeader()}
+                {
+                    companies.map(company => <th key={company} className="name-step-background" style={{ width: 1000 }} colSpan={12}>{company}</th>)
+                }
             </tr>
         );
 
-        return row;
+        rows.push(
+            <tr key="second-row-header">
+                {
+                    companies.map(company => {
+                        const cols = [];
+                        cols.push(<th className="name-company-background" key={`${company}-local`} colSpan={4}>{LangHelper.getResource('Local')}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-expat`} colSpan={4}>{LangHelper.getResource('Expat')}</th>);
+                        cols.push(<th className="name-step-background" key={`${company}-total`} colSpan={4}>{LangHelper.getResource('Total')}</th>);
+                        return cols;
+                    })
+                }
+            </tr>
+        );
+
+        rows.push(
+            <tr key="third-row-header">
+                {
+                    companies.map(company => {
+                        const cols = [];
+                        cols.push(<th className="name-company-background" key={`${company}-local-${year - 1}-current`}>{`${year - 1} (Current)`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-local-${year - 1}-forecast`}>{`${year - 1} Forecast`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-local-${year}-additional`}>{`${year} Additional`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-local-${year}-forecast`}>{`${year} (Forecast)`}</th>);
+
+                        cols.push(<th className="name-company-background" key={`${company}-expat-${year - 1}-current`}>{`${year - 1} (Current)`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-expat-${year - 1}-forecast`}>{`${year - 1} Forecast`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-expat-${year}-additional`}>{`${year} Additional`}</th>);
+                        cols.push(<th className="name-company-background" key={`${company}-expat-${year}-forecast`}>{`${year} (Forecast)`}</th>);
+
+                        cols.push(<th className="name-step-background" key={`${company}-total-${year - 1}-current`}>{`${year - 1} (Current)`}</th>);
+                        cols.push(<th className="name-step-background" key={`${company}-total-${year - 1}-forecast`}>{`${year - 1} Forecast`}</th>);
+                        cols.push(<th className="name-step-background" key={`${company}-total-${year}-additional`}>{`${year} Additional`}</th>);
+                        cols.push(<th className="name-step-background" key={`${company}-total-${year}-forecast`}>{`${year} (Forecast)`}</th>);
+
+                        return cols;
+                    })
+                }
+            </tr>
+        );
+
+        return rows;
     };
 
     const getSection = (request, detaildepartment) => {
@@ -102,505 +95,17 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return departments;
     };
 
-    const renderCurrentHeadcount = (request, deparment, section) => {
-        const rows = [];
-        let grandtotal = 0;
-        const unitType = request.unitName.slice(0, 2);
-        companies.map(company => {
-            let checkNone = 0;
-            const key = `section-currentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
-
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
-                    && isEqual(detail.sectionName, section) && company === detail.companyName) {
-                    grandtotal += detail.totalCurrentHeadcount;
-                    checkNone++;
-
-                    rows.push(
-                        <td key={`${key}-local`}>
-                            {renderNumberOfHeadcount(detail.localCurrentHeadcount)}
-                        </td>,
-                        <td key={`${key}-expat`}>
-                            {renderNumberOfHeadcount(detail.expatCurrentHeadcount)}
-                        </td>,
-                        <td key={`${key}-total`}>
-                            {renderNumberOfHeadcount(detail.totalCurrentHeadcount)}
-                        </td>);
-                }
-            });
-            if (checkNone === 0) {
-                rows.push(
-                    <td key={`${key}-local`}></td>,
-                    <td key={`${key}-expat`}></td>,
-                    <td key={`${key}-total`}></td>
-                );
-            }
+    const buildBody = () => {
+        unitTypes.map(unitType => {
+            const { unitRow, rowSpanUnitType } = renderUnit(unitType);
+            const totalHeadcountUnitType = renderTotalHeadcountUnitType(unitType);
+            bodyRows.push(<tr key={unitType}><td className="bold unit fixed-body fixed-body-unittype" rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
+            bodyRows.push(unitRow);
+            bodyRows.push(totalHeadcountUnitType);
         });
+        bodyRows.unshift(renderGrandTotal());
 
-        const key = `section-currentHeadcount-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderApprovedForecastHeadcount = (request, deparment, section) => {
-        const rows = [];
-        let grandtotal = 0;
-        const unitType = request.unitName.slice(0, 2);
-        companies.map(company => {
-            let checkNone = 0;
-            const key = `section-approvedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
-
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
-                    && isEqual(detail.sectionName, section) && company === detail.companyName) {
-                    grandtotal += detail.totalApprovedHeadcount;
-                    checkNone++;
-
-                    rows.push(
-                        <td key={`${key}-local`}>
-                            {renderNumberOfHeadcount(detail.localApprovedHeadcount)}
-                        </td>,
-                        <td key={`${key}-expat`}>
-                            {renderNumberOfHeadcount(detail.expatApprovedHeadcount)}
-                        </td>,
-                        <td key={`${key}-total`}>
-                            {renderNumberOfHeadcount(detail.totalApprovedHeadcount)}
-                        </td>
-                    );
-                }
-            });
-            if (checkNone === 0) {
-                rows.push(
-                    <td key={`${key}-local`}></td>,
-                    <td key={`${key}-expat`}></td>,
-                    <td key={`${key}-total`}></td>
-                );
-            }
-        });
-
-        const key = `section-approvedForecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderAdditionalHeadcount = (request, deparment, section) => {
-        const rows = [];
-        let grandtotal = 0;
-        const unitType = request.unitName.slice(0, 2);
-
-        companies.map(company => {
-            let checkNone = 0;
-            const key = `section-additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
-
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
-                    && isEqual(detail.sectionName, section) && company === detail.companyName) {
-                    grandtotal += detail.totalAddition;
-                    checkNone++;
-
-                    rows.push(
-                        <td key={`${key}-local`}>
-                            {renderNumberOfHeadcount(detail.localAddition)}
-                        </td>,
-                        <td key={`${key}-expat`}>
-                            {renderNumberOfHeadcount(detail.expatAddition)}
-                        </td>,
-                        <td key={`${key}-total`}>
-                            {renderNumberOfHeadcount(detail.totalAddition)}
-                        </td>
-                    );
-                }
-            });
-            if (checkNone === 0) {
-                rows.push(
-                    <td key={`${key}-local`}></td>,
-                    <td key={`${key}-expat`}></td>,
-                    <td key={`${key}-total`}></td>
-                );
-            }
-        });
-
-        const key = `section-additional-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderForecastHeadcount = (request, deparment, section) => {
-        const row = [];
-        let grandtotal = 0;
-        const unitType = request.unitName.slice(0, 2);
-
-        companies.map(company => {
-            let checkNone = 0;
-            const key = `section-forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-${company}`;
-
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName && isEqual(detail.departmentName, deparment.departmentName)
-                    && isEqual(detail.sectionName, section) && company === detail.companyName) {
-                    grandtotal += detail.totalCurrentHeadcount + detail.totalAddition;
-                    checkNone++;
-
-                    row.push(
-                        <td key={`${key}-local`}>
-                            {renderNumberOfHeadcount(detail.localCurrentHeadcount + detail.localAddition)}
-                        </td>,
-                        <td key={`${key}-expat`}>
-                            {renderNumberOfHeadcount(detail.expatCurrentHeadcount + detail.expatAddition)}
-                        </td>,
-                        <td key={`${key}-total`}>
-                            {renderNumberOfHeadcount(detail.totalCurrentHeadcount + detail.totalAddition)}
-                        </td>
-                    );
-                }
-            });
-            if (checkNone === 0) {
-                row.push(
-                    <td key={`${key}-local`}></td>,
-                    <td key={`${key}-expat`}></td>,
-                    <td key={`${key}-total`}></td>
-                );
-            }
-        });
-
-        const key = `section-Forecast-${unitType}-${request.unitName}-${deparment.departmentName}-${section}-grantotal`;
-        row.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return row;
-    };
-
-    const renderSection = (deparment, request) => {
-        const sectionRow = [];
-        let rowSpanDeparment = 2;
-        deparment.sections.map(section => {
-            rowSpanDeparment++;
-            const headcountRow = [];
-            headcountRow.push(renderCurrentHeadcount(request, deparment, section));
-            headcountRow.push(renderApprovedForecastHeadcount(request, deparment, section));
-            headcountRow.push(renderAdditionalHeadcount(request, deparment, section));
-            headcountRow.push(renderForecastHeadcount(request, deparment, section));
-            sectionRow.push(
-                <tr className="highlight-row" key={request.unitName + deparment.departmentName + section}>
-                    <td className="text-left fixed-body fixed-body-section">{section}</td>
-                    {headcountRow}
-                </tr>
-            );
-        });
-        return { sectionRow, rowSpanDeparment };
-    };
-
-    const renderTotalCurrentHeadcountDepartment = (request, deparment) => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            let local = 0;
-            let expat = 0;
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName
-                    && isEqual(detail.departmentName, deparment.departmentName)
-                    && company === detail.companyName) {
-                    local += detail.localCurrentHeadcount;
-                    expat += detail.expatCurrentHeadcount;
-                }
-            });
-
-            const key = `department-${company}-${deparment.departmentName}-totalcurrentheadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `department-${deparment.departmentName}-totalcurrentheadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderTotalApprovedForecastHeadcountDepartment = (request, deparment) => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            let local = 0;
-            let expat = 0;
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName
-                    && isEqual(detail.departmentName, deparment.departmentName)
-                    && company === detail.companyName) {
-                    local += detail.localApprovedHeadcount;
-                    expat += detail.expatApprovedHeadcount;
-                }
-            });
-
-            const key = `department-${company}-${deparment.departmentName}-totalApprovedForecastheadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `department-${deparment.departmentName}-totalApprovedForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderTotalAdditionalHeadcountDepartment = (request, deparment) => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            let local = 0;
-            let expat = 0;
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName
-                    && isEqual( detail.departmentName, deparment.departmentName)
-                    && company === detail.companyName) {
-                    local += detail.localAddition;
-                    expat += detail.expatAddition;
-                }
-            });
-
-            const key = `department-${company}-${deparment.departmentName}-totalAdditionalheadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `department-${deparment.departmentName}-totalApprovedForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderTotalForecastHeadcountDepartment = (request, deparment) => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            let local = 0;
-            let expat = 0;
-            request.details.map(detail => {
-                if (detail.unitName === request.unitName
-                    && isEqual(detail.departmentName, deparment.departmentName)
-                    && company === detail.companyName) {
-                    local += detail.localCurrentHeadcount + detail.localAddition;
-                    expat += detail.expatCurrentHeadcount + detail.expatAddition;
-                }
-            });
-
-            const key = `department-${company}-${deparment.departmentName}-totalForecastheadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `department-${deparment.departmentName}-totalForecastheadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderTotalHeadcountDepartment = (request, deparment) => {
-        const totalHeadcountDepartmentRow = [];
-        totalHeadcountDepartmentRow.push(renderTotalCurrentHeadcountDepartment(request, deparment));
-        totalHeadcountDepartmentRow.push(renderTotalApprovedForecastHeadcountDepartment(request, deparment));
-        totalHeadcountDepartmentRow.push(renderTotalAdditionalHeadcountDepartment(request, deparment));
-        totalHeadcountDepartmentRow.push(renderTotalForecastHeadcountDepartment(request, deparment));
-        return (
-            <tr className="total-department" key={`${request.unitName}-${deparment.departmentName}-totalHeadcount`}>
-                <td className="text-left fixed-body fixed-body-total-department">Total Headcount</td>
-                {totalHeadcountDepartmentRow}
-            </tr>
-        );
-    };
-
-    const calculateTotalCurrentHeadcountUnitType = (company, unitType) => {
-        let local = 0;
-        let expat = 0;
-        requests.map(request => {
-            if (unitType === request.unitName.slice(0, 2)) {
-                request.details.map(detail => {
-                    if (company === detail.companyName) {
-                        local += detail.localCurrentHeadcount;
-                        expat += detail.expatCurrentHeadcount;
-                    }
-                });
-            }
-        });
-        return { local, expat };
-    };
-
-    const renderTotalCurrentHeadcountUnitType = unitType => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            const { local, expat } = calculateTotalCurrentHeadcountUnitType(company, unitType);
-            const key = `unitType-${company}-${unitType}-totalcurrentheadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `unitType-${unitType}-totalcurrentheadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const calculateTotalApprovedHeadcountUnitType = (company, unitType) => {
-        let local = 0;
-        let expat = 0;
-        requests.map(request => {
-            if (unitType === request.unitName.slice(0, 2)) {
-                request.details.map(detail => {
-                    if (company === detail.companyName) {
-                        local += detail.localApprovedHeadcount;
-                        expat += detail.expatApprovedHeadcount;
-                    }
-                });
-            }
-        });
-        return { local, expat };
-    };
-
-    const renderTotalApprovedForecastHeadcountUnitType = unitType => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            const { local, expat } = calculateTotalApprovedHeadcountUnitType(company, unitType);
-            const key = `unitType-${company}-${unitType}-totalApprovedforecast`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>);
-            grandtotal += local + expat;
-        });
-
-        const key = `unitType-${unitType}-totalApprovedforecast-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const calculateTotalAdditionalHeadcountUnitType = (company, unitType) => {
-        let local = 0;
-        let expat = 0;
-        requests.map(request => {
-            if (unitType === request.unitName.slice(0, 2)) {
-                request.details.map(detail => {
-                    if (company === detail.companyName) {
-                        local += detail.localAddition;
-                        expat += detail.expatAddition;
-                    }
-                });
-            }
-        });
-        return { local, expat };
-    };
-
-    const renderTotalAdditionalHeadcountUnitType = unitType => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            const { local, expat } = calculateTotalAdditionalHeadcountUnitType(company, unitType);
-            const key = `unitType-${company}-${unitType}-totalAdditionalHeadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `unitType-${unitType}-totalAdditionalHeadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const calculateTotalForecastHeadcountUnitType = (company, unitType) => {
-        let local = 0;
-        let expat = 0;
-        requests.map(request => {
-            if (unitType === request.unitName.slice(0, 2)) {
-                request.details.map(detail => {
-                    if (company === detail.companyName) {
-                        local += detail.localCurrentHeadcount + detail.localAddition;
-                        expat += detail.expatCurrentHeadcount + detail.expatAddition;
-                    }
-                });
-            }
-        });
-        return { local, expat };
-    };
-
-    const renderTotalForecastHeadcountUnitType = unitType => {
-        const rows = [];
-        let grandtotal = 0;
-        companies.map(company => {
-            const { local, expat } = calculateTotalForecastHeadcountUnitType(company, unitType);
-            const key = `unitType-${company}-${unitType}-totalForecastHeadcount`;
-            rows.push(
-                <td key={`${key}-local`}>{renderNumberOfHeadcount(local)}</td>,
-                <td key={`${key}-expat`}>{renderNumberOfHeadcount(expat)}</td>,
-                <td key={`${key}-total`}>{renderNumberOfHeadcount(local + expat)}</td>
-            );
-            grandtotal += local + expat;
-        });
-
-        const key = `unitType-${unitType}-totalForecastHeadcount-grandtotal`;
-        rows.push(<td key={key}>{renderNumberOfHeadcount(grandtotal)}</td>);
-
-        return rows;
-    };
-
-    const renderTotalHeadcountUnitType = unitType => {
-        const totalHeadcountRow = [];
-        totalHeadcountRow.push(renderTotalCurrentHeadcountUnitType(unitType));
-        totalHeadcountRow.push(renderTotalApprovedForecastHeadcountUnitType(unitType));
-        totalHeadcountRow.push(renderTotalAdditionalHeadcountUnitType(unitType));
-        totalHeadcountRow.push(renderTotalForecastHeadcountUnitType(unitType));
-        return (
-            <tr className="total-unittype" key={`${unitType}-totalHeadcount`}>
-                <td className="bold fixed-body fixed-body-total-unittype" colSpan={4}>Total Headcount ({unitType})</td>
-                {totalHeadcountRow}
-            </tr>
-        );
-    };
-
-    const renderDeparment = request => {
-        const deparments = getDepartment(request);
-        let rowSpanUnit = 1;
-        const departmentRow = [];
-
-        deparments.map(deparment => {
-            const { sectionRow, rowSpanDeparment } = renderSection(deparment, request);
-            const totalHeadcountDepartmentRow = renderTotalHeadcountDepartment(request, deparment);
-            rowSpanUnit += rowSpanDeparment;
-            departmentRow.push(
-                <tr key={request.unitName + deparment.departmentName}>
-                    <td className="bold fixed-body fixed-body fixed-body-department" rowSpan={rowSpanDeparment}>
-                        {deparment.departmentName}
-                    </td>
-                </tr>);
-            departmentRow.push(sectionRow);
-            departmentRow.push(totalHeadcountDepartmentRow);
-        });
-        return { departmentRow, rowSpanUnit };
+        return bodyRows;
     };
 
     const renderUnit = unitType => {
@@ -628,69 +133,260 @@ const DataGrid = ({ requests, companies, unitTypes, periodSelected }) => {
         return { unitRow, rowSpanUnitType };
     };
 
-    const buildBody = () => {
-        const row = [];
-        unitTypes.map(unitType => {
-            const { unitRow, rowSpanUnitType } = renderUnit(unitType);
-            const totalHeadcountUnitType = renderTotalHeadcountUnitType(unitType);
-            row.push(<tr key={unitType}><td className="bold unit fixed-body fixed-body-unittype" rowSpan={rowSpanUnitType}>{unitType}</td></tr>);
-            row.push(unitRow);
-            row.push(totalHeadcountUnitType);
+    const renderDeparment = request => {
+        const departments = getDepartment(request);
+        let rowSpanUnit = 1;
+        const departmentRow = [];
+
+        departments.map(department => {
+            const { sectionRow, rowSpanDeparment } = renderSection(department, request);
+            const totalHeadcountDepartmentRow = renderTotalHeadcountDepartment(request, department);
+            rowSpanUnit += rowSpanDeparment;
+            departmentRow.push(
+                <tr key={request.unitName + department.departmentName}>
+                    <td className="bold fixed-body fixed-body fixed-body-department" rowSpan={rowSpanDeparment}>
+                        {department.departmentName}
+                    </td>
+                </tr>);
+            departmentRow.push(sectionRow);
+            departmentRow.push(totalHeadcountDepartmentRow);
         });
-        return row;
+        return { departmentRow, rowSpanUnit };
     };
 
-    const buildTableNoneData = () => {
-        return <div data-testid='table-summary' className="table-summary">
-            <table className="table">
-                <thead>
-                    <tr key="first-row-header">
-                        <th className="name-step-background hide-border fixed-header fixed-header-unit">{LangHelper.getResource('Unit')}</th>
-                        <th className="name-step-background hide-border fixed-header fixed-header-department">{LangHelper.getResource('Department')}</th>
-                        <th className="name-step-background section hide-border fixed-header fixed-header-section">{LangHelper.getResource('Section')}</th>
-                        <th className="name-step-background">
-                            {(periodSelected.year - 1) + LangHelper.getResource('ManpowerHeadcountCurrent')}
-                        </th>
-                        <th className="name-step-background">
-                            {(periodSelected.year - 1) + LangHelper.getResource('ApprovedForecastHeadcount')}
-                        </th>
-                        <th className="name-step-background">
-                            {LangHelper.getResource('AdditionalHeadcount')}
-                        </th>
-                        <th className="name-step-background">
-                            {periodSelected.year + LangHelper.getResource('ManpowerHeadcountForecast')}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr key={'body'} className="no-data">
-                        <td colSpan={7}>{LangHelper.getResource('ThereIsNoData')}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    const renderSection = (department, request) => {
+        const sectionRow = [];
+        let rowSpanDeparment = 2;
+        const year = periodSelected.year;
+        const unitType = request.unitName.slice(0, 2);
+        department.sections.map(section => {
+            rowSpanDeparment++;
+            const headcountRow = [];
+
+            companies.map(company => {
+                const key = `${unitType}-${request.unitName}-${department.departmentName}-${section}-${company}`;
+                const detail = request.details.find(detail => detail.unitName === request.unitName
+                    && isEqual(detail.departmentName, department.departmentName)
+                    && isEqual(detail.sectionName, section) && company === detail.companyName);
+
+                if (detail) {
+                    headcountRow.push(<td key={`${key}-local-${year - 1}-current`}>{renderNumberOfHeadcount(detail.localCurrentHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-local-${year - 1}-forecast`}>{renderNumberOfHeadcount(detail.localApprovedHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-local-${year}-additional`}>{renderNumberOfHeadcount(detail.localAddition)}</td>);
+                    headcountRow.push(<td key={`${key}-local-${year}-forecast`}>{renderNumberOfHeadcount(detail.localCurrentHeadcount + detail.localAddition)}</td>);
+
+                    headcountRow.push(<td key={`${key}-expat-${year - 1}-current`}>{renderNumberOfHeadcount(detail.expatCurrentHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-expat-${year - 1}-forecast`}>{renderNumberOfHeadcount(detail.expatApprovedHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-expat-${year}-additional`}>{renderNumberOfHeadcount(detail.expatAddition)}</td>);
+                    headcountRow.push(<td key={`${key}-expat-${year}-forecast`}>{renderNumberOfHeadcount(detail.expatCurrentHeadcount + detail.expatAddition)}</td>);
+
+                    headcountRow.push(<td key={`${key}-total-${year - 1}-current`}>{renderNumberOfHeadcount(detail.totalCurrentHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-total-${year - 1}-forecast`}>{renderNumberOfHeadcount(detail.totalApprovedHeadcount)}</td>);
+                    headcountRow.push(<td key={`${key}-total-${year}-additional`}>{renderNumberOfHeadcount(detail.totalAddition)}</td>);
+                    headcountRow.push(<td key={`${key}-total-${year}-forecast`}>{renderNumberOfHeadcount(detail.totalCurrentHeadcount + detail.totalAddition)}</td>);
+                } else {
+                    headcountRow.push(<td key={`${key}-local-${year - 1}-current`}></td>);
+                    headcountRow.push(<td key={`${key}-local-${year - 1}-forecast`}></td>);
+                    headcountRow.push(<td key={`${key}-local-${year}-additional`}></td>);
+                    headcountRow.push(<td key={`${key}-local-${year}-forecast`}></td>);
+
+                    headcountRow.push(<td key={`${key}-expat-${year - 1}-current`}></td>);
+                    headcountRow.push(<td key={`${key}-expat-${year - 1}-forecast`}></td>);
+                    headcountRow.push(<td key={`${key}-expat-${year}-additional`}></td>);
+                    headcountRow.push(<td key={`${key}-expat-${year}-forecast`}></td>);
+
+                    headcountRow.push(<td key={`${key}-total-${year - 1}-current`}></td>);
+                    headcountRow.push(<td key={`${key}-total-${year - 1}-forecast`}></td>);
+                    headcountRow.push(<td key={`${key}-total-${year}-additional`}></td>);
+                    headcountRow.push(<td key={`${key}-total-${year}-forecast`}></td>);
+                }
+            });
+
+            sectionRow.push(
+                <tr className="highlight-row" key={request.unitName + department.departmentName + section}>
+                    <td className="text-left fixed-body fixed-body-section">{section}</td>
+                    {headcountRow}
+                </tr>
+            );
+        });
+        return { sectionRow, rowSpanDeparment };
     };
 
-    return (
-        <>
-            {
-                periodSelected != null && requests.length > 0 &&
-                <div data-testid='table-summary' className="table-summary">
-                    <table className="table">
-                        <thead>
-                            {buildHeader()}
-                        </thead>
-                        <tbody>
-                            {buildBody()}
-                        </tbody>
-                    </table>
-                </div>
+    const calculateSum = (array, property) => {
+        let sum = 0;
+        const totalItems = array.length;
+        for (let index = 0; index < totalItems; index++) {
+            sum += array[index][property];
+        }
+
+        return sum;
+    };
+
+    const renderTotalHeadcountDepartment = (request, department) => {
+        const cols = [];
+        companies.map(company => {
+            const key = `${request.unitName}-${department.departmentName}-totalHeadcount-${company}`;
+            const details = request.details.filter(detail => detail.unitName === request.unitName
+                && isEqual(detail.departmentName, department.departmentName)
+                && company === detail.companyName);
+
+            const totalLocalCurrentHeadcount = calculateSum(details, 'localCurrentHeadcount');
+            const totalLocalApprovedHeadcount = calculateSum(details, 'localApprovedHeadcount');
+            const totalLocalAddition = calculateSum(details, 'localAddition');
+
+            cols.push(<td key={`${key}-local-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition)}</td>);
+            cols.push(<td key={`${key}-local-${year}-forecast`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount + totalLocalAddition)}</td>);
+
+            const totalExpatCurrentHeadcount = calculateSum(details, 'expatCurrentHeadcount');
+            const totalExpatApprovedHeadcount = calculateSum(details, 'expatApprovedHeadcount');
+            const totalExpatAddition = calculateSum(details, 'expatAddition');
+
+            cols.push(<td key={`${key}-expat-${year - 1}-current`}>{renderNumberOfHeadcount(totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-additional`}>{renderNumberOfHeadcount(totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-forecast`}>{renderNumberOfHeadcount(totalExpatCurrentHeadcount + totalExpatAddition)}</td>);
+
+            cols.push(<td key={`${key}-total-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount + totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount + totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition + totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-total-${year}-forecast`}>
+                {renderNumberOfHeadcount(totalLocalCurrentHeadcount + totalExpatCurrentHeadcount + totalLocalAddition + totalExpatAddition)}
+            </td>);
+
+            if (totalDeptHeadcounts.indexOf(item => item.unitName === request.unitName
+                && isEqual(item.departmentName, department.departmentName)
+                && company === item.companyName) === -1) {
+                totalDeptHeadcounts.push({
+                    unitName: request.unitName,
+                    departmentName: department.departmentName,
+                    companyName: company,
+                    localCurrentHeadcount: totalLocalCurrentHeadcount,
+                    localApprovedHeadcount: totalLocalApprovedHeadcount,
+                    localAddition: totalLocalAddition,
+                    localForecastHeadcount: totalLocalCurrentHeadcount + totalLocalAddition,
+                    expatCurrentHeadcount: totalExpatCurrentHeadcount,
+                    expatApprovedHeadcount: totalExpatApprovedHeadcount,
+                    expatAddition: totalExpatAddition,
+                    expatForecastHeadcount: totalExpatCurrentHeadcount + totalExpatAddition
+                });
             }
-            {
-                periodSelected != null && requests.length === 0 && buildTableNoneData()
-            }
-        </>
-    );
+        });
+
+        return (
+            <tr className="total-department" key={`${request.unitName}-${department.departmentName}-totalHeadcount`}>
+                <td className="text-left fixed-body fixed-body-total-department">Total Headcount</td>
+                {cols}
+            </tr>
+        );
+    };
+
+    const renderTotalHeadcountUnitType = unitType => {
+        const cols = [];
+        companies.map(company => {
+            const key = `${unitType}-totalHeadcount-${company}`;
+            const units = totalDeptHeadcounts.filter(item => unitType === item.unitName.slice(0, 2) && item.companyName === company);
+
+            const totalLocalCurrentHeadcount = calculateSum(units, 'localCurrentHeadcount');
+            const totalLocalApprovedHeadcount = calculateSum(units, 'localApprovedHeadcount');
+            const totalLocalAddition = calculateSum(units, 'localAddition');
+            const totalLocalForecastHeadcount = calculateSum(units, 'localForecastHeadcount');
+
+            cols.push(<td key={`${key}-local-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition)}</td>);
+            cols.push(<td key={`${key}-local-${year}-forecast`}>{renderNumberOfHeadcount(totalLocalForecastHeadcount)}</td>);
+
+            const totalExpatCurrentHeadcount = calculateSum(units, 'expatCurrentHeadcount');
+            const totalExpatApprovedHeadcount = calculateSum(units, 'expatApprovedHeadcount');
+            const totalExpatAddition = calculateSum(units, 'expatAddition');
+            const totalExpatForecastHeadcount = calculateSum(units, 'expatForecastHeadcount');
+
+            cols.push(<td key={`${key}-expat-${year - 1}-current`}>{renderNumberOfHeadcount(totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-additional`}>{renderNumberOfHeadcount(totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-forecast`}>{renderNumberOfHeadcount(totalExpatForecastHeadcount)}</td>);
+
+            cols.push(<td key={`${key}-total-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount + totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount + totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition + totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-total-${year}-forecast`}>
+                {renderNumberOfHeadcount(totalLocalForecastHeadcount + totalExpatForecastHeadcount)}
+            </td>);
+        });
+
+        return (
+            <tr className="total-unittype" key={`${unitType}-totalHeadcount`}>
+                <td className="bold fixed-body fixed-body-total-unittype" colSpan={4}>Total Headcount ({unitType})</td>
+                {cols}
+            </tr>
+        );
+    };
+
+    const renderGrandTotal = () => {
+        const cols = [];
+        companies.map(company => {
+            const key = `grand-total-${company}`;
+            const items = totalDeptHeadcounts.filter(item => item.companyName === company);
+
+            const totalLocalCurrentHeadcount = calculateSum(items, 'localCurrentHeadcount');
+            const totalLocalApprovedHeadcount = calculateSum(items, 'localApprovedHeadcount');
+            const totalLocalAddition = calculateSum(items, 'localAddition');
+            const totalLocalForecastHeadcount = calculateSum(items, 'localForecastHeadcount');
+
+            cols.push(<td key={`${key}-local-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-local-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition)}</td>);
+            cols.push(<td key={`${key}-local-${year}-forecast`}>{renderNumberOfHeadcount(totalLocalForecastHeadcount)}</td>);
+
+            const totalExpatCurrentHeadcount = calculateSum(items, 'expatCurrentHeadcount');
+            const totalExpatApprovedHeadcount = calculateSum(items, 'expatApprovedHeadcount');
+            const totalExpatAddition = calculateSum(items, 'expatAddition');
+            const totalExpatForecastHeadcount = calculateSum(items, 'expatForecastHeadcount');
+
+            cols.push(<td key={`${key}-expat-${year - 1}-current`}>{renderNumberOfHeadcount(totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-additional`}>{renderNumberOfHeadcount(totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-expat-${year}-forecast`}>{renderNumberOfHeadcount(totalExpatForecastHeadcount)}</td>);
+
+            cols.push(<td key={`${key}-total-${year - 1}-current`}>{renderNumberOfHeadcount(totalLocalCurrentHeadcount + totalExpatCurrentHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year - 1}-forecast`}>{renderNumberOfHeadcount(totalLocalApprovedHeadcount + totalExpatApprovedHeadcount)}</td>);
+            cols.push(<td key={`${key}-total-${year}-additional`}>{renderNumberOfHeadcount(totalLocalAddition + totalExpatAddition)}</td>);
+            cols.push(<td key={`${key}-total-${year}-forecast`}>
+                {renderNumberOfHeadcount(totalLocalForecastHeadcount + totalExpatForecastHeadcount)}
+            </td>);
+        });
+        return (
+            <tr className="total-unittype" key="grand-total">
+                <td className="bold fixed-body fixed-body-total-unittype" colSpan={4}>Grand Total ({unitTypes.join('+')})</td>
+                {cols}
+            </tr>
+        );
+    };
+
+    if (periodSelected !== null) {
+        return (
+            <div data-testid='table-summary' className="table-summary member-summary">
+                <table className="table">
+                    <thead>
+                        {buildHeader()}
+                    </thead>
+                    <tbody>
+                        {
+                            requests.length === 0 &&
+                            <tr key={'body'} className="no-data">
+                                <td colSpan={16}>{LangHelper.getResource('ThereIsNoData')}</td>
+                            </tr>
+                        }
+                        {requests.length > 0 && buildBody()}
+                    </tbody>
+                </table>
+            </div>
+        );
+    } else {
+        return <></>;
+    }
 };
 
 export default DataGrid;
