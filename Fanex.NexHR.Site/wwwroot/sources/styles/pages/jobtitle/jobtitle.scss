@@ -5,13 +5,11 @@
 @import '../../components/buttons-new';
 @import '../../components/jquery-ui-dialog';
 
-.form-group {
-    .form-group {
-        width: 100%;
+.form-modal {
+    width: 100%;
 
-        .input-form, .select-form {
-            width: calc(100% - 8rem);
-        }
+    .input-form, .select-form {
+        width: calc(100% - 8rem);
     }
 }
 
@@ -42,5 +40,3 @@
         }
     }
 }
-
-

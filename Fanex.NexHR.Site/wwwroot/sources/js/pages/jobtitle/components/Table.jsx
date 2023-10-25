@@ -4,7 +4,6 @@ import { resolveClientUrl, axiosError, confirm, alert } from '../../../shared/co
 
 export const Table = (props) => {
     const { data, setEditModal, editJobLevel, reloadTable } = props;
-    console.log(data)
 
     const handleDelete = (id) => {
         confirm('Are you sure you want to delete?', () => {
@@ -31,7 +30,7 @@ export const Table = (props) => {
         editJobLevel(id, name);
     }
 
-    const colSpan = window.hasPermission ? 4 : 2;
+    const colSpan = window.hasPermission ? 8 : 6;
 
     return (
         <Fragment>
@@ -54,7 +53,7 @@ export const Table = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data ? data.map((item, i) => (
+                    {data.length ? data.map((item, i) => (
                         <tr id={`row_${i}`} key={item.id}>
                             <td>{i + 1}</td>
                             <td className="align-left">{item.name}</td>
@@ -72,9 +71,14 @@ export const Table = (props) => {
                                         </a>
                                     </td>
                                     <td>
-                                        <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
-                                            <i className="fa fa-times fa-lg icon-delete"></i>
-                                        </a>
+                                        {item.value !== "0" ?
+                                            <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
+                                                <i className="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                                            </a> :
+                                            <a>
+                                                <i className="fa fa-times fa-lg icon-delete"></i>
+                                            </a>
+                                        }
                                     </td>
                                 </Fragment>
                             }

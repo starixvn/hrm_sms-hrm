@@ -8,19 +8,20 @@ import Draggable from 'react-draggable';
 import * as Yup from 'yup';
 
 const CreateSchema = Yup.object({
-    name: Yup.string().trim().required('Job Level is required!')
+    name: Yup.string().trim().required('Job Title is required!')
 });
 
 export const Create = (props) => {
-    const { createModal, setCreateModal, reloadTable } = props;
+    const { createModal, setCreateModal, reloadTable, jobCategory } = props;
 
     const handleClose = () => {
         setCreateModal(false);
     };
 
     const onSubmit = (values) => {
-        axios.post(resolveClientUrl(`JobLevel/Insert`), {
+        axios.post(resolveClientUrl(`JobTitle/Insert`), {
             name: values.name.trim(),
+            categoryId: values.categoryId
         })
             .then(response => {
                 const { data } = response;
@@ -45,12 +46,26 @@ export const Create = (props) => {
                     </div>
                 }
                 <div className="form-horizontal clearfix">
-                    <div className="form-group">
+                    <div className="form-group form-modal ">
                         <div className="label-form">
-                            <label className="control-label">Job Level</label>
+                            <label className="control-label">Job Title</label>
                         </div>
                         <div className="input-form">
                             <Field name="name" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group form-modal">
+                        <div className="label-form">
+                            <label className="control-label">Category</label>
+                        </div>
+                        <div className="select-form">
+                            <Field name="category" as="select" className="form-control">
+                                {jobCategory.map((category, i) => (
+                                    <option key={i} value={category.value}>
+                                        {category.text}
+                                    </option>
+                                ))}
+                            </Field>
                         </div>
                     </div>
                 </div>
@@ -64,14 +79,14 @@ export const Create = (props) => {
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: '' }}
+                    initialValues={{ name: '', categoryId: 0 }}
                     validationSchema={CreateSchema}
                     onSubmit={onSubmit}
                 >
                     {({ errors }) => (
                         <Form>
                             <Modal.Header>
-                                <Modal.Title>Add Job Level</Modal.Title>
+                                <Modal.Title>Add Job Title</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {renderForm(errors)}

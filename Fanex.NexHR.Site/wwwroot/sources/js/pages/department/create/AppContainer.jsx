@@ -46,11 +46,9 @@ export const AppContainer = () => {
 
     const onSubmit = (data) => {
         if (data) {
-            const name = data.name.trim();
-            const code = data.code.trim();
             axios.post(resolveClientUrl(`Department/Create`), {
-                Code: code,
-                Name: name,
+                Code: data.name.trim(),
+                Name: data.code.trim(),
                 IsActive: data.isActive,
                 UnitId: data.unit
             }).then(response => {
@@ -102,7 +100,7 @@ export const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
-                                <option value=""/>
+                                <option value="" />
                                 {units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
                                         {unit.name}
@@ -116,7 +114,7 @@ export const AppContainer = () => {
                             <label className="control-label">Is Active</label>
                         </div>
                         <div className="input-form">
-                            <Field type="checkbox" name="isActive" style={{ cursor: 'pointer' }}/>
+                            <Field type="checkbox" name="isActive" style={{ cursor: 'pointer' }} />
                         </div>
                     </div>
                     <div className="form-group">

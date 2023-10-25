@@ -2,24 +2,29 @@
 import { resolveClientUrl } from '../../../shared/common.functions';
 
 export const Filter = (props) => {
-    const { setChoose, submit } = props;
+    const { setKeyword, searchKeyword, setCreateModal} = props;
 
     const handleCreateModal = () => {
-        window.location = resolveClientUrl("Department/Create");
+        setCreateModal(true);
     }
+
     return (
-        <form className="filter" onSubmit={submit}>
+        <div className="filter">
             <div className="form-horizontal clearfix">
                 <div className="form-group">
                     <div className="label-form">
                         <label className="control-label">Keyword</label>
                     </div>
                     <div className="input-form">
-                        <input name="name" className="form-control" placeholder="job title" autoComplete="off" />
+                        <input name="name"
+                            className="form-control"
+                            placeholder="job title"
+                            autoComplete="off"
+                            onChange={e => setKeyword(e.target.value)} />
                     </div>
                 </div>
                 <div className="form-group form-group--m">
-                    <button type="submit" className="btn btn-primary">Search</button>
+                    <button type="submit" className="btn btn-primary" onClick={searchKeyword}>Search</button>
                     {
                         window.hasPermission &&
                         <Fragment>
@@ -31,6 +36,6 @@ export const Filter = (props) => {
                     }
                 </div>
             </div>
-        </form>
+        </div>
     )
 };

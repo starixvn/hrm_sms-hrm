@@ -8,20 +8,21 @@ import Draggable from 'react-draggable';
 import * as Yup from 'yup';
 
 const EditSchema = Yup.object({
-    name: Yup.string().trim().required('Job Level is required!')
+    name: Yup.string().trim().required('Job Title is required!')
 });
 
 export const Edit = (props) => {
-    const { editModal, setEditModal, id, name, reloadTable } = props;
+    const { editModal, setEditModal, id, name, reloadTable, jobCategory } = props;
 
     const handleClose = () => {
         setEditModal(false);
     };
 
     const onSubmit = (values) => {
-        axios.post(resolveClientUrl(`JobLevel/Update`), {
+        axios.post(resolveClientUrl(`JobTitle/Update`), {
             id: id,
             name: values.name.trim(),
+            categoryId: categoryId
         })
             .then(response => {
                 const { data } = response;
@@ -46,12 +47,26 @@ export const Edit = (props) => {
                     </div>
                 }
                 <div className="form-horizontal clearfix">
-                    <div className="form-group">
+                    <div className="form-group form-modal ">
                         <div className="label-form">
-                            <label className="control-label">Job Level</label>
+                            <label className="control-label">Job Title</label>
                         </div>
                         <div className="input-form">
                             <Field name="name" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group form-modal">
+                        <div className="label-form">
+                            <label className="control-label">Category</label>
+                        </div>
+                        <div className="select-form">
+                            <Field name="category" as="select" className="form-control">
+                                {jobCategory.map((category, i) => (
+                                    <option key={i} value={category.value}>
+                                        {category.text}
+                                    </option>
+                                ))}
+                            </Field>
                         </div>
                     </div>
                 </div>
