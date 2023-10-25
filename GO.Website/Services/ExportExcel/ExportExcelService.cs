@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using ExportExcel;
     using GO.Website.Models.Manpower;
     using GO.Website.Models.Report.Manpower;
     using Microsoft.AspNetCore.Hosting;
+    using EmployeeInfo = Models.Manpower.EmployeeInfo;
 
     public class ExportExcelService : IExportExcelService
     {
@@ -36,6 +38,14 @@
             const string ExcelTemplatePath = "ExcelTemplates/ManpowerForecast.xlsx";
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
             var excel = new ManpowerForecastReportExcel(templatePath, requests, year, periodName);
+            return excel.Export();
+        }
+
+        public byte[] ExportEmployeeReport(IEnumerable<EmployeeInfo> employeeInfos)
+        {
+            const string ExcelTemplatePath = "ExcelTemplates/EmployeeInfo.xlsx";
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ExcelTemplatePath);
+            var excel = new EmployeeInFoReportExcel(templatePath, employeeInfos);
             return excel.Export();
         }
     }

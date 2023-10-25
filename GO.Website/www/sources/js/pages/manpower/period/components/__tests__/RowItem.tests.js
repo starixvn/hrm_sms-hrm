@@ -24,7 +24,7 @@ describe('RowItem', () => {
         const onChangeStatus = jest.fn();
         window.hasHostPermissionOnPeriod = true;
         render(<RowItem rowIndex={1} period={period} onChangeStatus={onChangeStatus} onDelete={jest.fn()} onUpdate={jest.fn()} />)
-        fireEvent.click(screen.getAllByTestId('input-element')[0]);
+        fireEvent.click(screen.getAllByTestId('input-period')[0]);
         expect(onChangeStatus).toBeCalledWith(period.periodId, 0);
     });
 
@@ -33,7 +33,7 @@ describe('RowItem', () => {
         window.hasHostPermissionOnPeriod = true;
         period.isActive = false;
         render(<RowItem rowIndex={1} period={period} onChangeStatus={onChangeStatus} onDelete={jest.fn()} onUpdate={jest.fn()} />)
-        fireEvent.click(screen.getAllByTestId('input-element')[0]);
+        fireEvent.click(screen.getAllByTestId('input-period')[0]);
         expect(onChangeStatus).toBeCalledTimes(1);
     });
 
@@ -41,7 +41,7 @@ describe('RowItem', () => {
         const onChangeStatus = jest.fn();
         window.hasHostPermissionOnPeriod = false;
         render(<RowItem rowIndex={1} period={period} onChangeStatus={onChangeStatus} onDelete={jest.fn()} onUpdate={jest.fn()} />)
-        fireEvent.click(screen.getAllByTestId('input-element')[0]);
+        fireEvent.click(screen.getAllByTestId('input-period')[0]);
         expect(onChangeStatus).toBeCalledTimes(0);
     });
 });

@@ -47,7 +47,7 @@ const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
                 <input type='checkbox'
                     checked={isActive} disabled={!window.hasHostPermissionOnPeriod}
                     onChange={handleChangeStatus}
-                    data-testid="input-element"
+                    data-testid="input-period"
                 />
             </Cell>
             <Cell className="text-center">
@@ -55,8 +55,8 @@ const RowItem = ({ rowIndex, period, onChangeStatus, onDelete, onUpdate }) => {
                 {
                     window.hasHostPermissionOnPeriod &&
                     <>
-                        <a className="icon-edit fa fa-edit" onClick={handleUpdatePeriod} />
-                        <a className="icon-delete fa fa-trash" onClick={handleDeletePeriod} />
+                        <a className="icon-edit fa fa-edit" data-testid="update-period" onClick={handleUpdatePeriod} />
+                        <a className="icon-delete fa fa-trash" data-testid="delete-period" onClick={handleDeletePeriod} />
                     </>
                 }
             </Cell>

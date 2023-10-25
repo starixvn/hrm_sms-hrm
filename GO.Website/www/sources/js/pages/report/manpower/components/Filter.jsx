@@ -82,7 +82,7 @@ const Filter = ({ periods, onSubmit, exportExcel, periodSelected }) => {
                         {LangHelper.getResource('Submit')}
                     </Button>
                     <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={handleExportExcel}>
-                        {LangHelper.getResource('Export Excel')}
+                        {LangHelper.getResource('ExportExcel')}
                     </Button>
                 </Form.Group>
             </Form.Row>

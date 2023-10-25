@@ -5,7 +5,7 @@ import LangHelper from '@jsroot/common/langHelper';
 import { DefaultPageSize } from '@jsroot/common/constants';
 import TreeMultiselect from '@jsroot/components/react-tree-multiselect/TreeMultiselect';
 
-const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, onFilterChange }) => {
+const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, onFilterChange, exportExcel }) => {
     const [keyword, setKeyword] = useState('');
     const [company, setCompany] = useState({ value: null, label: 'All' });
     const [category, setCategory] = useState({ value: null, label: 'All' });
@@ -30,11 +30,30 @@ const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, on
         };
     };
 
+    const getParamsExportExcel = () => {
+        return {
+            keyword,
+            companyId: company.value,
+            category: category.value,
+            sections: sections,
+            statusId: status.value,
+            pageIndex: 1,
+            pageSize: null
+        };
+    };
+
     const handleSubmit = event => {
         event.preventDefault();
         const params = getParams();
         onFilterChange(params);
         getEmployeeInfos(params);
+    };
+
+    const handleExportExcel = event => {
+        event.preventDefault();
+        const params = getParamsExportExcel();
+        onFilterChange(params);
+        exportExcel(params);
     };
 
     const companyOptions = companies.map(item => {
@@ -103,9 +122,12 @@ const Filter = ({ sectionsTree, companies, getEmployeeInfos, getSectionInfos, on
                         onChange={value => setStatus(value)}
                     />
                 </Form.Group>
-                <Form.Group>
+                <Form.Group className="form-group-width">
                     <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={handleSubmit}>
                         {LangHelper.getResource('Submit')}
+                    </Button>
+                    <Button variant="primary" size="sm" className="mr-3" type="submit" onClick={handleExportExcel}>
+                        {LangHelper.getResource('ExportExcel')}
                     </Button>
                 </Form.Group>
             </Form.Row>

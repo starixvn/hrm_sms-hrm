@@ -66,6 +66,15 @@ const AppContainer = () => {
         }).then(() => Site.unblockUI());
     };
 
+    const exportExcel = async params => {
+        Site.blockUI();
+        const url = Site.resolveClientUrl('Manpower/Employee/ExportExcel');
+        await DataService.getFileAsync(url, params).then(response => {
+            const fileName = response.headers['content-disposition'].split('filename=')[1].split(';')[0];
+            Site.downloadFile(response.data, fileName);
+        }).then(() => Site.unblockUI());
+    };
+
     return (
         <div className="manpower-employee">
             <Filter
@@ -74,6 +83,7 @@ const AppContainer = () => {
                 onFilterChange={handleChangeFilter}
                 getEmployeeInfos={getEmployeeInfos}
                 getSectionInfos={getSectionInfos}
+                exportExcel={exportExcel}
             />
             <DataGrid filter={filter}
                 gridData={gridData}

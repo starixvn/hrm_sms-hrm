@@ -15,6 +15,7 @@
     using HRM.UserControl.Client.Core.Enumerables;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using Services;
 
     [Route("Manpower/Employee/[action]")]
     [GOPermission(FunctionKey = FunctionKey.ManpowerForecast_EmployeeManagement, Policy = Policy.Read)]
@@ -22,13 +23,16 @@
     {
         private readonly IUserControlSession userControlSession;
         private readonly IBaseService baseService;
+        private readonly IExportExcelService excelService;
 
         public EmployeeController(
             IUserControlSession userControlSession,
-            IBaseService baseService)
+            IBaseService baseService,
+            IExportExcelService excelService)
         {
             this.userControlSession = userControlSession;
             this.baseService = baseService;
+            this.excelService = excelService;
         }
 
         public IActionResult Index()
@@ -66,6 +70,16 @@
             command.ModifiedBy = userControlSession.UserId;
             var commandResult = await baseService.ExecuteNonQueryAsync(command);
             return Json(commandResult);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportExcel([FromBody] GetEmployeeCriteria criteria)
+        {
+            var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
+
+            var bytes = excelService.ExportEmployeeReport(employeeInfos);
+            var reportName = $"EmployeeInformation_{DateTime.Today:yyyyMMdd}";
+            return File(bytes, "application/xlsx", $"{reportName}.xlsx");
         }
 
         private static IEnumerable<MultiSelectViewModel> GetOrgChart(
