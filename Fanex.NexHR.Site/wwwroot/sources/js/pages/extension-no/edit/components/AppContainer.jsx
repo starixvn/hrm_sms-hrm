@@ -94,6 +94,7 @@ export const AppContainer = () => {
                     </div>
                 }
                 <Form className="form-horizontal">
+                    <input name="EmpId" hidden />
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">Is Internal</label>
@@ -201,7 +202,7 @@ export const AppContainer = () => {
                             <label className="control-label">Extension No</label>
                         </div>
                         <div className="input-form">
-                            <Field type="text" name="ExtensionNo" className="form-control" />
+                            <Field type="text" name="ExtensionNo" className="form-control" autoComplete='off'/>
                         </div>
                     </div>
                     <div className="form-group">
@@ -218,13 +219,12 @@ export const AppContainer = () => {
 
     const onSubmit = (data) => {
         if (data) {
-            console.log(data)
             axios.post(resolveClientUrl('ExtensionNo/Edit'), {
                 FullName: data.FullName,
                 NickName: data.NickName,
                 ExtensionNo: data.ExtensionNo,
                 IsInternal: data.IsInternal,
-                EmpId: data.Employee,
+                EmpId: data.EmpId,
                 EmployeeExtensionId: detail.employeeExtensionId,
                 TeamId: data.TeamId
             }).then(response => {
@@ -235,15 +235,20 @@ export const AppContainer = () => {
             }).catch(axiosError);
         }
     }
+    const fullName = selectEmployee && selectEmployee.fullName;
+    const nickName = selectEmployee && selectEmployee.nickName;
+    const empName = selectEmployee && selectEmployee.value;
+    const empId = selectEmployee && selectEmployee.id;
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={{
-                Employee: '',
-                FullName: selectEmployee && selectEmployee.fullName || detail.fullName || '',
+                EmpId: detail.EmpId ? detail.EmpId : empId,
+                Employee: empName ? empName : '',
+                FullName: fullName || detail.fullName || '',
                 TeamId: detail.teamId || '',
-                NickName: selectEmployee && selectEmployee.nickName || detail.nickName || '',
+                NickName: nickName || detail.nickName || '',
                 ExtensionNo: detail.extensionNo || '',
                 IsInternal: checked 
             }}

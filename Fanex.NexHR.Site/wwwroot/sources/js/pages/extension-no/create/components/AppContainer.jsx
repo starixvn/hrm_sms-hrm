@@ -8,6 +8,7 @@ import { isEmpty } from 'lodash';
 import Autocomplete from '../../../../shared/components/Autocomplete';
 
 
+
 export const AppContainer = () => {
     const [selectExtension, setSelectExtension] = useState([]);
     const [checked, setChecked] = useState(false);
@@ -65,8 +66,6 @@ export const AppContainer = () => {
         const selected = employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
     }
-    
-
 
     const renderForm = (errors) => {
         return (
@@ -80,6 +79,7 @@ export const AppContainer = () => {
                     </div>
                 }
                 <Form className="form-horizontal">
+                    <input name="EmpId" hidden />
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">Is Internal</label>
@@ -125,7 +125,6 @@ export const AppContainer = () => {
                                     {({
                                         field, form
                                     }) => (
-
                                         <Autocomplete
                                             className='form-control'
                                             sources={employee}
@@ -186,7 +185,7 @@ export const AppContainer = () => {
                             <label className="control-label">Extension No</label>
                         </div>
                         <div className="input-form">
-                            <Field type="text" name="ExtensionNo" className="form-control" />
+                            <Field type="text" name="ExtensionNo" className="form-control" autoComplete='off' />
                         </div>
                     </div>
                     <div className="form-group">
@@ -202,13 +201,14 @@ export const AppContainer = () => {
     }
 
     const onSubmit = (data) => {
+        console.log(data);
         if (data) {
             axios.post(resolveClientUrl('ExtensionNo/Create'), {
                 FullName: data.FullName,
                 NickName: data.NickName,
                 ExtensionNo: data.ExtensionNo,
                 IsInternal: data.IsInternal,
-                EmpId: data.Employee,
+                EmpId: data.EmpId,
                 TeamId: data.TeamId
             }).then(response => {
                 const { data } = response;
@@ -218,15 +218,22 @@ export const AppContainer = () => {
             }).catch(axiosError);
         }
     }
+
+    const fullName = selectEmployee && selectEmployee.fullName;
+    const teamId = selectExtension[0].value;
+    const nickName = selectEmployee && selectEmployee.nickName;
+    const empId = selectEmployee && selectEmployee.id;
+    const empName = selectEmployee && selectEmployee.value;
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={{
-                Employee: '',
-                FullName: selectEmployee && selectEmployee.fullName || '',
-                TeamId: selectExtension[0].value || '',
-                NickName: selectEmployee && selectEmployee.nickName || '',
+                EmpId: empId,
+                Employee: empName || '',
+                FullName: fullName || '',
+                TeamId: teamId || '',
+                NickName: nickName || '',
                 ExtensionNo: '',
                 IsInternal: checked || false
             }}

@@ -1,6 +1,6 @@
 ﻿import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from '../../shared/common.functions';
+
 
 
 export default class Autocomplete extends Component {
@@ -20,10 +20,8 @@ export default class Autocomplete extends Component {
         className: '',
         isDisabled: false,
         onInput: function () {
-            // This is intentional
         },
         onChange: function () {
-            // This is intentional
         },
         form: {},
         field: {},
@@ -35,11 +33,11 @@ export default class Autocomplete extends Component {
         this.updateAutocomplete();
     }
 
-    shouldComponentUpdate(nextProps) {
-        return this.props.sources !== nextProps.sources
-            || this.props.className !== nextProps.className
-            || this.props.isDisabled !== nextProps.isDisabled;
-    }
+    //shouldComponentUpdate(nextProps) {
+    //    return this.props.sources !== nextProps.sources
+    //        || this.props.className !== nextProps.className
+    //        || this.props.isDisabled !== nextProps.isDisabled;
+    //}
 
     componentDidUpdate() {
         this.updateAutocomplete();
@@ -76,10 +74,6 @@ export default class Autocomplete extends Component {
             }
         }
         this.props.onChange({ value, label });
-        if (this.props.form.setFieldValue) {
-            this.props.form.setFieldValue(this.props.nameInput, value);
-        }
-        
     };
 
     render() {
