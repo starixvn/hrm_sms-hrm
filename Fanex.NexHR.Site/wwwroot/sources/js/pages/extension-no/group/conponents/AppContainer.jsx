@@ -82,12 +82,14 @@ export const AppContainer = () => {
                 show={modalShow}
                 onHide={() => setModalShow(false)}
                 onSubmit={handleCreateData}
+                title='Add new'
             />
             <Popup
                 show={modalEdit}
                 onHide={() => setModalEdit(false)}
                 onSubmit={handleEditData}
                 data={single}
+                title='Edit'
             />
             <Table data={data} handleDeleteData={handleDeleteData} handleGetDataById={handleGetDataById }/>
         </Fragment>

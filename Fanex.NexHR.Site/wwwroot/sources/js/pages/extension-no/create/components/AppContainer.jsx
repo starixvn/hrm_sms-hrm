@@ -201,7 +201,6 @@ export const AppContainer = () => {
     }
 
     const onSubmit = (data) => {
-        console.log(data);
         if (data) {
             axios.post(resolveClientUrl('ExtensionNo/Create'), {
                 FullName: data.FullName,

@@ -44,7 +44,7 @@ export const AppContainer = () => {
     }, [id])
     const onSubmit = (data) => {
         if (data) {
-            axios.post(resolveClientUrl(`Section/Edit`), {
+            axios.post(resolveClientUrl('Section/Edit'), {
                 SectionId: data.id,
                 Code: data.code.trim(),
                 Name: data.name.trim(),
@@ -55,7 +55,7 @@ export const AppContainer = () => {
                 if (data.isSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("Section/Index");
+                        document.location = resolveClientUrl('Section/Index');
                     }, 3000);
                 } else {
                     toastr.error(data.Message, '', toastOptions());

@@ -4,7 +4,7 @@ import { resolveClientUrl } from '../../../../shared/common.functions';
 export const Filter = (props) => {
     const { setChoose, submit } = props;
     const handleCreateUnit = () => {
-        window.location = resolveClientUrl("Section/Create");
+        window.location = resolveClientUrl('Section/Create');
     }
     console.log(window.hasPermission)
     return (

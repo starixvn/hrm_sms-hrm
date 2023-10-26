@@ -15,7 +15,7 @@ export const Popup = (props) => {
             .required('The TeamName field is required!'),
     });
 
-    const { data } = props;
+    const { data , title } = props;
     return (
         <Draggable handle=".modal-header" >
             <Modal
@@ -24,7 +24,7 @@ export const Popup = (props) => {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Add new external group
+                        { title } external group
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

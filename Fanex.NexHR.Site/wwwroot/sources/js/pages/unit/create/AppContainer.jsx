@@ -30,7 +30,7 @@ export const AppContainer = () => {
         if (data) {
             const name = data.name.trim();
             const code = data.code.trim();
-            axios.post(resolveClientUrl(`Unit/Create`), {
+            axios.post(resolveClientUrl('Unit/Create'), {
                 Code: code,
                 Name: name,
                 IsActive: data.isActive
@@ -39,7 +39,7 @@ export const AppContainer = () => {
                 if (data.IsSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("Unit/Index");
+                        document.location = resolveClientUrl('Unit/Index');
                     }, 3000);
                 } else {
                     toastr.error(data.Message, '', toastOptions());

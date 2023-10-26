@@ -4,7 +4,7 @@ import { resolveClientUrl } from '../../../../shared/common.functions';
 export const Filter = (props) => {
     const { setChoose, submit } = props;
     const handleCreateUnit = () => {
-        window.location = resolveClientUrl("Unit/Create");
+        window.location = resolveClientUrl('Unit/Create');
     }
     return (
         <form className="filter" onSubmit={submit }>

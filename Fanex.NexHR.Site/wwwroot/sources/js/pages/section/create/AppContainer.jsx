@@ -57,7 +57,7 @@ export const AppContainer = () => {
                 if (data.IsSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
-                        document.location = resolveClientUrl("Section/Index");
+                        document.location = resolveClientUrl('Section/Index');
                     }, 3000);
                 } else {
                     toastr.error(data.Message, '', toastOptions());
