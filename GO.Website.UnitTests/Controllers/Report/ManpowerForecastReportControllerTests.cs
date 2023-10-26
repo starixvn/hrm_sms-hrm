@@ -4,16 +4,12 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using AutoFixture;
-    using HRM.UserControl.Client.Core.Configurations;
-    using HRM.UserControl.Client.Core.Services;
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
-    using Models;
     using Models.Manpower;
     using Models.Report.Manpower;
     using NSubstitute;
     using Website.Controllers.Report;
-    using Website.Criteria.Report;
     using Website.Criteria.Report.Manpower;
     using Website.Services;
     using Xunit;

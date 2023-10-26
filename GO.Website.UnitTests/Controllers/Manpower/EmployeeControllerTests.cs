@@ -1,6 +1,10 @@
 ﻿namespace GO.Website.UnitTests.Controllers.Manpower
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using AutoFixture;
+    using Fanex.NexHR.ViewModels;
     using GO.Core.Models;
     using GO.Core.Services;
     using GO.Website.Constants;
@@ -12,15 +16,14 @@
     using HRM.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
     using NSubstitute;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.NexHR.ViewModels;
     using Website.Criteria.Report;
+    using Website.Services;
     using Xunit;
 
     public class EmployeeControllerTests
     {
         private IUserControlSession userControlSession;
+        private IExportExcelService excelService;
         private IBaseService baseService;
         private readonly Fixture fixture = new();
 
@@ -58,8 +61,8 @@
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
-            var actualdata = jsonResult.Value.GetType().GetProperty("data").GetValue(jsonResult.Value);
-            var actualTotalItems = jsonResult.Value.GetType().GetProperty("totalItems").GetValue(jsonResult.Value);
+            var actualdata = jsonResult.Value.GetType().GetProperty("data")?.GetValue(jsonResult.Value);
+            var actualTotalItems = jsonResult.Value.GetType().GetProperty("totalItems")?.GetValue(jsonResult.Value);
             Assert.Equal(expected, actualdata);
             Assert.Equal(criteria.TotalRows, actualTotalItems);
         }
@@ -115,16 +118,40 @@
             Assert.Equal(expected, jsonResult.Value);
         }
 
+        [Fact]
+        public async Task ExportExcel_WhenCalled_ReturnExpectedData()
+        {
+            // Arrange
+            var controller = GetController();
+            var criteria = fixture.Create<GetEmployeeCriteria>();
+            var employeeInfos = fixture.Create<IEnumerable<EmployeeInfo>>();
+
+            var expected = fixture.Create<byte[]>();
+            var reportName = $"EmployeeInformation_{DateTime.Today:yyyyMMdd}.xlsx";
+
+            baseService.GetDataAsync<EmployeeInfo>(criteria).Returns(employeeInfos);
+            excelService.ExportEmployeeReport(Arg.Any<IEnumerable<EmployeeInfo>>()).Returns(expected);
+            //Act
+            var result = await controller.ExportExcel(criteria);
+
+            // Assert
+            var excelResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal("application/xlsx", excelResult.ContentType);
+            Assert.Equal(reportName, excelResult.FileDownloadName);
+        }
+
         #region helper
 
         private EmployeeController GetController()
         {
             userControlSession = Substitute.For<IUserControlSession>();
             baseService = Substitute.For<IBaseService>();
+            excelService = Substitute.For<IExportExcelService>();
 
             return new EmployeeController(
                 userControlSession,
-                baseService
+                baseService,
+                excelService
             );
         }
 
