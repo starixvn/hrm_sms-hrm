@@ -7,7 +7,7 @@ export const Table = (props) => {
 
     const handleDelete = (id) => {
         confirm('Are you sure you want to delete?', () => {
-            axios.post(resolveClientUrl('JobLevel/Delete'), {
+            axios.post(resolveClientUrl('JobTitle/Delete'), {
                 id: id
             }).then(response => {
                 const { data } = response;
@@ -25,12 +25,12 @@ export const Table = (props) => {
         window.location.href = (`/Employee/UserManagement?jobTitleId=${id}`);
     }
 
-    const handleEdit = (id, name) => {
+    const handleEdit = (id, name, categoryId) => {
         setEditModal(true);
-        editJobLevel(id, name);
+        editJobLevel(id, name, categoryId);
     }
 
-    const colSpan = window.hasPermission ? 8 : 6;
+    const colSpan = window.hasPermission === 'True' ? 8 : 6;
 
     return (
         <Fragment>
@@ -44,7 +44,7 @@ export const Table = (props) => {
                         <th>Total Local</th>
                         <th>Total(s)</th>
                         {
-                            window.hasPermission &&
+                            window.hasPermission === 'True' &&
                             <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -64,18 +64,19 @@ export const Table = (props) => {
                                 {item.value !== "0" ? <a onClick={() => handleLink(item.id)} style={{ cursor: 'pointer' }}>{item.value}</a> : 0}
                             </td>
                             {
-                                window.hasPermission && <Fragment>
+                                window.hasPermission === 'True' &&
+                                <Fragment>
                                     <td>
-                                        <a onClick={() => handleEdit(item.id, item.name)} style={{ cursor: 'pointer' }}>
+                                        <a onClick={() => handleEdit(item.id, item.name, item.categoryId)} style={{ cursor: 'pointer' }}>
                                             <i className="fa fa-pencil fa-lg icon-edit"></i>
                                         </a>
                                     </td>
                                     <td>
                                         {item.value !== "0" ?
-                                            <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
+                                            <a>
                                                 <i className="fa fa-times fa-lg fa-disabled icon-delete"></i>
                                             </a> :
-                                            <a>
+                                            <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
                                                 <i className="fa fa-times fa-lg icon-delete"></i>
                                             </a>
                                         }

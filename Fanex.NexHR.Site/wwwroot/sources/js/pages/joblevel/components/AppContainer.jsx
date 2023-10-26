@@ -39,16 +39,28 @@ export const AppContainer = () => {
 
     return (
         <Fragment>
-            {window.hasPermission &&
+            {window.hasPermission === 'True' &&
                 <div className="filter">
                     <Button className="btn btn-request" type="button" onClick={handleCreateJobLevel}>
                         <span className="fa fa-plus" /> New Job Level
                     </Button>
                 </div>
             }
-            <Create createModal={createModal} setCreateModal={setCreateModal} reloadTable={reloadTable} />
-            <Edit editModal={editModal} setEditModal={setEditModal} id={idJobLevelEdit} name={nameJobLevelEdit} reloadTable={reloadTable} />
-            <Table data={jobLevel} setEditModal={setEditModal} editJobLevel={handleEditInfo} reloadTable={reloadTable}/>
+            <Create
+                createModal={createModal}
+                setCreateModal={setCreateModal}
+                reloadTable={reloadTable} />
+            <Edit
+                editModal={editModal}
+                setEditModal={setEditModal}
+                id={idJobLevelEdit}
+                name={nameJobLevelEdit}
+                reloadTable={reloadTable} />
+            <Table
+                data={jobLevel}
+                setEditModal={setEditModal}
+                editJobLevel={handleEditInfo}
+                reloadTable={reloadTable} />
         </Fragment>
     )
 };

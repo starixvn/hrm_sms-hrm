@@ -21,7 +21,7 @@ export const Create = (props) => {
     const onSubmit = (values) => {
         axios.post(resolveClientUrl(`JobTitle/Insert`), {
             name: values.name.trim(),
-            categoryId: values.categoryId
+            categoryId: values.categoryId ? values.categoryId : jobCategory[0].value
         })
             .then(response => {
                 const { data } = response;
@@ -79,7 +79,7 @@ export const Create = (props) => {
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: '', categoryId: 1 }}
+                    initialValues={{ name: '', categoryId: '' }}
                     validationSchema={CreateSchema}
                     onSubmit={onSubmit}
                 >

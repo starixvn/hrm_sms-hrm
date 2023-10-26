@@ -12,7 +12,7 @@ const EditSchema = Yup.object({
 });
 
 export const Edit = (props) => {
-    const { editModal, setEditModal, id, name, reloadTable, jobCategory } = props;
+    const { editModal, setEditModal, id, name, categoryId, reloadTable, jobCategory } = props;
 
     const handleClose = () => {
         setEditModal(false);
@@ -22,7 +22,7 @@ export const Edit = (props) => {
         axios.post(resolveClientUrl(`JobTitle/Update`), {
             id: id,
             name: values.name.trim(),
-            categoryId: categoryId
+            categoryId: values.categoryId
         })
             .then(response => {
                 const { data } = response;
@@ -60,7 +60,7 @@ export const Edit = (props) => {
                             <label className="control-label">Category</label>
                         </div>
                         <div className="select-form">
-                            <Field name="category" as="select" className="form-control">
+                            <Field name="categoryId" as="select" className="form-control">
                                 {jobCategory.map((category, i) => (
                                     <option key={i} value={category.value}>
                                         {category.text}
@@ -80,7 +80,7 @@ export const Edit = (props) => {
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: name }}
+                    initialValues={{ id: id, name: name, categoryId: categoryId }}
                     validationSchema={EditSchema}
                     onSubmit={onSubmit}
                 >

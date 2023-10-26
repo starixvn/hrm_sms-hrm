@@ -22,7 +22,7 @@ export const Table = (props) => {
             }).catch(axiosError);
         });
     }
-    const colSpan = window.hasPermission ? 7 : 5;
+    const colSpan = window.hasPermission === 'True' ? 7 : 5;
 
     return (
         <Fragment>
@@ -35,7 +35,8 @@ export const Table = (props) => {
                         <th>Unit</th>
                         <th>Active</th>
                         {
-                            window.hasPermission && <Fragment>
+                            window.hasPermission === 'True' &&
+                            <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </Fragment>
@@ -54,7 +55,8 @@ export const Table = (props) => {
                                     {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
                                 </td>
                                 {
-                                    window.hasPermission && <Fragment>
+                                    window.hasPermission === 'True' &&
+                                    <Fragment>
                                         <td>
                                             <a onClick={() => handleEdit(item.id)} style={{ cursor: 'pointer' }}>
                                                 <i className="fa fa-pencil fa-lg icon-edit"></i>

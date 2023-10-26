@@ -31,7 +31,6 @@ export const AppContainer = () => {
             const { data } = response;
             if (data) {
                 setData(data);
-                console.log(data)
             }
         }).catch(axiosError);
     }

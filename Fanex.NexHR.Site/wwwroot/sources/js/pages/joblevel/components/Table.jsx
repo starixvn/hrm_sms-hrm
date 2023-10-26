@@ -26,7 +26,7 @@ export const Table = (props) => {
         editJobLevel(id, name);
     }
 
-    const colSpan = window.hasPermission ? 4 : 2;
+    const colSpan = window.hasPermission === 'True' ? 4 : 2;
 
     return (
         <Fragment>
@@ -36,7 +36,7 @@ export const Table = (props) => {
                         <th>#</th>
                         <th>Name</th>
                         {
-                            window.hasPermission &&
+                            window.hasPermission === 'True' &&
                             <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
@@ -50,7 +50,8 @@ export const Table = (props) => {
                             <td>{i + 1}</td>
                             <td className="align-left">{item.name}</td>
                             {
-                                window.hasPermission && <Fragment>
+                                window.hasPermission === 'True' &&
+                                <Fragment>
                                     <td>
                                         <a onClick={() => handleEdit(item.id, item.name)}>
                                             <i className="fa fa-pencil fa-lg icon-edit"></i>

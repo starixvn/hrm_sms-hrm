@@ -13,6 +13,7 @@ export const AppContainer = () => {
     const [jobCategory, setJobCategory] = useState([]);
     const [idJobTitleEdit, setIdJobTitleEdit] = useState(0);
     const [nameJobTitleEdit, setNameJobTitleEdit] = useState('');
+    const [categoryIdJobTitleEdit, setCategoryIdJobTitleEdit] = useState(0);
     const [keyword, setKeyword] = useState('');
 
     const handleGetJobTitle = () => {
@@ -39,17 +40,37 @@ export const AppContainer = () => {
         handleGetJobCategory();
     }, []);
 
-    const handleEditInfo = (id, name) => {
+    const handleEditInfo = (id, name, categoryId) => {
         setIdJobTitleEdit(id);
         setNameJobTitleEdit(name);
+        setCategoryIdJobTitleEdit(categoryId);
     };
 
     return (
         <Fragment>
-            <Filter setKeyword={setKeyword} searchKeyword={reloadTable} setCreateModal={setCreateModal} />
-            <Create createModal={createModal} setCreateModal={setCreateModal} reloadTable={reloadTable} jobCategory={jobCategory} />
-            <Edit editModal={editModal} setEditModal={setEditModal} id={idJobTitleEdit} name={nameJobTitleEdit} reloadTable={reloadTable} jobCategory={jobCategory} />
-            <Table data={jobTitle} setEditModal={setEditModal} editJobLevel={handleEditInfo} reloadTable={reloadTable} />
+            <Filter
+                keyword={keyword}
+                setKeyword={setKeyword}
+                searchKeyword={reloadTable}
+                setCreateModal={setCreateModal} />
+            <Create
+                createModal={createModal}
+                setCreateModal={setCreateModal}
+                reloadTable={reloadTable}
+                jobCategory={jobCategory} />
+            <Edit
+                editModal={editModal}
+                setEditModal={setEditModal}
+                id={idJobTitleEdit}
+                name={nameJobTitleEdit}
+                categoryId={categoryIdJobTitleEdit}
+                reloadTable={reloadTable}
+                jobCategory={jobCategory} />
+            <Table
+                data={jobTitle}
+                setEditModal={setEditModal}
+                editJobLevel={handleEditInfo}
+                reloadTable={reloadTable} />
         </Fragment>
     )
 };

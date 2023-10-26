@@ -2,10 +2,20 @@
 import { resolveClientUrl } from '../../../shared/common.functions';
 
 export const Filter = (props) => {
-    const { setKeyword, searchKeyword, setCreateModal} = props;
+    const { keyword, setKeyword, searchKeyword, setCreateModal } = props;
 
     const handleCreateModal = () => {
         setCreateModal(true);
+    }
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            searchKeyword();
+        }
+    }
+
+    const handleExportExcel = () => {
+        window.location.href = resolveClientUrl('jobTitle/ExportExcel?jobTitle=' + keyword);
     }
 
     return (
@@ -20,15 +30,16 @@ export const Filter = (props) => {
                             className="form-control"
                             placeholder="job title"
                             autoComplete="off"
-                            onChange={e => setKeyword(e.target.value)} />
+                            onChange={e => setKeyword(e.target.value)}
+                            onKeyPress={handleKeyPress} />
                     </div>
                 </div>
                 <div className="form-group form-group--m">
                     <button type="submit" className="btn btn-primary" onClick={searchKeyword}>Search</button>
                     {
-                        window.hasPermission &&
+                        window.hasPermission === 'True' &&
                         <Fragment>
-                            <button type="submit" className="btn btn-excel">Excel</button>
+                            <button type="submit" className="btn btn-excel" onClick={handleExportExcel}>Excel</button>
                             <button className="btn btn-request" type="button" onClick={handleCreateModal}>
                                 <span className="fa fa-plus" /> &nbsp;New Job Title
                             </button>
