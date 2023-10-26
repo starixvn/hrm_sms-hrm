@@ -7,10 +7,11 @@ export const Table = (props) => {
         window.location.href = (`/unit/edit/${id}`);
     }
     const handleDeleteId = (id) => {
+        const empId = window._global.employeeId;
         confirm('Are you sure you want to delete this unit?', () => {
             axios.post(resolveClientUrl('Unit/Delete'), {
                 UnitId: id,
-                ModifiedBy: window._global.employeeId
+                ModifiedBy: empId
             }).then(response => {
                 const { data } = response;
                 if (data.IsSuccessful) {

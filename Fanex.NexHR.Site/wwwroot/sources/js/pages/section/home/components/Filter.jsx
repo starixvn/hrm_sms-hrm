@@ -6,7 +6,6 @@ export const Filter = (props) => {
     const handleCreateUnit = () => {
         window.location = resolveClientUrl('Section/Create');
     }
-    console.log(window.hasPermission)
     return (
         <form className="filter" onSubmit={submit}>
             <div className="form-horizontal clearfix">
@@ -15,7 +14,7 @@ export const Filter = (props) => {
                         <label className="control-label">Status</label>
                     </div>
                     <div className="select-form">
-                        <select className="form-control" onChange={e => setChoose(e.target.value)}>
+                        <select className="form-control" onChange={event => setChoose(event.target.value)}>
                             <option value=''>All</option>
                             <option value='true'>Active</option>
                             <option value='false'>Inactive</option>
@@ -23,15 +22,13 @@ export const Filter = (props) => {
                     </div>
                 </div>
                     <div className="form-group form-group--m">
-                    <button type="submit" className="btn btn-primary">Search</button>
-                    {
-                        window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreateUnit}>
-                            <span className="fa fa-plus">
-                            </span>
-                            &nbsp;New Section
-                        </a>
-                    }
-                       
+                        <button type="submit" className="btn btn-primary">Search</button>
+                        {
+                            window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreateUnit}>
+                                <span className="fa fa-plus" />
+                                &nbsp;New Section
+                            </a>
+                        }
                     </div>
             </div>
         </form>

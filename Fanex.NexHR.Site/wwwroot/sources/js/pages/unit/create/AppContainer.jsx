@@ -18,21 +18,14 @@ const CreateUnitSchema = Yup.object({
         .required('The Name field is required!')
 });
 export const AppContainer = () => {
-    const initialValues = {
-        code: '',
-        name: '',
-        isActive : false
-    }
     const handleGoBack = () => {
         history.back();
     }
     const onSubmit = (data) => {
         if (data) {
-            const name = data.name.trim();
-            const code = data.code.trim();
             axios.post(resolveClientUrl('Unit/Create'), {
-                Code: code,
-                Name: name,
+                Code: data.name.trim(),
+                Name: data.code.trim(),
                 IsActive: data.isActive
             }).then(response => {
                 const { data } = response;
@@ -98,7 +91,11 @@ export const AppContainer = () => {
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
-            initialValues={initialValues}
+            initialValues={{
+                code: '',
+                name: '',
+                isActive: false
+            }}
             validationSchema={CreateUnitSchema}
             onSubmit={onSubmit}
         >

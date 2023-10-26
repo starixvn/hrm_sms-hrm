@@ -16,12 +16,10 @@ const EditUnitSchema = Yup.object({
 });
 
 export const AppContainer = () => {
-    const url = window.location.href;
-    const id = url.substring(url.lastIndexOf('/') + 1);
+    const id = window.id;
     const handleGoBack = () => {
         history.back();
     }
-
     const [data, setData] = useState([])
 
     const handleGetDataDetail = (id) => {

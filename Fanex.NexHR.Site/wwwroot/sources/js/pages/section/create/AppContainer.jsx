@@ -20,16 +20,9 @@ const CreateSectionSchema = Yup.object({
 });
 export const AppContainer = () => {
     const [deparments, setDeparments] = useState([]);
-    const initialValues = {
-        code: '',
-        name: '',
-        isActive: false,
-        department : ''
-    }
     const handleGoBack = () => {
         history.back();
     }
-
     const handleGetDepartment = () => {
         axios(resolveClientUrl('Section/GetDeparment')).then(response => {
             const { data } = response;
@@ -45,11 +38,9 @@ export const AppContainer = () => {
 
     const onSubmit = (data) => {
         if (data) {
-            const name = data.name.trim();
-            const code = data.code.trim();
             axios.post(resolveClientUrl('Section/Create'), {
-                Code: code,
-                Name: name,
+                Code: data.name.trim(),
+                Name: data.code.trim(),
                 IsActive: data.isActive,
                 DepartmentId: data.department
             }).then(response => {
@@ -133,7 +124,12 @@ export const AppContainer = () => {
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
-            initialValues={initialValues}
+            initialValues={{
+                code: '',
+                name: '',
+                isActive: false,
+                department: ''
+            }}
             validationSchema={CreateSectionSchema}
             onSubmit={onSubmit}
         >

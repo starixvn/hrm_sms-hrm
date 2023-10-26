@@ -19,8 +19,8 @@ export const AppContainer = () => {
         hanleGetUnit();
     }, [])
 
-    const handleFilterForm = (e) => {
-        e.preventDefault();
+    const handleFilterForm = (event) => {
+        event.preventDefault();
         hanleGetUnit();
     }
     return (

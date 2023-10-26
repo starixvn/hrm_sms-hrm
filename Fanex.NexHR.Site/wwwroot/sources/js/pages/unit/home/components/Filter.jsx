@@ -14,7 +14,7 @@ export const Filter = (props) => {
                         <label className="control-label">Status</label>
                     </div>
                     <div className="select-form">
-                        <select className="form-control" onChange={e => setChoose(e.target.value)}>
+                        <select className="form-control" onChange={event => setChoose(event.target.value)}>
                             <option value=''>All</option>
                             <option value='true'>Active</option>
                             <option value='false'>Inactive</option>

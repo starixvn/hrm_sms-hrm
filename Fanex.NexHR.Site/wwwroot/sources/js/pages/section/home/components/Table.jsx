@@ -45,21 +45,21 @@ export const Table = (props) => {
                                 <td>{item.code}</td>
                                 <td>{item.name}</td>
                                 <td>
-                                    {item.department !== null ? item.department.name : null }
+                                    {item.department ? item.department.name : null }
                                 </td>
                                 <td>
-                                    {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
+                                    {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
                                 </td>
                                 {
                                     window.hasPermission === 'True' && <Fragment>
                                         <td>
                                             <a onClick={() => handleViewId(item.id)} style={{ cursor: 'pointer' }}>
-                                                <i className="fa fa-pencil fa-lg icon-edit"></i>
+                                                <i className="fa fa-pencil fa-lg icon-edit" />
                                             </a>
                                         </td>
                                         <td>
                                             <a onClick={() => handleDeleteId(item.id)} style={{ cursor: 'pointer' }}>
-                                                <i className="fa fa-times fa-lg icon-delete"></i>
+                                                <i className="fa fa-times fa-lg icon-delete" />
                                             </a>
                                         </td>
                                     </Fragment>
