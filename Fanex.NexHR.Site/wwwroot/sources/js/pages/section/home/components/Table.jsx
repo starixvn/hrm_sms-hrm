@@ -30,7 +30,7 @@ export const Table = (props) => {
                         <th>Department</th>
                         <th>Active</th>
                         {
-                            window.hasPermission && <Fragment>
+                            window.hasPermission === 'True' && <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
                             </Fragment>
@@ -66,7 +66,7 @@ export const Table = (props) => {
                                 }
                             </tr>
                         )) : <tr>
-                            <td colSpan='10'>
+                                <td colSpan={ window.hasPermission === 'True' ? '7' : '5' }>
                                 No information available
                             </td>
                         </tr>

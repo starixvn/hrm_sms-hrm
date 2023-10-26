@@ -623,9 +623,6 @@
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
     <Content Include="wwwroot\sources\js\pages\employee\index.js" />
     <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\create.js" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\external.group.js" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\index.js" />
     <Content Include="wwwroot\sources\js\pages\holiday\edit.js" />
     <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />

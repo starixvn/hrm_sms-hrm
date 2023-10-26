@@ -21,17 +21,16 @@ export const Filter = (props) => {
                         </select>
                     </div>
                 </div>
-                {
-                    window.hasPermission === 'True' &&
-                    <div className="form-group form-group--m">
-                        <button type="submit" className="btn btn-primary">Search</button>
-                        <a className="btn btn-request" onClick={ handleCreateUnit }>
+                <div className="form-group form-group--m">
+                    <button type="submit" className="btn btn-primary">Search</button>
+                    {
+                        window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreateUnit}>
                             <span className="fa fa-plus">
                             </span>
                             &nbsp;New Unit
                         </a>
-                    </div>
-                }
+                    }
+                </div>
             </div>
         </form>
     )
