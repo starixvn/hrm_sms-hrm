@@ -59,7 +59,7 @@ export const Create = (props) => {
                             <label className="control-label">Category</label>
                         </div>
                         <div className="select-form">
-                            <Field name="category" as="select" className="form-control">
+                            <Field name="categoryId" as="select" className="form-control">
                                 {jobCategory.map((category, i) => (
                                     <option key={i} value={category.value}>
                                         {category.text}
@@ -79,7 +79,7 @@ export const Create = (props) => {
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: '', categoryId: 0 }}
+                    initialValues={{ name: '', categoryId: 1 }}
                     validationSchema={CreateSchema}
                     onSubmit={onSubmit}
                 >

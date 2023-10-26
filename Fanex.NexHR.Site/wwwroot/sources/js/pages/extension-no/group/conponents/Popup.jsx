@@ -15,7 +15,9 @@ export const Popup = (props) => {
             .required('The TeamName field is required!'),
     });
 
-    const { data , title } = props;
+    const { data, title } = props;
+    const teamName = data ? data.teamName : '';
+    const teamId = data ? data.teamId : '';
     return (
         <Draggable handle=".modal-header" >
             <Modal
@@ -33,8 +35,8 @@ export const Popup = (props) => {
                         validateOnChange={false}
                         enableReinitialize={true}
                         initialValues={{
-                            TeamName: data && data.teamName || '',
-                            TeamId: data && data.teamId || ''
+                            TeamName: teamName,
+                            TeamId: teamId
                         }}
                         validationSchema={CreateExternalGroup}
                         onSubmit={props.onSubmit}

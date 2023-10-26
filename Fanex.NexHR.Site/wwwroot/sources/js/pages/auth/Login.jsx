@@ -76,9 +76,10 @@ export default class Login extends Component {
                 {
                     isShowErr && <div className="validation-summary-errors">
                         <ul>
-                            <li>{errors["username"]}</li>
-                            <li>{errors["password"]}</li>
-                            <li>{errMsg}</li>
+                            { errors["username"] && <li>{errors["username"]}</li>}
+                            { errors["password"] && <li>{errors["username"]}</li>}
+                            {errMsg && <li>{errMsg}</li> }
+                            
                         </ul>
                     </div>
                 }

@@ -22,7 +22,7 @@ export const Table = (props) => {
             </thead>
             <tbody>
                 {
-                    data && data.map(item => (
+                    data.map(item => (
                         <Fragment key={item.name}>
                             <tr>
                                 <td className="rowdivider align-left" colSpan={6}>

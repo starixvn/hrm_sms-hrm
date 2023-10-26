@@ -108,8 +108,8 @@ export const AppContainer = () => {
                         <div className="input-form">
                             <Field as="select" name="TeamId" className="form-control">
                                 {
-                                    selectExtension && selectExtension.map((item, i) => (
-                                        <option value={item.value} key={item.value}>{item.text}</option>
+                                    selectExtension.map((item, i) => (
+                                        <option value={ item.value} key={item.value}>{item.text}</option>
                                     ))
                                 }
                             </Field>
@@ -145,7 +145,7 @@ export const AppContainer = () => {
                             <label className="control-label">Full Name</label>
                         </div>
                         <div className="input-form">
-                            <Field name="FullName" name="FullName">
+                            <Field name="FullName">
                                 {({
                                     field
                                 }) => (
@@ -154,7 +154,7 @@ export const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked ? checked : false}
+                                        readOnly={checked || false}
                                     />
                                 )}
                             </Field>
@@ -174,7 +174,7 @@ export const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked ? checked : false}
+                                        readOnly={checked || false}
                                     />
                                 )}
                             </Field>
@@ -196,10 +196,7 @@ export const AppContainer = () => {
             </div>
         );
     }
-    if (!selectExtension || !selectExtension[0] || !selectExtension[0].value) {
-        return null;
-    }
-
+    
     const onSubmit = (data) => {
         if (data) {
             axios.post(resolveClientUrl('ExtensionNo/Create'), {
@@ -218,11 +215,14 @@ export const AppContainer = () => {
         }
     }
 
-    const fullName = selectEmployee && selectEmployee.fullName;
+    if (!selectExtension || selectExtension[0] == null) {
+        return null;
+    }
+    const fullName = selectEmployee ? selectEmployee.fullName : '';
     const teamId = selectExtension[0].value;
-    const nickName = selectEmployee && selectEmployee.nickName;
-    const empId = selectEmployee && selectEmployee.id;
-    const empName = selectEmployee && selectEmployee.value;
+    const nickName = selectEmployee ? selectEmployee.nickName : '';
+    const empId = selectEmployee ? selectEmployee.id : '';
+    const empName = selectEmployee ? selectEmployee.value : '';
     return (
         <Formik
             validateOnBlur={false}

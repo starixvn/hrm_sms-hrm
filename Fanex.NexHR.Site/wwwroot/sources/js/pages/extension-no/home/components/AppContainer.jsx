@@ -1,6 +1,6 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
+import { resolveClientUrl, axiosError, confirm } from '../../../../shared/common.functions';
 import { ExtensionControl } from './ExtensionControl';
 import { Table } from './Table';
 

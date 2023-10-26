@@ -1,5 +1,4 @@
-﻿import React from 'react';
-import { Fragment } from 'react';
+﻿import React, { Fragment } from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
 export const ExtensionControl = () => {

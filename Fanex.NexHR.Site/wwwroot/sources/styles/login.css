@@ -185,10 +185,6 @@ input[type="submit"], input[type="reset"], input[type="button"], a.button, butto
     color: #FF0000;
 }
 
-.validation-summary-errors ul {
-    list-style : none;
-    padding-left : 20px;
-}
 
 .field-validation-valid {
     display: none;

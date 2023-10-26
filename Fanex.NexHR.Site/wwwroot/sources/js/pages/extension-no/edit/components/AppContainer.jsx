@@ -16,7 +16,7 @@ export const AppContainer = () => {
     const id = window.id;
     const [detail, setDetail] = useState(null);
     const [selectExtension, setSelectExtension] = useState([]);
-    const [checked, setChecked] = useState(isInternal === 'True' ? true : false);
+    const [checked, setChecked] = useState(isInternal === 'True');
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
 
@@ -124,7 +124,7 @@ export const AppContainer = () => {
                         <div className="input-form">
                             <Field as="select" name="TeamId" className="form-control">
                                 {
-                                    selectExtension && selectExtension.map((item, i) => (
+                                    selectExtension.map((item, i) => (
                                         <option value={item.value} key={item.value}>{item.text}</option>
                                     ))
                                 }
@@ -162,7 +162,7 @@ export const AppContainer = () => {
                             <label className="control-label">Full Name</label>
                         </div>
                         <div className="input-form">
-                            <Field name="FullName" name="FullName">
+                            <Field name="FullName">
                                 {({
                                     field
                                 }) => (
@@ -171,7 +171,7 @@ export const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked ? checked : false}
+                                        readOnly={checked || false}
                                     />
                                 )}
                             </Field>
@@ -191,7 +191,7 @@ export const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked ? checked : false}
+                                        readOnly={checked || false}
                                     />
                                 )}
                             </Field>
@@ -213,10 +213,10 @@ export const AppContainer = () => {
             </div>
         );
     }
-    if (!selectExtension || !selectExtension[0] || !selectExtension[0].value || !detail) {
+
+    if (!selectExtension || selectExtension[0] == null || detail == null) {
         return null;
     }
-
     const onSubmit = (data) => {
         if (data) {
             axios.post(resolveClientUrl('ExtensionNo/Edit'), {
@@ -235,17 +235,17 @@ export const AppContainer = () => {
             }).catch(axiosError);
         }
     }
-    const fullName = selectEmployee && selectEmployee.fullName;
-    const nickName = selectEmployee && selectEmployee.nickName;
-    const empName = selectEmployee && selectEmployee.value;
-    const empId = selectEmployee && selectEmployee.id;
+    const fullName = selectEmployee ? selectEmployee.fullName : '';
+    const nickName = selectEmployee ? selectEmployee.nickName : '';
+    const empName = selectEmployee ? selectEmployee.value : '';
+    const empId = selectEmployee ? selectEmployee.id : '';
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={{
                 EmpId: detail.EmpId ? detail.EmpId : empId,
-                Employee: empName ? empName : '',
+                Employee: empName || '',
                 FullName: fullName || detail.fullName || '',
                 TeamId: detail.teamId || '',
                 NickName: nickName || detail.nickName || '',

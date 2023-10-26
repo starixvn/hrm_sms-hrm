@@ -31,7 +31,6 @@ export const AppContainer = () => {
             const { data } = response;
             if (data) {
                 setData(data);
-                console.log(data)
             }
 
         }).catch(axiosError);
@@ -63,7 +62,6 @@ export const AppContainer = () => {
             }).catch(axiosError);
         }
     }
-
     const renderForm = (errors) => {
         return (
             <div className="card">
@@ -101,8 +99,8 @@ export const AppContainer = () => {
                             <Field name="department" as="select" className="form-control">
                                 <option defaultChecked></option>
                                 {
-                                    data.departments && data.departments.map((item) => (
-                                        <option value={item.id} key={item.id} defaultValue={data.departmentId === item.id ? true : false}>{item.name}</option>
+                                    data.departments.map((item) => (
+                                        <option value={item.id} key={item.id} defaultValue={data.departmentId === item.id}>{item.name}</option>
                                     ))
                                 }
                             </Field>
@@ -125,6 +123,9 @@ export const AppContainer = () => {
                 </Form>
             </div>
         )
+    }
+    if (!data || data.departments == null) {
+        return null;
     }
     return (
         <Formik
