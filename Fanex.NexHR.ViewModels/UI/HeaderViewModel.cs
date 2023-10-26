@@ -6,6 +6,6 @@
     {
         public EmployeeSession Employee { get; set; }
         public bool IsShowSearchBox { get; set; }
-        public int SiteId { get; set; }
+        public byte SiteId { get; set; }
     }
 }

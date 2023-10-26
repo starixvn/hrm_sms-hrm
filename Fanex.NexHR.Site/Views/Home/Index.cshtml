@@ -6,18 +6,15 @@
     ViewBag.Title = Labels.Dashboard;
     var isResetPassword = (bool)ViewBag.IsResetPassword;
 
-    int siteId = ConfigSettings.SiteId;
+    byte siteId = ConfigSettings.SiteId;
     var modalTitle = string.Empty;
     switch (siteId)
     {
-        case (int)SiteId.SMS:
+        case (byte)SiteId.SMS:
             modalTitle = "SMS HRM";
             break;
-        case (int)SiteId.HM:
+        case (byte)SiteId.HM:
             modalTitle = "HM HRM";
-            break;
-        case (int)SiteId.CTS:
-            modalTitle = "CTS HRM";
             break;
     }
 }

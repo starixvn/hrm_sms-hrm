@@ -3,7 +3,7 @@
 <div id="confirmModal" class="modal" tabindex="-1" role="dialog">
     @{
         var title = string.Empty;
-        int siteId = ConfigSettings.SiteId;
+        byte siteId = ConfigSettings.SiteId;
     }
     <div class="modal-dialog-centered modal-dialog" role="document">
         <div class="modal-content">
@@ -12,14 +12,11 @@
                 <h4 class="modal-title">
                     @switch (siteId)
                     {
-                        case (int)SiteId.SMS:
+                        case (byte)SiteId.SMS:
                             title = "SMS HRM";
                             break;
-                        case (int)SiteId.HM:
+                        case (byte)SiteId.HM:
                             title = "HM HRM";
-                            break;
-                        case (int)SiteId.CTS:
-                            title = "CTS HRM";
                             break;
                     }
                     @title

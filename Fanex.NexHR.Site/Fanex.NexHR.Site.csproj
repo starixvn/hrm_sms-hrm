@@ -795,7 +795,6 @@
     <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
     <Content Include="wwwroot\sources\styles\images\bgLogin.png" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
-    <Content Include="wwwroot\sources\styles\images\CTS-logo.png" />
     <Content Include="wwwroot\sources\styles\images\Hongma-logo.png" />
     <Content Include="wwwroot\sources\styles\images\icons.png" />
     <Content Include="wwwroot\sources\styles\images\panel_bg.png" />

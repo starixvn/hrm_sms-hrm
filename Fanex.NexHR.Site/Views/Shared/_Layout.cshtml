@@ -1,6 +1,6 @@
 ﻿@{
     var title = string.Empty;
-    int siteId = ConfigSettings.SiteId;
+    byte siteId = ConfigSettings.SiteId;
 }
 
 <!DOCTYPE html>
@@ -10,14 +10,11 @@
 
     @switch (siteId)
     {
-        case (int)SiteId.SMS:
+        case (byte)SiteId.SMS:
             title = "SMS HRM";
             break;
-        case (int)SiteId.HM:
+        case (byte)SiteId.HM:
             title = "HM HRM";
-            break;
-        case (int)SiteId.CTS:
-            title = "CTS HRM";
             break;
     }
 

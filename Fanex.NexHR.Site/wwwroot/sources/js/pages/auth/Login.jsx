@@ -9,66 +9,61 @@ export default class Login extends Component {
         this.state = {
             fields: {},
             errors: {},
-            errMsg : '',
-            isShowErr : false
+            errMsg: '',
+            isShowErr: false
         };
-        
     }
 
-    handleValidation() {
-        let fields = this.state.fields;
-        let errors = {};
-        let formIsValid = true;
+    validate = () => {
+        const fields = this.state.fields;
+        const errors = {};
+        let isValid = true;
         if (!fields['username']) {
-            formIsValid = false;
+            isValid = false;
             errors['username'] = 'The Username field is required.';
         }
 
         if (!fields['password']) {
-            formIsValid = false;
+            isValid = false;
             errors['password'] = 'The Password field is required.';
         }
 
-        this.setState({ errors: errors });
-        return formIsValid;
-    }
+        this.setState({ errors: errors, isShowErr: !isValid });
+        return isValid;
+    };
 
-
-    handleLogin = (e) => {
-        e.preventDefault();
+    handleLogin = event => {
+        event.preventDefault();
         const { fields } = this.state;
-        if (this.handleValidation()) {
+        const isValid = this.validate();
+        if (isValid) {
             axios.post(resolveClientUrl('Auth/Login'), {
-                Username: fields['username'],
-                Password: btoa(fields['password'])
+                username: fields['username'],
+                password: btoa(unescape(encodeURIComponent(fields['password'])))
             }).then(response => {
                 const { data } = response;
                 if (data.isSuccessfull) {
                     this.setState({
                         errMsg: '',
                         isShowErr: false
-                    })
+                    });
                     window.location.href = ('/');
                 } else {
                     this.setState({
                         errMsg: data.errorMessage,
                         isShowErr: true
-                    })
+                    });
                 }
             }).catch(axiosError);
-        } else {
-            this.setState({
-                isShowErr: true
-            })
         }
     }
 
-    handleChange(field, e) {
-        let fields = this.state.fields;
-        fields[field] = e.target.value;
+    handleChange = event => {
+        const fields = this.state.fields;
+        fields[event.target.name] = event.target.value;
         this.setState({ fields });
-    }
-   
+    };
+
     render() {
         const { isShowErr, errors, errMsg } = this.state;
         return (
@@ -84,17 +79,15 @@ export default class Login extends Component {
                     </div>
                 }
                 <div className="textbox-outer">
-                    <div className="username-icon">
-                    </div>
+                    <div className="username-icon" />
                     <div className="username-field">
-                        <input type="text" placeholder="Username" onChange={this.handleChange.bind(this, 'username')} />
+                        <input type="text" placeholder="Username" name="username" onChange={this.handleChange} />
                     </div>
                 </div>
                 <div className="textbox-outer">
-                    <div className="password-icon">
-                    </div>
+                    <div className="password-icon" />
                     <div className="password-field">
-                        <input type="password" placeholder="Password" onChange={this.handleChange.bind(this, 'password')} />
+                        <input type="password" placeholder="Password" name="password" onChange={this.handleChange} />
                     </div>
                 </div>
                 <div className="signin-button">

@@ -4,7 +4,7 @@
 @{
     Layout = null;
     var title = string.Empty;
-    int siteId = ConfigSettings.SiteId;
+    byte siteId = ConfigSettings.SiteId;
 }
 <!DOCTYPE html>
 <html>
@@ -13,14 +13,11 @@
     <title>
         @switch (siteId)
         {
-            case (int)SiteId.SMS:
+            case (byte)SiteId.SMS:
                 title = "Welcome to SMS HRM";
                 break;
-            case (int)SiteId.HM:
+            case (byte)SiteId.HM:
                 title = "Welcome to HM HRM";
-                break;
-            case (int)SiteId.CTS:
-                title = "Welcome to CTS HRM";
                 break;
         }
         @title
@@ -34,14 +31,11 @@
                 <div>
                     @switch (siteId)
                     {
-                        case (int)SiteId.SMS:
+                        case (byte)SiteId.SMS:
                             <img src="~/wwwroot/sources/styles/images/SMS-logo.png" />
                             break;
-                        case (int)SiteId.HM:
+                        case (byte)SiteId.HM:
                             <img src="~/wwwroot/sources/styles/images/Hongma-logo.png" />
-                            break;
-                        case (int)SiteId.CTS:
-                            <img src="~/wwwroot/sources/styles/images/CTS-logo.png" />
                             break;
                     }
                 </div>

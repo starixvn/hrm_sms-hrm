@@ -9,7 +9,7 @@
         public static bool IsShowCloseBalance => Convert.ToBoolean(ConfigurationManager.AppSettings["IsCloseBalance"]);
         public static bool AllowAdminLogin => Convert.ToBoolean(ConfigurationManager.AppSettings["AllowAdminLogin"]);
         public static bool IsDisabledSendMail => Convert.ToBoolean(ConfigurationManager.AppSettings["IsDisabledSendMail"]);
-        public static short SiteId => Convert.ToInt16(ConfigurationManager.AppSettings["SiteId"]);
+        public static byte SiteId => Convert.ToByte(ConfigurationManager.AppSettings["SiteId"]);
         public static string ApplicationDomain => ConfigurationManager.AppSettings["ApplicationDomain"];
         public static string SyncWorkingShiftUrl => ConfigurationManager.AppSettings["SyncWorkingShiftUrl"];
         public static bool EnableImportTimeRecord => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableImportTimeRecord"]);

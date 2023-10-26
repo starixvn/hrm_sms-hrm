@@ -8,14 +8,11 @@
         <a href="~/">
             @switch (Model.SiteId)
             {
-                case (int)SiteId.SMS:
+                case (byte)SiteId.SMS:
                     <img src="~/wwwroot/sources/styles/images/SMS-logo.png" width="155" alt="" />
                     break;
-                case (int)SiteId.HM:
+                case (byte)SiteId.HM:
                     <img src="~/wwwroot/sources/styles/images/Hongma-logo.png" width="155" alt="" />
-                    break;
-                case (int)SiteId.CTS:
-                    <img src="~/wwwroot/sources/styles/images/CTS-logo.png" width="155" alt="" />
                     break;
             }
         </a>

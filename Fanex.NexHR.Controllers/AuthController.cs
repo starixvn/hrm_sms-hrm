@@ -49,51 +49,47 @@
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+            var token = cryptoService.GenerateRijndaelKeyIV();
+            string[] keyiv = token.Split(':');
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            var loginParam = new LoginParam
             {
-                model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
-                var token = cryptoService.GenerateRijndaelKeyIV();
-                string[] keyiv = token.Split(':');
-                var rijndaelKey = keyiv[0];
-                var rijndaelIV = keyiv[1];
-                var loginParam = new LoginParam
+                Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
+                Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
+                Token = token,
+                IP = GetClientIP(),
+                Platform = Request.Browser.Platform,
+                BrowserName = Request.Browser.Browser,
+                NetSessionId = Session.SessionID
+            };
+            var loginResult = authService.Login(loginParam);
+            if (loginResult.IsSuccessfull)
+            {
+                EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
+                if (employee == null)
                 {
-                    Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
-                    Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
-                    Token = token,
-                    IP = GetClientIP(),
-                    Platform = Request.Browser.Platform,
-                    BrowserName = Request.Browser.Browser,
-                    NetSessionId = Session.SessionID
-                };
-                var loginResult = authService.Login(loginParam);
-                if (loginResult.IsSuccessfull)
-                {
-                    EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
-                    if (employee == null)
-                    {
-                        return new CustomJsonResult { Data = "User has not been mapped.", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                    }
-
-                    userControlSession.UserId = loginResult.UserId;
-                    userControlSession.SiteId = userControlSettings.SiteId;
-                    userControlSession.JwtToken = loginResult.JwtToken;
-                    userControlSession.OnUserId = loginResult.OnUserId;
-                    userControlSession.MenuItems = userService.GetMenuItem();
-                    userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
-                    userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
-
-                    userControlSession.Set(SessionKey.Employee, employee);
-                    FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
+                    loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
                     return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
-                else
-                {
-                    return new CustomJsonResult { Data = loginResult , JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                }
-            }
 
-            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                userControlSession.UserId = loginResult.UserId;
+                userControlSession.SiteId = userControlSettings.SiteId;
+                userControlSession.JwtToken = loginResult.JwtToken;
+                userControlSession.OnUserId = loginResult.OnUserId;
+                userControlSession.MenuItems = userService.GetMenuItem();
+                userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
+                userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
+
+                userControlSession.Set(SessionKey.Employee, employee);
+                FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
+                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
 
         [HttpGet]
