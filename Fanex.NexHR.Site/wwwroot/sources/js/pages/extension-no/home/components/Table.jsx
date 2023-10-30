@@ -9,7 +9,7 @@ export const Table = (props) => {
                 <tr>
                     <th>No</th>
                     <th>Full Name</th>
-                    <th>NickName</th>
+                    <th>Nickname</th>
                     <th>Extension Number</th>
                     {
                         window.hasPermission &&
@@ -25,7 +25,7 @@ export const Table = (props) => {
                     data.map(item => (
                         <Fragment key={item.name}>
                             <tr>
-                                <td className="rowdivider align-left" colSpan={6}>
+                                <td className="rowdivider align-left" colSpan={window.hasPermission === 'True' ? '6' : '4'}>
                                     <b>{item.name}</b>
                                 </td>
                             </tr>
@@ -35,13 +35,13 @@ export const Table = (props) => {
                                         <td>
                                             {index++}
                                         </td>
-                                        <td>
-                                            {item.fullName }
+                                        <td className="align-left">
+                                            {item.fullName}
                                         </td>
                                         <td>
                                             {item.nickName}
                                         </td>
-                                        
+
                                         <td style={{ color: '#0789D1' }}>
                                             {item.extensionNo}
                                         </td>
@@ -52,15 +52,15 @@ export const Table = (props) => {
                                                     <i className="fa fa-pencil fa-lg icon-edit" onClick={() => handleEditRow(item.employeeExtensionId, item.isInternal)} style={{ cursor: 'pointer' }}></i>
                                                 </td>
                                                 <td>
-                                                    <i className="fa fa-times fa-lg icon-delete" onClick={() => handleDeleteRow(item.employeeExtensionId) } style={{ cursor: 'pointer' }}></i>
+                                                    <i className="fa fa-times fa-lg icon-delete" onClick={() => handleDeleteRow(item.employeeExtensionId)} style={{ cursor: 'pointer' }}></i>
                                                 </td>
                                             </Fragment>
                                         }
-                                        
+
                                     </tr>
                                 ))
                             }
-                        </Fragment> 
+                        </Fragment>
                     ))
                 }
             </tbody>

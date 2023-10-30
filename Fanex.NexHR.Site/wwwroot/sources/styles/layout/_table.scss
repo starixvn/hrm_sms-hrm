@@ -10,7 +10,6 @@ table.table.table-custom {
         vertical-align: middle;
         padding: 5px 7px;
         line-height: 1.42857143;
-        border-right-width: 0;
         border-top-width: 0;
         border-right: 1px solid $table-border-color;
         border-bottom: 1px solid $table-border-color;
@@ -31,6 +30,8 @@ table.table.table-custom {
 
     thead {
         color: #fff;
+        position: sticky;
+        top: -10px;
 
         tr {
             input {
@@ -263,4 +264,3 @@ span.req.keepinview {
 .mytimesheet-workinginoffday {
     background-color: #F8F89C;
 }
-

@@ -8,7 +8,7 @@ export const Table = (props) => {
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>TeamName</th>
+                    <th>Team Name</th>
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
