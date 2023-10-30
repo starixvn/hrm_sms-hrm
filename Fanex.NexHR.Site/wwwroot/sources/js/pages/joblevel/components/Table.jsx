@@ -53,12 +53,12 @@ export const Table = (props) => {
                                 window.hasPermission === 'True' &&
                                 <Fragment>
                                     <td>
-                                        <a onClick={() => handleEdit(item.id, item.name)}>
+                                        <a onClick={() => handleEdit(item.id, item.name)} style={{ cursor: 'pointer' }}>
                                             <i className="fa fa-pencil fa-lg icon-edit"></i>
                                         </a>
                                     </td>
                                     <td>
-                                        <a onClick={() => handleDelete(item.id)}>
+                                        <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
                                             <i className="fa fa-times fa-lg icon-delete"></i>
                                         </a>
                                     </td>
