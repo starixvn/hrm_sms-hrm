@@ -26,7 +26,7 @@ export const Table = (props) => {
                     <tr>
                         <th>#</th>
                         <th>Code</th>
-                        <th>Name</th>
+                        <th>Section</th>
                         <th>Department</th>
                         <th>Active</th>
                         {

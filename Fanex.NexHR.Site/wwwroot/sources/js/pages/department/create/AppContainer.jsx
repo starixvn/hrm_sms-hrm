@@ -118,7 +118,7 @@ export const AppContainer = () => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" id="btnSubmit">Create</button>
+                        <button type="submit" className="btn btn-primary" id="btnSubmit">Add</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>

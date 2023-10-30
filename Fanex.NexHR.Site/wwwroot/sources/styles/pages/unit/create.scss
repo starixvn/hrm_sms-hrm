@@ -8,10 +8,10 @@
 @import '../../vendors/_autocomplete.scss';
 @import '../../components/_checkbox.scss';
 
-.btn{
-    margin-right : 5px;
-    &:focus,&:active{
-        outline : none;
-        border : none;
+.btn {
+    margin-right: 5px;
+
+    &:focus, &:active {
+        outline: none;
     }
 }
