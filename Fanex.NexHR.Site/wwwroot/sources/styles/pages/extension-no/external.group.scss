@@ -17,3 +17,38 @@
 .modal-dialog{
     cursor : move;
 }
+.form-modal {
+    width: 100%;
+
+    .input-form, .select-form {
+        width: calc(100% - 8rem);
+    }
+}
+
+.form-horizontal .form-group.form-group--m {
+    width: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.content_scroll .filter, .table-custom {
+    width: 827px !important;
+}
+
+.table-custom thead {
+    position: sticky;
+    top: -10px;
+}
+
+.modal-dialog {
+    top: 36%;
+    left: 4%;
+
+    .modal-content {
+        width: 400px;
+
+        .modal-header {
+            cursor: move;
+        }
+    }
+}

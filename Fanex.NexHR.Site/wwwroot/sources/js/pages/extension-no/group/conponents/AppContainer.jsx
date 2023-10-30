@@ -84,6 +84,7 @@ export const AppContainer = () => {
                 onSubmit={handleCreateData}
                 title='Add new'
             />
+
             <Popup
                 show={modalEdit}
                 onHide={() => setModalEdit(false)}
