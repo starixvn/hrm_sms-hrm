@@ -29,6 +29,7 @@ export const Create = (props) => {
                     alert('Create successfully!');
                     reloadTable();
                 } else {
+                    handleClose();
                     alert(data.Message);
                 }
             }).catch(axiosError);

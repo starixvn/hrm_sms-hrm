@@ -30,6 +30,7 @@ export const Edit = (props) => {
                     alert('Edit successfully!');
                     reloadTable();
                 } else {
+                    handleClose();
                     alert(data.Message);
                 }
             }).catch(axiosError);
