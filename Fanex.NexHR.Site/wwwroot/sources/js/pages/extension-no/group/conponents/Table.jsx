@@ -23,7 +23,7 @@ export const Table = (props) => {
                                 <i
                                     className="fa fa-pencil fa-lg icon-edit"
                                     style={{ cursor: 'pointer' }}
-                                    onClick={() => handleGetDataById(item.teamId)}
+                                    onClick={() => handleGetDataById(item.teamId, item.teamName)}
                                 />
                             </td>
                             <td>

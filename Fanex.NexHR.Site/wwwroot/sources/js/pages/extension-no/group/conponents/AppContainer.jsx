@@ -50,11 +50,13 @@ export const AppContainer = () => {
         });
     }
 
-    const handleGetDataById = (id) => {
+    const handleGetDataById = (id , itemName) => {
         if (id) {
             setModalEdit(true);
-            const newData = data.find(item => item.teamId === id);
-            setSingle(newData)
+            setSingle({
+                id: id,
+                teamName: itemName
+            })
         }
     }
 

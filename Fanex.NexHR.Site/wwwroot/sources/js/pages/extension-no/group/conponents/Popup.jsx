@@ -16,7 +16,7 @@ export const Popup = (props) => {
     });
     const { data, title } = props;
     const teamName = data ? data.teamName : '';
-    const teamId = data ? data.teamId : '';
+    const teamId = data ? data.id : '';
     const renderForm = (errors) => {
         return (
             <Fragment>
@@ -52,7 +52,8 @@ export const Popup = (props) => {
         <Draggable handle=".modal-header" >
             <Modal
                 {...props}
-                aria-labelledby="contained-modal-title-vcenter"
+                keyboard={false}
+                backdrop="static"
             >
                 <Formik
                     validateOnBlur={false}
