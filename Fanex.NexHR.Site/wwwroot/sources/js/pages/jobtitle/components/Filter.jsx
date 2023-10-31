@@ -4,10 +4,6 @@ import { resolveClientUrl } from '../../../shared/common.functions';
 export const Filter = (props) => {
     const { keyword, setKeyword, searchKeyword, setCreateModal } = props;
 
-    const handleCreateModal = () => {
-        setCreateModal(true);
-    }
-
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             searchKeyword();
@@ -40,7 +36,7 @@ export const Filter = (props) => {
                         window.hasPermission === 'True' &&
                         <Fragment>
                             <button type="submit" className="btn btn-excel" onClick={handleExportExcel}>Excel</button>
-                            <button className="btn btn-request" type="button" onClick={handleCreateModal}>
+                            <button className="btn btn-request" type="button" onClick={() => setCreateModal(true)}>
                                 <span className="fa fa-plus" /> &nbsp;New Job Title
                             </button>
                         </Fragment>

@@ -1,31 +1,7 @@
 ﻿import React, { Fragment } from 'react';
-import axios from 'axios';
-import { resolveClientUrl, axiosError, confirm, alert } from '../../../shared/common.functions';
 
 export const Table = (props) => {
-    const { data, setEditModal, editJobLevel, reloadTable } = props;
-
-    const handleDelete = (id) => {
-        confirm('Are you sure you want to delete?', () => {
-            axios.post(resolveClientUrl('JobLevel/Delete'), {
-                id: id
-            }).then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    alert('Delete successfully!');
-                    reloadTable();
-                } else {
-                    alert(data.Message);
-                }
-            }).catch(axiosError);
-        });
-    }
-
-    const handleEdit = (id, name) => {
-        setEditModal(true);
-        editJobLevel(id, name);
-    }
-
+    const { data, handleDelete, handleEditInfo } = props;
     const colSpan = window.hasPermission === 'True' ? 4 : 2;
 
     return (
@@ -53,7 +29,7 @@ export const Table = (props) => {
                                 window.hasPermission === 'True' &&
                                 <Fragment>
                                     <td>
-                                        <a onClick={() => handleEdit(item.id, item.name)} style={{ cursor: 'pointer' }}>
+                                        <a onClick={() => handleEditInfo(item.id, item.name)} style={{ cursor: 'pointer' }}>
                                             <i className="fa fa-pencil fa-lg icon-edit"></i>
                                         </a>
                                     </td>

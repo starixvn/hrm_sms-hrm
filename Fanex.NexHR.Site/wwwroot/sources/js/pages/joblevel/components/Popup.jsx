@@ -2,38 +2,15 @@
 import { Button, Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
 import { isEmpty } from 'lodash';
-import axios from 'axios';
-import { resolveClientUrl, axiosError, alert } from '../../../shared/common.functions';
 import Draggable from 'react-draggable';
 import * as Yup from 'yup';
 
-const CreateSchema = Yup.object({
+const validationSchema = Yup.object({
     name: Yup.string().trim().required('Job Level is required!')
 });
 
-export const Create = (props) => {
-    const { createModal, setCreateModal, reloadTable } = props;
-
-    const handleClose = () => {
-        setCreateModal(false);
-    };
-
-    const onSubmit = (values) => {
-        axios.post(resolveClientUrl(`JobLevel/Insert`), {
-            name: values.name.trim(),
-        })
-            .then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    handleClose();
-                    alert('Create successfully!');
-                    reloadTable();
-                } else {
-                    handleClose();
-                    alert(data.Message);
-                }
-            }).catch(axiosError);
-    };
+export const Popup = (props) => {
+    const { data, title } = props;
 
     const renderForm = (errors) => {
         return (
@@ -61,25 +38,25 @@ export const Create = (props) => {
 
     return (
         <Draggable handle=".modal-header" >
-            <Modal show={createModal} onHide={handleClose} keyboard={false} backdrop="static">
+            <Modal {...props} keyboard={false} backdrop="static">
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: '' }}
-                    validationSchema={CreateSchema}
-                    onSubmit={onSubmit}
+                    initialValues={{ name: data ? data.name : '' }}
+                    validationSchema={validationSchema}
+                    onSubmit={props.onSubmit}
                 >
                     {({ errors }) => (
                         <Form>
                             <Modal.Header>
-                                <Modal.Title>Add Job Level</Modal.Title>
+                                <Modal.Title>{title} Job Level</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {renderForm(errors)}
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button bsStyle="primary" type="submit">Submit</Button>
-                                <Button className="btn-cancel" onClick={handleClose}>Cancel</Button>
+                                <Button className="btn-cancel" onClick={props.onHide}>Cancel</Button>
                             </Modal.Footer>
                         </Form>
                     )}

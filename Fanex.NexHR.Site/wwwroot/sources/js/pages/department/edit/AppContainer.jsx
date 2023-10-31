@@ -18,8 +18,7 @@ const EditDepartmentSchema = Yup.object({
 });
 
 export const AppContainer = () => {
-    const url = window.location.href;
-    const id = url.substring(url.lastIndexOf('/') + 1);
+    const id = window.departmentId;
     const handleGoBack = () => {
         history.back();
     }

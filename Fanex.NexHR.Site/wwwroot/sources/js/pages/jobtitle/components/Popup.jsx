@@ -2,39 +2,15 @@
 import { Button, Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
 import { isEmpty } from 'lodash';
-import axios from 'axios';
-import { resolveClientUrl, axiosError, alert } from '../../../shared/common.functions';
 import Draggable from 'react-draggable';
 import * as Yup from 'yup';
 
-const EditSchema = Yup.object({
-    name: Yup.string().trim().required('Job Level is required!')
+const validationSchema = Yup.object({
+    name: Yup.string().trim().required('Job Title is required!')
 });
 
-export const Edit = (props) => {
-    const { editModal, setEditModal, id, name, reloadTable } = props;
-
-    const handleClose = () => {
-        setEditModal(false);
-    };
-
-    const onSubmit = (values) => {
-        axios.post(resolveClientUrl(`JobLevel/Update`), {
-            id: id,
-            name: values.name.trim(),
-        })
-            .then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    handleClose();
-                    alert('Edit successfully!');
-                    reloadTable();
-                } else {
-                    handleClose();
-                    alert(data.Message);
-                }
-            }).catch(axiosError);
-    };
+export const Popup = (props) => {
+    const { data, title, jobCategory } = props;
 
     const renderForm = (errors) => {
         return (
@@ -47,12 +23,26 @@ export const Edit = (props) => {
                     </div>
                 }
                 <div className="form-horizontal clearfix">
-                    <div className="form-group">
+                    <div className="form-group form-modal ">
                         <div className="label-form">
-                            <label className="control-label">Job Level</label>
+                            <label className="control-label">Job Title</label>
                         </div>
                         <div className="input-form">
                             <Field name="name" className="form-control" autoComplete="off" />
+                        </div>
+                    </div>
+                    <div className="form-group form-modal">
+                        <div className="label-form">
+                            <label className="control-label">Category</label>
+                        </div>
+                        <div className="select-form">
+                            <Field name="categoryId" as="select" className="form-control">
+                                {jobCategory.map((category) => (
+                                    <option key={category.value} value={category.value}>
+                                        {category.text}
+                                    </option>
+                                ))}
+                            </Field>
                         </div>
                     </div>
                 </div>
@@ -61,26 +51,29 @@ export const Edit = (props) => {
     }
 
     return (
-        <Draggable handle=".modal-header">
-            <Modal show={editModal} onHide={handleClose} keyboard={false} backdrop="static">
+        <Draggable handle=".modal-header" >
+            <Modal {...props} keyboard={false} backdrop="static">
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
-                    initialValues={{ name: name }}
-                    validationSchema={EditSchema}
-                    onSubmit={onSubmit}
+                    initialValues={{
+                        name: data ? data.name : '',
+                        categoryId: data ? data.categoryId : ''
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={props.onSubmit}
                 >
                     {({ errors }) => (
                         <Form>
                             <Modal.Header>
-                                <Modal.Title>Edit Job Level</Modal.Title>
+                                <Modal.Title>{title} Job Title</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {renderForm(errors)}
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button bsStyle="primary" type="submit">Submit</Button>
-                                <Button className="btn-cancel" onClick={handleClose}>Cancel</Button>
+                                <Button className="btn-cancel" onClick={props.onHide}>Cancel</Button>
                             </Modal.Footer>
                         </Form>
                     )}

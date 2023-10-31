@@ -153,13 +153,13 @@ export const Table = (props) => {
     const renderTableRows = (items) => {
         const disabled = data.isHost ? '' : "disabled";
         return items.map((item, i) => (
-            <Fragment key={i}>
+            <Fragment key={item.functionId}>
                 <tr id={`row_${i}`} className={item.level === 0 ? 'root-row' : 'child-row'}>
                     <td className="align-left">
                         {item.level > 0 && (
                             <Fragment>
                                 {Array.from({ length: item.level.length - 1 }).map((_, i) => (
-                                    <span key={i} style={{ opacity: 0 }} className="icon-child-level" >&#9495;</span>
+                                    <span key={item.functionId} style={{ opacity: 0 }} className="icon-child-level" >&#9495;</span>
                                 ))}
                                 <span className="icon-child-level">&#9495;</span>
                             </Fragment>

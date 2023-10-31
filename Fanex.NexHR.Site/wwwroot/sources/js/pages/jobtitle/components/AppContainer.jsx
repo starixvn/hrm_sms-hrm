@@ -1,20 +1,17 @@
 ﻿import React, { Fragment, useState, useEffect } from 'react';
 import { Table } from './Table';
-import { Create } from './Create';
-import { Edit } from './Edit';
+import { Popup } from './Popup';
 import { Filter } from './Filter';
 import axios from 'axios';
-import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
+import { resolveClientUrl, axiosError, alert, confirm } from '../../../shared/common.functions';
 
 export const AppContainer = () => {
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [jobTitle, setJobTitle] = useState([]);
     const [jobCategory, setJobCategory] = useState([]);
-    const [idJobTitleEdit, setIdJobTitleEdit] = useState(0);
-    const [nameJobTitleEdit, setNameJobTitleEdit] = useState('');
-    const [categoryIdJobTitleEdit, setCategoryIdJobTitleEdit] = useState(0);
     const [keyword, setKeyword] = useState('');
+    const [jobTitleEdit, setJobTitleEdit] = useState([]);
 
     const handleGetJobTitle = () => {
         axios.post(resolveClientUrl('JobTitle/GetJobTitles'), {
@@ -31,19 +28,69 @@ export const AppContainer = () => {
         }).catch(axiosError);
     }
 
-    const reloadTable = () => {
-        handleGetJobTitle();
-    }
-
     useEffect(() => {
         handleGetJobTitle();
         handleGetJobCategory();
     }, []);
 
     const handleEditInfo = (id, name, categoryId) => {
-        setIdJobTitleEdit(id);
-        setNameJobTitleEdit(name);
-        setCategoryIdJobTitleEdit(categoryId);
+        setEditModal(true);
+        setJobTitleEdit({
+            id: id,
+            name: name,
+            categoryId: categoryId
+        });
+    };
+
+    const handleCreate = (values) => {
+        axios.post(resolveClientUrl(`JobTitle/Insert`), {
+            name: values.name.trim(),
+            categoryId: values.categoryId ? values.categoryId : jobCategory[0].value
+        })
+            .then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    setCreateModal(false);
+                    alert('Create successfully!');
+                    handleGetJobTitle();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
+    };
+
+    const handleDelete = (id) => {
+        confirm('Are you sure you want to delete?', () => {
+            axios.post(resolveClientUrl('JobTitle/Delete'), {
+                id: id
+            }).then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    alert('Delete successfully!');
+                    handleGetJobTitle();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
+        });
+    }
+
+    const handleEdit = (values) => {
+        axios.post(resolveClientUrl(`JobTitle/Update`), {
+            id: jobTitleEdit.id,
+            name: values.name.trim(),
+            categoryId: values.categoryId
+        })
+            .then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    setEditModal(false);
+                    alert('Edit successfully!');
+                    handleGetJobTitle();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
     };
 
     return (
@@ -51,26 +98,25 @@ export const AppContainer = () => {
             <Filter
                 keyword={keyword}
                 setKeyword={setKeyword}
-                searchKeyword={reloadTable}
+                searchKeyword={handleGetJobTitle}
                 setCreateModal={setCreateModal} />
-            <Create
-                createModal={createModal}
-                setCreateModal={setCreateModal}
-                reloadTable={reloadTable}
+            <Popup
+                show={createModal}
+                onHide={() => setCreateModal(false)}
+                onSubmit={handleCreate}
+                title='Add'
                 jobCategory={jobCategory} />
-            <Edit
-                editModal={editModal}
-                setEditModal={setEditModal}
-                id={idJobTitleEdit}
-                name={nameJobTitleEdit}
-                categoryId={categoryIdJobTitleEdit}
-                reloadTable={reloadTable}
-                jobCategory={jobCategory} />
+            <Popup
+                show={editModal}
+                onHide={() => setEditModal(false)}
+                onSubmit={handleEdit}
+                title='Edit'
+                jobCategory={jobCategory}
+                data={jobTitleEdit} />
             <Table
                 data={jobTitle}
-                setEditModal={setEditModal}
-                editJobLevel={handleEditInfo}
-                reloadTable={reloadTable} />
+                handleEditInfo={handleEditInfo}
+                handleDelete={handleDelete} />
         </Fragment>
     )
 };
