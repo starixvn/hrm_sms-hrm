@@ -9,7 +9,7 @@ import Draggable from 'react-draggable';
 export const Popup = (props) => {
     const CreateExternalGroup = Yup.object({
         TeamName: Yup.string()
-            .trim('The TeamName field is required!')
+            .trim()
             .min(3, 'Length of external group must be 3 between and 100.')
             .max(100, 'Length of external group must be 3 between and 100.')
             .required('The TeamName field is required!'),

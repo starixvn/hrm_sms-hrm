@@ -22,10 +22,10 @@ export const AppContainer = () => {
 
     const CreateExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
-            .trim('The ExtensionNo field is required!')
+            .trim()
             .required('The ExtensionNo field is required!'),
         Employee: checked ? Yup.string()
-            .trim('The Employee field is required!')
+            .trim()
             .required('The Employee field is required!') : false
     });
 
