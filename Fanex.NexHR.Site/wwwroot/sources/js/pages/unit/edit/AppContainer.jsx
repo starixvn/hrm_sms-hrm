@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { validationSchema } from '../validate';
+import { validationSchema } from '../common.functions';
 
 const AppContainer = () => {
     const [unit, setUnit] = useState(null);

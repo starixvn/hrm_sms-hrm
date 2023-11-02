@@ -5,7 +5,7 @@ import axios from 'axios';
 import toastr from 'toastr';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { validationSchema } from '../validate';
+import { validationSchema } from '../common.functions';
 
 const AppContainer = () => {
     const handleGoBack = () => {

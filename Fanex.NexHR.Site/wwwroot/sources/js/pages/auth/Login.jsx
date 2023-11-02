@@ -49,7 +49,6 @@ export default class Login extends Component {
                     });
                     window.location.href = ('/');
                 } else {
-                    console.log(data);
                     this.setState({
                         errMsg: data.errorMessage,
                         isShowErr: true

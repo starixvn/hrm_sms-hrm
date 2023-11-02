@@ -1,23 +1,13 @@
 ﻿import axios from 'axios';
 import toastr from 'toastr';
 import React, { useEffect, useState } from 'react';
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { validationSchema } from '../common.functions';
 
 
-const CreateSectionSchema = Yup.object({
-    code: Yup.string()
-        .trim()
-        .max(50, 'The Code must be 50 characters!')
-        .required('The Code field is required!'),
-    name: Yup.string()
-        .trim()
-        .max(200, 'The Name must be 200 characters!')
-        .required('The Name field is required!'),
-    department: Yup.string().required('The Deparment field is required!')
-});
 const AppContainer = () => {
     const [deparments, setDeparments] = useState([]);
     const handleGoBack = () => {
@@ -36,28 +26,28 @@ const AppContainer = () => {
         handleGetDepartment();
     },[])
 
-    const onSubmit = data => {
-        if (data) {
-            axios.post(resolveClientUrl('Section/Create'), {
-                Code: data.name.trim(),
-                Name: data.code.trim(),
-                IsActive: data.isActive,
-                DepartmentId: data.department
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success('Successfully!', '', toastOptions());
-                    setTimeout(function () {
-                        document.location = resolveClientUrl('Section/Index');
-                    }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        }
+    const onSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
+        axios.post(resolveClientUrl('Section/Create'), {
+            Code: values.name.trim(),
+            Name: values.code.trim(),
+            IsActive: values.isActive,
+            DepartmentId: values.department
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl('Section/Index');
+                }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+                setSubmitting(false);
+            }
+        }).catch(axiosError);
     }
 
-    const renderForm = (errors) => {
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
                 {
@@ -113,7 +103,7 @@ const AppContainer = () => {
                     </div>
 
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" id="btnSubmit">Add</button>
+                        <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>Add</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
@@ -130,12 +120,10 @@ const AppContainer = () => {
                 isActive: false,
                 department: ''
             }}
-            validationSchema={CreateSectionSchema}
+            validationSchema={validationSchema}
             onSubmit={onSubmit}
         >
-            {({ errors }) => (
-                renderForm(errors)
-            )}
+            {renderForm}
         </Formik>
 
     )
