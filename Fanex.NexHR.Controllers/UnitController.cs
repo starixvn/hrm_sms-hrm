@@ -62,8 +62,7 @@
                 };
                 commandResult = unitService.Create(criteria);
             }
-
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
@@ -96,8 +95,7 @@
                 };
                 commandResult = unitService.Edit(criteria);
             }
-
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -105,7 +103,7 @@
         public JsonResult Delete(DeleteUnitCriteria criteria)
         {
             var commandResult = unitService.Delete(criteria);
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

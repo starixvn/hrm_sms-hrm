@@ -1,20 +1,27 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
-export const Filter = (props) => {
-    const { setChoose, submit } = props;
+export const Filter = ({ onSubmit }) => {
+    const [status, setStatus] = useState('');
     const handleCreateUnit = () => {
         window.location = resolveClientUrl('Unit/Create');
     }
+    const handleChangeStatus = (event) => {
+        setStatus(event.target.value);
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        onSubmit(status)
+    }
     return (
-        <form className="filter" onSubmit={submit }>
+        <form className="filter" onSubmit={handleSubmit }>
             <div className="form-horizontal clearfix">
                 <div className="form-group">
                     <div className="label-form label--xs">
                         <label className="control-label">Status</label>
                     </div>
                     <div className="select-form">
-                        <select className="form-control" onChange={event => setChoose(event.target.value)}>
+                        <select className="form-control" onChange={handleChangeStatus}>
                             <option value=''>All</option>
                             <option value='true'>Active</option>
                             <option value='false'>Inactive</option>

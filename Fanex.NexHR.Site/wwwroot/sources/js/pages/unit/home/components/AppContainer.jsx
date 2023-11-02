@@ -1,16 +1,15 @@
-﻿import React, { Fragment, useEffect, useState } from 'react';
+﻿import React, { Fragment, useEffect , useState } from 'react';
 import { Filter } from './Filter';
 import axios from 'axios';
 import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
 import { Table } from './Table';
 
 export const AppContainer = () => {
-    const [choose, setChoose] = useState('');
     const [units, setUnits] = useState([]);
 
-    const getUnits = () => {
+    const getUnits = (status) => {
         axios.post(resolveClientUrl('Unit/GetUnits'), {
-            isActive: choose
+            isActive: status
         }).then(response => {
             setUnits(response.data)
         }).catch(axiosError);
@@ -20,14 +19,9 @@ export const AppContainer = () => {
         getUnits();
     }, [])
 
-    const handleFilterForm = (event) => {
-        event.preventDefault();
-        getUnits();
-    };
-
     return (
         <Fragment>
-            <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />
+            <Filter onSubmit={getUnits} />
             <Table data={units} />
         </Fragment>
     );

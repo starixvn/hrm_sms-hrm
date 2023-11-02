@@ -29,7 +29,7 @@ export const AppContainer = () => {
                 IsActive: data.isActive
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
                         document.location = resolveClientUrl('Unit/Index');
