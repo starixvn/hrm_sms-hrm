@@ -1,10 +1,12 @@
 ﻿import React, { Fragment, useEffect , useState } from 'react';
-import { Filter } from './Filter';
 import axios from 'axios';
-import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
-import { Table } from './Table';
 
-export const AppContainer = () => {
+import Filter from './Filter';
+import Table from './Table';
+
+import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
+
+const AppContainer = () => {
     const [units, setUnits] = useState([]);
 
     const getUnits = (status) => {
@@ -19,10 +21,28 @@ export const AppContainer = () => {
         getUnits();
     }, [])
 
+    const handleDelete = unit => {
+        confirm('Are you sure you want to delete this unit?', () => {
+            axios.post(resolveClientUrl('Unit/Delete'), {
+                unitId: unit.id
+            }).then(response => {
+                const { data } = response;
+                if (data.IsSuccessful) {
+                    alert('Delete successfully!');
+                    getUnits();
+                } else {
+                    alert(data.Message);
+                }
+            }).catch(axiosError);
+        });
+    };
+
     return (
         <Fragment>
             <Filter onSubmit={getUnits} />
-            <Table data={units} getUnits={getUnits }/>
+            <Table data={units} onDelete={handleDelete} />
         </Fragment>
     );
 };
+
+export default AppContainer;

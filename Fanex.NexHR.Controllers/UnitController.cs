@@ -102,7 +102,9 @@
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public JsonResult Delete(DeleteUnitCriteria criteria)
         {
+            criteria.ModifiedBy = EmployeeSession.EmpId;
             var commandResult = unitService.Delete(criteria);
+
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }

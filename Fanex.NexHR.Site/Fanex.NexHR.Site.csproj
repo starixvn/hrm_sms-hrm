@@ -616,6 +616,7 @@
     <Content Include="wwwroot\sources\js\pages\unit\edit\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
     <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
