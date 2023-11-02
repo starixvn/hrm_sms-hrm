@@ -1,66 +1,59 @@
-﻿import axios from 'axios';
+﻿import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import toastr from 'toastr';
-import React, { useEffect, useState } from 'react';
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
-const EditUnitSchema = Yup.object({
-    code: Yup.string()
-        .trim()
-        .max(50, 'The Code must be 50 characters!')
-        .required('The Code field is required!'),
-    name: Yup.string()
-        .trim()
-        .max(200, 'The Name must be 200 characters!')
-        .required('The Name field is required!')
-});
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 
 const AppContainer = () => {
-    const id = window.id;
+    const [unit, setUnit] = useState(null);
+
+    const validationSchema = Yup.object({
+        code: Yup.string()
+            .trim()
+            .max(50, 'Code field must not over 50 characters long!')
+            .required('Code field is required!'),
+        name: Yup.string()
+            .trim()
+            .max(200, 'Name field must not over 200 characters long!')
+            .required('Name field is required!')
+    });
+
     const handleGoBack = () => {
         history.back();
-    }
-    const [data, setData] = useState([])
-
-    const handleGetDataDetail = id => {
-        axios(resolveClientUrl(`Unit/getById/${id}`)).then(response => {
-            const { data } = response;
-            if (data) {
-                setData(data);
-            }
-            
-        }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
-        if (id) {
-            handleGetDataDetail(id)
-        }
-    }, [id])
-    const onSubmit = data => {
-        if (data) {
-            axios.post(resolveClientUrl('Unit/Edit'), {
-                UnitId: data.id,
-                Code: data.code.trim(),
-                Name: data.name.trim(),
-                IsActive: data.isActive
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success('Successfully!', '', toastOptions());
-                    setTimeout(function () {
-                        document.location = resolveClientUrl('Unit/Index');
-                    }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        }
-    }
+        axios(resolveClientUrl(`Unit/getById/${window.unitId}`)).then(response => {
+            setUnit(response.data);
+        }).catch(axiosError);
+    }, []);
 
-    const renderForm = errors => {
+    const hanldeSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
+
+        axios.post(resolveClientUrl('Unit/Edit'), {
+            unitId: values.id,
+            code: values.code.trim(),
+            name: values.name.trim(),
+            isActive: values.isActive
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Updated successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl('Unit/Index');
+                }, 3000);
+            } else {
+                toastr.error(data.Message, '', toastOptions());
+                setSubmitting(false);
+            }
+        }).catch(axiosError);
+    };
+
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
                 {
@@ -88,7 +81,6 @@ const AppContainer = () => {
                             <Field name="name" className="form-control" autoComplete="off" />
                         </div>
                     </div>
-
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">Is Active</label>
@@ -97,36 +89,36 @@ const AppContainer = () => {
                             <Field type="checkbox" name="isActive" />
                         </div>
                     </div>
-
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" id="btnSubmit">Update</button>
+                        <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>Update</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
             </div>
-        )
+        );
+    };
+
+    if (unit === null) {
+        return null;
     }
 
-    
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             enableReinitialize={true}
             initialValues={{
-                id: data.id || '',
-                name: data.name || '',
-                code: data.code || '',
-                isActive: data.isActive || false
+                id: unit.id || '',
+                name: unit.name || '',
+                code: unit.code || '',
+                isActive: unit.isActive || false
             }}
-            validationSchema={EditUnitSchema}
-            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            onSubmit={hanldeSubmit}
         >
-            {({ errors }) => (
-                renderForm(errors)
-            )}
+            {renderForm}
         </Formik>
-    )
+    );
 };
 
 export default AppContainer;
