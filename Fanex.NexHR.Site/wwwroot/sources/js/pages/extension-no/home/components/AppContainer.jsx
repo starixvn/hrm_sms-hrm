@@ -1,24 +1,21 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { resolveClientUrl, axiosError, confirm } from '../../../../shared/common.functions';
-import { ExtensionControl } from './ExtensionControl';
+import ExtensionControl from './ExtensionControl';
 import { Table } from './Table';
 
-export const AppContainer = () => {
-    const [data, setData] = useState([]);
+const AppContainer = () => {
+    const [extension, setExtension] = useState([]);
 
     const getExtensionNo = () => {
         axios(resolveClientUrl('ExtensionNo/GetExtensionNo')).then(response => {
-            const { data } = response;
-            if (data) {
-                setData(response.data)  
-            }
+            setExtension(response.data)
         }).catch(axiosError);
     }
 
-    const handleDeleteExtention = (id) => {
+    const handleDeleteExtention = empId => {
         confirm('Are you sure you want to delete this extension number?', () => {
-            axios.post(resolveClientUrl(`ExtensionNo/Delete/${id}`)).then(response => {
+            axios.post(resolveClientUrl(`ExtensionNo/Delete/${empId}`)).then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     getExtensionNo();
@@ -29,18 +26,16 @@ export const AppContainer = () => {
         });
         
     }
-
-    const handleEditExtention = (id, isInternal) => {
-        window.location = resolveClientUrl(`ExtensionNo/Edit/${id}?isInternal=${isInternal}`);
-    }
-
     useEffect(() => {
         getExtensionNo();
     }, [])
     return (
         <Fragment>
             <ExtensionControl />
-            <Table data={data} handleDeleteRow={handleDeleteExtention} handleEditRow={handleEditExtention }/>
+            <Table data={extension} onDelete={handleDeleteExtention}/>
         </Fragment>
     )
 };
+
+
+export default AppContainer;

@@ -1,7 +1,7 @@
 ﻿import React, { Fragment } from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
-export const ExtensionControl = () => {
+const ExtensionControl = () => {
     const handleCreateExtension = () => {
         window.location = resolveClientUrl("ExtensionNo/Create");
     }
@@ -24,3 +24,4 @@ export const ExtensionControl = () => {
         </Fragment>
     );
 }
+export default ExtensionControl;

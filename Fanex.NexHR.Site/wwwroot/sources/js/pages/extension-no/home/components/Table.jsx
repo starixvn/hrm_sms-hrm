@@ -1,7 +1,7 @@
 ﻿import React, { Fragment } from 'react';
+import Row from './Row';
 
-export const Table = (props) => {
-    const { data, handleDeleteRow, handleEditRow } = props;
+export const Table = ({ data, onDelete }) => {
     let index = 1
     return (
         <table className="table table-custom" id="data">
@@ -22,7 +22,7 @@ export const Table = (props) => {
             </thead>
             <tbody>
                 {
-                    data.map(item => (
+                    data.length > 0 ? data.map(item => (
                         <Fragment key={item.name}>
                             <tr>
                                 <td className="rowdivider align-left" colSpan={window.hasPermission === 'True' ? '6' : '4'}>
@@ -30,38 +30,14 @@ export const Table = (props) => {
                                 </td>
                             </tr>
                             {
-                                item.extensions.map(item => (
-                                    <tr key={item.employeeExtensionId}>
-                                        <td>
-                                            {index++}
-                                        </td>
-                                        <td className="align-left">
-                                            {item.fullName}
-                                        </td>
-                                        <td>
-                                            {item.nickName}
-                                        </td>
-
-                                        <td style={{ color: '#0789D1' }}>
-                                            {item.extensionNo}
-                                        </td>
-                                        {
-                                            window.hasPermission &&
-                                            <Fragment>
-                                                <td>
-                                                    <i className="fa fa-pencil fa-lg icon-edit" onClick={() => handleEditRow(item.employeeExtensionId, item.isInternal)} style={{ cursor: 'pointer' }}></i>
-                                                </td>
-                                                <td>
-                                                    <i className="fa fa-times fa-lg icon-delete" onClick={() => handleDeleteRow(item.employeeExtensionId)} style={{ cursor: 'pointer' }}></i>
-                                                </td>
-                                            </Fragment>
-                                        }
-
-                                    </tr>
-                                ))
+                                item.extensions.map(item => <Row key={item.employeeExtensionId} rowIndex={index++} item={item} onDelete={onDelete}/>)
                             }
                         </Fragment>
-                    ))
+                    )) : <tr>
+                        <td colSpan={window.hasPermission === 'True' ? '6' : '4'}>
+                            No information available
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

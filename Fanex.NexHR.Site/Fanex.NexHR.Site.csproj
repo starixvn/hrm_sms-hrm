@@ -579,6 +579,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\group\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\ExtensionControl.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
@@ -597,12 +598,14 @@
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
     <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
+    <Content Include="wwwroot\sources\js\pages\section\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\section\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\edit\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\section\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
@@ -611,6 +614,7 @@
     <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
     <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
     <Content Include="wwwroot\sources\js\pages\employeeworkfromhome\index.js" />
+    <Content Include="wwwroot\sources\js\pages\unit\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\edit\AppContainer.jsx" />
