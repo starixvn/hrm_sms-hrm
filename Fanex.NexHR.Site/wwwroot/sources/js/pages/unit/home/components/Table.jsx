@@ -36,7 +36,7 @@ export const Table = (props) => {
                             window.hasPermission === 'True' && <Fragment>
                                 <th>Edit</th>
                                 <th>Delete</th>
-                             </Fragment>
+                            </Fragment>
                         }
                     </tr>
                 </thead>
@@ -45,10 +45,10 @@ export const Table = (props) => {
                         data.length ? data.map((item, i) => (
                             <tr id={`row_${i}`} key={item.id}>
                                 <td>{i + 1}</td>
-                                <td>{ item.code }</td>
+                                <td>{item.code}</td>
                                 <td>{item.name}</td>
                                 <td>
-                                    { item.isActive && <i className="fa fa-check fa-lg icon-check"></i> }
+                                    {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
                                 </td>
                                 {
                                     window.hasPermission === 'True' && <Fragment>
@@ -71,7 +71,6 @@ export const Table = (props) => {
                             </td>
                         </tr>
                     }
-                    
                 </tbody>
             </table>
         </Fragment>

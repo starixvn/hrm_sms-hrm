@@ -42,7 +42,6 @@ export default class Login extends Component {
                 password: btoa(unescape(encodeURIComponent(fields['password'])))
             }).then(response => {
                 const { data } = response;
-                
                 if (data.isSuccessfull) {
                     this.setState({
                         errMsg: '',
@@ -73,10 +72,10 @@ export default class Login extends Component {
                 {
                     isShowErr && <div className="validation-summary-errors">
                         <ul>
-                            { errors["username"] && <li>{errors["username"]}</li>}
+                            {errors["username"] && <li>{errors["username"]}</li>}
                             {errors["password"] && <li>{errors["username"]}</li>}
                             {errMsg && <li>{errMsg}</li>}
-                            
+
                         </ul>
                     </div>
                 }

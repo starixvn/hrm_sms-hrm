@@ -2,7 +2,6 @@
 {
     using System.Web.Mvc;
     using Core.Models;
-    using Core.Services;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
@@ -30,23 +29,21 @@
         public ActionResult Index()
         {
             var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
-            
             return View(hasPermission);
         }
 
         [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.UnitManagement)]
-        public ActionResult GetUnit(UnitViewModel model)
+        public ActionResult GetUnits(UnitViewModel model)
         {
-            var units = unitService.GetUnit(isActive: model.IsActive);
-
+            var units = unitService.GetUnit(model.IsActive);
             return new CustomJsonResult { Data = units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult Create()
         {
-            return View(new AddUnitViewModel { });
+            return View();
         }
 
         [HttpPost]

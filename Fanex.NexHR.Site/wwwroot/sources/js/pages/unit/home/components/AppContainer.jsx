@@ -7,8 +7,9 @@ import { Table } from './Table';
 export const AppContainer = () => {
     const [choose, setChoose] = useState('');
     const [units, setUnits] = useState([]);
-    const hanleGetUnit = () => {
-        axios.post(resolveClientUrl('Unit/GetUnit'), {
+
+    const getUnits = () => {
+        axios.post(resolveClientUrl('Unit/GetUnits'), {
             isActive: choose
         }).then(response => {
             setUnits(response.data)
@@ -16,17 +17,18 @@ export const AppContainer = () => {
     }
 
     useEffect(() => {
-        hanleGetUnit();
+        getUnits();
     }, [])
 
     const handleFilterForm = (event) => {
         event.preventDefault();
-        hanleGetUnit();
-    }
+        getUnits();
+    };
+
     return (
         <Fragment>
             <Filter setChoose={setChoose} choose={choose} submit={handleFilterForm} />
-            <Table data={units} hanleGetUnit={ hanleGetUnit }/>
+            <Table data={units} />
         </Fragment>
-    )
+    );
 };
