@@ -24,7 +24,7 @@ export const AppContainer = () => {
     }
     const [data, setData] = useState([])
 
-    const handleGetDataDetail = (id) => {
+    const handleGetDataDetail = id => {
         axios(resolveClientUrl(`Unit/getById/${id}`)).then(response => {
             const { data } = response;
             if (data) {
@@ -39,7 +39,7 @@ export const AppContainer = () => {
             handleGetDataDetail(id)
         }
     }, [id])
-    const onSubmit = (data) => {
+    const onSubmit = data => {
         if (data) {
             axios.post(resolveClientUrl('Unit/Edit'), {
                 UnitId: data.id,
@@ -60,7 +60,7 @@ export const AppContainer = () => {
         }
     }
 
-    const renderForm = (errors) => {
+    const renderForm = errors => {
         return (
             <div className="card">
                 {

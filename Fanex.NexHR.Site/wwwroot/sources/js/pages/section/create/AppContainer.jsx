@@ -36,7 +36,7 @@ export const AppContainer = () => {
         handleGetDepartment();
     },[])
 
-    const onSubmit = (data) => {
+    const onSubmit = data => {
         if (data) {
             axios.post(resolveClientUrl('Section/Create'), {
                 Code: data.name.trim(),
@@ -45,7 +45,7 @@ export const AppContainer = () => {
                 DepartmentId: data.department
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     toastr.success('Successfully!', '', toastOptions());
                     setTimeout(function () {
                         document.location = resolveClientUrl('Section/Index');

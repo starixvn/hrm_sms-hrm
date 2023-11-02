@@ -1,20 +1,32 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
-export const Filter = (props) => {
-    const { setChoose, submit } = props;
-    const handleCreateUnit = () => {
+const Filter = ({ onSubmit }) => {
+    const [filterParams, setFilterParams] = useState({ isActive: true });
+    const handleCreate = () => {
         window.location = resolveClientUrl('Section/Create');
     }
+    const handleChange = event => {
+        setFilterParams({
+            ...filterParams,
+            [event.target.name]: event.target.value
+        });
+    };
+
+    const handleSubmit = event => {
+        event.preventDefault();
+        onSubmit(filterParams)
+    }
+
     return (
-        <form className="filter" onSubmit={submit}>
+        <form className="filter" onSubmit={handleSubmit}>
             <div className="form-horizontal clearfix">
                 <div className="form-group">
                     <div className="label-form label--xs">
                         <label className="control-label">Status</label>
                     </div>
                     <div className="select-form">
-                        <select className="form-control" onChange={event => setChoose(event.target.value)}>
+                        <select className="form-control" name="isActive" defaultValue={filterParams.isActive} onChange={handleChange}>
                             <option value=''>All</option>
                             <option value='true'>Active</option>
                             <option value='false'>Inactive</option>
@@ -24,7 +36,7 @@ export const Filter = (props) => {
                     <div className="form-group form-group--m">
                         <button type="submit" className="btn btn-primary">Search</button>
                         {
-                            window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreateUnit}>
+                        window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreate}>
                                 <span className="fa fa-plus" />
                                 &nbsp;New Section
                             </a>
@@ -34,3 +46,5 @@ export const Filter = (props) => {
         </form>
     )
 };
+
+export default Filter;
