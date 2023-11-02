@@ -1,8 +1,7 @@
 ﻿import React, { Fragment } from 'react';
 import axios from 'axios';
 import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
-export const Table = (props) => {
-    const { data, hanleGetUnit } = props;
+export const Table = ({ data, getUnits }) => {
     const handleViewId = (id) => {
         window.location.href = (`/unit/edit/${id}`);
     }
@@ -14,9 +13,9 @@ export const Table = (props) => {
                 ModifiedBy: empId
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     alert('Delete successfully!');
-                    hanleGetUnit();
+                    getUnits();
                 } else {
                     alert(data.Message);
                 }

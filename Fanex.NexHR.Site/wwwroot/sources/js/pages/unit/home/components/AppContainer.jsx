@@ -22,7 +22,7 @@ export const AppContainer = () => {
     return (
         <Fragment>
             <Filter onSubmit={getUnits} />
-            <Table data={units} />
+            <Table data={units} getUnits={getUnits }/>
         </Fragment>
     );
 };
