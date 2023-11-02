@@ -1,17 +1,19 @@
 ﻿import React, { useState } from 'react';
+
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
 const Filter = ({ onSubmit }) => {
     const [status, setStatus] = useState('');
+
     const handleCreateUnit = () => {
         window.location = resolveClientUrl('Unit/Create');
     };
 
-    const handleChangeStatus = (event) => {
+    const handleChangeStatus = event => {
         setStatus(event.target.value);
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = event => {
         event.preventDefault();
         onSubmit(status)
     };

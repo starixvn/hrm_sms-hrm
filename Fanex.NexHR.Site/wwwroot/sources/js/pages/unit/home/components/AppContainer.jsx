@@ -9,7 +9,7 @@ import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared
 const AppContainer = () => {
     const [units, setUnits] = useState([]);
 
-    const getUnits = (status) => {
+    const getUnits = status => {
         axios.post(resolveClientUrl('Unit/GetUnits'), {
             isActive: status
         }).then(response => {
@@ -19,7 +19,7 @@ const AppContainer = () => {
 
     useEffect(() => {
         getUnits();
-    }, [])
+    }, []);
 
     const handleDelete = unit => {
         confirm('Are you sure you want to delete this unit?', () => {
