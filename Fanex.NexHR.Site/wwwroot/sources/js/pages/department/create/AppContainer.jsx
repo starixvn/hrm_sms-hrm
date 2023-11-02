@@ -1,71 +1,55 @@
-﻿import axios from 'axios';
-import toastr from 'toastr';
-import React, { useState, useEffect } from 'react';
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+﻿import React, { useState, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+import axios from 'axios';
+import toastr from 'toastr';
 
-const CreateDepartmentSchema = Yup.object({
-    code: Yup.string().trim()
-        .max(50, 'The Code must be 50 characters!')
-        .required('The Code field is required!'),
-    name: Yup.string().trim()
-        .max(200, 'The Name must be 200 characters!')
-        .required('The Name field is required!'),
-    unit: Yup.string()
-        .required('The Unit field is required!')
-});
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { validationSchema } from '../validate/common.functions';
 
-export const AppContainer = () => {
+const AppContainer = () => {
+    const [units, setUnits] = useState([]);
+
     const initialValues = {
         code: '',
         name: '',
-        isActive: false,
+        isActive: true,
         unitId: ''
-    }
+    };
 
     const handleGoBack = () => {
         history.back();
-    }
-
-    const [units, setUnits] = useState([]);
-
-    const handleGetUnits = () => {
-        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
-            const { data } = response;
-            if (data) {
-                setUnits(data);
-            }
-        }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
-        handleGetUnits();
-    }, [])
+        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
+            setUnits(response.data);
+        }).catch(axiosError);
+    }, []);
 
-    const onSubmit = (data) => {
-        if (data) {
-            axios.post(resolveClientUrl(`Department/Create`), {
-                Code: data.name.trim(),
-                Name: data.code.trim(),
-                IsActive: data.isActive,
-                UnitId: data.unit
-            }).then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    toastr.success('Successfully!', '', toastOptions());
-                    setTimeout(function () {
-                        document.location = resolveClientUrl("Department/Index");
-                    }, 3000);
-                } else {
-                    toastr.error(data.Message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        }
-    }
+    const hanldeSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
 
-    const renderForm = (errors) => {
+        axios.post(resolveClientUrl('Department/Create'), {
+            code: values.name.trim(),
+            name: values.code.trim(),
+            isActive: values.isActive,
+            unitId: values.unit
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Created successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl('Department/Index');
+                }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+                setSubmitting(false);
+            }
+        }).catch(axiosError);
+    };
+
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
                 {
@@ -118,25 +102,25 @@ export const AppContainer = () => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" id="btnSubmit">Add</button>
+                        <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>Add</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
             </div>
-        )
-    }
+        );
+    };
+
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={initialValues}
-            validationSchema={CreateDepartmentSchema}
-            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            onSubmit={hanldeSubmit}
         >
-            {({ errors }) => (
-                renderForm(errors)
-            )}
+            {renderForm}
         </Formik>
+    );
+};
 
-    )
-}
+export default AppContainer;

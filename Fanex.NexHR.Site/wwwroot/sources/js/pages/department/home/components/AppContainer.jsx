@@ -1,33 +1,48 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
-import { Filter } from './Filter';
 import axios from 'axios';
-import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
-import { Table } from './Table';
 
-export const AppContainer = () => {
-    const [choose, setChoose] = useState('');
+import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
+import Table from './Table';
+import Filter from './Filter';
+
+const AppContainer = () => {
     const [departments, setDepartments] = useState([]);
+    const [filterParams, setFilterParams] = useState({ isActive: true });
 
-    const handleGetDepartment = () => {
-        axios.post(resolveClientUrl('Department/GetDepartment'), {
-            isActive: choose
-        }).then(response => {
-            setDepartments(response.data)
-        }).catch(axiosError);
-    }
+    const handleGetDepartment = params => {
+        setFilterParams(params);
+        axios.post(resolveClientUrl('Department/GetDepartment'), params)
+            .then(response => {
+                setDepartments(response.data)
+            }).catch(axiosError);
+    };
 
     useEffect(() => {
-        handleGetDepartment();
-    }, [])
+        handleGetDepartment(filterParams);
+    }, []);
 
-    const handleFilterForm = (e) => {
-        e.preventDefault();
-        handleGetDepartment();
-    }
+    const handleDelete = department => {
+        confirm('Are you sure you want to delete this department?', () => {
+            axios.post(resolveClientUrl('Department/Delete'), {
+                id: department.id
+            }).then(response => {
+                const { data } = response;
+                if (data.isSuccessful) {
+                    alert('Delete successfully!');
+                    handleGetDepartment(filterParams);
+                } else {
+                    alert(data.message);
+                }
+            }).catch(axiosError);
+        });
+    };
+
     return (
         <Fragment>
-            <Filter setChoose={setChoose} submit={handleFilterForm} />
-            <Table data={departments} handleGetDepartment={handleGetDepartment} />
+            <Filter onSubmit={handleGetDepartment} />
+            <Table data={departments} onDelete={handleDelete} />
         </Fragment>
-    )
+    );
 };
+
+export default AppContainer;

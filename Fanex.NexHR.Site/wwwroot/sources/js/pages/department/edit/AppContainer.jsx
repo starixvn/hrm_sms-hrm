@@ -1,67 +1,49 @@
-﻿import axios from 'axios';
+﻿import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import toastr from 'toastr';
-import React, { useEffect, useState } from 'react';
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 
-const EditDepartmentSchema = Yup.object({
-    code: Yup.string().trim()
-        .max(50, 'The Code must be 50 characters!')
-        .required('The Code field is required!'),
-    name: Yup.string().trim()
-        .max(200, 'The Name must be 200 characters!')
-        .required('The Name field is required!'),
-    unit: Yup.string()
-        .required('The Unit field is required!')
-});
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { validationSchema } from '../validate/common.functions';
 
-export const AppContainer = () => {
-    const id = window.departmentId;
+const AppContainer = () => {
     const handleGoBack = () => {
         history.back();
-    }
+    };
 
-    const [data, setData] = useState([]);
-
-    const handleGetById = (id) => {
-        axios(resolveClientUrl(`department/getById/${id}`)).then(response => {
-            const { data } = response;
-            if (data) {
-                setData(data);
-            }
-        }).catch(axiosError);
-    }
+    const [department, setDepartment] = useState([]);
 
     useEffect(() => {
-        if (id) {
-            handleGetById(id);
-        }
-    }, [id])
-    const onSubmit = (department) => {
-        if (department) {
-            axios.post(resolveClientUrl(`Department/Edit`), {
-                DepartmentId: department.id,
-                Code: department.code.trim(),
-                Name: department.name.trim(),
-                IsActive: department.isActive,
-                UnitId: department.unit
-            }).then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    toastr.success('Successfully!', '', toastOptions());
-                    setTimeout(function () {
-                        document.location = resolveClientUrl("Department/Index");
-                    }, 3000);
-                } else {
-                    toastr.error(data.Message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        }
-    }
+        axios(resolveClientUrl(`Department/getById/${window.departmentId}`)).then(response => {
+            setDepartment(response.data);
+        }).catch(axiosError);
+    }, []);
 
-    const renderForm = (errors) => {
+    const hanldeSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
+
+        axios.post(resolveClientUrl('Department/Edit'), {
+            departmentId: values.id,
+            code: values.code.trim(),
+            name: values.name.trim(),
+            isActive: values.isActive,
+            unitId: values.unit
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Updated successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl('Department/Index');
+                }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+                setSubmitting(false);
+            }
+        }).catch(axiosError);
+    };
+
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
                 {
@@ -113,12 +95,16 @@ export const AppContainer = () => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary" id="btnSubmit">Update</button>
+                        <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>Update</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
             </div>
-        )
+        );
+    };
+
+    if (department === null) {
+        return null;
     }
 
     return (
@@ -127,18 +113,18 @@ export const AppContainer = () => {
             validateOnChange={false}
             enableReinitialize={true}
             initialValues={{
-                id: data.departmentId || '',
-                name: data.name || '',
-                code: data.code || '',
-                isActive: data.isActive || false,
-                unit: data.unitId || ''
+                id: department.departmentId || '',
+                name: department.name || '',
+                code: department.code || '',
+                isActive: department.isActive || false,
+                unit: department.unitId || ''
             }}
-            validationSchema={EditDepartmentSchema}
-            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+            onSubmit={hanldeSubmit}
         >
-            {({ errors }) => (
-                renderForm(errors)
-            )}
+            {renderForm}
         </Formik>
-    )
+    );
 };
+
+export default AppContainer;

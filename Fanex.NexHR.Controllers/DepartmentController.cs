@@ -83,7 +83,7 @@
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -135,7 +135,7 @@
                 commandResult = baseService.ExecuteNonQuery(criteria);
             }
 
-            return Json(commandResult);
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
