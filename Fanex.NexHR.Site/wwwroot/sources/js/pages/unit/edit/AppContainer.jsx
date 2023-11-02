@@ -3,24 +3,12 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { validationSchema } from '../validate';
 
 const AppContainer = () => {
     const [unit, setUnit] = useState(null);
-
-    const validationSchema = Yup.object({
-        code: Yup.string()
-            .trim()
-            .max(50, 'Code field must not over 50 characters long!')
-            .required('Code field is required!'),
-        name: Yup.string()
-            .trim()
-            .max(200, 'Name field must not over 200 characters long!')
-            .required('Name field is required!')
-    });
-
     const handleGoBack = () => {
         history.back();
     };
@@ -113,7 +101,7 @@ const AppContainer = () => {
                 code: unit.code || '',
                 isActive: unit.isActive || false
             }}
-            validationSchema={validationSchema}
+            validationSchema={ validationSchema }
             onSubmit={hanldeSubmit}
         >
             {renderForm}

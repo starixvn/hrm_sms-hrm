@@ -1,24 +1,13 @@
 ﻿import React from 'react';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 import axios from 'axios';
 import toastr from 'toastr';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { validationSchema } from '../validate';
 
 const AppContainer = () => {
-    const validationSchema = Yup.object({
-        code: Yup.string()
-            .trim()
-            .max(50, 'Code field must not over 50 characters long!')
-            .required('Code field is required!'),
-        name: Yup.string()
-            .trim()
-            .max(200, 'Name field must not over 200 characters long!')
-            .required('Name field is required!')
-    });
-
     const handleGoBack = () => {
         history.back();
     };
