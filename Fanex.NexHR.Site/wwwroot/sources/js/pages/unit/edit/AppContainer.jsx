@@ -17,7 +17,7 @@ const EditUnitSchema = Yup.object({
         .required('The Name field is required!')
 });
 
-export const AppContainer = () => {
+const AppContainer = () => {
     const id = window.id;
     const handleGoBack = () => {
         history.back();
@@ -54,7 +54,7 @@ export const AppContainer = () => {
                         document.location = resolveClientUrl('Unit/Index');
                     }, 3000);
                 } else {
-                    toastr.error(data.Message, '', toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
         }
@@ -128,3 +128,5 @@ export const AppContainer = () => {
         </Formik>
     )
 };
+
+export default AppContainer;

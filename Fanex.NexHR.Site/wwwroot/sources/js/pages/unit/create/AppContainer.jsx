@@ -35,7 +35,7 @@ export const AppContainer = () => {
                         document.location = resolveClientUrl('Unit/Index');
                     }, 3000);
                 } else {
-                    toastr.error(data.Message, '', toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
         }

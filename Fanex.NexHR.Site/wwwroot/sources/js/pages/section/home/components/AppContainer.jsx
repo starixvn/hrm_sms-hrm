@@ -26,7 +26,7 @@ const AppContainer = () => {
                     alert('Delete successfully!');
                     getSection(filterParams);
                 } else {
-                    alert(data.Message);
+                    alert(data.message);
                 }
             }).catch(axiosError);
         });

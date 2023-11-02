@@ -18,7 +18,7 @@ const CreateSectionSchema = Yup.object({
         .required('The Name field is required!'),
     department: Yup.string().required('The Deparment field is required!')
 });
-export const AppContainer = () => {
+const AppContainer = () => {
     const [deparments, setDeparments] = useState([]);
     const handleGoBack = () => {
         history.back();
@@ -51,7 +51,7 @@ export const AppContainer = () => {
                         document.location = resolveClientUrl('Section/Index');
                     }, 3000);
                 } else {
-                    toastr.error(data.Message, '', toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
         }
@@ -140,3 +140,4 @@ export const AppContainer = () => {
 
     )
 }
+export default AppContainer;
