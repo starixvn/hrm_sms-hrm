@@ -1,4 +1,4 @@
-﻿import React, { Fragment, useEffect , useState } from 'react';
+﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Filter from './Filter';
@@ -7,18 +7,20 @@ import Table from './Table';
 import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
 
 const AppContainer = () => {
+    const [filterParams, setFilterParams] = useState({ isActive: true });
     const [units, setUnits] = useState([]);
 
-    const getUnits = status => {
-        axios.post(resolveClientUrl('Unit/GetUnits'), {
-            isActive: status
-        }).then(response => {
-            setUnits(response.data)
-        }).catch(axiosError);
+    const getUnits = params => {
+        setFilterParams(params);
+
+        axios.post(resolveClientUrl('Unit/GetUnits'), params)
+            .then(response => {
+                setUnits(response.data)
+            }).catch(axiosError);
     }
 
     useEffect(() => {
-        getUnits();
+        getUnits(filterParams);
     }, []);
 
     const handleDelete = unit => {
@@ -27,11 +29,11 @@ const AppContainer = () => {
                 unitId: unit.id
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     alert('Delete successfully!');
-                    getUnits();
+                    getUnits(filterParams);
                 } else {
-                    alert(data.Message);
+                    alert(data.message);
                 }
             }).catch(axiosError);
         });

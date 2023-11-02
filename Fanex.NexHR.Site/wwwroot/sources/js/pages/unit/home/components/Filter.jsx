@@ -3,19 +3,22 @@
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
 const Filter = ({ onSubmit }) => {
-    const [status, setStatus] = useState('');
+    const [filterParams, setFilterParams] = useState({ isActive: true });
 
-    const handleCreateUnit = () => {
+    const handleCreate = () => {
         window.location = resolveClientUrl('Unit/Create');
     };
 
-    const handleChangeStatus = event => {
-        setStatus(event.target.value);
+    const handleChange = event => {
+        setFilterParams({
+            ...filterParams,
+            [event.target.name]: event.target.value
+        });
     };
 
     const handleSubmit = event => {
         event.preventDefault();
-        onSubmit(status)
+        onSubmit(filterParams)
     };
 
     return (
@@ -26,7 +29,7 @@ const Filter = ({ onSubmit }) => {
                         <label className="control-label">Status</label>
                     </div>
                     <div className="select-form">
-                        <select className="form-control" onChange={handleChangeStatus}>
+                        <select className="form-control" name="isActive" defaultValue={filterParams.isActive} onChange={handleChange}>
                             <option value=''>All</option>
                             <option value='true'>Active</option>
                             <option value='false'>Inactive</option>
@@ -37,7 +40,7 @@ const Filter = ({ onSubmit }) => {
                     <button type="submit" className="btn btn-primary">Search</button>
                     {
                         window.hasPermission === 'True' &&
-                        <a className="btn btn-request" onClick={handleCreateUnit}>
+                        <a className="btn btn-request" onClick={handleCreate}>
                             <span className="fa fa-plus" />
                             &nbsp;New Unit
                         </a>
