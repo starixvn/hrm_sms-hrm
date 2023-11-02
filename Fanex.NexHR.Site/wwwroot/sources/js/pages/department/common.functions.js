@@ -1,6 +1,6 @@
 ﻿import * as Yup from 'yup';
 
-const validationSchema = Yup.object({
+export const validationSchema = Yup.object({
     code: Yup.string()
         .trim()
         .max(50, 'Code field must not over 50 characters long!')
@@ -12,5 +12,3 @@ const validationSchema = Yup.object({
     unit: Yup.string()
         .required('Unit field is required!')
 });
-
-export default validationSchema;

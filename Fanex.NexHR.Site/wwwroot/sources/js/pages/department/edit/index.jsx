@@ -4,5 +4,5 @@ import AppContainer from './AppContainer';
 
 ReactDOM.render(
     <AppContainer />,
-    document.getElementById('department - edit')
+    document.getElementById('department-edit')
 );

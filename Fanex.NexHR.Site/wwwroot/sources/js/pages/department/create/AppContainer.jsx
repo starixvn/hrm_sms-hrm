@@ -1,14 +1,14 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import toastr from 'toastr';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { validationSchema } from '../validate/common.functions';
+import { validationSchema } from '../common.functions';
+import Validation from '../../../shared/components/Validation';
 
 const AppContainer = () => {
-    const [units, setUnits] = useState([]);
+    const [units, setUnits] = useState(null);
 
     const initialValues = {
         code: '',
@@ -52,15 +52,7 @@ const AppContainer = () => {
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.code && <li>{errors.code}</li>}
-                            {errors.name && <li>{errors.name}</li>}
-                            {errors.unit && <li>{errors.unit}</li>}
-                        </ul>
-                    </div>
-                }
+                <Validation errors={errors} />
                 <Form className="form-horizontal">
                     <div className="form-group">
                         <div className="label-form">
@@ -85,11 +77,11 @@ const AppContainer = () => {
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
                                 <option value="" />
-                                {units.map((unit) => (
+                                {units ? units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
                                         {unit.name}
                                     </option>
-                                ))}
+                                )) : ''}
                             </Field>
                         </div>
                     </div>

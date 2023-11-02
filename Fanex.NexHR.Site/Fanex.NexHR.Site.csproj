@@ -561,12 +561,14 @@
     <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
     <Content Include="wwwroot\sources\js\pages\auth\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\auth\Login.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\department\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\edit\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx" />
@@ -658,6 +660,7 @@
     <Content Include="wwwroot\sources\js\pages\unit\home\index.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\SweetModalDialog.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\Validation.jsx" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />

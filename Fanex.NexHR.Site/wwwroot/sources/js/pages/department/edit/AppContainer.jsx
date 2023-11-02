@@ -1,18 +1,18 @@
 ﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toastr from 'toastr';
-import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { validationSchema } from '../validate/common.functions';
+import { validationSchema } from '../common.functions';
+import Validation from '../../../shared/components/Validation';
 
 const AppContainer = () => {
     const handleGoBack = () => {
         history.back();
     };
 
-    const [department, setDepartment] = useState([]);
+    const [department, setDepartment] = useState(null);
 
     useEffect(() => {
         axios(resolveClientUrl(`Department/getById/${window.departmentId}`)).then(response => {
@@ -46,15 +46,7 @@ const AppContainer = () => {
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.code && <li>{errors.code}</li>}
-                            {errors.name && <li>{errors.name}</li>}
-                            {errors.unit && <li>{errors.unit}</li>}
-                        </ul>
-                    </div>
-                }
+                <Validation errors={errors} />
                 <Form className="form-horizontal">
                     <div className="form-group">
                         <div className="label-form">
@@ -78,7 +70,7 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
-                                {data.units ? data.units.map((unit) => (
+                                {department.units ? department.units.map((unit) => (
                                     <option key={unit.id} value={unit.id}>
                                         {unit.name}
                                     </option>
