@@ -77,11 +77,13 @@ const AppContainer = () => {
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
                                 <option value="" />
-                                {units ? units.map((unit) => (
-                                    <option key={unit.id} value={unit.id}>
-                                        {unit.name}
-                                    </option>
-                                )) : ''}
+                                {
+                                    units ? units.map(unit => (
+                                        <option key={unit.id} value={unit.id}>
+                                            {unit.name}
+                                        </option>
+                                    )) : ''
+                                }
                             </Field>
                         </div>
                     </div>

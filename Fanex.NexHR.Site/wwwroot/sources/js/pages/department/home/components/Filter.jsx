@@ -6,7 +6,7 @@ const Filter = ({ onSubmit }) => {
     const [filterParams, setFilterParams] = useState({ isActive: true });
 
     const handleCreate = () => {
-        window.location = resolveClientUrl("Department/Create");
+        window.location = resolveClientUrl('Department/Create');
     };
 
     const handleSubmit = event => {

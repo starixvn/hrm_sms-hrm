@@ -1,33 +1,31 @@
-﻿import axios from 'axios';
-import toastr from 'toastr';
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
+import toastr from 'toastr';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
-
 
 const AppContainer = () => {
     const [deparments, setDeparments] = useState([]);
     const handleGoBack = () => {
         history.back();
-    }
-    const handleGetDepartment = () => {
-        axios(resolveClientUrl('Section/GetDeparment')).then(response => {
-            const { data } = response;
-            if (data) {
-                setDeparments(data);
-            }
+    };
+
+    const getDepartments = () => {
+        axios(resolveClientUrl('Section/GetDeparments')).then(response => {
+            setDeparments(response.data);
         }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
-        handleGetDepartment();
-    },[])
+        getDepartments();
+    }, []);
 
-    const onSubmit = (values, { setSubmitting }) => {
+    const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
+
         axios.post(resolveClientUrl('Section/Create'), {
             Code: values.name.trim(),
             Name: values.code.trim(),
@@ -36,7 +34,7 @@ const AppContainer = () => {
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                toastr.success('Successfully!', '', toastOptions());
+                toastr.success('Created successfully!', '', toastOptions());
                 setTimeout(function () {
                     document.location = resolveClientUrl('Section/Index');
                 }, 3000);
@@ -45,7 +43,7 @@ const AppContainer = () => {
                 setSubmitting(false);
             }
         }).catch(axiosError);
-    }
+    };
 
     const renderForm = ({ errors, isSubmitting }) => {
         return (
@@ -76,7 +74,6 @@ const AppContainer = () => {
                             <Field name="name" className="form-control" autoComplete="off" />
                         </div>
                     </div>
-
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">Department</label>
@@ -92,7 +89,6 @@ const AppContainer = () => {
                             </Field>
                         </div>
                     </div>
-
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">Is Active</label>
@@ -101,7 +97,6 @@ const AppContainer = () => {
                             <Field type="checkbox" name="isActive" />
                         </div>
                     </div>
-
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>Add</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
@@ -109,7 +104,8 @@ const AppContainer = () => {
                 </Form>
             </div>
         )
-    }
+    };
+
     return (
         <Formik
             validateOnBlur={false}
@@ -117,15 +113,15 @@ const AppContainer = () => {
             initialValues={{
                 code: '',
                 name: '',
-                isActive: false,
+                isActive: true,
                 department: ''
             }}
             validationSchema={validationSchema}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
         >
             {renderForm}
         </Formik>
+    );
+};
 
-    )
-}
 export default AppContainer;

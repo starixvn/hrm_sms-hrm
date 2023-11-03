@@ -135,7 +135,6 @@
     <Compile Include="Report\DisciplineSummaryPerYearViewModel.cs" />
     <Compile Include="Report\MealAllowanceReportViewModel.cs" />
     <Compile Include="Section\AddSectionViewModel.cs" />
-    <Compile Include="Section\SectionViewModel.cs" />
     <Compile Include="Section\EditSectionViewModel.cs" />
     <Compile Include="Discipline\DisciplineSummaryViewModel.cs" />
     <Compile Include="Discipline\AddOtherDisciplineViewModel.cs" />

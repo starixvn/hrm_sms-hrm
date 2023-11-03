@@ -4,5 +4,5 @@ import AppContainer from './AppContainer';
 
 ReactDOM.render(
     <AppContainer />,
-    document.getElementById("create-section")
+    document.getElementById('create-section')
 );

@@ -1,11 +1,14 @@
 ﻿import React, { useState } from 'react';
+
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
 const Filter = ({ onSubmit }) => {
     const [filterParams, setFilterParams] = useState({ isActive: true });
+
     const handleCreate = () => {
         window.location = resolveClientUrl('Section/Create');
-    }
+    };
+
     const handleChange = event => {
         setFilterParams({
             ...filterParams,
@@ -16,7 +19,7 @@ const Filter = ({ onSubmit }) => {
     const handleSubmit = event => {
         event.preventDefault();
         onSubmit(filterParams)
-    }
+    };
 
     return (
         <form className="filter" onSubmit={handleSubmit}>
@@ -33,18 +36,19 @@ const Filter = ({ onSubmit }) => {
                         </select>
                     </div>
                 </div>
-                    <div className="form-group form-group--m">
-                        <button type="submit" className="btn btn-primary">Search</button>
-                        {
-                        window.hasPermission === 'True' && <a className="btn btn-request" onClick={handleCreate}>
-                                <span className="fa fa-plus" />
-                                &nbsp;New Section
-                            </a>
-                        }
-                    </div>
+                <div className="form-group form-group--m">
+                    <button type="submit" className="btn btn-primary">Search</button>
+                    {
+                        window.hasPermission === 'True' &&
+                        <a className="btn btn-request" onClick={handleCreate}>
+                            <span className="fa fa-plus" />
+                            &nbsp;New Section
+                        </a>
+                    }
+                </div>
             </div>
         </form>
-    )
+    );
 };
 
 export default Filter;

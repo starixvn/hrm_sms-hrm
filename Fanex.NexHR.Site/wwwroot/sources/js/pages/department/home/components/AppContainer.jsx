@@ -1,24 +1,25 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
 import Table from './Table';
 import Filter from './Filter';
+
+import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
 
 const AppContainer = () => {
     const [departments, setDepartments] = useState([]);
     const [filterParams, setFilterParams] = useState({ isActive: true });
 
-    const handleGetDepartment = params => {
+    const getDepartments = params => {
         setFilterParams(params);
-        axios.post(resolveClientUrl('Department/GetDepartment'), params)
+        axios.post(resolveClientUrl('Department/GetDepartments'), params)
             .then(response => {
                 setDepartments(response.data)
             }).catch(axiosError);
     };
 
     useEffect(() => {
-        handleGetDepartment(filterParams);
+        getDepartments(filterParams);
     }, []);
 
     const handleDelete = department => {
@@ -29,7 +30,7 @@ const AppContainer = () => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     alert('Delete successfully!');
-                    handleGetDepartment(filterParams);
+                    getDepartments(filterParams);
                 } else {
                     alert(data.message);
                 }
@@ -39,7 +40,7 @@ const AppContainer = () => {
 
     return (
         <Fragment>
-            <Filter onSubmit={handleGetDepartment} />
+            <Filter onSubmit={getDepartments} />
             <Table data={departments} onDelete={handleDelete} />
         </Fragment>
     );

@@ -18,19 +18,19 @@ const Row = ({ rowIndex, item, onDelete }) => {
             <td>{item.name}</td>
             <td>{item.unit.name}</td>
             <td>
-                {item.isActive && <i className="fa fa-check fa-lg icon-check"></i>}
+                {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
             </td>
             {
                 window.hasPermission === 'True' &&
                 <Fragment>
                     <td>
                         <a onClick={handleEdit} style={{ cursor: 'pointer' }}>
-                            <i className="fa fa-pencil fa-lg icon-edit"></i>
+                            <i className="fa fa-pencil fa-lg icon-edit" />
                         </a>
                     </td>
                     <td>
                         <a onClick={handleDelete} style={{ cursor: 'pointer' }}>
-                            <i className="fa fa-times fa-lg icon-delete"></i>
+                            <i className="fa fa-times fa-lg icon-delete" />
                         </a>
                     </td>
                 </Fragment>

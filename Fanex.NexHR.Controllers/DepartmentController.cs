@@ -43,7 +43,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.DepartmentManagement)]
-        public ActionResult GetDepartment(bool? isActive = null)
+        public ActionResult GetDepartments(bool? isActive = null)
         {
             var departments = departmentService.GetDepartment(isActive);
             return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -52,17 +52,13 @@
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public ActionResult Create()
         {
-            return View(new CreateDepartmentViewModel { });
+            return View();
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public ActionResult GetUnits()
         {
-            var model = new CreateDepartmentViewModel
-            {
-                Units = unitService.GetUnit()
-            };
-            return new CustomJsonResult { Data = model.Units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var units = unitService.GetUnit();
+            return new CustomJsonResult { Data = units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -96,12 +92,6 @@
         public ActionResult GetById(int Id)
         {
             Department department = departmentService.GetById(Id);
-
-            if (department == null)
-            {
-                return RedirectToAction("PageNotFound", "Error");
-            }
-
             IList<Unit> units = unitService.GetUnit();
             var model = new EditDepartmentViewModel
             {

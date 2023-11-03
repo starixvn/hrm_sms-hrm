@@ -8,11 +8,11 @@ import { validationSchema } from '../common.functions';
 import Validation from '../../../shared/components/Validation';
 
 const AppContainer = () => {
+    const [department, setDepartment] = useState(null);
+
     const handleGoBack = () => {
         history.back();
     };
-
-    const [department, setDepartment] = useState(null);
 
     useEffect(() => {
         axios(resolveClientUrl(`Department/getById/${window.departmentId}`)).then(response => {
@@ -70,11 +70,13 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field name="unit" as="select" className="form-control">
-                                {department.units ? department.units.map((unit) => (
-                                    <option key={unit.id} value={unit.id}>
-                                        {unit.name}
-                                    </option>
-                                )) : ''}
+                                {
+                                    department.units ? department.units.map(unit => (
+                                        <option key={unit.id} value={unit.id}>
+                                            {unit.name}
+                                        </option>
+                                    )) : ''
+                                }
                             </Field>
                         </div>
                     </div>

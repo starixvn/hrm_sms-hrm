@@ -52,9 +52,9 @@
 
         [HttpPost]
         [HRMPermission(Policy.Read, FunctionKey.SectionManagement)]
-        public ActionResult GetSection(SectionViewModel model)
+        public ActionResult GetSections(bool? isActive = null)
         {
-            var sections = sectionService.GetSection(isActive: model.IsActive);
+            var sections = sectionService.GetSection(isActive);
             return new CustomJsonResult { Data = sections, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
@@ -65,7 +65,7 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult GetDeparment()
+        public ActionResult GetDeparments()
         {
             var departments = departmentService.GetDepartment();
             return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -102,11 +102,6 @@
         public ActionResult GetById(int id)
         {
             Section section = sectionService.GetById(id);
-            if (section == null)
-            {
-                return RedirectToAction("PageNotFound", "Error");
-            }
-
             IList<Department> departments = departmentService.GetDepartment();
             var model = new EditSectionViewModel
             {
@@ -170,7 +165,7 @@
             IList<Team> teams,
             IList<Section> sections)
         {
-            var multiSelectViewModel = units.Select(u => new MultiSelectViewModel
+            var orgCharts = units.Select(u => new MultiSelectViewModel
             {
                 Id = u.Id,
                 Text = u.Name,
@@ -195,7 +190,7 @@
                 }).ToList()
             });
 
-            return multiSelectViewModel;
+            return orgCharts;
         }
     }
 }

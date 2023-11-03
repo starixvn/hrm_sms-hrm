@@ -4,5 +4,5 @@ import AppContainer from './components/AppContainer';
 
 ReactDOM.render(
     <AppContainer />,
-    document.getElementById("index-section")
+    document.getElementById('index-section')
 );

@@ -1,21 +1,24 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
-import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
+
 import Filter from './Filter';
 import Table from './Table';
+
+import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
+
 const AppContainer = () => {
     const [section, setSection] = useState([]);
     const [filterParams, setFilterParams] = useState({ isActive: true });
 
-    const getSection = params => {
+    const getSections = params => {
         setFilterParams(params);
-        axios.post(resolveClientUrl('Section/GetSection'), params).then(response => {
+        axios.post(resolveClientUrl('Section/GetSections'), params).then(response => {
             setSection(response.data)
         }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
-        getSection(filterParams);
+        getSections(filterParams);
     }, []);
 
     const handleDelete = id => {
@@ -23,21 +26,21 @@ const AppContainer = () => {
             axios.post(resolveClientUrl(`Section/Delete/${id}`)).then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    alert('Delete successfully!');
-                    getSection(filterParams);
+                    alert('Deleted successfully!');
+                    getSections(filterParams);
                 } else {
                     alert(data.message);
                 }
             }).catch(axiosError);
         });
-    }
+    };
 
     return (
         <Fragment>
-            <Filter onSubmit={getSection} />
-            <Table data={section} onDelete={handleDelete}/>
+            <Filter onSubmit={getSections} />
+            <Table data={section} onDelete={handleDelete} />
         </Fragment>
-    )
+    );
 };
 
 export default AppContainer;

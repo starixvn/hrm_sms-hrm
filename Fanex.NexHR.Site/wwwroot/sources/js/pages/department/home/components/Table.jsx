@@ -6,35 +6,33 @@ const Table = ({ data, onDelete }) => {
     const colSpan = window.hasPermission === 'True' ? 7 : 5;
 
     return (
-        <Fragment>
-            <table className="table table-custom">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Code</th>
-                        <th>Department</th>
-                        <th>Unit</th>
-                        <th>Active</th>
-                        {
-                            window.hasPermission === 'True' &&
-                            <Fragment>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </Fragment>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
+        <table className="table table-custom">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Code</th>
+                    <th>Department</th>
+                    <th>Unit</th>
+                    <th>Active</th>
                     {
-                        data.length > 0
-                            ? data.map((item, index) => <Row key={item.id} rowIndex={index + 1} item={item} onDelete={onDelete} />)
-                            : <tr>
-                                <td colSpan={colSpan}>No information available</td>
-                            </tr>
+                        window.hasPermission === 'True' &&
+                        <Fragment>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </Fragment>
                     }
-                </tbody>
-            </table>
-        </Fragment>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    data.length > 0
+                        ? data.map((item, index) => <Row key={item.id} rowIndex={index + 1} item={item} onDelete={onDelete} />)
+                        : <tr>
+                            <td colSpan={colSpan}>No information available</td>
+                        </tr>
+                }
+            </tbody>
+        </table>
     );
 };
 
