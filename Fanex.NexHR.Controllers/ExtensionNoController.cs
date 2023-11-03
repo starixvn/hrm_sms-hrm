@@ -45,14 +45,12 @@
         [HRMPermission(Policy.Read, FunctionKey.ExtensionNumber)]
         public ActionResult GetExtensionNo()
         {
-            IEnumerable<ExtensionNoModel> lstEntity = extensionNumberService.GetAllExtensionNo();
+            IEnumerable<ExtensionNoModel> extensionNos = extensionNumberService.GetAllExtensionNo();
 
-            var model = (from item in lstEntity
-                         group item by item.TeamName into g
-                         select new ExtensionNumberViewModel { Name = g.Key, Extensions = g.ToList() }).ToList();
+            var model = extensionNos.GroupBy(item => item.TeamName)
+                .Select(item => new ExtensionNumberViewModel { Name = item.Key, Extensions = item.ToList() }).ToList();
             return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create()
@@ -64,6 +62,7 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Create(ExtensionNoModel model)
         {
+            var commandResult = new CommandResult();
             if (model != null)
             {
                 CheckExternalEmployee(model);
@@ -79,12 +78,11 @@
                         TeamId = model.TeamId,
                     };
 
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    commandResult = baseService.ExecuteNonQuery(criteria);
                 }
             }
 
-            return View();
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
@@ -103,12 +101,11 @@
             return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-
-
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(ExtensionNoModel model)
         {
+            var commandResult = new CommandResult();
             if (model != null)
             {
                 CheckExternalEmployee(model);
@@ -124,11 +121,11 @@
                         EmpId = model.EmpId,
                         TeamId = model.TeamId
                     };
-                    CommandResult result = baseService.ExecuteNonQuery(criteria);
-                    return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    commandResult = baseService.ExecuteNonQuery(criteria);
                 }
             }
-            return View();
+
+            return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -150,16 +147,16 @@
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult GetAllExternalGroup()
         {
-            IEnumerable<ExtensionNoModel> group = extensionNumberService.GetAllExtensionGroupInfo(isInternal: false);
+            IEnumerable<ExtensionNoModel> groups = extensionNumberService.GetAllExtensionGroupInfo(isInternal: false);
 
-            return new CustomJsonResult { Data = group, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            return new CustomJsonResult { Data = groups, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpGet]
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public CustomJsonResult GetGroupExtension(bool isInternal, int? teamId)
         {
-            IList<SelectListItem> groups = null;
+            IList<SelectListItem> groups;
             if (isInternal)
             {
                 IList<Team> teams = commonDataService.GetAllTeam();

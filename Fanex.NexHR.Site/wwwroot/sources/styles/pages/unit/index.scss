@@ -1,26 +1,30 @@
-﻿@import '../../abstracts/_mixins.scss';
-@import '../../abstracts/_variables.scss';
-@import '../../components/_buttons-new.scss';
-@import '../../layout/_filter.scss';
-@import '../../layout/_table.scss';
+﻿@import '../../abstracts/mixins';
+@import '../../abstracts/variables';
+@import '../../components/buttons-new';
+@import '../../layout/toastr';
+@import '../../layout/filter';
+@import '../../layout/table';
 @import '../../components/jquery-ui-dialog';
 
-.filter{
-    max-width : 700px;
+.filter {
+    max-width: 700px;
 }
 
-.btn{
+.btn {
     &:focus, &:active {
-        outline : none;
+        outline: none;
     }
 }
-.btn-request{
-    margin-left : 5px;
+
+.btn-request {
+    margin-left: 5px;
 }
+
 .form-group {
     margin-bottom: 0 !important;
 }
-.table-custom{
+
+.table-custom {
     width: auto;
-    max-width : 700px;
+    max-width: 700px;
 }

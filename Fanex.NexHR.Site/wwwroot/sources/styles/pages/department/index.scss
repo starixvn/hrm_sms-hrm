@@ -1,8 +1,9 @@
-﻿@import '../../abstracts/_mixins.scss';
-@import '../../abstracts/_variables.scss';
-@import '../../components/_buttons-new.scss';
-@import '../../layout/_filter.scss';
-@import '../../layout/_table.scss';
+﻿@import '../../abstracts/mixins';
+@import '../../abstracts/variables';
+@import '../../components/buttons-new';
+@import '../../layout/toastr';
+@import '../../layout/filter';
+@import '../../layout/table';
 @import '../../components/jquery-ui-dialog';
 
 .filter {

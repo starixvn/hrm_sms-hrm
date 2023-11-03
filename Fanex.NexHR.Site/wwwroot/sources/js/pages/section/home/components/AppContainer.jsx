@@ -1,10 +1,11 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+import toastr from 'toastr';
 
 import Filter from './Filter';
 import Table from './Table';
 
-import { axiosError, resolveClientUrl, confirm, alert } from '../../../../shared/common.functions';
+import { axiosError, resolveClientUrl, confirm, toastOptions } from '../../../../shared/common.functions';
 
 const AppContainer = () => {
     const [section, setSection] = useState([]);
@@ -26,10 +27,10 @@ const AppContainer = () => {
             axios.post(resolveClientUrl(`Section/Delete/${id}`)).then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    alert('Deleted successfully!');
+                    toastr.success('Deleted successfully!', '', toastOptions());
                     getSections(filterParams);
                 } else {
-                    alert(data.message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
         });

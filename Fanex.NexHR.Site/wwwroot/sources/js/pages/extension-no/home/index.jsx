@@ -1,8 +1,9 @@
 ﻿import React from 'react';
 import ReactDOM from 'react-dom';
+
 import AppContainer from './components/AppContainer';
 
 ReactDOM.render(
     <AppContainer />,
-    document.getElementById("index-extension-no")
+    document.getElementById('index-extension-no')
 );

@@ -1,8 +1,8 @@
 ﻿import React, { Fragment } from 'react';
+
 import Row from './Row';
 
-export const Table = ({ data, onDelete }) => {
-    let index = 1
+const Table = ({ data, onDelete }) => {
     return (
         <table className="table table-custom" id="data">
             <thead>
@@ -30,7 +30,7 @@ export const Table = ({ data, onDelete }) => {
                                 </td>
                             </tr>
                             {
-                                item.extensions.map(item => <Row key={item.employeeExtensionId} rowIndex={index++} item={item} onDelete={onDelete}/>)
+                                item.extensions.map((item, index) => <Row key={item.employeeExtensionId} rowIndex={index + 1} item={item} onDelete={onDelete} />)
                             }
                         </Fragment>
                     )) : <tr>
@@ -42,4 +42,6 @@ export const Table = ({ data, onDelete }) => {
             </tbody>
         </table>
     );
-}
+};
+
+export default Table;
