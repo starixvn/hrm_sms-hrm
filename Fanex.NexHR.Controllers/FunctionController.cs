@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
@@ -29,7 +28,6 @@
             this.ucfunctionService = ucfunctionService;
         }
 
-
         [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
         public ActionResult Index()
         {
@@ -37,15 +35,16 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.FunctionManagement)]
-        public ActionResult GetFunctions(short? roleId = null)
+        public ActionResult GetRolePermission(short? roleId = null)
         {
             IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
             var functionTrees = new TreeFunctionViewModel
             {
-                RoleId = roleId ?? systemRoles.First().RoleId,
+                RoleId = roleId ?? systemRoles[0].RoleId,
                 IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
-                Functions = ucfunctionService.GetHierarchyBySiteId(userControlSession.SiteId),
-                FunctionPermissions = ucfunctionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, roleId ?? systemRoles.First().RoleId)
+                Functions = ucfunctionService.GetBySiteId(userControlSession.SiteId),
+                HierarchyFunctions = ucfunctionService.GetHierarchyBySiteId(userControlSession.SiteId),
+                Permissions = ucfunctionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, roleId ?? systemRoles[0].RoleId)
             };
 
             return new CustomJsonResult { Data = functionTrees, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

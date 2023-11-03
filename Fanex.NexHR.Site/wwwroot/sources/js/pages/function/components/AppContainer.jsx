@@ -1,29 +1,74 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
-import { Filter } from './Filter';
 import axios from 'axios';
-import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
-import { Table } from './Table';
+import toastr from 'toastr';
 
-export const AppContainer = () => {
+import Filter from './Filter';
+import Table from './Table';
+
+import { axiosError, blockUI, unblockUI, resolveClientUrl, toastOptions } from '../../../shared/common.functions';
+
+const AppContainer = () => {
     const [roleId, setRoleId] = useState('');
-    const [data, setData] = useState([]);
+    const [systemRoles, setSystemRoles] = useState([]);
+    const [rolePermission, setRolePermission] = useState(null);
 
-    const handleGetFunctions = () => {
-        axios.post(resolveClientUrl('Function/GetFunctions'), {
+    const getSystemRoles = () => {
+        axios.post(resolveClientUrl('Function/GetSystemRoles'))
+            .then(response => {
+                setSystemRoles(response.data)
+            }).catch(axiosError);
+    };
+
+    const getRolePermission = () => {
+        blockUI();
+        axios.post(resolveClientUrl('Function/GetRolePermission'), {
             roleId: roleId
         }).then(response => {
-            setData(response.data)
-        }).catch(axiosError);
-    }
+            setRolePermission(response.data);
+        }).catch(axiosError).finally(unblockUI);
+    };
 
     useEffect(() => {
-        handleGetFunctions();
+        getSystemRoles();
+    }, []);
+
+    useEffect(() => {
+        getRolePermission();
     }, [roleId]);
+
+    const handleChangePermission = permissions => {
+        setRolePermission(permissions);
+    };
+
+    const handleSubmit = () => {
+        axios.post(resolveClientUrl(`Function/AssignPermission`), {
+            roleId: rolePermission.roleId,
+            permissions: rolePermission.permissions
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Updated successfully!', '', toastOptions());
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
 
     return (
         <Fragment>
-            <Filter setRoleId={setRoleId} roleId={roleId} />
-            <Table data={data} />
+            <Filter systemRoles={systemRoles} onChange={setRoleId} />
+            {
+                rolePermission &&
+                <Table rolePermission={rolePermission} onChangePermission={handleChangePermission} />
+            }
+            {
+                rolePermission && rolePermission.isHost && rolePermission.functions.length > 0 &&
+                <div className="form-group">
+                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>Save</button>
+                </div>
+            }
         </Fragment>
-    )
+    );
 };
+
+export default AppContainer;

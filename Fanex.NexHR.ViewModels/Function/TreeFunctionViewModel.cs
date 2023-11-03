@@ -5,9 +5,10 @@
 
     public class TreeFunctionViewModel
     {
-        public int RoleId { get; set; }
+        public short RoleId { get; set; }
         public bool IsHost { get; set; }
         public IList<Function> Functions { get; set; } = new List<Function>();
-        public IList<FunctionPermission> FunctionPermissions { get; set; } = new List<FunctionPermission>();
+        public IList<Function> HierarchyFunctions { get; set; } = new List<Function>();
+        public IList<FunctionPermission> Permissions { get; set; } = new List<FunctionPermission>();
     }
 }
