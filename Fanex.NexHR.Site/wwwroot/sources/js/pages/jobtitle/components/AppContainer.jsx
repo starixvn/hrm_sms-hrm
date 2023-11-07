@@ -1,11 +1,13 @@
 ﻿import React, { Fragment, useState, useEffect } from 'react';
-import { Table } from './Table';
-import { Popup } from './Popup';
-import { Filter } from './Filter';
 import axios from 'axios';
+
+import Table from './Table';
+import Popup from './Popup';
+import Filter from './Filter';
+
 import { resolveClientUrl, axiosError, alert, confirm } from '../../../shared/common.functions';
 
-export const AppContainer = () => {
+const AppContainer = () => {
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [jobTitle, setJobTitle] = useState([]);
@@ -19,14 +21,14 @@ export const AppContainer = () => {
         }).then(response => {
             setJobTitle(response.data)
         }).catch(axiosError);
-    }
+    };
 
     const handleGetJobCategory = () => {
         axios.post(resolveClientUrl('JobTitle/GetJobCategory'), {
         }).then(response => {
             setJobCategory(response.data)
         }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
         handleGetJobTitle();
@@ -42,10 +44,10 @@ export const AppContainer = () => {
         });
     };
 
-    const handleCreate = (values) => {
+    const handleCreate = jobTitle => {
         axios.post(resolveClientUrl(`JobTitle/Insert`), {
-            name: values.name.trim(),
-            categoryId: values.categoryId ? values.categoryId : jobCategory[0].value
+            name: jobTitle.name.trim(),
+            categoryId: jobTitle.categoryId ? jobTitle.categoryId : jobCategory[0].value
         })
             .then(response => {
                 const { data } = response;
@@ -73,7 +75,7 @@ export const AppContainer = () => {
                 }
             }).catch(axiosError);
         });
-    }
+    };
 
     const handleEdit = (values) => {
         axios.post(resolveClientUrl(`JobTitle/Update`), {
@@ -120,3 +122,5 @@ export const AppContainer = () => {
         </Fragment>
     )
 };
+
+export default AppContainer;

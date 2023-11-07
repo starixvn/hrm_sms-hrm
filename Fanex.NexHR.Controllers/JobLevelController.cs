@@ -34,7 +34,7 @@
 
         [ValidateInput(false)]
         [HRMPermission(Policy.Read, FunctionKey.JobLevelManagement)]
-        public ActionResult GetJobLevel()
+        public ActionResult GetJobLevels()
         {
             IList<JobLevel> jobLevel = jobLevelService.GetJobLevel();
             return new CustomJsonResult { Data = jobLevel, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -53,7 +53,7 @@
 
             CommandResult result = jobLevelService.Insert(criteria);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
@@ -69,7 +69,7 @@
             };
             CommandResult result = jobLevelService.Update(criteria);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]
@@ -78,7 +78,7 @@
         {
             CommandResult result = jobLevelService.Delete(id, EmployeeSession.EmpId);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }

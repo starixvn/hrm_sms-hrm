@@ -9,10 +9,10 @@ const validationSchema = Yup.object({
     name: Yup.string().trim().required('Job Title is required!')
 });
 
-export const Popup = (props) => {
+const Popup = (props) => {
     const { data, title, jobCategory } = props;
 
-    const renderForm = (errors) => {
+    const renderForm = errors => {
         return (
             <div className="card">
                 {
@@ -47,8 +47,8 @@ export const Popup = (props) => {
                     </div>
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <Draggable handle=".modal-header" >
@@ -80,5 +80,7 @@ export const Popup = (props) => {
                 </Formik>
             </Modal>
         </Draggable>
-    )
+    );
 };
+
+export default Popup;

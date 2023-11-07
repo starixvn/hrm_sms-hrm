@@ -1,106 +1,116 @@
 ﻿import React, { Fragment, useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
-import { Table } from './Table';
-import { Popup } from './Popup';
 import axios from 'axios';
-import { resolveClientUrl, axiosError, alert, confirm } from '../../../shared/common.functions';
+import toastr from 'toastr';
+
+import Table from './Table';
+import Popup from './Popup';
+
+import { resolveClientUrl, axiosError, confirm, toastOptions } from '../../../shared/common.functions';
 
 export const AppContainer = () => {
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
-    const [jobLevel, setJobLevel] = useState([]);
+    const [jobLevels, setJobLevels] = useState([]);
     const [jobLevelEdit, setJobLevelEdit] = useState([]);
 
-    const handleGetJobLevel = () => {
-        axios.post(resolveClientUrl('JobLevel/GetJobLevel'), {
+    const getJobLevels = () => {
+        axios.post(resolveClientUrl('JobLevel/GetJobLevels'), {
         }).then(response => {
-            setJobLevel(response.data)
+            setJobLevels(response.data)
         }).catch(axiosError);
-    }
-
-    useEffect(() => {
-        handleGetJobLevel();
-    }, []);
-
-    const handleEditInfo = (id, name) => {
-        setEditModal(true);
-        setJobLevelEdit({ id: id, name: name });
     };
 
-    const handleCreate = (values) => {
+    useEffect(() => {
+        getJobLevels();
+    }, []);
+
+    const handleEditInfo = jobLevel => {
+        setEditModal(true);
+        setJobLevelEdit({ id: jobLevel.id, name: jobLevel.name });
+    };
+
+    const handleCreate = values => {
         axios.post(resolveClientUrl(`JobLevel/Insert`), {
             name: values.name.trim(),
         })
             .then(response => {
                 const { data } = response;
                 setCreateModal(false);
-                if (data.IsSuccessful) {
-                    alert('Create successfully!');
-                    handleGetJobLevel();
+                if (data.isSuccessful) {
+                    toastr.success('Create successfully!', '', toastOptions());
+                    getJobLevels();
                 } else {
-                    alert(data.Message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
     };
 
-    const handleEdit = (values) => {
+    const handleEdit = jobLevel => {
         axios.post(resolveClientUrl(`JobLevel/Update`), {
             id: jobLevelEdit.id,
-            name: values.name.trim(),
+            name: jobLevel.name.trim(),
         })
             .then(response => {
                 const { data } = response;
                 setEditModal(false);
-                if (data.IsSuccessful) {
-                    alert('Edit successfully!');
-                    handleGetJobLevel();
+                if (data.isSuccessful) {
+                    toastr.success('Edit successfully!', '', toastOptions());
+                    getJobLevels();
                 } else {
-                    alert(data.Message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = jobLevel => {
         confirm('Are you sure you want to delete?', () => {
             axios.post(resolveClientUrl('JobLevel/Delete'), {
-                id: id
+                id: jobLevel.id
             }).then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
-                    alert('Delete successfully!');
-                    handleGetJobLevel();
+                if (data.isSuccessful) {
+                    toastr.success('Deleted successfully!', '', toastOptions());
+                    getJobLevels();
                 } else {
-                    alert(data.Message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
         });
-    }
+    };
+
+    const handleCreateModal = () => {
+        setCreateModal(!createModal);
+    };
+
+    const handleEditModal = () => {
+        setEditModal(false);
+    };
 
     return (
         <Fragment>
-            {window.hasPermission === 'True' &&
+            {
+                window.hasPermission === 'True' &&
                 <div className="filter">
-                    <Button className="btn btn-request" type="button" onClick={() => setCreateModal(true)}>
+                    <button className="btn btn-request" type="button" onClick={handleCreateModal}>
                         <span className="fa fa-plus" /> New Job Level
-                    </Button>
+                    </button>
                 </div>
             }
             <Popup
                 show={createModal}
-                onHide={() => setCreateModal(false)}
+                onHide={handleCreateModal}
                 onSubmit={handleCreate}
-                title='Add'
-            />
+                title='Add' />
             <Popup
                 show={editModal}
-                onHide={() => setEditModal(false)}
+                onHide={handleEditModal}
                 onSubmit={handleEdit}
                 data={jobLevelEdit}
                 title='Edit' />
             <Table
-                data={jobLevel}
-                handleEditInfo={handleEditInfo}
-                handleDelete={handleDelete} />
+                data={jobLevels}
+                onEdit={handleEditInfo}
+                onDelete={handleDelete} />
         </Fragment>
-    )
+    );
 };

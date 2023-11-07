@@ -590,6 +590,7 @@
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Popup.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\AppContainer.jsx" />

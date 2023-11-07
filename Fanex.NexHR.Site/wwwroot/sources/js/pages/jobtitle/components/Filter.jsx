@@ -1,18 +1,19 @@
 ﻿import React, { Fragment } from 'react';
+
 import { resolveClientUrl } from '../../../shared/common.functions';
 
-export const Filter = (props) => {
+const Filter = (props) => {
     const { keyword, setKeyword, searchKeyword, setCreateModal } = props;
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             searchKeyword();
-        }
-    }
+        };
+    };
 
     const handleExportExcel = () => {
         window.location.href = resolveClientUrl('jobTitle/ExportExcel?jobTitle=' + keyword);
-    }
+    };
 
     return (
         <div className="filter">
@@ -44,5 +45,7 @@ export const Filter = (props) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };
+
+export default Filter;

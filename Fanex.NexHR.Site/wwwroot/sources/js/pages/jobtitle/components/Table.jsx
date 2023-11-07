@@ -1,11 +1,10 @@
 ﻿import React, { Fragment } from 'react';
 
-export const Table = (props) => {
-    const { data, handleEditInfo, handleDelete } = props;
+const Table = ({ data, handleEditInfo, handleDelete }) => {
 
     const handleLink = (id) => {
         window.location.href = (`/Employee/UserManagement?jobTitleId=${id}`);
-    }
+    };
 
     const colSpan = window.hasPermission === 'True' ? 8 : 6;
 
@@ -70,5 +69,7 @@ export const Table = (props) => {
                 </tbody>
             </table>
         </Fragment>
-    )
-}
+    );
+};
+
+export default Table;
