@@ -22,6 +22,7 @@ export class AssignNewSite extends Component {
 
     handleCloseModalDialog = () => {
         this.props.setAssignNewSiteModalDialog({ show: false });
+        this.props.setSiteRoles([]);
         if (this.props.assignNewSiteResult) {
             this.props.setAssignNewSiteResult(null);
         }

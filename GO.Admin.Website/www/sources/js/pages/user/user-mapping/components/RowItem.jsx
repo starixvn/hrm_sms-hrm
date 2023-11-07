@@ -40,7 +40,7 @@ export class RowItem extends Component {
     handleOnSelect = id => {
         const userId = parseInt(id, 10);
         const index = this.props.users.findIndex(item => item.userId === userId);
-        const user = { ... this.state.user, ...this.props.users[index] };
+        const user = { ...this.state.user, ...this.props.users[index] };
 
         Site.blockUI();
         const params = {
@@ -52,6 +52,32 @@ export class RowItem extends Component {
             Site.unblockUI();
             if (response.data.isSuccessful) {
                 this.setState({ user });
+            } else {
+                toast.error(response.data.message);
+            }
+        });
+    };
+
+    handleRemove = () => {
+        const user = this.state.user;
+        Site.blockUI();
+        const params = {
+            userId: user.userId,
+            siteId: user.siteId
+        };
+        this.props.updateUserMapping(params).then(response => {
+            Site.unblockUI();
+            if (response.data.isSuccessful) {
+                this.setState({
+                    user: {
+                        ...this.state.user,
+                        userId: null,
+                        username: null,
+                        code: null,
+                        nickname: null,
+                        fullName: null
+                    }
+                });
             } else {
                 toast.error(response.data.message);
             }
@@ -109,10 +135,20 @@ export class RowItem extends Component {
                             onMenuVisibilityChange={this.handleOnMenuVisibilityChange}
                         />
                     }
-                    <div>- <strong>{LangHelper.getResource('Username')}</strong>: {user.username}</div>
-                    <div>- <strong>{LangHelper.getResource('Code')}</strong>: {user.code}</div>
-                    <div>- <strong>{LangHelper.getResource('Nickname')}</strong>: {user.nickname}</div>
-                    <div>- <strong>{LangHelper.getResource('FullName')}</strong>: {user.fullName}</div>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div>- <strong>{LangHelper.getResource('Username')}</strong>: {user.username}</div>
+                            <div>- <strong>{LangHelper.getResource('Code')}</strong>: {user.code}</div>
+                            <div>- <strong>{LangHelper.getResource('Nickname')}</strong>: {user.nickname}</div>
+                            <div>- <strong>{LangHelper.getResource('FullName')}</strong>: {user.fullName}</div>
+                        </div>
+                        <div>
+                            {
+                                window.hasHostPermissionOnUser && user.userId > 0 &&
+                                <span className="rounded-circle text-center fa fa-times icon-delete" onClick={this.handleRemove} />
+                            }
+                        </div>
+                    </div>
                 </Cell>
             </Row>
         );
