@@ -38,6 +38,7 @@ export const AppContainer = () => {
         }).catch(axiosError);
     }
 
+
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -58,9 +59,9 @@ export const AppContainer = () => {
         }
     };
 
-    const getGroupExtension = (isInternal) => {
+    const getGroupExtension = isInternal => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
-            params: { IsInternal: isInternal }
+            params: { isInternal }
         }).then(response => {
             setSelectExtension(response.data);
         }).catch(axiosError);
@@ -204,7 +205,7 @@ export const AppContainer = () => {
     if (!selectExtension || extensionDetail == null) {
         return null;
     }
-    const handleSubmit = (data) => {
+    const handleSubmit = data => {
         axios.post(resolveClientUrl('ExtensionNo/Edit'), {
             FullName: data.FullName,
             NickName: data.NickName,
@@ -214,7 +215,6 @@ export const AppContainer = () => {
             EmployeeExtensionId: extensionDetail.employeeExtensionId,
             TeamId: data.TeamId
         }).then(response => {
-            console.log(response.data);
             const { data } = response;
             if (data.isSuccessful) {
                 document.location = resolveClientUrl("ExtensionNo/Index");
@@ -230,7 +230,7 @@ export const AppContainer = () => {
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={{
-                EmpId: extensionDetail.EmpId ? extensionDetail.EmpId : empId,
+                EmpId: extensionDetail ? extensionDetail.empId : empId,
                 Employee: empName || '',
                 FullName: fullName || extensionDetail.fullName || '',
                 TeamId: extensionDetail.teamId || '',

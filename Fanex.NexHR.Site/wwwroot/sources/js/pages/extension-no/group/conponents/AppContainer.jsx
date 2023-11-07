@@ -11,10 +11,7 @@ export const AppContainer = () => {
 
     const handleGetAllEnternalGroup = () => {
         axios(resolveClientUrl('ExtensionNo/GetAllExternalGroup')).then(response => {
-            const { data } = response;
-            if (data) {
-                setData(response.data)
-            }
+            setData(response.data)
         }).catch(axiosError);
     }
 
@@ -22,21 +19,19 @@ export const AppContainer = () => {
         handleGetAllEnternalGroup();
     }, [])
 
-    const handleCreateData = (data) => {
-        if (data) {
-            axios.post(resolveClientUrl('ExtensionNo/CreateExternalGroup'), {
-                teamName: data.TeamName.trim()
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    handleGetAllEnternalGroup();
-                    setModalShow(false);
-                }
-            }).catch(axiosError);
-        }
+    const handleCreateData = data => {
+        axios.post(resolveClientUrl('ExtensionNo/CreateExternalGroup'), {
+            teamName: data.TeamName.trim()
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                handleGetAllEnternalGroup();
+                setModalShow(false);
+            }
+        }).catch(axiosError);
     }
 
-    const handleDeleteData = (id) => {
+    const handleDeleteData = id => {
         confirm('Are you sure you want to delete this external group?', () => {
             axios.post(resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${id}`)).then(response => {
                 const { data } = response;
@@ -60,19 +55,17 @@ export const AppContainer = () => {
         }
     }
 
-    const handleEditData = (data) => {
-        if (data) {
-            axios.post(resolveClientUrl('ExtensionNo/EditExternalGroup'), {
-                teamName: data.TeamName.trim(),
-                teamId: data.TeamId
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    handleGetAllEnternalGroup();
-                    setModalEdit(false);
-                }
-            }).catch(axiosError);
-        }
+    const handleEditData = data => {
+        axios.post(resolveClientUrl('ExtensionNo/EditExternalGroup'), {
+            teamName: data.TeamName.trim(),
+            teamId: data.TeamId
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                handleGetAllEnternalGroup();
+                setModalEdit(false);
+            }
+        }).catch(axiosError);
     }
 
     return (
@@ -94,7 +87,7 @@ export const AppContainer = () => {
                 data={single}
                 title='Edit'
             />
-            <Table data={data} handleDeleteData={handleDeleteData} handleGetDataById={handleGetDataById }/>
+            <Table data={data} onDelete={handleDeleteData} onEdit={handleGetDataById }/>
         </Fragment>
     )
 };

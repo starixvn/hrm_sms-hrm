@@ -46,7 +46,7 @@ const AppContainer = () => {
         }
     };
 
-    const getGroupExtension = (isInternal) => {
+    const getGroupExtension = isInternal => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
             params: { IsInternal: isInternal }
         }).then(response => {
@@ -59,7 +59,7 @@ const AppContainer = () => {
     }, [isInternal])
 
 
-    const handleChange = (data) => {
+    const handleChange = data => {
         const selected = employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
     }
@@ -187,7 +187,7 @@ const AppContainer = () => {
         );
     }
     
-    const handleSubmit = (data) => {
+    const handleSubmit = data => {
         axios.post(resolveClientUrl('ExtensionNo/Create'), {
             FullName: data.FullName,
             NickName: data.NickName,

@@ -1,10 +1,10 @@
 ﻿import React, { Fragment} from 'react';
-import 'jquery-ui-bundle/jquery-ui';
 import { Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { isEmpty } from 'lodash';
 import Draggable from 'react-draggable';
+
+import Errors from '../../../../shared/components/Errors';
 
 export const Popup = (props) => {
     const CreateExternalGroup = Yup.object({
@@ -17,33 +17,40 @@ export const Popup = (props) => {
     const { data, title } = props;
     const teamName = data ? data.teamName : '';
     const teamId = data ? data.id : '';
-    const renderForm = (errors) => {
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <Fragment>
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.TeamName && <li>{errors.TeamName}</li>}
-                        </ul>
-                    </div>
-                }
-                <div className="form-group" style={{ marginBottom : '0' }}>
-                    <div className="label-form">Group Name</div>
-                    <div className="input-form">
-                        <Field name="TeamName" className="form-control">
-                            {({
-                                field
-                            }) => (
-                                <input
-                                    autoComplete='off'
-                                    className="form-control"
-                                    type="text"
-                                    {...field}
-                                />
-                            )}
-                        </Field>
-                    </div>
-                </div>
+                <Form className="form-horizontal">
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            {title} external group
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Errors errors={errors} />
+                        <div className="form-group" style={{ marginBottom: '0' }}>
+                            <div className="label-form">Group Name</div>
+                            <div className="input-form">
+                                <Field name="TeamName" className="form-control">
+                                    {({
+                                        field
+                                    }) => (
+                                        <input
+                                            autoComplete='off'
+                                            className="form-control"
+                                            type="text"
+                                            {...field}
+                                        />
+                                    )}
+                                </Field>
+                            </div>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Save</button>
+                        <a className="btn btn-default" onClick={props.onHide}>Cancel</a>
+                    </Modal.Footer>
+                </Form>
             </Fragment>
         )
     }
@@ -66,22 +73,7 @@ export const Popup = (props) => {
                     validationSchema={CreateExternalGroup}
                     onSubmit={props.onSubmit}
                 >
-                    {({ errors }) => (
-                        <Form className="form-horizontal">
-                            <Modal.Header closeButton>
-                                <Modal.Title id="contained-modal-title-vcenter">
-                                    {title} external group
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                {renderForm(errors)}
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <button type="submit" className="btn btn-primary">Save</button>
-                                <a className="btn btn-default" onClick={props.onHide}>Cancel</a>
-                            </Modal.Footer>
-                        </Form>
-                    )}
+                    {renderForm}
                 </Formik>
             </Modal>
         </Draggable>
