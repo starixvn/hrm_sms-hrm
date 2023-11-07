@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-const Validation = ({ errors }) => {
+const Errors = ({ errors }) => {
     if (!errors || Object.keys(errors).length === 0) {
         return null;
     }
@@ -16,4 +16,4 @@ const Validation = ({ errors }) => {
     );
 };
 
-export default Validation;
+export default Errors;

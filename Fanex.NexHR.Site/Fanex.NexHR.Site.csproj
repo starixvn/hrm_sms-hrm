@@ -660,7 +660,7 @@
     <Content Include="wwwroot\sources\js\pages\unit\home\index.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\SweetModalDialog.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
-    <Content Include="wwwroot\sources\js\shared\components\Validation.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\Errors.jsx" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
     <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />

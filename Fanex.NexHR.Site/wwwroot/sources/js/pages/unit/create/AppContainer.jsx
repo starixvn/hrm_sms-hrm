@@ -1,11 +1,11 @@
 ﻿import React from 'react';
-import { isEmpty } from 'lodash';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import toastr from 'toastr';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
+import Errors from '../../../shared/components/Errors';
 
 const AppContainer = () => {
     const handleGoBack = () => {
@@ -36,14 +36,7 @@ const AppContainer = () => {
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.code && <li>{errors.code}</li>}
-                            {errors.name && <li>{errors.name}</li>}
-                        </ul>
-                    </div>
-                }
+                <Errors errors={errors} />
                 <Form className="form-horizontal">
                     <div className="form-group">
                         <div className="label-form">

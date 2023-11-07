@@ -3,23 +3,22 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { isEmpty } from 'lodash';
 
 import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
 import Autocomplete from '../../../../shared/components/Autocomplete';
-
+import Errors from '../../../../shared/components/Errors';
 
 
 const AppContainer = () => {
-    const [selectExtension, setSelectExtension] = useState([]);
-    const [checked, setChecked] = useState(false);
+    const [selectExtension, setSelectExtension] = useState(null);
+    const [isInternal, setIsInternal]= useState(false);
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const CreateExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
             .required('The ExtensionNo field is required!'),
-        Employee: checked ? Yup.string()
+        Employee: isInternal ? Yup.string()
             .trim()
             .required('The Employee field is required!') : false
     });
@@ -28,7 +27,7 @@ const AppContainer = () => {
     }
 
     const getEmployees = query => {
-        if (query) {
+        if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
                 params: { query }
             }).then(response => {
@@ -47,20 +46,17 @@ const AppContainer = () => {
         }
     };
 
-    const getGroupExtension = (checked) => {
+    const getGroupExtension = (isInternal) => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
-            params: { IsInternal: checked }
+            params: { IsInternal: isInternal }
         }).then(response => {
-            const { data } = response;
-            if (data) {
-                setSelectExtension(data)
-            }
+            setSelectExtension(response.data);
         }).catch(axiosError);
     }
 
     useEffect(() => {
-        getGroupExtension(checked);
-    }, [checked])
+        getGroupExtension(isInternal);
+    }, [isInternal])
 
 
     const handleChange = (data) => {
@@ -68,17 +64,10 @@ const AppContainer = () => {
         setSelectEmployee(selected);
     }
 
-    const renderForm = (errors) => {
+    const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.ExtensionNo && <li>{errors.ExtensionNo}</li>}
-                            {errors.Employee && <li>{errors.Employee}</li>}
-                        </ul>
-                    </div>
-                }
+                <Errors errors={errors }/>
                 <Form className="form-horizontal">
                     <input name="EmpId" hidden />
                     <div className="form-group">
@@ -94,7 +83,7 @@ const AppContainer = () => {
                                         type="checkbox"
                                         {...field}
                                         onChange={e => {
-                                            setChecked(e.target.checked)
+                                            setIsInternal(e.target.checked)
                                             form.setFieldValue('IsInternal', e.target.checked)
                                         }}
                                     />
@@ -117,7 +106,7 @@ const AppContainer = () => {
                         </div>
                     </div>
                     {
-                        checked && <div className="form-group">
+                        isInternal && <div className="form-group">
                             <div className="label-form">
                                 <label className="control-label">Employee</label>
                             </div>
@@ -155,7 +144,7 @@ const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked || false}
+                                        readOnly={isInternal || false}
                                     />
                                 )}
                             </Field>
@@ -175,7 +164,7 @@ const AppContainer = () => {
                                         className="form-control"
                                         type="text"
                                         {...field}
-                                        readOnly={checked || false}
+                                        readOnly={isInternal || false}
                                     />
                                 )}
                             </Field>
@@ -190,7 +179,7 @@ const AppContainer = () => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <button type="submit" id="btnSubmit" className="btn btn-primary" style={{ marginRight: "5px" }}>Add</button>
+                        <button type="submit" id="btnSubmit" className="btn btn-primary" disabled={isSubmitting} style={{ marginRight: "5px" }}>Add</button>
                         <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
@@ -198,25 +187,23 @@ const AppContainer = () => {
         );
     }
     
-    const onSubmit = (data) => {
-        if (data) {
-            axios.post(resolveClientUrl('ExtensionNo/Create'), {
-                FullName: data.FullName,
-                NickName: data.NickName,
-                ExtensionNo: data.ExtensionNo,
-                IsInternal: data.IsInternal,
-                EmpId: data.EmpId,
-                TeamId: data.TeamId
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    document.location = resolveClientUrl("ExtensionNo/Index");
-                }
-            }).catch(axiosError);
-        }
+    const handleSubmit = (data) => {
+        axios.post(resolveClientUrl('ExtensionNo/Create'), {
+            FullName: data.FullName,
+            NickName: data.NickName,
+            ExtensionNo: data.ExtensionNo,
+            IsInternal: data.IsInternal,
+            EmpId: data.EmpId,
+            TeamId: data.TeamId
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                document.location = resolveClientUrl("ExtensionNo/Index");
+            }
+        }).catch(axiosError);
     }
 
-    if (!selectExtension || selectExtension[0] == null) {
+    if (!selectExtension) {
         return null;
     }
     const fullName = selectEmployee ? selectEmployee.fullName : '';
@@ -230,20 +217,18 @@ const AppContainer = () => {
             validateOnChange={false}
             initialValues={{
                 EmpId: empId,
-                Employee: empName || '',
-                FullName: fullName || '',
-                TeamId: teamId || '',
-                NickName: nickName || '',
+                Employee: empName,
+                FullName: fullName,
+                TeamId: teamId,
+                NickName: nickName,
                 ExtensionNo: '',
-                IsInternal: checked || false
+                IsInternal: isInternal || false
             }}
             enableReinitialize={true}
             validationSchema={CreateExtensionSchema}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
         >
-            {({ errors }) => (
-                renderForm(errors)
-            )}
+            {renderForm}
         </Formik>
         
     )
