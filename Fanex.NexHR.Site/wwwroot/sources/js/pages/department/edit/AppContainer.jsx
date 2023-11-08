@@ -5,7 +5,7 @@ import { Formik, Form, Field } from 'formik';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
-import Validation from '../../../shared/components/Validation';
+import Errors from '../../../shared/components/Errors';
 
 const AppContainer = () => {
     const [department, setDepartment] = useState(null);
@@ -46,7 +46,7 @@ const AppContainer = () => {
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                <Validation errors={errors} />
+                <Errors errors={errors} />
                 <Form className="form-horizontal">
                     <div className="form-group">
                         <div className="label-form">

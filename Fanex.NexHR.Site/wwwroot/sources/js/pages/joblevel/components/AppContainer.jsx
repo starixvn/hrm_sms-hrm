@@ -6,12 +6,15 @@ import Table from './Table';
 import Popup from './Popup';
 
 import { resolveClientUrl, axiosError, confirm, toastOptions } from '../../../shared/common.functions';
+import ConfirmPopup from '../../../shared/components/ConfirmPopup';
 
 export const AppContainer = () => {
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [jobLevels, setJobLevels] = useState([]);
     const [jobLevelEdit, setJobLevelEdit] = useState([]);
+    const [jobLevelDelete, setJobLevelDelete] = useState([]);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const getJobLevels = () => {
         axios.post(resolveClientUrl('JobLevel/GetJobLevels'), {
@@ -29,9 +32,9 @@ export const AppContainer = () => {
         setJobLevelEdit({ id: jobLevel.id, name: jobLevel.name });
     };
 
-    const handleCreate = values => {
+    const handleCreate = jobLevel => {
         axios.post(resolveClientUrl(`JobLevel/Insert`), {
-            name: values.name.trim(),
+            name: jobLevel.name.trim(),
         })
             .then(response => {
                 const { data } = response;
@@ -63,19 +66,8 @@ export const AppContainer = () => {
     };
 
     const handleDelete = jobLevel => {
-        confirm('Are you sure you want to delete?', () => {
-            axios.post(resolveClientUrl('JobLevel/Delete'), {
-                id: jobLevel.id
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success('Deleted successfully!', '', toastOptions());
-                    getJobLevels();
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        });
+        setShowConfirm(true);
+        setJobLevelDelete(jobLevel);
     };
 
     const handleCreateModal = () => {
@@ -84,6 +76,25 @@ export const AppContainer = () => {
 
     const handleEditModal = () => {
         setEditModal(false);
+    };
+
+    const handleConfirm = () => {
+        setShowConfirm(false);
+        axios.post(resolveClientUrl('JobLevel/Delete'), {
+            id: jobLevelDelete.id
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Deleted successfully!', '', toastOptions());
+                getJobLevels();
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    const handleCancel = () => {
+        setShowConfirm(false);
     };
 
     return (
@@ -111,6 +122,12 @@ export const AppContainer = () => {
                 data={jobLevels}
                 onEdit={handleEditInfo}
                 onDelete={handleDelete} />
+            <ConfirmPopup
+                show={showConfirm}
+                message="Are you sure you want to delete?"
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
         </Fragment>
     );
 };
