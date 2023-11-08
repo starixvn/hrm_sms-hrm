@@ -6,7 +6,8 @@ import Filter from './Filter';
 import Table from './Table';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
-import ConfirmPopup from '../../../../shared/components/ConfirmPopup';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
+
 
 const AppContainer = () => {
     const [filterParams, setFilterParams] = useState({ isActive: true });
@@ -58,7 +59,7 @@ const AppContainer = () => {
         <Fragment>
             <Filter onSubmit={getUnits} />
             <Table data={units} onDelete={handleDelete} />
-            <ConfirmPopup
+            <SweetModalDialog
                 show={dialog.showConfirm}
                 message='Are you sure you want to delete this unit?'
                 onConfirm={handleConfirm}

@@ -5,11 +5,16 @@ import toastr from 'toastr';
 import Filter from './Filter';
 import Table from './Table';
 
-import { axiosError, resolveClientUrl, confirm, toastOptions } from '../../../../shared/common.functions';
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
     const [section, setSection] = useState([]);
     const [filterParams, setFilterParams] = useState({ isActive: true });
+    const [dialog, setDialog] = useState({
+        section : null,
+        showConfirm: false
+    });
 
     const getSections = params => {
         setFilterParams(params);
@@ -22,24 +27,39 @@ const AppContainer = () => {
         getSections(filterParams);
     }, []);
 
-    const handleDelete = id => {
-        confirm('Are you sure you want to delete this section?', () => {
-            axios.post(resolveClientUrl(`Section/Delete/${id}`)).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success('Deleted successfully!', '', toastOptions());
-                    getSections(filterParams);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
-        });
+    const handleDelete = section => {
+        setDialog({ showConfirm: true, section: section });
+    };
+
+    const handleCancel = () => {
+        setDialog({ showConfirm: false });
+    };
+
+
+    const handleConfirm = () => {
+        setDialog({ showConfirm: false });
+        const id = dialog.section;
+        axios.post(resolveClientUrl(`Section/Delete/${id}`)).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Deleted successfully!', '', toastOptions());
+                getSections(filterParams);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
     };
 
     return (
         <Fragment>
             <Filter onSubmit={getSections} />
             <Table data={section} onDelete={handleDelete} />
+            <SweetModalDialog
+                show={dialog.showConfirm}
+                message='Are you sure you want to delete this section?'
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+            />
         </Fragment>
     );
 };
