@@ -1,20 +1,12 @@
 ﻿import React, { Fragment} from 'react';
 import { Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
 import Draggable from 'react-draggable';
 
 import Errors from '../../../../shared/components/Errors';
+import { validationSchema } from '../common.functions';
 
-const Popup = (props) => {
-    const CreateExternalGroup = Yup.object({
-        TeamName: Yup.string()
-            .trim()
-            .min(3, 'Length of external group must be 3 between and 100.')
-            .max(100, 'Length of external group must be 3 between and 100.')
-            .required('The TeamName field is required!'),
-    });
-    const { data, title, onHide, onSubmit } = props;
+const Popup = ({ show, data, title, onHide, onSubmit }) => {
     const teamName = data ? data.teamName : '';
     const teamId = data ? data.id : '';
     const renderForm = ({ errors, isSubmitting }) => {
@@ -58,9 +50,10 @@ const Popup = (props) => {
     return (
         <Draggable handle=".modal-header" >
             <Modal
-                {...props}
+                show={show}
                 keyboard={false}
                 backdrop="static"
+                onHide={onHide}
             >
                 <Formik
                     validateOnBlur={false}
@@ -70,7 +63,7 @@ const Popup = (props) => {
                         TeamName: teamName,
                         TeamId: teamId
                     }}
-                    validationSchema={CreateExternalGroup}
+                    validationSchema={validationSchema }
                     onSubmit={onSubmit}
                 >
                     {renderForm}

@@ -575,8 +575,10 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Popup.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\AppContainer.jsx" />
@@ -659,7 +661,6 @@
     <Content Include="wwwroot\sources\js\pages\team\supervisor\table\EmployeeAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\home\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\home\index.jsx" />
-    <Content Include="wwwroot\sources\js\shared\components\ConfirmPopup.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\SweetModalDialog.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Errors.jsx" />
