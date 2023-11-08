@@ -4,7 +4,7 @@
 @import '../../layout/toastr';
 @import '../../components/validation';
 @import '../../components/buttons-new';
-@import '../../components/jquery-ui-dialog';
+@import '../../components/sweet-modal';
 
 .form-group {
     width: 100%;
@@ -24,17 +24,4 @@
 
 .filter, .table-custom {
     width: 700px !important;
-}
-
-.modal-dialog {
-    top: 36%;
-    left: 4%;
-
-    .modal-content {
-        width: 425px;
-
-        .modal-header {
-            cursor: move;
-        }
-    }
 }

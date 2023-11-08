@@ -99,7 +99,7 @@ const AppContainer = () => {
     const handleDelete = jobTitle => {
         setModalDialog({
             showConfirm: true,
-            jobTitleDelete: jobTitle
+            jobTitle: jobTitle
         });
     };
 
@@ -108,7 +108,7 @@ const AppContainer = () => {
             showConfirm: false
         });
         axios.post(resolveClientUrl('JobTitle/Delete'), {
-            id: modalDialog.jobTitleDelete.id
+            id: modalDialog.jobTitle.id
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {

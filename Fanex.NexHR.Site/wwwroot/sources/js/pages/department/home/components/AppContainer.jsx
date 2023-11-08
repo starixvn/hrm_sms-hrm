@@ -5,11 +5,15 @@ import toastr from 'toastr';
 import Table from './Table';
 import Filter from './Filter';
 
-import { axiosError, resolveClientUrl, confirm, toastOptions } from '../../../../shared/common.functions';
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
     const [departments, setDepartments] = useState([]);
     const [filterParams, setFilterParams] = useState({ isActive: true });
+    const [modalDialog, setModalDialog] = useState({
+        showConfirm: false
+    });
 
     const getDepartments = params => {
         setFilterParams(params);
@@ -24,18 +28,32 @@ const AppContainer = () => {
     }, []);
 
     const handleDelete = department => {
-        confirm('Are you sure you want to delete this department?', () => {
-            axios.post(resolveClientUrl('Department/Delete'), {
-                id: department.id
-            }).then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success('Deleted successfully!', '', toastOptions());
-                    getDepartments(filterParams);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+        setModalDialog({
+            showConfirm: true,
+            department: department
+        });
+    };
+
+    const handleConfirm = () => {
+        setModalDialog({
+            showConfirm: false
+        });
+        axios.post(resolveClientUrl('Department/Delete'), {
+            id: modalDialog.department.id
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Deleted successfully!', '', toastOptions());
+                getDepartments(filterParams);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    const handleCancel = () => {
+        setModalDialog({
+            showConfirm: false
         });
     };
 
@@ -43,6 +61,11 @@ const AppContainer = () => {
         <Fragment>
             <Filter onSubmit={getDepartments} />
             <Table data={departments} onDelete={handleDelete} />
+            <SweetModalDialog
+                show={modalDialog.showConfirm}
+                message="Are you sure you want to delete this department?"
+                onConfirm={handleConfirm}
+                onCancel={handleCancel} />
         </Fragment>
     );
 };
