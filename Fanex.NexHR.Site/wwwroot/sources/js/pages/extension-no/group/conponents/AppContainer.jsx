@@ -1,7 +1,7 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 
-import { resolveClientUrl, axiosError, alert } from '../../../../shared/common.functions';
+import { resolveClientUrl, axiosError } from '../../../../shared/common.functions';
 import Table from './Table';
 import Popup from './Popup';
 import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
@@ -55,10 +55,9 @@ export const AppContainer = () => {
         axios.post(resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${id}`)).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                alert('Delete successfully!');
                 handleGetAllEnternalGroup();
             } else {
-                alert(data.Message);
+                toastr.error(data.message, '', toastOptions());
             }
         }).catch(axiosError);
     }
