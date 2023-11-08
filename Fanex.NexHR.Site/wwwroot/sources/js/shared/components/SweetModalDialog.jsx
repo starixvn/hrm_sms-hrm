@@ -1,64 +1,36 @@
-﻿import React, { Fragment, PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
+﻿import React from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import Draggable from 'react-draggable';
 
-export default class SweetModalDialog extends PureComponent {
-    static propTypes = {
-        show: PropTypes.bool,
-        contents: PropTypes.element.isRequired,
-        onHide: PropTypes.func,
-        onSubmit: PropTypes.func
-    };
+const SweetModalDialog = ({ show, message, onConfirm, onCancel }) => {
 
-    static defaultProps = {
-        show: false,
-        contents: <Fragment />,
-        onHide: function () {
-            // This is intentional
-        },
-        onSubmit: function () {
-            // This is intentional
-        }
-    };
-
-    constructor(props) {
-        super(props);
-        this.siteId = document.getElementById('SiteId').value;
-        switch (this.siteId) {
-            case '1':
-                this.title = 'SMS HRM';
-                break;
-            case '2':
-                this.title = 'HM HRM';
-                break;
-            case '3':
-                this.title = 'CTS HRM';
-                break;
-        }
+    let title = '';
+    switch (window.siteId) {
+        case 1:
+            title = 'SMS HRM';
+            break;
+        case 2:
+            title = 'HM HRM';
+            break;
+        case 3:
+            title = 'CTS HRM';
+            break;
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-        this.props.onSubmit();
-    };
-
-    render() {
-        return (
-            <Modal keyboard={false} backdrop="static"
-                show={this.props.show} onHide={this.props.onHide}
-                dialogClassName="modal-dialog-centered"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>{this.title}</Modal.Title>
+    return (
+        <Draggable handle=".modal-header" >
+            <Modal keyboard={false} backdrop="static" show={show} onHide={onCancel}>
+                <Modal.Header>
+                    <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    {this.props.contents}
-                </Modal.Body>
+                <Modal.Body>{message}</Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onSubmit} bsStyle="primary">Ok</Button>
-                    <Button onClick={this.props.onHide} className="btn-cancel">Cancel</Button>
+                    <Button bsStyle="primary" onClick={onConfirm}> OK </Button>
+                    <Button className="btn-cancel" onClick={onCancel}> Cancel </Button>
                 </Modal.Footer>
             </Modal>
-        );
-    }
-}
+        </Draggable>
+    );
+};
+
+export default SweetModalDialog;

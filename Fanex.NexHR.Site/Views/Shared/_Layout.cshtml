@@ -80,6 +80,7 @@
     <div id="message"></div>
     <script type="text/javascript">
         var siteId = @siteId;
+        window.siteId = @siteId;
     </script>
     @Html.Action("GlobalScript", "UI")
     @Html.Hidden("RootURL", Url.Content("~/"))

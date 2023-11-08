@@ -5,8 +5,8 @@ import toastr from 'toastr';
 import Table from './Table';
 import Popup from './Popup';
 
-import { resolveClientUrl, axiosError, confirm, toastOptions } from '../../../shared/common.functions';
-import ConfirmPopup from '../../../shared/components/ConfirmPopup';
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import SweetModalDialog from '../../../shared/components/SweetModalDialog';
 
 export const AppContainer = () => {
     const [createModal, setCreateModal] = useState(false);
@@ -122,7 +122,7 @@ export const AppContainer = () => {
                 data={jobLevels}
                 onEdit={handleEditInfo}
                 onDelete={handleDelete} />
-            <ConfirmPopup
+            <SweetModalDialog
                 show={showConfirm}
                 message="Are you sure you want to delete?"
                 onConfirm={handleConfirm}
