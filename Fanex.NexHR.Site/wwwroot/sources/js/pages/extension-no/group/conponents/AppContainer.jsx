@@ -1,12 +1,14 @@
 ﻿import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
+
 import { resolveClientUrl, axiosError, confirm, alert } from '../../../../shared/common.functions';
-import { Table } from './Table';
-import { Popup } from './Popup';
+import Table from './Table';
+import Popup from './Popup';
+
 export const AppContainer = () => {
     const [data, setData] = useState([]);
     const [single, setSingle] = useState(null);
-    const [modalShow, setModalShow] = useState(false);
+    const [modalCreate, setModalCreate] = useState(false);
     const [modalEdit, setModalEdit] = useState(false);
 
     const handleGetAllEnternalGroup = () => {
@@ -26,7 +28,7 @@ export const AppContainer = () => {
             const { data } = response;
             if (data.isSuccessful) {
                 handleGetAllEnternalGroup();
-                setModalShow(false);
+                setModalCreate(false);
             }
         }).catch(axiosError);
     }
@@ -70,12 +72,12 @@ export const AppContainer = () => {
 
     return (
         <Fragment>
-            <a className="btn btn-request" onClick={() => setModalShow(true)}>
+            <a className="btn btn-request" onClick={() => setModalCreate(true)}>
                 <span className="fa fa-plus"></span> New External Group
             </a>
             <Popup
-                show={modalShow}
-                onHide={() => setModalShow(false)}
+                show={modalCreate}
+                onHide={() => setModalCreate(false)}
                 onSubmit={handleCreateData}
                 title='Add new'
             />

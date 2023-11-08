@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import Row from './Row';
 
-export const Table = ({ data, onDelete, onEdit }) => {
+const Table = ({ data, onDelete, onEdit }) => {
     if (!data) return null
     return (
         <table className="table table-custom" id="data" style={{ width: 'auto', minWidth: '600px' }}>
@@ -26,3 +26,4 @@ export const Table = ({ data, onDelete, onEdit }) => {
         </table>
     );
 }
+export default Table;

@@ -6,7 +6,7 @@ import Draggable from 'react-draggable';
 
 import Errors from '../../../../shared/components/Errors';
 
-export const Popup = (props) => {
+const Popup = (props) => {
     const CreateExternalGroup = Yup.object({
         TeamName: Yup.string()
             .trim()
@@ -14,7 +14,7 @@ export const Popup = (props) => {
             .max(100, 'Length of external group must be 3 between and 100.')
             .required('The TeamName field is required!'),
     });
-    const { data, title } = props;
+    const { data, title, onHide, onSubmit } = props;
     const teamName = data ? data.teamName : '';
     const teamId = data ? data.id : '';
     const renderForm = ({ errors, isSubmitting }) => {
@@ -48,7 +48,7 @@ export const Popup = (props) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Save</button>
-                        <a className="btn btn-default" onClick={props.onHide}>Cancel</a>
+                        <a className="btn btn-default" onClick={onHide}>Cancel</a>
                     </Modal.Footer>
                 </Form>
             </Fragment>
@@ -71,7 +71,7 @@ export const Popup = (props) => {
                         TeamId: teamId
                     }}
                     validationSchema={CreateExternalGroup}
-                    onSubmit={props.onSubmit}
+                    onSubmit={onSubmit}
                 >
                     {renderForm}
                 </Formik>
@@ -79,3 +79,5 @@ export const Popup = (props) => {
         </Draggable>
     );
 }
+
+export default Popup;
