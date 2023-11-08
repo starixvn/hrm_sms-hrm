@@ -1,27 +1,17 @@
 ﻿import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
-import { isEmpty } from 'lodash';
 import Draggable from 'react-draggable';
-import * as Yup from 'yup';
 
-const validationSchema = Yup.object({
-    name: Yup.string().trim().required('Job Title is required!')
-});
+import { validationSchema } from '../common.functions';
+import Errors from '../../../shared/components/Errors';
 
-const Popup = (props) => {
-    const { data, title, jobCategory } = props;
+const Popup = ({ show, onHide, onSubmit, data, title, jobCategory }) => {
 
     const renderForm = errors => {
         return (
             <div className="card">
-                {
-                    !isEmpty(errors) && <div className="validation-summary-errors">
-                        <ul>
-                            {errors.name && <li>{errors.name}</li>}
-                        </ul>
-                    </div>
-                }
+                <Errors errors={errors} />
                 <div className="form-horizontal clearfix">
                     <div className="form-group form-modal ">
                         <div className="label-form">
@@ -37,11 +27,13 @@ const Popup = (props) => {
                         </div>
                         <div className="select-form">
                             <Field name="categoryId" as="select" className="form-control">
-                                {jobCategory.map((category) => (
-                                    <option key={category.value} value={category.value}>
-                                        {category.text}
-                                    </option>
-                                ))}
+                                {
+                                    jobCategory ? jobCategory.map((category) => (
+                                        <option key={category.value} value={category.value}>
+                                            {category.text}
+                                        </option>
+                                    )) : ''
+                                }
                             </Field>
                         </div>
                     </div>
@@ -52,7 +44,7 @@ const Popup = (props) => {
 
     return (
         <Draggable handle=".modal-header" >
-            <Modal {...props} keyboard={false} backdrop="static">
+            <Modal keyboard={false} backdrop="static" show={show} onHide={onHide}>
                 <Formik
                     validateOnBlur={false}
                     validateOnChange={false}
@@ -61,7 +53,7 @@ const Popup = (props) => {
                         categoryId: data ? data.categoryId : ''
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={props.onSubmit}
+                    onSubmit={onSubmit}
                 >
                     {({ errors }) => (
                         <Form>
@@ -73,7 +65,7 @@ const Popup = (props) => {
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button bsStyle="primary" type="submit">Submit</Button>
-                                <Button className="btn-cancel" onClick={props.onHide}>Cancel</Button>
+                                <Button className="btn-cancel" onClick={onHide}>Cancel</Button>
                             </Modal.Footer>
                         </Form>
                     )}

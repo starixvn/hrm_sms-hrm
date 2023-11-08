@@ -1,29 +1,36 @@
 ﻿import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
+import toastr from 'toastr';
 
 import Table from './Table';
 import Popup from './Popup';
 import Filter from './Filter';
 
-import { resolveClientUrl, axiosError, alert, confirm } from '../../../shared/common.functions';
+import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import SweetModalDialog from '../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
-    const [createModal, setCreateModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
-    const [jobTitle, setJobTitle] = useState([]);
+    const [jobTitles, setJobTitles] = useState([]);
     const [jobCategory, setJobCategory] = useState([]);
-    const [keyword, setKeyword] = useState('');
+    const [filterParams, setFilterParams] = useState({ jobTitle: '' });
     const [jobTitleEdit, setJobTitleEdit] = useState([]);
+    const [modalDialog, setModalDialog] = useState({
+        showConfirm: false
+    });
+    const [openPopup, setOpenPopup] = useState({
+        openCreate: false,
+        openEdit: false
+    });
 
-    const handleGetJobTitle = () => {
-        axios.post(resolveClientUrl('JobTitle/GetJobTitles'), {
-            jobTitle: keyword
-        }).then(response => {
-            setJobTitle(response.data)
-        }).catch(axiosError);
+    const getJobTitles = params => {
+        setFilterParams(params);
+        axios.post(resolveClientUrl('JobTitle/GetJobTitles'), params)
+            .then(response => {
+                setJobTitles(response.data)
+            }).catch(axiosError);
     };
 
-    const handleGetJobCategory = () => {
+    const getJobCategory = () => {
         axios.post(resolveClientUrl('JobTitle/GetJobCategory'), {
         }).then(response => {
             setJobCategory(response.data)
@@ -31,16 +38,16 @@ const AppContainer = () => {
     };
 
     useEffect(() => {
-        handleGetJobTitle();
-        handleGetJobCategory();
+        getJobTitles(filterParams);
+        getJobCategory();
     }, []);
 
-    const handleEditInfo = (id, name, categoryId) => {
-        setEditModal(true);
+    const handleEditInfo = jobTitle => {
+        setOpenPopup({ openEdit: true });
         setJobTitleEdit({
-            id: id,
-            name: name,
-            categoryId: categoryId
+            id: jobTitle.id,
+            name: jobTitle.name,
+            categoryId: jobTitle.categoryId
         });
     };
 
@@ -51,76 +58,103 @@ const AppContainer = () => {
         })
             .then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
-                    setCreateModal(false);
-                    alert('Create successfully!');
-                    handleGetJobTitle();
+                setOpenPopup({ openCreate: false });
+                if (data.isSuccessful) {
+                    toastr.success('Create successfully!', '', toastOptions());
+                    getJobTitles();
                 } else {
-                    alert(data.Message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
     };
 
-    const handleDelete = (id) => {
-        confirm('Are you sure you want to delete?', () => {
-            axios.post(resolveClientUrl('JobTitle/Delete'), {
-                id: id
-            }).then(response => {
-                const { data } = response;
-                if (data.IsSuccessful) {
-                    alert('Delete successfully!');
-                    handleGetJobTitle();
-                } else {
-                    alert(data.Message);
-                }
-            }).catch(axiosError);
-        });
-    };
-
-    const handleEdit = (values) => {
+    const handleEdit = jobTitle => {
         axios.post(resolveClientUrl(`JobTitle/Update`), {
             id: jobTitleEdit.id,
-            name: values.name.trim(),
-            categoryId: values.categoryId
+            name: jobTitle.name.trim(),
+            categoryId: jobTitle.categoryId
         })
             .then(response => {
                 const { data } = response;
-                if (data.IsSuccessful) {
-                    setEditModal(false);
-                    alert('Edit successfully!');
-                    handleGetJobTitle();
+                setOpenPopup({ openEdit: false });
+                if (data.isSuccessful) {
+                    toastr.success('Edit successfully!', '', toastOptions());
+                    getJobTitles();
                 } else {
-                    alert(data.Message);
+                    toastr.error(data.message, '', toastOptions());
                 }
             }).catch(axiosError);
+    };
+
+    const handleCreateModal = () => {
+        setOpenPopup({ openCreate: !openPopup.openCreate });
+
+    };
+
+    const handleEditModal = () => {
+        setOpenPopup({ openEdit: false });
+
+    };
+
+    const handleDelete = jobTitle => {
+        setModalDialog({
+            showConfirm: true,
+            jobTitleDelete: jobTitle
+        });
+    };
+
+    const handleConfirm = () => {
+        setModalDialog({
+            showConfirm: false
+        });
+        axios.post(resolveClientUrl('JobTitle/Delete'), {
+            id: modalDialog.jobTitleDelete.id
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Deleted successfully!', '', toastOptions());
+                getJobLevels();
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    const handleCancel = () => {
+        setModalDialog({
+            showConfirm: false
+        });
     };
 
     return (
         <Fragment>
             <Filter
-                keyword={keyword}
-                setKeyword={setKeyword}
-                searchKeyword={handleGetJobTitle}
-                setCreateModal={setCreateModal} />
+                onSubmit={getJobTitles}
+                setOpenPopup={handleCreateModal} />
             <Popup
-                show={createModal}
-                onHide={() => setCreateModal(false)}
+                show={openPopup.openCreate}
+                onHide={handleCreateModal}
                 onSubmit={handleCreate}
                 title='Add'
                 jobCategory={jobCategory} />
             <Popup
-                show={editModal}
-                onHide={() => setEditModal(false)}
+                show={openPopup.openEdit}
+                onHide={handleEditModal}
                 onSubmit={handleEdit}
                 title='Edit'
                 jobCategory={jobCategory}
                 data={jobTitleEdit} />
             <Table
-                data={jobTitle}
-                handleEditInfo={handleEditInfo}
-                handleDelete={handleDelete} />
+                data={jobTitles}
+                onEdit={handleEditInfo}
+                onDelete={handleDelete} />
+            <SweetModalDialog
+                show={modalDialog.showConfirm}
+                message="Are you sure you want to delete?"
+                onConfirm={handleConfirm}
+                onCancel={handleCancel} />
         </Fragment>
-    )
+    );
 };
 
 export default AppContainer;

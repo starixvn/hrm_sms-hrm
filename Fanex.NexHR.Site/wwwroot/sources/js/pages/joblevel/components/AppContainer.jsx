@@ -9,12 +9,16 @@ import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/comm
 import SweetModalDialog from '../../../shared/components/SweetModalDialog';
 
 export const AppContainer = () => {
-    const [createModal, setCreateModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
+
     const [jobLevels, setJobLevels] = useState([]);
     const [jobLevelEdit, setJobLevelEdit] = useState([]);
-    const [jobLevelDelete, setJobLevelDelete] = useState([]);
-    const [showConfirm, setShowConfirm] = useState(false);
+    const [modalDialog, setModalDialog] = useState({
+        showConfirm: false
+    });
+    const [openPopup, setOpenPopup] = useState({
+        openCreate: false,
+        openEdit: false
+    });
 
     const getJobLevels = () => {
         axios.post(resolveClientUrl('JobLevel/GetJobLevels'), {
@@ -28,7 +32,7 @@ export const AppContainer = () => {
     }, []);
 
     const handleEditInfo = jobLevel => {
-        setEditModal(true);
+        setOpenPopup({ openEdit: true });
         setJobLevelEdit({ id: jobLevel.id, name: jobLevel.name });
     };
 
@@ -38,7 +42,7 @@ export const AppContainer = () => {
         })
             .then(response => {
                 const { data } = response;
-                setCreateModal(false);
+                setOpenPopup({ openCreate: false });
                 if (data.isSuccessful) {
                     toastr.success('Create successfully!', '', toastOptions());
                     getJobLevels();
@@ -55,7 +59,7 @@ export const AppContainer = () => {
         })
             .then(response => {
                 const { data } = response;
-                setEditModal(false);
+                setOpenPopup({ openEdit: false });
                 if (data.isSuccessful) {
                     toastr.success('Edit successfully!', '', toastOptions());
                     getJobLevels();
@@ -66,22 +70,26 @@ export const AppContainer = () => {
     };
 
     const handleDelete = jobLevel => {
-        setShowConfirm(true);
-        setJobLevelDelete(jobLevel);
+        setModalDialog({
+            showConfirm: true,
+            jobLevelDelete: jobLevel
+        });
     };
 
     const handleCreateModal = () => {
-        setCreateModal(!createModal);
+        setOpenPopup({ openCreate: !openPopup.openCreate });
     };
 
     const handleEditModal = () => {
-        setEditModal(false);
+        setOpenPopup({ openEdit: false });
     };
 
     const handleConfirm = () => {
-        setShowConfirm(false);
+        setModalDialog({
+            showConfirm: false
+        });
         axios.post(resolveClientUrl('JobLevel/Delete'), {
-            id: jobLevelDelete.id
+            id: modalDialog.jobLevelDelete.id
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
@@ -94,7 +102,9 @@ export const AppContainer = () => {
     };
 
     const handleCancel = () => {
-        setShowConfirm(false);
+        setModalDialog({
+            showConfirm: false
+        });
     };
 
     return (
@@ -108,12 +118,12 @@ export const AppContainer = () => {
                 </div>
             }
             <Popup
-                show={createModal}
+                show={openPopup.openCreate}
                 onHide={handleCreateModal}
                 onSubmit={handleCreate}
                 title='Add' />
             <Popup
-                show={editModal}
+                show={openPopup.openEdit}
                 onHide={handleEditModal}
                 onSubmit={handleEdit}
                 data={jobLevelEdit}
@@ -123,11 +133,10 @@ export const AppContainer = () => {
                 onEdit={handleEditInfo}
                 onDelete={handleDelete} />
             <SweetModalDialog
-                show={showConfirm}
+                show={modalDialog.showConfirm}
                 message="Are you sure you want to delete?"
                 onConfirm={handleConfirm}
-                onCancel={handleCancel}
-            />
+                onCancel={handleCancel} />
         </Fragment>
     );
 };

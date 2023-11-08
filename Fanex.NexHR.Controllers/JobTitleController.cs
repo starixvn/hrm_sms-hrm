@@ -76,7 +76,7 @@
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
@@ -92,7 +92,7 @@
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [ValidateInput(false)]
@@ -108,7 +108,7 @@
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);
 
-            return Json(result);
+            return new CustomJsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         private static IList<SelectListItem> GetJobCategories()

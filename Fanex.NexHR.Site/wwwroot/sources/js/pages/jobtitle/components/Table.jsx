@@ -1,11 +1,8 @@
 ﻿import React, { Fragment } from 'react';
 
-const Table = ({ data, handleEditInfo, handleDelete }) => {
+import Row from './Row';
 
-    const handleLink = (id) => {
-        window.location.href = (`/Employee/UserManagement?jobTitleId=${id}`);
-    };
-
+const Table = ({ data, onDelete, onEdit }) => {
     const colSpan = window.hasPermission === 'True' ? 8 : 6;
 
     return (
@@ -29,42 +26,12 @@ const Table = ({ data, handleEditInfo, handleDelete }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.length ? data.map((item, i) => (
-                        <tr id={`row_${i}`} key={item.id}>
-                            <td>{i + 1}</td>
-                            <td className="align-left">{item.name}</td>
-                            <td className="align-left">{item.categoryName}</td>
-                            <td >{item.totalExpat}</td>
-                            <td >{item.totalLocal}</td>
-                            <td>
-                                {item.value !== "0" ? <a onClick={() => handleLink(item.id)} style={{ cursor: 'pointer' }}>{item.value}</a> : 0}
-                            </td>
-                            {
-                                window.hasPermission === 'True' &&
-                                <Fragment>
-                                    <td>
-                                        <a onClick={() => handleEditInfo(item.id, item.name, item.categoryId)} style={{ cursor: 'pointer' }}>
-                                            <i className="fa fa-pencil fa-lg icon-edit"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        {item.value !== "0" ?
-                                            <a>
-                                                <i className="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                                            </a> :
-                                            <a onClick={() => handleDelete(item.id)} style={{ cursor: 'pointer' }}>
-                                                <i className="fa fa-times fa-lg icon-delete"></i>
-                                            </a>
-                                        }
-                                    </td>
-                                </Fragment>
-                            }
-                        </tr>
-                    ))
-                        :
-                        <tr>
-                            <td colSpan={colSpan}>No information available</td>
-                        </tr>
+                    {
+                        data.length > 0
+                            ? data.map((item, index) => <Row key={item.id} rowIndex={index + 1} item={item} onEdit={onEdit} onDelete={onDelete} />)
+                            : <tr>
+                                <td colSpan={colSpan}>No information available</td>
+                            </tr>
                     }
                 </tbody>
             </table>

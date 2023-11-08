@@ -590,14 +590,17 @@
     <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Popup.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Popup.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />

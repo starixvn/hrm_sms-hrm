@@ -1,18 +1,34 @@
-﻿import React, { Fragment } from 'react';
+﻿import React, { Fragment, useState } from 'react';
 
 import { resolveClientUrl } from '../../../shared/common.functions';
 
-const Filter = (props) => {
-    const { keyword, setKeyword, searchKeyword, setCreateModal } = props;
+const Filter = ({ setOpenPopup, onSubmit }) => {
 
-    const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            searchKeyword();
-        };
+    const [filterParams, setFilterParams] = useState({ jobTitle: '' });
+
+    const handleSubmit = () => {
+        onSubmit(filterParams);
+    };
+
+    const handleChange = event => {
+        setFilterParams({
+            ...filterParams,
+            [event.target.name]: event.target.value
+        });
     };
 
     const handleExportExcel = () => {
-        window.location.href = resolveClientUrl('jobTitle/ExportExcel?jobTitle=' + keyword);
+        window.location.href = resolveClientUrl('jobTitle/ExportExcel?jobTitle=' + filterParams.jobTitle);
+    };
+
+    const handleKeyPress = event => {
+        if (event.key === 'Enter') {
+            onSubmit(filterParams);
+        };
+    };
+
+    const handleCreateModal = () => {
+        setOpenPopup(true);
     };
 
     return (
@@ -23,21 +39,21 @@ const Filter = (props) => {
                         <label className="control-label">Keyword</label>
                     </div>
                     <div className="input-form">
-                        <input name="name"
+                        <input name="jobTitle"
                             className="form-control"
                             placeholder="job title"
                             autoComplete="off"
-                            onChange={e => setKeyword(e.target.value)}
+                            onChange={handleChange}
                             onKeyPress={handleKeyPress} />
                     </div>
                 </div>
                 <div className="form-group form-group--m">
-                    <button type="submit" className="btn btn-primary" onClick={searchKeyword}>Search</button>
+                    <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Search</button>
                     {
                         window.hasPermission === 'True' &&
                         <Fragment>
-                            <button type="submit" className="btn btn-excel" onClick={handleExportExcel}>Excel</button>
-                            <button className="btn btn-request" type="button" onClick={() => setCreateModal(true)}>
+                            <button className="btn btn-excel" onClick={handleExportExcel}>Excel</button>
+                            <button className="btn btn-request" type="button" onClick={handleCreateModal}>
                                 <span className="fa fa-plus" /> &nbsp;New Job Title
                             </button>
                         </Fragment>
