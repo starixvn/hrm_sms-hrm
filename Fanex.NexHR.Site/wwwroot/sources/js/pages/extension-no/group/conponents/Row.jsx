@@ -2,15 +2,12 @@
 
 
 const Row = ({ rowIndex, item, onDelete , onEdit }) => {
-
     const handleDelete = () => {
         onDelete(item.teamId);
-    }
-
+    };
     const handleGetDataById = () => {
         onEdit(item.teamId, item.teamName)
-    }
-
+    };
     return (
         <tr>
             <td>{rowIndex}</td>

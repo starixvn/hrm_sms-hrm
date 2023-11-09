@@ -2,7 +2,7 @@
 import Row from './Row';
 
 const Table = ({ data, onDelete, onEdit }) => {
-    if (!data) return null
+    if (!data) return null;
     return (
         <table className="table table-custom" id="data" style={{ width: 'auto', minWidth: '600px' }}>
             <thead>

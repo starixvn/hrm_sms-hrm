@@ -45,7 +45,7 @@ const Popup = ({ show, data, title, onHide, onSubmit }) => {
                 </Form>
             </Fragment>
         )
-    }
+    };
 
     return (
         <Draggable handle=".modal-header" >

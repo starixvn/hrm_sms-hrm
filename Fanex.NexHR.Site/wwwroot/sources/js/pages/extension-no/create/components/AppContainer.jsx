@@ -24,8 +24,7 @@ const AppContainer = () => {
     });
     const handleGoBack = () => {
         history.back();
-    }
-
+    };
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -52,7 +51,7 @@ const AppContainer = () => {
         }).then(response => {
             setSelectExtension(response.data);
         }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
         getGroupExtension(isInternal);
@@ -62,12 +61,11 @@ const AppContainer = () => {
     const handleChange = data => {
         const selected = employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
-    }
-
+    };
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                <Errors errors={errors }/>
+                <Errors errors={errors} />
                 <Form className="form-horizontal">
                     <input name="EmpId" hidden />
                     <div className="form-group">
@@ -99,7 +97,7 @@ const AppContainer = () => {
                             <Field as="select" name="TeamId" className="form-control">
                                 {
                                     selectExtension.map((item, i) => (
-                                        <option value={ item.value} key={item.value}>{item.text}</option>
+                                        <option value={item.value} key={item.value}>{item.text}</option>
                                     ))
                                 }
                             </Field>
@@ -185,7 +183,7 @@ const AppContainer = () => {
                 </Form>
             </div>
         );
-    }
+    };
     
     const handleSubmit = data => {
         axios.post(resolveClientUrl('ExtensionNo/Create'), {

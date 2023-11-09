@@ -12,7 +12,7 @@ import Errors from '../../../../shared/components/Errors';
 export const AppContainer = () => {
     const handleGoBack = () => {
         history.back();
-    }
+    };
     const internal = window.isInternal;
     const id = window.id;
     const [extensionDetail, setExtensionDetail] = useState(null);
@@ -20,13 +20,11 @@ export const AppContainer = () => {
     const [isInternal, setIsInternal] = useState(internal === 'True');
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
-
     const EditExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
             .required('The ExtensionNo field is required!')
     });
-
     const GetExtentionById = (isInternal, id) => {
         axios.get(resolveClientUrl('ExtensionNo/GetExtentionById'), {
             params: {
@@ -36,9 +34,7 @@ export const AppContainer = () => {
         }).then(response => {
             setExtensionDetail(response.data);
         }).catch(axiosError);
-    }
-
-
+    };
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -65,22 +61,20 @@ export const AppContainer = () => {
         }).then(response => {
             setSelectExtension(response.data);
         }).catch(axiosError);
-    }
+    };
 
     useEffect(() => {
         getGroupExtension(isInternal);
         GetExtentionById(isInternal, id);
-    }, [isInternal, isInternal, id])
-
-
+    }, [isInternal, isInternal, id]);
     const handleChange = (data) => {
         const selected = employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
-    }
+    };
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                <Errors errors={errors }/>
+                <Errors errors={errors} />
                 <Form className="form-horizontal">
                     <input name="EmpId" hidden />
                     <div className="form-group">
@@ -190,7 +184,7 @@ export const AppContainer = () => {
                             <label className="control-label">Extension No</label>
                         </div>
                         <div className="input-form">
-                            <Field type="text" name="ExtensionNo" className="form-control" autoComplete='off'/>
+                            <Field type="text" name="ExtensionNo" className="form-control" autoComplete='off' />
                         </div>
                     </div>
                     <div className="form-group">
@@ -200,11 +194,11 @@ export const AppContainer = () => {
                 </Form>
             </div>
         );
-    }
+    };
 
     if (!selectExtension || extensionDetail == null) {
         return null;
-    }
+    };
     const handleSubmit = data => {
         axios.post(resolveClientUrl('ExtensionNo/Edit'), {
             FullName: data.FullName,
@@ -220,7 +214,7 @@ export const AppContainer = () => {
                 document.location = resolveClientUrl("ExtensionNo/Index");
             }
         }).catch(axiosError);
-    }
+    };
     const fullName = selectEmployee ? selectEmployee.fullName : '';
     const nickName = selectEmployee ? selectEmployee.nickName : '';
     const empName = selectEmployee ? selectEmployee.value : '';
