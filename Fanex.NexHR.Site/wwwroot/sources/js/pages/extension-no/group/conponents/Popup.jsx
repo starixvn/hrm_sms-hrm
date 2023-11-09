@@ -9,7 +9,7 @@ import { validationSchema } from '../common.functions';
 const Popup = ({ show, data, title, onHide, onSubmit }) => {
     const teamName = data ? data.teamName : '';
     const teamId = data ? data.id : '';
-    const renderForm = ({ errors, isSubmitting }) => {
+    const renderForm = ({ errors }) => {
         return (
             <Fragment>
                 <Form className="form-horizontal">
@@ -39,7 +39,7 @@ const Popup = ({ show, data, title, onHide, onSubmit }) => {
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Save</button>
+                        <button type="submit" className="btn btn-primary">Save</button>
                         <a className="btn btn-default" onClick={onHide}>Cancel</a>
                     </Modal.Footer>
                 </Form>
