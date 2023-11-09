@@ -15,7 +15,7 @@ export const AppContainer = () => {
     })
 
     const [dialog, setDialog] = useState({
-        externalId : null,
+        externalId: null,
         showConfirm: false
     });
 
@@ -62,7 +62,7 @@ export const AppContainer = () => {
         }).catch(axiosError);
     }
     const handleGetDataById = (id, itemName) => {
-        setPopup({ modalEdit : true })
+        setPopup({ modalEdit: true })
         setSingle({
             id: id,
             teamName: itemName
@@ -93,7 +93,7 @@ export const AppContainer = () => {
     }
     return (
         <Fragment>
-            <a className="btn btn-request" onClick={handleCreateExternal }>
+            <a className="btn btn-request" onClick={handleCreateExternal}>
                 <span className="fa fa-plus"></span> New External Group
             </a>
             <Popup
@@ -113,7 +113,7 @@ export const AppContainer = () => {
             <Table data={data} onDelete={handleDelete} onEdit={handleGetDataById} />
             <SweetModalDialog
                 show={dialog.showConfirm}
-                contents='Are you sure you want to delete this Extension?'
+                contents={<p>Are you sure you want to delete this Extension?</p>}
                 onSubmit={handleConfirm}
                 onHide={handleCancel}
             />

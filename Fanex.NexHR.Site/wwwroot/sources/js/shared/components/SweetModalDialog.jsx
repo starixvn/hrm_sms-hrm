@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import Draggable from 'react-draggable';
@@ -39,6 +39,17 @@ SweetModalDialog.propTypes = {
     contents: PropTypes.element.isRequired,
     onHide: PropTypes.func,
     onSubmit: PropTypes.func
+};
+
+SweetModalDialog.defaultProps = {
+    show: false,
+    contents: <Fragment />,
+    onHide: function () {
+        // This is intentional
+    },
+    onSubmit: function () {
+        // This is intentional
+    }
 };
 
 export default SweetModalDialog;

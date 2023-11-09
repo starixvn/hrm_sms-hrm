@@ -134,7 +134,7 @@ export const AppContainer = () => {
                 onDelete={handleDelete} />
             <SweetModalDialog
                 show={modalDialog.showConfirm}
-                contents="Are you sure you want to delete?"
+                contents={<p>Are you sure you want to delete?</p>}
                 onSubmit={handleConfirm}
                 onHide={handleCancel} />
         </Fragment>

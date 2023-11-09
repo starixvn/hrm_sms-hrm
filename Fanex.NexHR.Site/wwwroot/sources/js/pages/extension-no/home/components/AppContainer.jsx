@@ -11,7 +11,7 @@ import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 const AppContainer = () => {
     const [extensions, setExtensions] = useState([]);
     const [dialog, setDialog] = useState({
-        employeeId : null,
+        employeeId: null,
         showConfirm: false
     });
 
@@ -53,7 +53,7 @@ const AppContainer = () => {
             <Table data={extensions} onDelete={handleDeleteExtention} />
             <SweetModalDialog
                 show={dialog.showConfirm}
-                contents='Are you sure you want to delete this Extension?'
+                contents={<p>Are you sure you want to delete this Extension?</p>}
                 onSubmit={handleConfirm}
                 onHide={handleCancel}
             />
