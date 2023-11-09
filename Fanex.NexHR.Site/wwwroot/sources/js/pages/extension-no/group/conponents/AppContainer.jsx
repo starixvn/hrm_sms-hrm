@@ -8,8 +8,8 @@ import Popup from './Popup';
 import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 export const AppContainer = () => {
-    const [data, setData] = useState([]);
-    const [single, setSingle] = useState(null);
+    const [externalGroup, setExternalGroup] = useState([]);
+    const [externalGroupDetail, setExternalGroupDetail] = useState(null);
     const [popup, setPopup] = useState({
         modalCreate: false,
         modalEdit: false
@@ -18,23 +18,23 @@ export const AppContainer = () => {
         externalId: null,
         showConfirm: false
     });
-    const handleGetAllEnternalGroup = () => {
+    const getAllEnternalGroup = () => {
         axios(resolveClientUrl('ExtensionNo/GetAllExternalGroup')).then(response => {
-            setData(response.data)
+            setExternalGroup(response.data)
         }).catch(axiosError);
     };
     useEffect(() => {
-        handleGetAllEnternalGroup();
+        getAllEnternalGroup();
     }, []);
 
-    const handleCreate = data => {
+    const handleCreate = external => {
         setPopup({ modalCreate: false });
         axios.post(resolveClientUrl('ExtensionNo/CreateExternalGroup'), {
-            teamName: data.TeamName.trim()
+            teamName: external.TeamName.trim()
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                handleGetAllEnternalGroup();
+                getAllEnternalGroup();
                 toastr.success('Created successfully!', '', toastOptions());
             } else {
                 toastr.error(data.message, '', toastOptions());
@@ -55,7 +55,7 @@ export const AppContainer = () => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
-                handleGetAllEnternalGroup();
+                getAllEnternalGroup();
             } else {
                 toastr.error(data.message, '', toastOptions());
             }
@@ -63,20 +63,21 @@ export const AppContainer = () => {
     };
     const handleGetDataById = (id, itemName) => {
         setPopup({ modalEdit: true })
-        setSingle({
+        setExternalGroupDetail({
             id: id,
             teamName: itemName
         })
     };
-    const handleEdit = data => {
+    const handleEdit = external => {
         setPopup({ modalEdit: false });
         axios.post(resolveClientUrl('ExtensionNo/EditExternalGroup'), {
-            teamName: data.TeamName.trim(),
-            teamId: data.TeamId
+            teamName: external.TeamName.trim(),
+            teamId: external.TeamId
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                handleGetAllEnternalGroup();
+                toastr.success('Updated successfully!', '', toastOptions());
+                getAllEnternalGroup();
             } else {
                 toastr.error(data.message, '', toastOptions());
             }
@@ -108,10 +109,10 @@ export const AppContainer = () => {
                 show={popup.modalEdit}
                 onHide={handleCancelExternal}
                 onSubmit={handleEdit}
-                data={single}
+                data={externalGroupDetail}
                 title='Edit'
             />
-            <Table data={data} onDelete={handleDelete} onEdit={handleGetDataById} />
+            <Table data={externalGroup} onDelete={handleDelete} onEdit={handleGetDataById} />
             <SweetModalDialog
                 show={dialog.showConfirm}
                 contents={<p>Are you sure you want to delete this Extension?</p>}
