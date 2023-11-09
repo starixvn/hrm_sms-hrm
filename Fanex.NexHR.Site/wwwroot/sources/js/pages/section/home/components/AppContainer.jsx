@@ -56,9 +56,9 @@ const AppContainer = () => {
             <Table data={section} onDelete={handleDelete} />
             <SweetModalDialog
                 show={dialog.showConfirm}
-                message='Are you sure you want to delete this Section?'
-                onConfirm={handleConfirm}
-                onCancel={handleCancel}
+                contents='Are you sure you want to delete this Section?'
+                onSubmit={handleConfirm}
+                onHide={handleCancel}
             />
         </Fragment>
     );

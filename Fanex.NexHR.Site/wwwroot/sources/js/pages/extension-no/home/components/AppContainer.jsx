@@ -53,9 +53,9 @@ const AppContainer = () => {
             <Table data={extensions} onDelete={handleDeleteExtention} />
             <SweetModalDialog
                 show={dialog.showConfirm}
-                message='Are you sure you want to delete this Extension?'
-                onConfirm={handleConfirm}
-                onCancel={handleCancel}
+                contents='Are you sure you want to delete this Extension?'
+                onSubmit={handleConfirm}
+                onHide={handleCancel}
             />
         </Fragment>
     );

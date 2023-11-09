@@ -1,8 +1,9 @@
 ﻿import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 
-const SweetModalDialog = ({ show, message, onConfirm, onCancel }) => {
+const SweetModalDialog = ({ show, contents, onSubmit, onHide }) => {
 
     let title = '';
     switch (window.siteId) {
@@ -15,22 +16,29 @@ const SweetModalDialog = ({ show, message, onConfirm, onCancel }) => {
         case 3:
             title = 'CTS HRM';
             break;
-    }
+    };
 
     return (
         <Draggable handle=".modal-header" >
-            <Modal keyboard={false} backdrop="static" show={show} onHide={onCancel}>
+            <Modal keyboard={false} backdrop="static" show={show} onHide={onHide}>
                 <Modal.Header>
                     <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>{message}</Modal.Body>
+                <Modal.Body>{contents}</Modal.Body>
                 <Modal.Footer>
-                    <Button bsStyle="primary" onClick={onConfirm}> OK </Button>
-                    <Button className="btn-cancel" onClick={onCancel}> Cancel </Button>
+                    <Button bsStyle="primary" onClick={onSubmit}> OK </Button>
+                    <Button className="btn-cancel" onClick={onHide}> Cancel </Button>
                 </Modal.Footer>
             </Modal>
         </Draggable>
     );
+};
+
+SweetModalDialog.propTypes = {
+    show: PropTypes.bool,
+    contents: PropTypes.element.isRequired,
+    onHide: PropTypes.func,
+    onSubmit: PropTypes.func
 };
 
 export default SweetModalDialog;
