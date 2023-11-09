@@ -61,7 +61,7 @@ export const AppContainer = () => {
             }
         }).catch(axiosError);
     };
-    const handleGetDataById = (id, itemName) => {
+    const getDataById = (id, itemName) => {
         setPopup({ modalEdit: true })
         setExternalGroupDetail({
             id: id,
@@ -112,7 +112,7 @@ export const AppContainer = () => {
                 data={externalGroupDetail}
                 title='Edit'
             />
-            <Table data={externalGroup} onDelete={handleDelete} onEdit={handleGetDataById} />
+            <Table data={externalGroup} onDelete={handleDelete} onEdit={getDataById} />
             <SweetModalDialog
                 show={dialog.showConfirm}
                 contents={<p>Are you sure you want to delete this Extension?</p>}
