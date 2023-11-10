@@ -1,31 +1,34 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
-import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import toastr from 'toastr';
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import { Formik, Form, Field } from 'formik';
 
 import Autocomplete from '../../../../shared/components/Autocomplete';
 import Errors from '../../../../shared/components/Errors';
 
-
-export const AppContainer = () => {
+const AppContainer = () => {
     const handleGoBack = () => {
         history.back();
     };
-    const internal = window.isInternal;
-    const id = window.id;
     const [extensionDetail, setExtensionDetail] = useState(null);
     const [selectExtension, setSelectExtension] = useState(null);
-    const [isInternal, setIsInternal] = useState(internal === 'True');
+    const [isInternal, setIsInternal] = useState(window.isInternal === 'True');
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
-    const EditExtensionSchema = Yup.object({
+
+    const editExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
-            .required('The ExtensionNo field is required!')
+            .required('The ExtensionNo field is required!'),
+        Employee: isInternal ? Yup.string()
+            .trim()
+            .required('The Employee field is required!') : false
     });
-    const GetExtentionById = (isInternal, id) => {
+
+    const getExtentionById = (isInternal, id) => {
         axios.get(resolveClientUrl('ExtensionNo/GetExtentionById'), {
             params: {
                 id: id,
@@ -35,6 +38,8 @@ export const AppContainer = () => {
             setExtensionDetail(response.data);
         }).catch(axiosError);
     };
+
+
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -63,14 +68,38 @@ export const AppContainer = () => {
         }).catch(axiosError);
     };
 
-    useEffect(() => {
-        getGroupExtension(isInternal);
-        GetExtentionById(isInternal, id);
-    }, [isInternal, isInternal, id]);
-    const handleChange = (data) => {
-        const selected = employee.find(item => item.id === data.value);
+    const handleChange = data => {
+        const selected = employee && employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
     };
+    useEffect(() => {
+        getExtentionById(window.isInternal, window.id);
+    }, [window.isInternal, window.id]);
+
+    useEffect(() => {
+        getGroupExtension(isInternal);
+    }, [isInternal]);
+
+    const handleChangeStatus = () => {
+        setIsInternal(event.target.checked);
+        axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
+            params: { isInternal: event.target.checked }
+        }).then(response => {
+            setSelectExtension(response.data);
+            setExtensionDetail({
+                empId: extensionDetail.empId,
+                teamId: response.data[0].value,
+                extensionNo: extensionDetail.extensionNo,
+                nickName: extensionDetail.nickName,
+                fullName: extensionDetail.fullName,
+                employeeExtensionId: extensionDetail.employeeExtensionId,
+                employee: extensionDetail.employee
+            });
+        }).catch(axiosError);
+    }
+
+    
+    
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
@@ -84,16 +113,13 @@ export const AppContainer = () => {
                         <div className="input-form">
                             <Field name="IsInternal" className="form-control">
                                 {({
-                                    field, form
+                                    field
                                 }) => (
                                     <input
                                         checked={isInternal}
                                         type="checkbox"
                                         {...field}
-                                        onChange={e => {
-                                            setIsInternal(e.target.checked)
-                                            form.setFieldValue('IsInternal', e.target.checked)
-                                        }}
+                                        onChange={handleChangeStatus}
                                     />
                                 )}
                             </Field>
@@ -106,8 +132,8 @@ export const AppContainer = () => {
                         <div className="input-form">
                             <Field as="select" name="TeamId" className="form-control">
                                 {
-                                    selectExtension.map((item, i) => (
-                                        <option value={item.value} key={item.value}>{item.text}</option>
+                                    selectExtension && selectExtension.map(item => (
+                                        <option defaultValue={item.value} value={item.value} key={item.value}>{item.text}</option>
                                     ))
                                 }
                             </Field>
@@ -196,48 +222,59 @@ export const AppContainer = () => {
         );
     };
 
-    if (!selectExtension || extensionDetail == null) {
+    if (extensionDetail == null) {
         return null;
     };
-    const handleSubmit = data => {
+    const handleSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
         axios.post(resolveClientUrl('ExtensionNo/Edit'), {
-            FullName: data.FullName,
-            NickName: data.NickName,
-            ExtensionNo: data.ExtensionNo,
-            IsInternal: data.IsInternal,
-            EmpId: data.EmpId,
+            FullName: values.FullName,
+            NickName: values.NickName,
+            ExtensionNo: values.ExtensionNo,
+            IsInternal: values.IsInternal,
+            EmpId: values.EmpId,
             EmployeeExtensionId: extensionDetail.employeeExtensionId,
-            TeamId: data.TeamId
+            TeamId: values.TeamId
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                document.location = resolveClientUrl("ExtensionNo/Index");
+                toastr.success('Created successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl("ExtensionNo/Index");
+                }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+                setSubmitting(false);
             }
         }).catch(axiosError);
     };
-    const fullName = selectEmployee ? selectEmployee.fullName : '';
-    const nickName = selectEmployee ? selectEmployee.nickName : '';
-    const empName = selectEmployee ? selectEmployee.value : '';
-    const empId = selectEmployee ? selectEmployee.id : '';
+    const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
+    const emPloyee = selectEmployee && selectEmployee.value || '';
+    const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
+    const teamId = extensionDetail.teamId || '';
+    const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
+    const extensionNo = extensionDetail.extensionNo || '';
     return (
         <Formik
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={{
-                EmpId: extensionDetail ? extensionDetail.empId : empId,
-                Employee: empName || '',
-                FullName: fullName || extensionDetail.fullName || '',
-                TeamId: extensionDetail.teamId || '',
-                NickName: nickName || extensionDetail.nickName || '',
-                ExtensionNo: extensionDetail.extensionNo || '',
+                EmpId: empId,
+                Employee: emPloyee,
+                FullName: fullName,
+                TeamId: teamId,
+                NickName: nickName,
+                ExtensionNo: extensionNo,
                 IsInternal: isInternal
             }}
             enableReinitialize={true}
-            validationSchema={EditExtensionSchema}
+            validationSchema={editExtensionSchema}
             onSubmit={handleSubmit}
         >
-            {renderForm }
+            {renderForm}
         </Formik>
-        
+
     )
 };
+
+export default AppContainer;

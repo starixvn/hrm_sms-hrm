@@ -1,17 +1,16 @@
-﻿import 'jquery-ui-bundle/jquery-ui';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+﻿import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import toastr from 'toastr';
 
-import { axiosError, resolveClientUrl } from '../../../../shared/common.functions';
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 import Autocomplete from '../../../../shared/components/Autocomplete';
 import Errors from '../../../../shared/components/Errors';
 
-
 const AppContainer = () => {
     const [selectExtension, setSelectExtension] = useState(null);
-    const [isInternal, setIsInternal]= useState(false);
+    const [isInternal, setIsInternal] = useState(false);
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const CreateExtensionSchema = Yup.object({
@@ -44,7 +43,6 @@ const AppContainer = () => {
             }).catch(axiosError);
         }
     };
-
     const getGroupExtension = isInternal => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
             params: { IsInternal: isInternal }
@@ -52,15 +50,39 @@ const AppContainer = () => {
             setSelectExtension(response.data);
         }).catch(axiosError);
     };
-
     useEffect(() => {
         getGroupExtension(isInternal);
-    }, [isInternal])
-
+    }, [isInternal]);
 
     const handleChange = data => {
         const selected = employee.find(item => item.id === data.value);
         setSelectEmployee(selected);
+    };
+
+    const handleChangeStatus = () => {
+        setIsInternal(event.target.checked);
+    }
+    const handleSubmit = (values, { setSubmitting }) => {
+        setSubmitting(true);
+        axios.post(resolveClientUrl('ExtensionNo/Create'), {
+            FullName: values.FullName,
+            NickName: values.NickName,
+            ExtensionNo: values.ExtensionNo,
+            IsInternal: values.IsInternal,
+            EmpId: values.EmpId,
+            TeamId: values.TeamId
+        }).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Created successfully!', '', toastOptions());
+                setTimeout(function () {
+                    document.location = resolveClientUrl("ExtensionNo/Index");
+                }, 3000);
+            } else {
+                toastr.error(data.message, '', toastOptions());
+                setSubmitting(false);
+            }
+        }).catch(axiosError);
     };
     const renderForm = ({ errors, isSubmitting }) => {
         return (
@@ -75,15 +97,12 @@ const AppContainer = () => {
                         <div className="input-form">
                             <Field name="IsInternal" className="form-control">
                                 {({
-                                    field, form
+                                    field
                                 }) => (
                                     <input
                                         type="checkbox"
                                         {...field}
-                                        onChange={e => {
-                                            setIsInternal(e.target.checked)
-                                            form.setFieldValue('IsInternal', e.target.checked)
-                                        }}
+                                        onChange={handleChangeStatus}
                                     />
                                 )}
                             </Field>
@@ -96,7 +115,7 @@ const AppContainer = () => {
                         <div className="input-form">
                             <Field as="select" name="TeamId" className="form-control">
                                 {
-                                    selectExtension.map((item, i) => (
+                                    selectExtension && selectExtension.map(item => (
                                         <option value={item.value} key={item.value}>{item.text}</option>
                                     ))
                                 }
@@ -184,23 +203,6 @@ const AppContainer = () => {
             </div>
         );
     };
-    
-    const handleSubmit = data => {
-        axios.post(resolveClientUrl('ExtensionNo/Create'), {
-            FullName: data.FullName,
-            NickName: data.NickName,
-            ExtensionNo: data.ExtensionNo,
-            IsInternal: data.IsInternal,
-            EmpId: data.EmpId,
-            TeamId: data.TeamId
-        }).then(response => {
-            const { data } = response;
-            if (data.isSuccessful) {
-                document.location = resolveClientUrl("ExtensionNo/Index");
-            }
-        }).catch(axiosError);
-    }
-
     if (!selectExtension) {
         return null;
     }
@@ -228,8 +230,6 @@ const AppContainer = () => {
         >
             {renderForm}
         </Formik>
-        
-    )
+    );
 };
-
 export default AppContainer;

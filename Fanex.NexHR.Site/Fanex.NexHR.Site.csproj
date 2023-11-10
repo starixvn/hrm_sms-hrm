@@ -571,11 +571,11 @@
     <Content Include="wwwroot\sources\js\pages\department\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\create\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\index.jsx" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\group\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Popup.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Row.jsx" />
@@ -586,6 +586,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\RenderForm.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />

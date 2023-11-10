@@ -7,7 +7,7 @@ import Table from './Table';
 import Popup from './Popup';
 import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
-export const AppContainer = () => {
+const AppContainer = () => {
     const [externalGroup, setExternalGroup] = useState([]);
     const [externalGroupDetail, setExternalGroupDetail] = useState(null);
     const [popup, setPopup] = useState({
@@ -61,7 +61,7 @@ export const AppContainer = () => {
             }
         }).catch(axiosError);
     };
-    const getDataById = (id, itemName) => {
+    const getExternalGroupById = (id, itemName) => {
         setPopup({ modalEdit: true })
         setExternalGroupDetail({
             id: id,
@@ -112,7 +112,7 @@ export const AppContainer = () => {
                 data={externalGroupDetail}
                 title='Edit'
             />
-            <Table data={externalGroup} onDelete={handleDelete} onEdit={getDataById} />
+            <Table data={externalGroup} onDelete={handleDelete} onEdit={getExternalGroupById} />
             <SweetModalDialog
                 show={dialog.showConfirm}
                 contents={<p>Are you sure you want to delete this Extension?</p>}
@@ -122,3 +122,5 @@ export const AppContainer = () => {
         </Fragment>
     )
 };
+
+export default AppContainer;
