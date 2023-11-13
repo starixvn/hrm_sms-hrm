@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import Draggable from 'react-draggable';
 
 import Errors from '../../../../shared/components/Errors';
-import { validationSchema } from '../../common.functions';
+import { validationSchema } from '../common.functions';
 
 const Popup = ({ show, data, title, onHide, onSubmit }) => {
     const teamName = data ? data.teamName : '';

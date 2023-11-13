@@ -3,22 +3,17 @@ import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import axios from 'axios';
 import toastr from 'toastr';
-import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
-import { Formik, Form, Field } from 'formik';
+import { Formik } from 'formik';
 
-import Autocomplete from '../../../../shared/components/Autocomplete';
-import Errors from '../../../../shared/components/Errors';
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import RenderFrom from '../../RenderForm';
 
 const AppContainer = () => {
-    const handleGoBack = () => {
-        history.back();
-    };
     const [extensionDetail, setExtensionDetail] = useState(null);
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(window.isInternal === 'True');
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
-
     const editExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
@@ -38,8 +33,6 @@ const AppContainer = () => {
             setExtensionDetail(response.data);
         }).catch(axiosError);
     };
-
-
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -59,7 +52,6 @@ const AppContainer = () => {
             }).catch(axiosError);
         }
     };
-
     const getGroupExtension = isInternal => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
             params: { isInternal }
@@ -67,9 +59,8 @@ const AppContainer = () => {
             setSelectExtension(response.data);
         }).catch(axiosError);
     };
-
-    const handleChange = data => {
-        const selected = employee && employee.find(item => item.id === data.value);
+    const handleChange = items => {
+        const selected = employee && employee.find(item => item.id === items.value);
         setSelectEmployee(selected);
     };
     useEffect(() => {
@@ -80,7 +71,7 @@ const AppContainer = () => {
         getGroupExtension(isInternal);
     }, [isInternal]);
 
-    const handleChangeStatus = () => {
+    const handleChangeInternal = () => {
         setIsInternal(event.target.checked);
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
             params: { isInternal: event.target.checked }
@@ -96,132 +87,7 @@ const AppContainer = () => {
                 employee: extensionDetail.employee
             });
         }).catch(axiosError);
-    }
-
-    
-    
-    const renderForm = ({ errors, isSubmitting }) => {
-        return (
-            <div className="card">
-                <Errors errors={errors} />
-                <Form className="form-horizontal">
-                    <input name="EmpId" hidden />
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Is Internal</label>
-                        </div>
-                        <div className="input-form">
-                            <Field name="IsInternal" className="form-control">
-                                {({
-                                    field
-                                }) => (
-                                    <input
-                                        checked={isInternal}
-                                        type="checkbox"
-                                        {...field}
-                                        onChange={handleChangeStatus}
-                                    />
-                                )}
-                            </Field>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Group</label>
-                        </div>
-                        <div className="input-form">
-                            <Field as="select" name="TeamId" className="form-control">
-                                {
-                                    selectExtension && selectExtension.map(item => (
-                                        <option defaultValue={item.value} value={item.value} key={item.value}>{item.text}</option>
-                                    ))
-                                }
-                            </Field>
-                        </div>
-                    </div>
-                    {
-                        isInternal && <div className="form-group">
-                            <div className="label-form">
-                                <label className="control-label">Employee</label>
-                            </div>
-                            <div className="select-form">
-                                <Field type="text" name="Employee" className="form-control">
-                                    {({
-                                        field, form
-                                    }) => (
-
-                                        <Autocomplete
-                                            className='form-control'
-                                            sources={employee}
-                                            onInput={getEmployees}
-                                            field={field}
-                                            form={form}
-                                            nameInput='Employee'
-                                            onChange={handleChange}
-                                        />
-                                    )}
-                                </Field>
-                            </div>
-                        </div>
-                    }
-
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Full Name</label>
-                        </div>
-                        <div className="input-form">
-                            <Field name="FullName">
-                                {({
-                                    field
-                                }) => (
-                                    <input
-                                        autoComplete='off'
-                                        className="form-control"
-                                        type="text"
-                                        {...field}
-                                        readOnly={isInternal || false}
-                                    />
-                                )}
-                            </Field>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Nick Name</label>
-                        </div>
-                        <div className="input-form">
-                            <Field name="NickName" className="form-control">
-                                {({
-                                    field
-                                }) => (
-                                    <input
-                                        autoComplete='off'
-                                        className="form-control"
-                                        type="text"
-                                        {...field}
-                                        readOnly={isInternal || false}
-                                    />
-                                )}
-                            </Field>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Extension No</label>
-                        </div>
-                        <div className="input-form">
-                            <Field type="text" name="ExtensionNo" className="form-control" autoComplete='off' />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <button type="submit" id="btnSubmit" className="btn btn-primary" disabled={isSubmitting} style={{ marginRight: "5px" }}>Update</button>
-                        <a className="btn btn-default" onClick={handleGoBack}>Back</a>
-                    </div>
-                </Form>
-            </div>
-        );
     };
-
     if (extensionDetail == null) {
         return null;
     };
@@ -271,10 +137,20 @@ const AppContainer = () => {
             validationSchema={editExtensionSchema}
             onSubmit={handleSubmit}
         >
-            {renderForm}
+            {({ errors, isSubmitting }) => (
+                <RenderFrom
+                    errors={errors}
+                    isInternal={isInternal}
+                    onChangeInternal={handleChangeInternal}
+                    selectExtension={selectExtension}
+                    employee={employee}
+                    getEmployees={getEmployees}
+                    onChangeEmployee={handleChange}
+                    isSubmitting={isSubmitting}
+                />
+            )}
         </Formik>
 
-    )
+    );
 };
-
 export default AppContainer;
