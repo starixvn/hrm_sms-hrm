@@ -1,32 +1,31 @@
 ﻿import React from 'react';
 
-
-const Row = ({ rowIndex, item, onDelete , onEdit }) => {
+const Row = ({ rowIndex, item, onDelete, onEdit }) => {
     const handleDelete = () => {
-        onDelete(item.teamId);
+        if (item.totalMember <= 0) {
+            onDelete(item.teamId);
+        }
     };
-    const handleGetDataById = () => {
+
+    const handleEdit = () => {
         onEdit(item.teamId, item.teamName)
     };
+
     return (
         <tr>
             <td>{rowIndex}</td>
             <td className="align-left">{item.teamName}</td>
             <td>
-                <i
+                <a
                     className="fa fa-pencil fa-lg icon-edit"
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleGetDataById}
+                    onClick={handleEdit}
                 />
             </td>
             <td>
-                {
-                    <i
-                        className={`fa fa-times fa-lg ${item.totalMember > 0 ? 'fa-disabled' : ''} icon-delete`}
-                        style={{ cursor: `${item.totalMember > 0 ? 'no-drop' : 'pointer'}` }}
-                        onClick={item.totalMember > 0 ? null : handleDelete}
-                    />
-                }
+                <a
+                    className={`fa fa-times fa-lg ${item.totalMember > 0 ? 'fa-disabled' : ''} icon-delete`}
+                    onClick={handleDelete}
+                />
             </td>
         </tr>
     );

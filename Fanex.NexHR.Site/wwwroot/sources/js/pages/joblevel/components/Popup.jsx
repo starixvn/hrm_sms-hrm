@@ -3,14 +3,14 @@ import { Button, Modal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
 import Draggable from 'react-draggable';
 
-import { validationSchema } from '../common.functions';
 import Errors from '../../../shared/components/Errors';
 
-const Popup = ({ show, onHide, onSubmit, data, title }) => {
+import { validationSchema } from '../common.functions';
 
+const Popup = ({ show, onHide, onSubmit, data, title }) => {
     const renderForm = errors => {
         return (
-            <div className="card">
+            <div>
                 <Errors errors={errors} />
                 <div className="form-horizontal clearfix">
                     <div className="form-group">

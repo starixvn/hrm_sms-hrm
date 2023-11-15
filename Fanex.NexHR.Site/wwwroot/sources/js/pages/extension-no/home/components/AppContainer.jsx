@@ -4,17 +4,16 @@ import toastr from 'toastr';
 
 import ExtensionControl from './ExtensionControl';
 import Table from './Table';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../../shared/common.functions';
-import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
     const [extensions, setExtensions] = useState([]);
-    const [dialog, setDialog] = useState({
-        employeeId: null,
-        showConfirm: false
+    const [deleteModalDialog, setDeleteModalDialog] = useState({
+        empId: null,
+        show: false
     });
-
 
     const getExtensionNo = () => {
         axios(resolveClientUrl('ExtensionNo/GetExtensionNo')).then(response => {
@@ -23,16 +22,16 @@ const AppContainer = () => {
     };
 
     const handleDeleteExtention = empId => {
-        setDialog({ showConfirm: true, employeeId: empId });
-    };
-    const handleCancel = () => {
-        setDialog({ showConfirm: false });
+        setDeleteModalDialog({ show: true, empId });
     };
 
-    const handleConfirm = () => {
-        setDialog({ showConfirm: false });
-        const empId = dialog.employeeId;
-        axios.post(resolveClientUrl(`ExtensionNo/Delete/${empId}`)).then(response => {
+    const handleCancel = () => {
+        setDeleteModalDialog({ show: false });
+    };
+
+    const handleConfirmDelete = () => {
+        setDeleteModalDialog({ show: false });
+        axios.post(resolveClientUrl(`ExtensionNo/Delete/${deleteModalDialog.empId}`)).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
@@ -52,9 +51,9 @@ const AppContainer = () => {
             <ExtensionControl />
             <Table data={extensions} onDelete={handleDeleteExtention} />
             <SweetModalDialog
-                show={dialog.showConfirm}
+                show={deleteModalDialog.show}
                 contents={<p>Are you sure you want to delete this Extension?</p>}
-                onSubmit={handleConfirm}
+                onSubmit={handleConfirmDelete}
                 onHide={handleCancel}
             />
         </Fragment>

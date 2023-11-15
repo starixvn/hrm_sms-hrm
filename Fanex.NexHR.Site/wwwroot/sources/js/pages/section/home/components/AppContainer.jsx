@@ -4,16 +4,16 @@ import toastr from 'toastr';
 
 import Filter from './Filter';
 import Table from './Table';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
-import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
     const [section, setSection] = useState([]);
     const [filterParams, setFilterParams] = useState({ isActive: true });
-    const [dialog, setDialog] = useState({
-        section : null,
-        showConfirm: false
+    const [deleteModalDialog, setDeleteModalDialog] = useState({
+        section: null,
+        show: false
     });
 
     const getSections = params => {
@@ -28,18 +28,16 @@ const AppContainer = () => {
     }, []);
 
     const handleDelete = section => {
-        setDialog({ showConfirm: true, section: section });
+        setDeleteModalDialog({ show: true, section });
     };
 
     const handleCancel = () => {
-        setDialog({ showConfirm: false });
+        setDeleteModalDialog({ show: false });
     };
 
-
-    const handleConfirm = () => {
-        setDialog({ showConfirm: false });
-        const id = dialog.section;
-        axios.post(resolveClientUrl(`Section/Delete/${id}`)).then(response => {
+    const handleConfirmDelete = () => {
+        setDeleteModalDialog({ show: false });
+        axios.post(resolveClientUrl(`Section/Delete/${deleteModalDialog.section.id}`)).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
@@ -54,12 +52,15 @@ const AppContainer = () => {
         <Fragment>
             <Filter onSubmit={getSections} />
             <Table data={section} onDelete={handleDelete} />
-            <SweetModalDialog
-                show={dialog.showConfirm}
-                contents={<p>Are you sure you want to delete this Section?</p>}
-                onSubmit={handleConfirm}
-                onHide={handleCancel}
-            />
+            {
+                deleteModalDialog.show &&
+                <SweetModalDialog
+                    show={deleteModalDialog.show}
+                    contents={<p>Are you sure you want to delete <strong>{deleteModalDialog.section.name}</strong>?</p>}
+                    onSubmit={handleConfirmDelete}
+                    onHide={handleCancel}
+                />
+            }
         </Fragment>
     );
 };

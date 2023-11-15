@@ -56,7 +56,6 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                                 {({
                                     field, form
                                 }) => (
-
                                     <Autocomplete
                                         className='form-control'
                                         sources={employee}
@@ -94,7 +93,7 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                 </div>
                 <div className="form-group">
                     <div className="label-form">
-                        <label className="control-label">Nick Name</label>
+                        <label className="control-label">Nickname</label>
                     </div>
                     <div className="input-form">
                         <Field name="NickName" className="form-control">

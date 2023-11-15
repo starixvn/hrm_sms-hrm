@@ -27,19 +27,13 @@ const Row = ({ rowIndex, item, onDelete, onEdit }) => {
                 window.hasPermission === 'True' &&
                 <Fragment>
                     <td>
-                        <a onClick={handleEdit} style={{ cursor: 'pointer' }}>
-                            <i className="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
+                        <a onClick={handleEdit} className="fa fa-pencil fa-lg icon-edit" />
                     </td>
                     <td>
                         {
-                            item.value !== "0" ?
-                                <a>
-                                    <i className="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                                </a> :
-                                <a onClick={handleDelete} style={{ cursor: 'pointer' }}>
-                                    <i className="fa fa-times fa-lg icon-delete"></i>
-                                </a>
+                            item.value !== "0"
+                                ? <a className="fa fa-times fa-lg fa-disabled icon-delete" />
+                                : <a onClick={handleDelete} className="fa fa-times fa-lg icon-delete" />
                         }
                     </td>
                 </Fragment>

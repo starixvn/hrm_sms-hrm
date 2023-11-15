@@ -2,33 +2,36 @@
 import axios from 'axios';
 import toastr from 'toastr';
 
-import { resolveClientUrl, axiosError, toastOptions } from '../../../../shared/common.functions';
 import Table from './Table';
-import Popup from './Popup';
+import CreateEdit from './CreateEdit';
 import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
+import { resolveClientUrl, axiosError, toastOptions } from '../../../../shared/common.functions';
+
 const AppContainer = () => {
-    const [externalGroup, setExternalGroup] = useState([]);
+    const [externalGroups, setExternalGroups] = useState([]);
     const [externalGroupDetail, setExternalGroupDetail] = useState(null);
-    const [popup, setPopup] = useState({
-        modalCreate: false,
-        modalEdit: false
+    const [modalDialog, setModalDialog] = useState({
+        create: false,
+        edit: false
     });
-    const [dialog, setDialog] = useState({
+    const [deleteModalDialog, setDeleteModalDialog] = useState({
         externalId: null,
-        showConfirm: false
+        show: false
     });
+
     const getAllEnternalGroup = () => {
         axios(resolveClientUrl('ExtensionNo/GetAllExternalGroup')).then(response => {
-            setExternalGroup(response.data)
+            setExternalGroups(response.data)
         }).catch(axiosError);
     };
+
     useEffect(() => {
         getAllEnternalGroup();
     }, []);
 
     const handleCreate = external => {
-        setPopup({ modalCreate: false });
+        setModalDialog({ create: false });
         axios.post(resolveClientUrl('ExtensionNo/CreateExternalGroup'), {
             teamName: external.TeamName.trim()
         }).then(response => {
@@ -43,15 +46,16 @@ const AppContainer = () => {
     };
 
     const handleDelete = id => {
-        setDialog({ showConfirm: true, externalId: id });
+        setDeleteModalDialog({ show: true, externalId: id });
     };
+
     const handleCancel = () => {
-        setDialog({ showConfirm: false });
+        setDeleteModalDialog({ show: false });
     };
 
     const handleConfirm = () => {
-        setDialog({ showConfirm: false });
-        axios.post(resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${dialog.externalId}`)).then(response => {
+        setDeleteModalDialog({ show: false });
+        axios.post(resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${deleteModalDialog.externalId}`)).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
@@ -61,15 +65,17 @@ const AppContainer = () => {
             }
         }).catch(axiosError);
     };
-    const getExternalGroupById = (id, itemName) => {
-        setPopup({ modalEdit: true })
+
+    const handleSelectExternaGroup = (id, itemName) => {
+        setModalDialog({ edit: true })
         setExternalGroupDetail({
             id: id,
             teamName: itemName
         })
     };
+
     const handleEdit = external => {
-        setPopup({ modalEdit: false });
+        setModalDialog({ edit: false });
         axios.post(resolveClientUrl('ExtensionNo/EditExternalGroup'), {
             teamName: external.TeamName.trim(),
             teamId: external.TeamId
@@ -83,39 +89,40 @@ const AppContainer = () => {
             }
         }).catch(axiosError);
     };
+
     const handleCreateExternal = () => {
-        setPopup({ modalCreate: true });
+        setModalDialog({ create: true });
     };
 
     const handleCancelExternal = () => {
-        setPopup({
-            modalCreate: false,
-            modalEdit: false
+        setModalDialog({
+            create: false,
+            edit: false
         });
     };
+
     return (
         <Fragment>
             <a className="btn btn-request" onClick={handleCreateExternal}>
                 <span className="fa fa-plus"></span> New External Group
             </a>
-            <Popup
-                show={popup.modalCreate}
+            <CreateEdit
+                show={modalDialog.create}
                 onHide={handleCancelExternal}
                 onSubmit={handleCreate}
                 title='Add new'
             />
-
-            <Popup
-                show={popup.modalEdit}
+            <CreateEdit
+                show={modalDialog.edit}
                 onHide={handleCancelExternal}
                 onSubmit={handleEdit}
                 data={externalGroupDetail}
                 title='Edit'
             />
-            <Table data={externalGroup} onDelete={handleDelete} onEdit={getExternalGroupById} />
+            <Table data={externalGroups} onDelete={handleDelete} onEdit={handleSelectExternaGroup} />
             <SweetModalDialog
-                show={dialog.showConfirm}
-                contents={<p>Are you sure you want to delete this Extension?</p>}
+                show={deleteModalDialog.show}
+                contents={<p>Are you sure you want to delete this External Group?</p>}
                 onSubmit={handleConfirm}
                 onHide={handleCancel}
             />

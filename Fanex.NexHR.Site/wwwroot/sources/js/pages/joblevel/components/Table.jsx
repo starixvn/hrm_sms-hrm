@@ -6,32 +6,30 @@ const Table = ({ data, onDelete, onEdit }) => {
     const colSpan = window.hasPermission === 'True' ? 4 : 2;
 
     return (
-        <Fragment>
-            <table className="table table-custom">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        {
-                            window.hasPermission === 'True' &&
-                            <Fragment>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </Fragment>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
+        <table className="table table-custom">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
                     {
-                        data.length > 0
-                            ? data.map((item, index) => <Row key={item.id} rowIndex={index + 1} item={item} onEdit={onEdit} onDelete={onDelete} />)
-                            : <tr>
-                                <td colSpan={colSpan}>No information available</td>
-                            </tr>
+                        window.hasPermission === 'True' &&
+                        <Fragment>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </Fragment>
                     }
-                </tbody>
-            </table>
-        </Fragment>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    data.length > 0
+                        ? data.map((item, index) => <Row key={item.id} rowIndex={index + 1} item={item} onEdit={onEdit} onDelete={onDelete} />)
+                        : <tr>
+                            <td colSpan={colSpan}>No information available</td>
+                        </tr>
+                }
+            </tbody>
+        </table>
     );
 };
 

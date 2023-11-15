@@ -577,7 +577,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\edit\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\AppContainer.jsx" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Popup.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\CreateEdit.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\index.jsx" />
@@ -586,6 +586,7 @@
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\RenderForm.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
@@ -598,7 +599,7 @@
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\AppContainer.jsx" />
-    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Popup.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\CreateEdit.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Filter.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\jobtitle\components\Table.jsx" />
@@ -1497,6 +1498,8 @@
     <Content Include="wwwroot\dist\styles\user.management.js.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.css.map" />
     <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="wwwroot\sources\styles\components\_sweet-modal.scss" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

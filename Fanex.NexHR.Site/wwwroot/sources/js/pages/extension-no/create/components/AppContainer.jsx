@@ -1,26 +1,28 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import 'jquery-ui-bundle/jquery-ui';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import toastr from 'toastr';
 
-import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 import RenderFrom from '../../RenderForm';
 
+import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 
 const AppContainer = () => {
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(false);
     const [employee, setEmployee] = useState(null);
     const [selectEmployee, setSelectEmployee] = useState(null);
-    const CreateExtensionSchema = Yup.object({
+    const createExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
-            .required('The ExtensionNo field is required!'),
+            .required('Extension No field is required!'),
         Employee: isInternal ? Yup.string()
             .trim()
-            .required('The Employee field is required!') : false
+            .required('Employee field is required!') : false
     });
+
     const getEmployees = query => {
         if (query.length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
@@ -40,13 +42,15 @@ const AppContainer = () => {
             }).catch(axiosError);
         }
     };
+
     const getGroupExtension = isInternal => {
         axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
-            params: { IsInternal: isInternal }
+            params: { isInternal }
         }).then(response => {
             setSelectExtension(response.data);
         }).catch(axiosError);
     };
+
     useEffect(() => {
         getGroupExtension(isInternal);
     }, [isInternal]);
@@ -58,7 +62,8 @@ const AppContainer = () => {
 
     const handleChangeInternal = () => {
         setIsInternal(event.target.checked);
-    }
+    };
+
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
         axios.post(resolveClientUrl('ExtensionNo/Create'), {
@@ -73,7 +78,7 @@ const AppContainer = () => {
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());
                 setTimeout(function () {
-                    document.location = resolveClientUrl("ExtensionNo/Index");
+                    document.location = resolveClientUrl('ExtensionNo/Index');
                 }, 3000);
             } else {
                 toastr.error(data.message, '', toastOptions());
@@ -81,14 +86,17 @@ const AppContainer = () => {
             }
         }).catch(axiosError);
     };
+
     if (!selectExtension) {
         return null;
     }
+
     const fullName = selectEmployee ? selectEmployee.fullName : '';
     const teamId = selectExtension[0].value;
     const nickName = selectEmployee ? selectEmployee.nickName : '';
     const empId = selectEmployee ? selectEmployee.id : '';
     const empName = selectEmployee ? selectEmployee.value : '';
+
     return (
         <Formik
             validateOnBlur={false}
@@ -103,7 +111,7 @@ const AppContainer = () => {
                 IsInternal: isInternal || false
             }}
             enableReinitialize={true}
-            validationSchema={CreateExtensionSchema}
+            validationSchema={createExtensionSchema}
             onSubmit={handleSubmit}
         >
             {({ errors, isSubmitting }) => (

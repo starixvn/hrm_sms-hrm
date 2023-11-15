@@ -1,8 +1,6 @@
 ﻿import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-
-
 export default class Autocomplete extends Component {
     static propTypes = {
         sources: PropTypes.arrayOf(PropTypes.object),
@@ -56,7 +54,6 @@ export default class Autocomplete extends Component {
             change: (event, ui) => this.handleChange(event, ui)
         });
     };
-
 
     handleInput = event => {
         this.props.onInput(event.target.value);

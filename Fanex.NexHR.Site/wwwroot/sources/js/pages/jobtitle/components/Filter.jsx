@@ -2,8 +2,7 @@
 
 import { resolveClientUrl } from '../../../shared/common.functions';
 
-const Filter = ({ setOpenPopup, onSubmit }) => {
-
+const Filter = ({ onCreate, onSubmit }) => {
     const [filterParams, setFilterParams] = useState({ jobTitle: '' });
 
     const handleSubmit = () => {
@@ -25,10 +24,6 @@ const Filter = ({ setOpenPopup, onSubmit }) => {
         if (event.key === 'Enter') {
             onSubmit(filterParams);
         };
-    };
-
-    const handleCreateModal = () => {
-        setOpenPopup(true);
     };
 
     return (
@@ -53,7 +48,7 @@ const Filter = ({ setOpenPopup, onSubmit }) => {
                         window.hasPermission === 'True' &&
                         <Fragment>
                             <button className="btn btn-excel" onClick={handleExportExcel}>Excel</button>
-                            <button className="btn btn-request" type="button" onClick={handleCreateModal}>
+                            <button className="btn btn-request" type="button" onClick={onCreate}>
                                 <span className="fa fa-plus" /> &nbsp;New Job Title
                             </button>
                         </Fragment>

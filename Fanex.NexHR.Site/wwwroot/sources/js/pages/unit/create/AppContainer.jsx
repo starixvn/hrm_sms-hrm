@@ -3,9 +3,10 @@ import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import toastr from 'toastr';
 
+import Errors from '../../../shared/components/Errors';
+
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
-import Errors from '../../../shared/components/Errors';
 
 const AppContainer = () => {
     const handleGoBack = () => {

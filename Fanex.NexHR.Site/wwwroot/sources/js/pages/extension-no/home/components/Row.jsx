@@ -21,10 +21,10 @@ const Row = ({ rowIndex, item, onDelete }) => {
                 window.hasPermission &&
                 <Fragment>
                     <td>
-                        <i className="fa fa-pencil fa-lg icon-edit" onClick={handleEdit} style={{ cursor: 'pointer' }} />
+                        <a className="fa fa-pencil fa-lg icon-edit" onClick={handleEdit} />
                     </td>
                     <td>
-                        <i className="fa fa-times fa-lg icon-delete" onClick={handleDelete} style={{ cursor: 'pointer' }} />
+                        <a className="fa fa-times fa-lg icon-delete" onClick={handleDelete} />
                     </td>
                 </Fragment>
             }
