@@ -6,15 +6,15 @@ import { Form, Field } from 'formik';
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title }) => {
-    const [values, setValues] = useState('');
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title, setInputSelect }) => {
+    //const [values, setValues] = useState('');
     const handleGoBack = () => {
         history.back();
     };
     const handleChange = event => {
         const value = event.target.value;
-        setValues(value);
         onSearchEmployees(value);
+        setInputSelect(value);
     }
 
 
@@ -65,7 +65,7 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                             <Field type="text" name="Employee" className="form-control">
                                 {() => (
                                     <EmployeeAutocomplete
-                                        value={values}
+                                        value={inputSelect}
                                         options={employee}
                                         onChange={handleChange}
                                         onSelect={onSelectEmployee}

@@ -155,6 +155,7 @@ const AppContainer = () => {
                     onSelectEmployee={handleSelect}
                     isSubmitting={isSubmitting}
                     inputSelect={inputSelect}
+                    setInputSelect={setInputSelect}
                     title='Update'
                 />
             )}
