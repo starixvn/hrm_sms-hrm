@@ -3,20 +3,18 @@ import axios from 'axios';
 import toastr from 'toastr';
 
 import Table from './Table';
-import Popup from './Popup';
+import CreateEdit from './CreateEdit';
+import SweetModalDialog from '../../../shared/components/SweetModalDialog';
 
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import SweetModalDialog from '../../../shared/components/SweetModalDialog';
 
 const AppContainer = () => {
     const [jobLevels, setJobLevels] = useState([]);
-    const [jobLevelEdit, setJobLevelEdit] = useState([]);
-    const [modalDialog, setModalDialog] = useState({
-        showConfirm: false
-    });
-    const [openPopup, setOpenPopup] = useState({
-        openCreate: false,
-        openEdit: false
+    const [jobLevelEdit, setJobLevelEdit] = useState(null);
+    const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
+    const [showModalDialog, setShowModalDialog] = useState({
+        create: false,
+        edit: false
     });
 
     const getJobLevels = () => {
@@ -30,63 +28,58 @@ const AppContainer = () => {
         getJobLevels();
     }, []);
 
-    const handleEditInfo = jobLevel => {
-        setOpenPopup({ openEdit: true });
-        setJobLevelEdit({ id: jobLevel.id, name: jobLevel.name });
-    };
+    const handleShowCreateModalDialog = () => setShowModalDialog({ create: true });
+    const handleHideCreateModalDialog = () => setShowModalDialog({ create: false });
 
     const handleCreate = jobLevel => {
         axios.post(resolveClientUrl(`JobLevel/Insert`), {
             name: jobLevel.name.trim(),
-        })
-            .then(response => {
-                const { data } = response;
-                setOpenPopup({ openCreate: false });
-                if (data.isSuccessful) {
-                    toastr.success('Create successfully!', '', toastOptions());
-                    getJobLevels();
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+        }).then(response => {
+            const { data } = response;
+            setShowModalDialog({ create: false });
+            if (data.isSuccessful) {
+                toastr.success('Create successfully!', '', toastOptions());
+                getJobLevels();
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
+    };
+
+    const handleEditInfo = jobLevel => {
+        setShowModalDialog({ edit: true });
+        setJobLevelEdit({ id: jobLevel.id, name: jobLevel.name });
     };
 
     const handleEdit = jobLevel => {
         axios.post(resolveClientUrl(`JobLevel/Update`), {
             id: jobLevelEdit.id,
             name: jobLevel.name.trim(),
-        })
-            .then(response => {
-                const { data } = response;
-                setOpenPopup({ openEdit: false });
-                if (data.isSuccessful) {
-                    toastr.success('Edit successfully!', '', toastOptions());
-                    getJobLevels();
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                }
-            }).catch(axiosError);
+        }).then(response => {
+            const { data } = response;
+            setShowModalDialog({ edit: false });
+            if (data.isSuccessful) {
+                toastr.success('Edit successfully!', '', toastOptions());
+                getJobLevels();
+            } else {
+                toastr.error(data.message, '', toastOptions());
+            }
+        }).catch(axiosError);
     };
 
+    const handleHideEditModalDialog = () => setShowModalDialog({ edit: false });
+
     const handleDelete = jobLevel => {
-        setModalDialog({
-            showConfirm: true,
+        setDeleteModalDialog({
+            show: true,
             jobLevel: jobLevel
         });
     };
 
-    const handleCreateModal = () => {
-        setOpenPopup({ openCreate: !openPopup.openCreate });
-    };
-
-    const handleEditModal = () => {
-        setOpenPopup({ openEdit: false });
-    };
-
     const handleConfirmDelete = () => {
-        setModalDialog({ showConfirm: false });
+        setDeleteModalDialog({ show: false });
         axios.post(resolveClientUrl('JobLevel/Delete'), {
-            id: modalDialog.jobLevel.id
+            id: deleteModalDialog.jobLevel.id
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
@@ -99,9 +92,7 @@ const AppContainer = () => {
     };
 
     const handleCancel = () => {
-        setModalDialog({
-            showConfirm: false
-        });
+        setDeleteModalDialog({ show: false });
     };
 
     return (
@@ -109,19 +100,19 @@ const AppContainer = () => {
             {
                 window.hasPermission === 'True' &&
                 <div className="filter">
-                    <button className="btn btn-request" type="button" onClick={handleCreateModal}>
+                    <button className="btn btn-request" type="button" onClick={handleShowCreateModalDialog}>
                         <span className="fa fa-plus" /> New Job Level
                     </button>
                 </div>
             }
-            <Popup
-                show={openPopup.openCreate}
-                onHide={handleCreateModal}
+            <CreateEdit
+                show={showModalDialog.create}
+                onHide={handleHideCreateModalDialog}
                 onSubmit={handleCreate}
                 title='Add' />
-            <Popup
-                show={openPopup.openEdit}
-                onHide={handleEditModal}
+            <CreateEdit
+                show={showModalDialog.edit}
+                onHide={handleHideEditModalDialog}
                 onSubmit={handleEdit}
                 data={jobLevelEdit}
                 title='Edit' />
@@ -130,8 +121,8 @@ const AppContainer = () => {
                 onEdit={handleEditInfo}
                 onDelete={handleDelete} />
             <SweetModalDialog
-                show={modalDialog.showConfirm}
-                contents={<p>Are you sure you want to delete?</p>}
+                show={deleteModalDialog.show}
+                contents={<p>Are you sure you want to delete this Job Level?</p>}
                 onSubmit={handleConfirmDelete}
                 onHide={handleCancel} />
         </Fragment>

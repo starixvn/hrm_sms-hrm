@@ -594,7 +594,7 @@
     <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
-    <Content Include="wwwroot\sources\js\pages\joblevel\components\Popup.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\CreateEdit.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
@@ -782,7 +782,6 @@
     <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\THead.jsx" />
-    <Content Include="wwwroot\sources\js\shared\components\AlertModal.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
     <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
     <Content Include="wwwroot\sources\js\shared\constants.js" />

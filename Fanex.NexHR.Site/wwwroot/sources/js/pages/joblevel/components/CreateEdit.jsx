@@ -7,7 +7,7 @@ import Errors from '../../../shared/components/Errors';
 
 import { validationSchema } from '../common.functions';
 
-const Popup = ({ show, onHide, onSubmit, data, title }) => {
+const CreateEdit = ({ show, onHide, onSubmit, data, title }) => {
     const renderForm = errors => {
         return (
             <div>
@@ -56,4 +56,4 @@ const Popup = ({ show, onHide, onSubmit, data, title }) => {
     );
 };
 
-export default Popup;
+export default CreateEdit;

@@ -11,9 +11,9 @@ import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/comm
 
 const AppContainer = () => {
     const [jobTitles, setJobTitles] = useState([]);
-    const [jobCategory, setJobCategory] = useState([]);
+    const [jobCategories, setJobCategories] = useState([]);
     const [filterParams, setFilterParams] = useState({ jobTitle: '' });
-    const [jobTitleEdit, setJobTitleEdit] = useState([]);
+    const [jobTitleEdit, setJobTitleEdit] = useState(null);
     const [deleteModalDialog, setDeleteModalDialog] = useState({
         show: false
     });
@@ -33,7 +33,7 @@ const AppContainer = () => {
     const getJobCategory = () => {
         axios.post(resolveClientUrl('JobTitle/GetJobCategory'), {
         }).then(response => {
-            setJobCategory(response.data)
+            setJobCategories(response.data)
         }).catch(axiosError);
     };
 
@@ -48,7 +48,7 @@ const AppContainer = () => {
     const handleCreate = jobTitle => {
         axios.post(resolveClientUrl(`JobTitle/Insert`), {
             name: jobTitle.name.trim(),
-            categoryId: jobTitle.categoryId ? jobTitle.categoryId : jobCategory[0].value
+            categoryId: jobTitle.categoryId ? jobTitle.categoryId : jobCategories[0].value
         }).then(response => {
             const { data } = response;
             setShowModalDialog({ create: false });
@@ -127,13 +127,13 @@ const AppContainer = () => {
                 onHide={handleHideCreateModalDialog}
                 onSubmit={handleCreate}
                 title='Add'
-                jobCategory={jobCategory} />
+                jobCategories={jobCategories} />
             <CreateEdit
                 show={showModalDialog.edit}
                 onHide={handleHideEditModalDialog}
                 onSubmit={handleEdit}
                 title='Edit'
-                jobCategory={jobCategory}
+                jobCategories={jobCategories}
                 data={jobTitleEdit} />
             <Table
                 data={jobTitles}

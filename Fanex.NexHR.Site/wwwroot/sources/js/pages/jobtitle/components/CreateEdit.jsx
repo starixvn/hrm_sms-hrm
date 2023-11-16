@@ -7,7 +7,7 @@ import Errors from '../../../shared/components/Errors';
 
 import { validationSchema } from '../common.functions';
 
-const CreateEdit = ({ show, onHide, onSubmit, data, title, jobCategory }) => {
+const CreateEdit = ({ show, onHide, onSubmit, data, title, jobCategories }) => {
     const renderForm = errors => {
         return (
             <div>
@@ -28,11 +28,13 @@ const CreateEdit = ({ show, onHide, onSubmit, data, title, jobCategory }) => {
                         <div className="select-form">
                             <Field name="categoryId" as="select" className="form-control">
                                 {
-                                    jobCategory ? jobCategory.map((category) => (
-                                        <option key={category.value} value={category.value}>
-                                            {category.text}
-                                        </option>
-                                    )) : ''
+                                    jobCategories
+                                        ? jobCategories.map(category => (
+                                            <option key={category.value} value={category.value}>
+                                                {category.text}
+                                            </option>
+                                        ))
+                                        : null
                                 }
                             </Field>
                         </div>
