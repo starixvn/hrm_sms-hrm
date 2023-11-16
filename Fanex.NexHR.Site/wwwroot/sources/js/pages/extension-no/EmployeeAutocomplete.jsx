@@ -34,7 +34,6 @@ const EmployeeAutocomplete = ({ options, onChange, onSelect }) => {
             value={keyword}
             onChange={handleChange}
             onSelect={handleSelect}
-                
         />
     );
 };

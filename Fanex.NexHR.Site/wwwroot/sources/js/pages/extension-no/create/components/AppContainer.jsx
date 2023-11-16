@@ -40,6 +40,8 @@ const AppContainer = () => {
 
                 setEmployees(employeeOptions);
             }).catch(axiosError);
+        } else {
+            setEmployees([]);
         }
     };
 
@@ -123,8 +125,6 @@ const AppContainer = () => {
                     onSearchEmployee={getEmployees}
                     onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
-                    setInputSelect={setInputSelect}
-                    setEmployee={setEmployee}
                     title='Create'
                 />
             )}

@@ -33,7 +33,7 @@ const AppContainer = () => {
     };
 
     const getEmployees = query => {
-        if(query.trim().length >= 2) {
+        if (query.trim().length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
                 params: { query }
             }).then(response => {
@@ -49,6 +49,8 @@ const AppContainer = () => {
 
                 setEmployees(employeeOptions);
             }).catch(axiosError);
+        } else {
+            setEmployees([]);
         }
     };
 
@@ -151,8 +153,6 @@ const AppContainer = () => {
                     onSearchEmployee={getEmployees}
                     onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
-                    setInputSelect={setInputSelect}
-                    setEmployee={setEmployee}
                     title='Update'
                 />
             )}
