@@ -13,15 +13,13 @@ const AppContainer = () => {
     const [extensionDetail, setExtensionDetail] = useState(null);
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(window.isInternal === 'True');
-    const [employee, setEmployee] = useState(null);
+    const [inputSelect, setInputSelect] = useState('');
+    const [employee, setEmployee] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const editExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
             .required('Extension No field is required!'),
-        Employee: isInternal ? Yup.string()
-            .trim()
-            .required('Employee field is required!') : false
     });
 
     const getExtentionById = (isInternal, id) => {
@@ -36,7 +34,7 @@ const AppContainer = () => {
     };
 
     const getEmployees = query => {
-        if (query.length >= 2) {
+        if(query.trim().length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
                 params: { query }
             }).then(response => {
@@ -63,9 +61,10 @@ const AppContainer = () => {
         }).catch(axiosError);
     };
 
-    const handleChange = items => {
-        const selected = employee && employee.find(item => item.id === items.value);
+    const handleSelect = (input, newValue) => {
+        const selected = employee.find(item => item.id === newValue.id);
         setSelectEmployee(selected);
+        setInputSelect(input);
     };
 
     useEffect(() => {
@@ -121,7 +120,6 @@ const AppContainer = () => {
     if (extensionDetail == null) {
         return null;
     };
-
     const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
     const emPloyee = selectEmployee && selectEmployee.value || '';
     const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
@@ -153,9 +151,10 @@ const AppContainer = () => {
                     onChangeInternal={handleChangeInternal}
                     selectExtension={selectExtension}
                     employee={employee}
-                    getEmployees={getEmployees}
-                    onChangeEmployee={handleChange}
+                    onSearchEmployees={getEmployees}
+                    onSelectEmployee={handleSelect}
                     isSubmitting={isSubmitting}
+                    inputSelect={inputSelect}
                 />
             )}
         </Formik>

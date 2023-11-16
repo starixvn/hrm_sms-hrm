@@ -4,6 +4,10 @@
 @import '../../components/card';
 @import '../../components/checkbox';
 @import '../../components/form-horizontal';
+@import '../../components/react-autocomplete-wrapper';
 @import '../../components/validation';
-@import '../../vendors/autocomplete';
 @import '../../layout/_toastr.scss';
+
+.react-autocomplete-wrapper{
+    width :auto;
+}

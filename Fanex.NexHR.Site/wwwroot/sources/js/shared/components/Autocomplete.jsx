@@ -7,10 +7,7 @@ export default class Autocomplete extends Component {
         className: PropTypes.string,
         isDisabled: PropTypes.bool,
         onInput: PropTypes.func,
-        onChange: PropTypes.func,
-        form: PropTypes.object,
-        field: PropTypes.object,
-        nameInput: PropTypes.string,
+        onChange: PropTypes.func
     };
 
     static defaultProps = {
@@ -20,10 +17,7 @@ export default class Autocomplete extends Component {
         onInput: function () {
         },
         onChange: function () {
-        },
-        form: {},
-        field: {},
-        nameInput: ''
+        }
     };
 
     componentDidMount() {
@@ -31,11 +25,11 @@ export default class Autocomplete extends Component {
         this.updateAutocomplete();
     }
 
-    //shouldComponentUpdate(nextProps) {
-    //    return this.props.sources !== nextProps.sources
-    //        || this.props.className !== nextProps.className
-    //        || this.props.isDisabled !== nextProps.isDisabled;
-    //}
+    shouldComponentUpdate(nextProps) {
+        return this.props.sources !== nextProps.sources
+            || this.props.className !== nextProps.className
+            || this.props.isDisabled !== nextProps.isDisabled;
+    }
 
     componentDidUpdate() {
         this.updateAutocomplete();
@@ -77,14 +71,7 @@ export default class Autocomplete extends Component {
         return (
             <Fragment>
                 {
-                    this.props.form && this.props.field && this.props.nameInput ? <input
-                        ref={el => this.el = el}
-                        className={this.props.className}
-                        disabled={this.props.isDisabled}
-                        onInput={this.handleInput}
-                        type="text"
-                        {...this.props.field}
-                    /> : <input
+                   <input
                         ref={el => this.el = el}
                         type="text"
                         className={this.props.className}

@@ -12,7 +12,8 @@ import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/c
 const AppContainer = () => {
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(false);
-    const [employee, setEmployee] = useState(null);
+    const [inputSelect, setInputSelect] = useState('');
+    const [employee, setEmployee] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const createExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
@@ -24,7 +25,7 @@ const AppContainer = () => {
     });
 
     const getEmployees = query => {
-        if (query.length >= 2) {
+        if (query.trim().length >= 2) {
             axios.get(resolveClientUrl('employee/getemployees'), {
                 params: { query }
             }).then(response => {
@@ -55,9 +56,10 @@ const AppContainer = () => {
         getGroupExtension(isInternal);
     }, [isInternal]);
 
-    const handleChange = data => {
-        const selected = employee.find(item => item.id === data.value);
+    const handleSelect = (input , newValue) => {
+        const selected = employee.find(item => item.id === newValue.id);
         setSelectEmployee(selected);
+        setInputSelect(input);
     };
 
     const handleChangeInternal = () => {
@@ -121,9 +123,10 @@ const AppContainer = () => {
                     onChangeInternal={handleChangeInternal}
                     selectExtension={selectExtension}
                     employee={employee}
-                    getEmployees={getEmployees}
-                    onChangeEmployee={handleChange}
+                    onSearchEmployees={getEmployees}
+                    onSelectEmployee={handleSelect}
                     isSubmitting={isSubmitting}
+                    inputSelect={inputSelect}
                 />
             )}
         </Formik>

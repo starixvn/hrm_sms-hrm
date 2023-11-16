@@ -1,13 +1,23 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { Form, Field } from 'formik';
 
-import Autocomplete from '../../shared/components/Autocomplete';
-import Errors from '../../shared/components/Errors';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, getEmployees, onChangeEmployee , isSubmitting }) => {
+
+import Errors from '../../shared/components/Errors';
+import EmployeeAutocomplete from './EmployeeAutocomplete';
+
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect }) => {
+    const [values, setValues] = useState('');
     const handleGoBack = () => {
         history.back();
     };
+    const handleChange = event => {
+        const value = event.target.value;
+        setValues(value);
+        onSearchEmployees(value);
+    }
+
+
     return (
         <div className="card">
             <Errors errors={errors} />
@@ -53,17 +63,13 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                         </div>
                         <div className="select-form">
                             <Field type="text" name="Employee" className="form-control">
-                                {({
-                                    field, form
-                                }) => (
-                                    <Autocomplete
-                                        className='form-control'
-                                        sources={employee}
-                                        onInput={getEmployees}
-                                        field={field}
-                                        form={form}
-                                        nameInput='Employee'
-                                        onChange={onChangeEmployee}
+                                {() => (
+                                    <EmployeeAutocomplete
+                                        value={values}
+                                        options={employee}
+                                        onChange={handleChange}
+                                        onSelect={onSelectEmployee}
+                                        inputSelect={inputSelect}
                                     />
                                 )}
                             </Field>
