@@ -571,6 +571,7 @@
     <Content Include="wwwroot\sources\js\pages\department\home\components\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
     <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\EmployeeAutocomplete.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\group\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\extension-no\create\index.jsx" />

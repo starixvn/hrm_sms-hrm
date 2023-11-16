@@ -6,7 +6,7 @@ import { Form, Field } from 'formik';
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect }) => {
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title }) => {
     const [values, setValues] = useState('');
     const handleGoBack = () => {
         history.back();
@@ -126,7 +126,7 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                     </div>
                 </div>
                 <div className="form-group">
-                    <button type="submit" id="btnSubmit" className="btn btn-primary" disabled={isSubmitting} style={{ marginRight: "5px" }}>Update</button>
+                    <button type="submit" id="btnSubmit" className="btn btn-primary" disabled={isSubmitting} style={{ marginRight: "5px" }}>{title}</button>
                     <a className="btn btn-default" onClick={handleGoBack}>Back</a>
                 </div>
             </Form>

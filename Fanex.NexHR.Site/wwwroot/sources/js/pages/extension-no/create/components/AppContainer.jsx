@@ -127,6 +127,7 @@ const AppContainer = () => {
                     onSelectEmployee={handleSelect}
                     isSubmitting={isSubmitting}
                     inputSelect={inputSelect}
+                    title='Create'
                 />
             )}
         </Formik>
