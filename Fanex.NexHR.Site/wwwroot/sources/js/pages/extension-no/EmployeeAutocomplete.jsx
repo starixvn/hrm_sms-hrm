@@ -22,6 +22,7 @@ export default class EmployeeAutocomplete extends PureComponent {
                 value={this.props.inputSelect ? this.props.inputSelect : this.props.value}
                 onChange={this.props.onChange}
                 onSelect={(event, newValue) => this.props.onSelect(event, newValue)}
+                
             />
         );
     }

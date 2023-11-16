@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
 import { Form, Field } from 'formik';
 
 
@@ -6,13 +6,15 @@ import { Form, Field } from 'formik';
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title, setInputSelect }) => {
-    //const [values, setValues] = useState('');
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title, setInputSelect, setEmployee }) => {
     const handleGoBack = () => {
         history.back();
     };
     const handleChange = event => {
         const value = event.target.value;
+        if (value.length < 2) {
+            setEmployee([])
+        }
         onSearchEmployees(value);
         setInputSelect(value);
     }
