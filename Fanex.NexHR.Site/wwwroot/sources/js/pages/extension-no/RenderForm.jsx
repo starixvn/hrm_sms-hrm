@@ -1,24 +1,13 @@
 ﻿import React from 'react';
 import { Form, Field } from 'formik';
 
-
-
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employee, onSearchEmployees, onSelectEmployee, isSubmitting, inputSelect, title, setInputSelect, setEmployee }) => {
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title }) => {
     const handleGoBack = () => {
         history.back();
     };
-    const handleChange = event => {
-        const value = event.target.value;
-        if (value.length < 2) {
-            setEmployee([])
-        }
-        onSearchEmployees(value);
-        setInputSelect(value);
-    }
-
 
     return (
         <div className="card">
@@ -67,11 +56,9 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                             <Field type="text" name="Employee" className="form-control">
                                 {() => (
                                     <EmployeeAutocomplete
-                                        value={inputSelect}
-                                        options={employee}
-                                        onChange={handleChange}
+                                        options={employees}
+                                        onChange={onSearchEmployee}
                                         onSelect={onSelectEmployee}
-                                        inputSelect={inputSelect}
                                     />
                                 )}
                             </Field>

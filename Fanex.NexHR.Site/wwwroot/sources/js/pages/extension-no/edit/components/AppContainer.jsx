@@ -13,8 +13,7 @@ const AppContainer = () => {
     const [extensionDetail, setExtensionDetail] = useState(null);
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(window.isInternal === 'True');
-    const [inputSelect, setInputSelect] = useState('');
-    const [employee, setEmployee] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const editExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
@@ -48,7 +47,7 @@ const AppContainer = () => {
                     };
                 });
 
-                setEmployee(employeeOptions);
+                setEmployees(employeeOptions);
             }).catch(axiosError);
         }
     };
@@ -61,10 +60,8 @@ const AppContainer = () => {
         }).catch(axiosError);
     };
 
-    const handleSelect = (input, newValue) => {
-        const selected = employee.find(item => item.id === newValue.id);
-        setSelectEmployee(selected);
-        setInputSelect(input);
+    const handleSelectEmployee = selectedItem => {
+        setSelectEmployee(selectedItem);
     };
 
     useEffect(() => {
@@ -150,11 +147,10 @@ const AppContainer = () => {
                     isInternal={isInternal}
                     onChangeInternal={handleChangeInternal}
                     selectExtension={selectExtension}
-                    employee={employee}
-                    onSearchEmployees={getEmployees}
-                    onSelectEmployee={handleSelect}
+                    employees={employees}
+                    onSearchEmployee={getEmployees}
+                    onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
-                    inputSelect={inputSelect}
                     setInputSelect={setInputSelect}
                     setEmployee={setEmployee}
                     title='Update'

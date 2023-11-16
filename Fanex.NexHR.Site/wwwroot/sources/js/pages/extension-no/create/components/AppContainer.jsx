@@ -12,8 +12,7 @@ import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/c
 const AppContainer = () => {
     const [selectExtension, setSelectExtension] = useState(null);
     const [isInternal, setIsInternal] = useState(false);
-    const [inputSelect, setInputSelect] = useState('');
-    const [employee, setEmployee] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
     const createExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
@@ -39,7 +38,7 @@ const AppContainer = () => {
                     };
                 });
 
-                setEmployee(employeeOptions);
+                setEmployees(employeeOptions);
             }).catch(axiosError);
         }
     };
@@ -54,12 +53,10 @@ const AppContainer = () => {
 
     useEffect(() => {
         getGroupExtension(isInternal);
-    }, [isInternal]);
+    }, []);
 
-    const handleSelect = (input , newValue) => {
-        const selected = employee.find(item => item.id === newValue.id);
-        setSelectEmployee(selected);
-        setInputSelect(input);
+    const handleSelectEmployee = selectedItem => {
+        setSelectEmployee(selectedItem);
     };
 
     const handleChangeInternal = () => {
@@ -122,11 +119,10 @@ const AppContainer = () => {
                     isInternal={isInternal}
                     onChangeInternal={handleChangeInternal}
                     selectExtension={selectExtension}
-                    employee={employee}
-                    onSearchEmployees={getEmployees}
-                    onSelectEmployee={handleSelect}
+                    employees={employees}
+                    onSearchEmployee={getEmployees}
+                    onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
-                    inputSelect={inputSelect}
                     setInputSelect={setInputSelect}
                     setEmployee={setEmployee}
                     title='Create'
