@@ -14,6 +14,8 @@ const AppContainer = () => {
     const [isInternal, setIsInternal] = useState(false);
     const [employees, setEmployees] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
+    const [selectGroup, setSelectGroup] = useState('');
+
     const createExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
@@ -50,12 +52,13 @@ const AppContainer = () => {
             params: { isInternal }
         }).then(response => {
             setSelectExtension(response.data);
+            setSelectGroup(response.data[0].value);
         }).catch(axiosError);
     };
 
     useEffect(() => {
         getGroupExtension(isInternal);
-    }, []);
+    }, [isInternal]);
 
     const handleSelectEmployee = selectedItem => {
         setSelectEmployee(selectedItem);
@@ -93,7 +96,7 @@ const AppContainer = () => {
     }
 
     const fullName = selectEmployee ? selectEmployee.fullName : '';
-    const teamId = selectExtension[0].value;
+    const teamId = selectGroup || selectExtension[0].value;
     const nickName = selectEmployee ? selectEmployee.nickName : '';
     const empId = selectEmployee ? selectEmployee.id : '';
     const empName = selectEmployee ? selectEmployee.value : '';
@@ -125,6 +128,7 @@ const AppContainer = () => {
                     onSearchEmployee={getEmployees}
                     onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
+                    setSelectGroup={setSelectGroup}
                     title='Create'
                 />
             )}

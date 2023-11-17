@@ -15,10 +15,15 @@ const AppContainer = () => {
     const [isInternal, setIsInternal] = useState(window.isInternal === 'True');
     const [employees, setEmployees] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
+    const [selectGroup, setSelectGroup] = useState('');
+
     const editExtensionSchema = Yup.object({
         ExtensionNo: Yup.string()
             .trim()
             .required('Extension No field is required!'),
+        Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? Yup.string()
+            .trim()
+            .required('Employee field is required!') : false,
     });
 
     const getExtentionById = (isInternal, id) => {
@@ -89,6 +94,7 @@ const AppContainer = () => {
                 employeeExtensionId: extensionDetail.employeeExtensionId,
                 employee: extensionDetail.employee
             });
+            setSelectGroup(response.data[0].value);
         }).catch(axiosError);
     };
 
@@ -122,7 +128,7 @@ const AppContainer = () => {
     const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
     const emPloyee = selectEmployee && selectEmployee.value || '';
     const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
-    const teamId = extensionDetail.teamId || '';
+    const teamId = selectGroup || extensionDetail.teamId;
     const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
     const extensionNo = extensionDetail.extensionNo || '';
 
@@ -153,6 +159,7 @@ const AppContainer = () => {
                     onSearchEmployee={getEmployees}
                     onSelectEmployee={handleSelectEmployee}
                     isSubmitting={isSubmitting}
+                    setSelectGroup={setSelectGroup}
                     title='Update'
                 />
             )}

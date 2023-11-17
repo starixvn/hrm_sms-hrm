@@ -4,10 +4,14 @@ import { Form, Field } from 'formik';
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title }) => {
+const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title, setSelectGroup }) => {
     const handleGoBack = () => {
         history.back();
     };
+
+    const handleSelectGroup = event => {
+        setSelectGroup(event.target.value);
+    }
 
     return (
         <div className="card">
@@ -38,7 +42,7 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
                         <label className="control-label">Group</label>
                     </div>
                     <div className="input-form">
-                        <Field as="select" name="TeamId" className="form-control">
+                        <Field as="select" name="TeamId" className="form-control" onChange={handleSelectGroup}>
                             {
                                 selectExtension && selectExtension.map(item => (
                                     <option defaultValue={item.value} value={item.value} key={item.value}>{item.text}</option>
