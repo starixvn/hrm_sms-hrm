@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GO.Website\GO.Website.csproj" />
-  </ItemGroup>
-
 </Project>
