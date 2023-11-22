@@ -7,23 +7,12 @@
     <Company>HRM.UserControl.Client.AspNetCore</Company>
     <PackageTags>HRM</PackageTags>
     <Copyright>2021</Copyright>
-    <CodeAnalysisRuleSet>HRM.UserControl.Client.AspNetCore.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\SonarQube\smshrm\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="HRM.UserControl.Client.Core" Version="1.0.7" />
+    <PackageReference Include="HRM.UserControl.Client.Core" Version="1.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.34.0.42011">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
-
 </Project>
