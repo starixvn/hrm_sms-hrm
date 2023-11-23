@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="SonarQube - Nexus / SMS HRM Sonar way" ToolsVersion="14.0">
-  <Include Path="..\sonarqube\smshrmcsharp.ruleset" Action="Default" />
-  <Include Path="fanexrules.ruleset" Action="Default" />
-</RuleSet>

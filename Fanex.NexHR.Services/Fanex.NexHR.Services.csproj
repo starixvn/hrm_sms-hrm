@@ -1,73 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7789CD20-1DC9-4077-921C-2548023BBC62}</ProjectGuid>
+    <ProjectGuid>{8E5744B4-0732-4997-A5FB-7623F5F694DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Fanex.NexHR.Services</RootNamespace>
     <AssemblyName>Fanex.NexHR.Services</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Fanex.NexHR.Services.Debug.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>Fanex.NexHR.Services.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.9\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.2.0.78\lib\net461\Dapper.dll</HintPath>
+      <HintPath>..\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="Fanex.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.Common.1.1.0.1\lib\net40\Fanex.Common.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.Data, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Data.4.2.2\lib\net461\Fanex.Data.dll</HintPath>
@@ -78,14 +49,14 @@
     <Reference Include="Fanex.Logging, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.2.0.1\lib\net461\Fanex.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.Core, Version=1.8.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hangfire.Core.1.8.2\lib\net46\Hangfire.Core.dll</HintPath>
+    <Reference Include="Hangfire.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.8.6\lib\net46\Hangfire.Core.dll</HintPath>
     </Reference>
     <Reference Include="HRM.UserControl.Client.AspNetMvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.AspNetMvc.1.0.4\lib\net461\HRM.UserControl.Client.AspNetMvc.dll</HintPath>
+      <HintPath>..\packages\HRM.UserControl.Client.AspNetMvc.1.0.5\lib\net472\HRM.UserControl.Client.AspNetMvc.dll</HintPath>
     </Reference>
-    <Reference Include="HRM.UserControl.Client.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.7\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
+    <Reference Include="HRM.UserControl.Client.Core, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HRM.UserControl.Client.Core.1.0.8\lib\netstandard2.0\HRM.UserControl.Client.Core.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.3.11, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.3.3\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -95,28 +66,6 @@
     </Reference>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.Http.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.Http.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.Http.Extensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.Http.Extensions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.5.0.0\lib\net461\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Net.Http.Headers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Net.Http.Headers.2.2.0\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -140,265 +89,198 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="RazorEngine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <HintPath>..\packages\RazorEngine.3.10.0\lib\net45\RazorEngine.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.9\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
-    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.9\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.0\lib\net40\System.Web.Providers.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="Unity.Abstractions, Version=5.11.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.10\lib\net46\Unity.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Unity.5.11.10\lib\net47\Unity.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Container, Version=5.11.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.10\lib\net46\Unity.Container.dll</HintPath>
+      <HintPath>..\packages\Unity.5.11.10\lib\net47\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mvc5, Version=1.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.Mvc5.1.4.0\lib\net45\Unity.Mvc5.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExportExcel\ExportDisciplineSummaryPerYearService.cs" />
-    <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
-    <Compile Include="ExportExcel\ExportOvertimeService.cs" />
-    <Compile Include="ExportExcel\JobTitleExportService.cs" />
-    <Compile Include="ExportExcel\ExportExcelTimeRecordService.cs" />
-    <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
-    <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
-    <Compile Include="Implement\API\APITodolistRequestService.cs" />
-    <Compile Include="Implement\AttachFileService.cs" />
-    <Compile Include="Implement\BackgroundJob.cs" />
-    <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
-    <Compile Include="Extensions\ServiceDIExtensions.cs" />
-    <Compile Include="Implement\HRMAuthService.cs" />
-    <Compile Include="Implement\CommonDataService.cs" />
-    <Compile Include="Implement\DashboardService.cs" />
-    <Compile Include="Implement\JobLevelService .cs" />
-    <Compile Include="Implement\LetstalkService.cs" />
-    <Compile Include="Implement\SyncWorkingShiftService.cs" />
-    <Compile Include="Implement\EmployeeWorkFromHomeService.cs" />
-    <Compile Include="Implement\Report\MealAllowanceSummaryServicecs.cs" />
-    <Compile Include="Implement\UnitService.cs" />
-    <Compile Include="Implement\SectionService.cs" />
-    <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />
     <Compile Include="ExportExcel\Discipline\ExportDisciplineDetailService.cs" />
     <Compile Include="ExportExcel\Discipline\ExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Discipline\IExportDisciplineDetailService.cs" />
     <Compile Include="ExportExcel\Discipline\IExportDisciplineSummaryService.cs" />
     <Compile Include="ExportExcel\Employee\ExportExcelEmployeeInfoService.cs" />
     <Compile Include="ExportExcel\Employee\IExportExcelEmployeeInfoService.cs" />
-    <Compile Include="ExportExcel\ExportSupervisorService.cs" />
+    <Compile Include="ExportExcel\ExportDisciplineSummaryPerYearService.cs" />
+    <Compile Include="ExportExcel\ExportExcelAttendanceReportService.cs" />
+    <Compile Include="ExportExcel\ExportExcelScheduleService.cs" />
+    <Compile Include="ExportExcel\ExportExcelService.cs" />
+    <Compile Include="ExportExcel\ExportExcelShiftStatisticService.cs" />
+    <Compile Include="ExportExcel\ExportExcelTimeRecordService.cs" />
     <Compile Include="ExportExcel\ExportExcelUnpaidLeaveSummaryReportService.cs" />
+    <Compile Include="ExportExcel\ExportOvertimeService.cs" />
+    <Compile Include="ExportExcel\ExportSupervisorService.cs" />
+    <Compile Include="ExportExcel\IExportExcelService.cs" />
+    <Compile Include="ExportExcel\JobTitleExportService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveDetailService.cs" />
     <Compile Include="ExportExcel\WeekendLeave\ExportWeekendLeaveSummaryService.cs" />
-    <Compile Include="Implement\ExtensionNumberService.cs" />
-    <Compile Include="Implement\DisciplineService.cs" />
+    <Compile Include="Extensions\ServiceDIExtensions.cs" />
     <Compile Include="Implement\ActionLog\ActionLogService.cs" />
+    <Compile Include="Implement\ActionLog\EmployeeLogService.cs" />
+    <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
+    <Compile Include="Implement\API\APITodolistRequestService.cs" />
+    <Compile Include="Implement\AttachFileService.cs" />
+    <Compile Include="Implement\BackgroundJob.cs" />
+    <Compile Include="Implement\CommonDataService.cs" />
+    <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
+    <Compile Include="Implement\DisciplineService.cs" />
+    <Compile Include="Implement\EmailService.cs" />
+    <Compile Include="Implement\EmployeeService.cs" />
+    <Compile Include="Implement\EmployeeWorkFromHomeService.cs" />
+    <Compile Include="Implement\ExtensionNumberService.cs" />
+    <Compile Include="Implement\HolidayService.cs" />
+    <Compile Include="Implement\HRMAuthService.cs" />
+    <Compile Include="Implement\JobLevelService .cs" />
+    <Compile Include="Implement\LetstalkService.cs" />
+    <Compile Include="Implement\MemoService.cs" />
+    <Compile Include="Implement\MessageService.cs" />
     <Compile Include="Implement\PaternityService.cs" />
     <Compile Include="Implement\PostnatalService.cs" />
-    <Compile Include="Implement\Report\MonthlyWorkingHoursService.cs" />
+    <Compile Include="Implement\ReportService.cs" />
     <Compile Include="Implement\Report\EmployeeWorkingHoursService.cs" />
     <Compile Include="Implement\Report\ManpowerReportService.cs" />
+    <Compile Include="Implement\Report\MealAllowanceSummaryServicecs.cs" />
+    <Compile Include="Implement\Report\MonthlyWorkingHoursService.cs" />
     <Compile Include="Implement\Report\OvertimeReportService.cs" />
     <Compile Include="Implement\Report\ShiftStatisticReportService.cs" />
     <Compile Include="Implement\Report\WorkingCalendarSummaryReportService.cs" />
     <Compile Include="Implement\Report\WorkingHoursSummaryReportService.cs" />
+    <Compile Include="Implement\Request\ChangeShiftRequestService.cs" />
+    <Compile Include="Implement\Request\CheckInOutRequestService.cs" />
+    <Compile Include="Implement\Request\KeepInViewRequestService.cs" />
+    <Compile Include="Implement\Request\LateInEarlyOutRequestService.cs" />
+    <Compile Include="Implement\Request\LeaveRequestService.cs" />
+    <Compile Include="Implement\Request\OvertimeRequestService.cs" />
+    <Compile Include="Implement\Request\RequestMailService.cs" />
+    <Compile Include="Implement\Request\RequestService.cs" />
+    <Compile Include="Implement\ScheduleArrangeService.cs" />
+    <Compile Include="Implement\SectionService.cs" />
+    <Compile Include="Implement\ShiftService.cs" />
+    <Compile Include="Implement\SyncWorkingShiftService.cs" />
+    <Compile Include="Implement\TeamService.cs" />
+    <Compile Include="Implement\UnitService.cs" />
     <Compile Include="Implement\WorkingCalendarReportService.cs" />
+    <Compile Include="Implement\WorkingCalendarService.cs" />
     <Compile Include="Interfaces\API\IAPITodolistRequestService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAttachFileService.cs" />
-    <Compile Include="Interfaces\IHRMAuthService.cs" />
     <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />
-    <Compile Include="Interfaces\IJobLevelService.cs" />
-    <Compile Include="Interfaces\IEmployeeWorkFromHomeService.cs" />
-    <Compile Include="Interfaces\ILetstalkService.cs" />
-    <Compile Include="Interfaces\IUnitService.cs" />
-    <Compile Include="Interfaces\ISectionService.cs" />
-    <Compile Include="Interfaces\IDisciplineService.cs" />
-    <Compile Include="Interfaces\IExtensionNumberService.cs" />
-    <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
+    <Compile Include="Interfaces\IDisciplineService.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
+    <Compile Include="Interfaces\IEmployeeWorkFromHomeService.cs" />
+    <Compile Include="Interfaces\IExtensionNumberService.cs" />
+    <Compile Include="Interfaces\IHolidayService.cs" />
+    <Compile Include="Interfaces\IHRMAuthService.cs" />
+    <Compile Include="Interfaces\IJobLevelService.cs" />
+    <Compile Include="Interfaces\ILetstalkService.cs" />
+    <Compile Include="Interfaces\IMemoService.cs" />
+    <Compile Include="Interfaces\IMessageService.cs" />
     <Compile Include="Interfaces\IOvertimeRequestService.cs" />
     <Compile Include="Interfaces\IPaternityService.cs" />
     <Compile Include="Interfaces\IPostnatalService.cs" />
-    <Compile Include="Interfaces\Request\IRequestMailService.cs" />
+    <Compile Include="Interfaces\IReportService.cs" />
+    <Compile Include="Interfaces\IScheduleArrangeService.cs" />
+    <Compile Include="Interfaces\ISectionService.cs" />
+    <Compile Include="Interfaces\IShiftService.cs" />
+    <Compile Include="Interfaces\ITeamService.cs" />
+    <Compile Include="Interfaces\IUnitService.cs" />
     <Compile Include="Interfaces\IWorkingCalendarService.cs" />
-    <Compile Include="Implement\Request\KeepInViewRequestService.cs" />
-    <Compile Include="Implement\Request\ChangeShiftRequestService.cs" />
-    <Compile Include="Implement\Request\CheckInOutRequestService.cs" />
-    <Compile Include="ExportExcel\ExportExcelService.cs" />
-    <Compile Include="Interfaces\Request\IKeepInViewRequestService.cs" />
+    <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
     <Compile Include="Interfaces\Request\IChangeShiftRequestService.cs" />
     <Compile Include="Interfaces\Request\ICheckInOutRequestService.cs" />
-    <Compile Include="ExportExcel\IExportExcelService.cs" />
+    <Compile Include="Interfaces\Request\IKeepInViewRequestService.cs" />
     <Compile Include="Interfaces\Request\ILateInEarlyOutRequestService.cs" />
     <Compile Include="Interfaces\Request\ILeaveRequestService.cs" />
-    <Compile Include="Interfaces\IReportService.cs" />
-    <Compile Include="Implement\Request\LateInEarlyOutRequestService.cs" />
-    <Compile Include="Implement\Request\LeaveRequestService.cs" />
-    <Compile Include="Implement\EmailService.cs" />
-    <Compile Include="Implement\EmployeeService.cs" />
-    <Compile Include="Interfaces\IEmailService.cs" />
-    <Compile Include="Interfaces\IMemoService.cs" />
-    <Compile Include="Interfaces\ITeamService.cs" />
-    <Compile Include="Implement\MemoService.cs" />
-    <Compile Include="Implement\MessageService.cs">
-      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Implement\Request\OvertimeRequestService.cs" />
-    <Compile Include="Implement\ReportService.cs" />
-    <Compile Include="Implement\Request\RequestMailService.cs" />
-    <Compile Include="Implement\TeamService.cs" />
-    <Compile Include="Implement\HolidayService.cs" />
-    <Compile Include="Interfaces\IHolidayService.cs" />
-    <Compile Include="Interfaces\IEmployeeService.cs" />
-    <Compile Include="Interfaces\Request\IRequestService.cs">
-      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Interfaces\IShiftService.cs" />
-    <Compile Include="Interfaces\IScheduleArrangeService.cs" />
-    <Compile Include="Interfaces\Report\IOvertimeReportService.cs" />
+    <Compile Include="Interfaces\Request\IRequestMailService.cs" />
+    <Compile Include="Interfaces\Request\IRequestService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implement\Request\RequestService.cs" />
-    <Compile Include="Implement\ShiftService.cs" />
-    <Compile Include="Implement\WorkingCalendarService.cs" />
-    <Compile Include="Implement\ScheduleArrangeService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">
-      <Project>{2493CFDA-E539-4F5C-BE9D-4AE823E42473}</Project>
-      <Name>Fanex.NexHR.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj">
-      <Project>{089B8314-1793-403B-ADA8-E83E842C275E}</Project>
-      <Name>Fanex.NexHR.Criteria</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.MailDeliver\Fanex.NexHR.MailDeliver.csproj">
-      <Project>{085eb762-ecdd-4f5f-9f63-93d6fb6eae08}</Project>
-      <Name>Fanex.NexHR.MailDeliver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
-      <Project>{5955CE2D-B3DC-48C2-B3B4-CCEE2DB5B35F}</Project>
-      <Name>Fanex.NexHR.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Repositories\Fanex.NexHR.Repositories.csproj">
-      <Project>{89E66795-E15A-41B8-9684-35B05739C1F7}</Project>
-      <Name>Fanex.NexHR.Repositories</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
-      <Project>{C7D47FA8-C2DD-4C1A-BEC9-B9D5316E9168}</Project>
-      <Name>Fanex.NexHR.Resources</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
-      <Project>{41C13575-C69E-442C-BB46-665FFDF81164}</Project>
-      <Name>Fanex.NexHR.ViewModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj">
-      <Project>{F57BC2A2-BFA1-49C0-AE61-5432948DB735}</Project>
-      <Name>HRM.Letstalk.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Fanex.NexHR.Services.Debug.ruleset" />
-    <None Include="Fanex.NexHR.Services.ruleset" />
+    <None Include="ExportExcel\ExportExcelScheduleService.cs~HEAD" />
+    <None Include="Implement\Report\MonthlyWorkingHoursService.cs.orig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\SonarQube\smshrm\CSharp\SonarLint.xml">
-      <Link>SonarLint.xml</Link>
-    </AdditionalFiles>
+    <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">
+      <Project>{245f4ded-6e59-453e-be42-2efb1f4648d3}</Project>
+      <Name>Fanex.NexHR.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Criteria\Fanex.NexHR.Criteria.csproj">
+      <Project>{cb7d5bfc-72c1-487b-bc31-eb850cede998}</Project>
+      <Name>Fanex.NexHR.Criteria</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.MailDeliver\Fanex.NexHR.MailDeliver.csproj">
+      <Project>{c50bbabf-6938-44db-a14e-3f931f2b4cde}</Project>
+      <Name>Fanex.NexHR.MailDeliver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
+      <Project>{89f85e0d-f859-4780-b21b-bd3f3976388b}</Project>
+      <Name>Fanex.NexHR.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Repositories\Fanex.NexHR.Repositories.csproj">
+      <Project>{bdd927bf-d74e-4332-9624-a909fcd70f85}</Project>
+      <Name>Fanex.NexHR.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
+      <Project>{2024da01-8438-47c4-b0cf-e1a93d78d624}</Project>
+      <Name>Fanex.NexHR.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
+      <Project>{f77b7464-3729-47c5-a240-7f21b3a0b23d}</Project>
+      <Name>Fanex.NexHR.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj">
+      <Project>{f57bc2a2-bfa1-49c0-ae61-5432948db735}</Project>
+      <Name>HRM.Letstalk.Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.CFG.dll" />
-    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.8.34.0.42011\analyzers\SonarAnalyzer.dll" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

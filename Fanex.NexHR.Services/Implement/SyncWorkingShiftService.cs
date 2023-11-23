@@ -94,7 +94,7 @@
                 {
                     commandResult = await SyncWorkingShiftAsync(command, date);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LogService.Error(ex.Message, ex);
                 }

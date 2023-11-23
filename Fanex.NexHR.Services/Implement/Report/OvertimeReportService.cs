@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Text;
     using System.Web;
-    using Fanex.Common.Extensions;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Services;

@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NexHR.MailDeliver.Criteria
 {
-    using Data.Repository;
     using System;
+    using Fanex.Data.Repository;
 
     public class InsertMailErrorCriteria : CriteriaBase
     {

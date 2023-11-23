@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NexHR.MailDeliver.Criteria
 {
-    using Data.Repository;
+    using Fanex.Data.Repository;
 
     public class GetMailSettingByIdCriteria : CriteriaBase
     { 
