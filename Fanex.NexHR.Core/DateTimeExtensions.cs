@@ -19,7 +19,7 @@
 
         public static DateTime FirstDayOfMonth(this DateTime dt)
         {
-            return new DateTime(dt.Year, dt.Month, 1);
+            return new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
         }
 
         public static DateTime LastDayOfMonth(this DateTime dt)
@@ -136,7 +136,7 @@
 
         public static DateTime ToEndOfDay(this DateTime time)
         {
-            return new DateTime(time.Year, time.Month, time.Day, 23, 59, 59);
+            return new DateTimeOffset(time.Year, time.Month, time.Day, 23, 59, 59, TimeSpan.Zero).DateTime;
         }
 
         public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)

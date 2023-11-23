@@ -27,7 +27,7 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             var model = new MealAllowanceReportViewModel
             {
                 FromDate = today,
@@ -99,7 +99,7 @@
             IEnumerable<MealAllowanceDetail> mealAllowanceDetails = reportService.GetMealAllowanceDetails(criteriaDetails);
             byte[] bytes = reportService.Export(model, mealAllowanceSummary, mealAllowanceDetails);
 
-            var fileName = $"Meal Allowance {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"Meal Allowance {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate:dd MMM yyyy}.xlsx";
             return File(bytes, MimeType.XLSX, fileName);
         }
     }

@@ -29,10 +29,11 @@
 
         public ActionResult Index()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var model = new EmployeeAttendanceViewModel
             {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now,
+                FromDate = currentDateTime,
+                ToDate = currentDateTime,
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id)),
                 DateOption = 0,
                 ExcludeDeletedUsers = true,
@@ -79,7 +80,7 @@
             IList<EmployeeAttendanceModel> employeeAttendances = reportService.GetEmployeeAttendanceReport(criteria);
             byte[] bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
-            var fileName = $"AttendanceReport_{DateTime.Now.ToString("yyyyMMdd")}.xlsx";
+            var fileName = $"AttendanceReport_{DateTimeOffset.Now:yyyyMMdd}.xlsx";
             return File(bytes, MimeType.XLSX, fileName);
         }
     }

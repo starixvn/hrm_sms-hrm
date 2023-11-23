@@ -7,7 +7,6 @@
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Calendar;
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Models.ScheduleArrange;
@@ -64,10 +63,11 @@
         [HRMPermission(Policy.Read, FunctionKey.WorkingCalendars)]
         public ActionResult WorkingCalendars()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var model = new WorkingCalendarFilterViewModel
             {
-                FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek(),
+                FromDate = currentDateTime.FirstDayOfWeek(),
+                ToDate = currentDateTime.LastDayOfWeek(),
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };
 

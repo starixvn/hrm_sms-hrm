@@ -4,7 +4,6 @@
     using System.Web;
     using Core;
     using Criteria.Report;
-    using Fanex.NexHR.Core.Constants;
     using Models.Report;
     using Resources;
 

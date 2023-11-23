@@ -275,7 +275,7 @@
 
         public static string GetCurrentStatusName(int statusId)
         {
-            var statusName = string.Empty;
+            string statusName;
             switch (statusId)
             {
                 case (int)CurrentRequestStatus.Pending:
@@ -317,7 +317,7 @@
         public static IList<SelectListItem> GetDateRangeByYear()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-            var currentDate = DateTime.Today;
+            var currentDate = DateTimeOffset.Now;
             dateRange.Add(new SelectListItem
             {
                 Text = Labels.ThisYear,

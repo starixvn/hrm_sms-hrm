@@ -63,7 +63,7 @@
             IList<LookupData> jobTitles = commonDataService.GetJobTitle(jobTitle);
             byte[] bytes = jobTitleExportService.Export(jobTitles);
 
-            return File(bytes, MimeType.XLSX, $"JobTitle_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
+            return File(bytes, MimeType.XLSX, $"JobTitle_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
         }
 
         [HttpPost]

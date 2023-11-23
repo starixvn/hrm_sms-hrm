@@ -78,7 +78,7 @@
         private static void FillDisciplineCell(ExcelRange cell, DisciplineSummaryPerYear employee, int year)
         {
             const byte July = 7;
-            if (employee.JoinedDate.HasValue && employee.JoinedDate.Value.Date < new DateTime(year, July, 1))
+            if (employee.JoinedDate.HasValue && employee.JoinedDate.Value.Date < new DateTimeOffset(year, July, 1, 0, 0, 0, TimeSpan.Zero).Date)
             {
                 var discipline = employee.Disciplines.Where(x => x.Year == year).Sum(x => x.ApproverSubtractScore);
                 cell.Value = discipline > 0 ? -discipline : 0;

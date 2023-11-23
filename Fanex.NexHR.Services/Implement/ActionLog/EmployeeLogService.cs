@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Log;

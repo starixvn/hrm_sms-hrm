@@ -118,7 +118,7 @@
                     rowIndex++;
                     templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
                     worksheet.Cells[rowIndex, colIndex].Value =
-                        $"Print Date: {DateTime.Now.ToString(DateTimeFormat)} by {actor.Nickname} ({actor.FullName}), Total Records: {weeklySchedules.Count()}";
+                        $"Print Date: {DateTimeOffset.Now.ToString(DateTimeFormat)} by {actor.Nickname} ({actor.FullName}), Total Records: {weeklySchedules.Count()}";
 
                     // sum
                     rowIndex++;

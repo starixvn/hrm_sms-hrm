@@ -46,13 +46,14 @@
         [HttpGet]
         public ActionResult EmployeeView(int? year)
         {
-            int tempYear = year ?? DateTime.Today.Year;
+            int tempYear = year ?? DateTimeOffset.Now.Year;
             ViewBag.Year = tempYear;
+            var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetCheckInOutRequestByDateCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                FromDate = new DateTime(tempYear, 1, 1),
-                ToDate = new DateTime(tempYear, 12, 31)
+                FromDate = fromDate,
+                ToDate = fromDate.AddYears(1).AddDays(-1)
             };
 
             IList<CheckInOutRequest> requests = checkInOutRequestService.GetByDate(criteria);
@@ -66,22 +67,22 @@
 
         public ActionResult Create()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now;
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.CheckIn);
             var viewModel = new CheckInOutRequestViewModel
             {
                 Employee = EmployeeSession.DisplayName,
                 EmployeeId = EmployeeSession.EmpId,
-                ForDate = today,
-                AttendantDate = today,
-                Hour = DateTime.Now.Hour,
-                Minute = DateTime.Now.Minute,
+                ForDate = today.Date,
+                AttendantDate = today.Date,
+                Hour = today.Hour,
+                Minute = today.Minute,
                 RequestTypeId = (byte)RequestType.CheckIn,
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers
             };
 
-            Shift shift = shiftService.GetByDate(EmployeeSession.EmpId, today);
+            Shift shift = shiftService.GetByDate(EmployeeSession.EmpId, today.Date);
             CheckShiftFromToFormat(viewModel, shift);
             viewModel.Shift = shift == null ? string.Empty : shift.Name;
             ViewBag.Shift = shift;
@@ -136,7 +137,7 @@
                 {
                     EmployeeId = request.Requester.EmpId,
                     FromDate = request.OnDate.AddMonths(-1),
-                    ToDate = DateTime.Today,
+                    ToDate = DateTimeOffset.Now.Date,
                     RequestId = request.RequestId,
                     RequestTypeId = request.RequestTypeId
                 };

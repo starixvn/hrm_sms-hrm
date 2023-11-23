@@ -45,7 +45,7 @@
         {
             var model = new PaternityViewModel
             {
-                ChildBornDate = DateTime.Now,
+                ChildBornDate = DateTimeOffset.Now.DateTime,
                 LeaveDay = 5
             };
             return PartialView("_Create", model);

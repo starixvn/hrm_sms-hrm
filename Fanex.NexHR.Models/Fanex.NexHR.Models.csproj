@@ -228,7 +228,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="BackgroundJob\AnnualLeaveBalance.cs.orig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

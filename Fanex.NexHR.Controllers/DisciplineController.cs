@@ -146,7 +146,7 @@
             {
                 EmployeeId = employeeId ?? -1,
                 Employee = employee,
-                WorkDate = DateTime.Now,
+                WorkDate = DateTimeOffset.Now.DateTime,
                 OtherDisciplineTypes = otherDisciplineTypes
             };
 
@@ -217,7 +217,7 @@
         private static IList<SelectListItem> GetDateRangeByQuarter()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-            var currentDate = DateTime.Today;
+            var currentDate = DateTimeOffset.Now.Date;
             const byte May = 5;
             const byte June = 6;
             const byte December = 12;
@@ -261,46 +261,46 @@
             const byte May = 5;
             const byte June = 6;
             const byte December = 12;
-            var today = DateTime.Today;
-            var month = DateTime.Today.Month;
-            DateTime fromDate;
+            var today = DateTimeOffset.Now.Date;
+            var month = today.Month;
+            DateTimeOffset fromDate;
             if (month == December)
             {
-                fromDate = new DateTime(today.Year, month, 1);
+                fromDate = new DateTimeOffset(today.Year, month, 1, 0, 0, 0, TimeSpan.Zero);
             }
             else if (month >= 1 && month <= May)
             {
-                fromDate = new DateTime(today.Year - 1, December, 1);
+                fromDate = new DateTimeOffset(today.Year - 1, December, 1, 0, 0, 0, TimeSpan.Zero);
             }
             else
             {
-                fromDate = new DateTime(today.Year, June, 1);
+                fromDate = new DateTimeOffset(today.Year, June, 1, 0, 0, 0, TimeSpan.Zero);
             }
 
-            return fromDate;
+            return fromDate.DateTime;
         }
 
         private static DateTime GetToDate()
         {
             const byte May = 5;
             const byte December = 12;
-            var today = DateTime.Today;
-            var month = DateTime.Today.Month;
-            DateTime toDate;
+            var today = DateTimeOffset.Now.Date;
+            var month = today.Month;
+            DateTimeOffset toDate;
             if (month == December)
             {
-                toDate = new DateTime(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May));
+                toDate = new DateTimeOffset(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May), 0, 0, 0, TimeSpan.Zero);
             }
             else if (month >= 1 && month <= May)
             {
-                toDate = new DateTime(today.Year, May, DateTime.DaysInMonth(today.Year, May));
+                toDate = new DateTimeOffset(today.Year, May, DateTime.DaysInMonth(today.Year, May), 0, 0, 0, TimeSpan.Zero);
             }
             else
             {
-                toDate = new DateTime(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1));
+                toDate = new DateTimeOffset(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1), 0, 0, 0, TimeSpan.Zero);
             }
 
-            return toDate;
+            return toDate.DateTime;
         }
 
         private IList<DisciplineTypeModel> GetDisciplineType(bool includeOtherType)

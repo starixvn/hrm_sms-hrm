@@ -26,7 +26,7 @@
         public ActionResult EmployeeWorkFromHome(GetEmployeeWorkFromHomeCriteria criteria)
         {
             var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
-            string fileName = "EmployeeWorkFromHome_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "EmployeeWorkFromHome_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
             HSSFWorkbook hssfworkbook = exportExcelService.ExportEmployeeWfh(employees);
 

@@ -60,7 +60,7 @@
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-            string fileName = "EmployeeRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "EmployeeRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -91,7 +91,7 @@
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
-            string fileName = "EmployeeVoidRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "EmployeeVoidRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }
@@ -122,7 +122,7 @@
 
             IList<RequestEntity> requestList = requestService.GetRequests(criteria);
             HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-            string fileName = "DailyRequest_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "DailyRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
             return ExcelFile(hssfworkbook, fileName);
         }

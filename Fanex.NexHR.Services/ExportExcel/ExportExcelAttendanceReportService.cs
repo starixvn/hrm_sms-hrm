@@ -143,18 +143,19 @@
 
         private static RequestEntity GetRequestEntity(EmployeeAttendanceRequest request, int actualLateInErlyOut)
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var requestEntity = new RequestEntity
             {
                 RequestType = request.RequestType,
                 Remark = request.Remark,
                 RequestedDate = request.RequestDate,
-                FromDate = request.FromDate ?? DateTime.Now,
-                ToDate = request.ToDate ?? DateTime.Now,
+                FromDate = request.FromDate ?? currentDateTime,
+                ToDate = request.ToDate ?? currentDateTime,
                 CreatedDate = request.CreatedDate,
                 TotalDays = request.TotalDays ?? 0,
                 LeaveType = request.LeaveType,
-                FromTime = request.FromTime ?? DateTime.Now,
-                ToTime = request.ToTime ?? DateTime.Now,
+                FromTime = request.FromTime ?? currentDateTime,
+                ToTime = request.ToTime ?? currentDateTime,
                 FromShift = new Shift
                 {
                     Name = request.FromShift

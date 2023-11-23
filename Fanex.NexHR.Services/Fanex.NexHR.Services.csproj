@@ -244,8 +244,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="ExportExcel\ExportExcelScheduleService.cs~HEAD" />
-    <None Include="Implement\Report\MonthlyWorkingHoursService.cs.orig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

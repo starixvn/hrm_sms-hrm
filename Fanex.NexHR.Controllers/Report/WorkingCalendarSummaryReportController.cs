@@ -29,7 +29,7 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             var model = new WorkingCalendarSummaryViewModel
             {
                 FromDate = today,

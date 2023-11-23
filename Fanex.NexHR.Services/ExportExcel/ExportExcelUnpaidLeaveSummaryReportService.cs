@@ -49,7 +49,7 @@
                 range = 6;
             }
             string templatePath = HttpContext.Current.Server.MapPath(path);
-            string fileName = "UnpaidLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
             string[] leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',') : new string[] { };
             IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();

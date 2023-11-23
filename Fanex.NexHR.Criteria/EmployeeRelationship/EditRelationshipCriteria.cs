@@ -21,14 +21,8 @@
 
         public int Modifier { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeRelationship_Edit";
-        }
+        public override string GetSettingKey() => "EmployeeRelationship_Edit";
 
-        public override bool IsValid()
-        {
-            return RelationshipId > 0 && Modifier > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
-        }
+        public override bool IsValid() => RelationshipId > 0 && Modifier > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
     }
 }

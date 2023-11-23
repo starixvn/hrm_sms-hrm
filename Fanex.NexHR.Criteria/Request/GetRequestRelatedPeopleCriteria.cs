@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Request
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class GetRequestRelatedPeopleCriteria : CriteriaBase
@@ -9,14 +8,8 @@
 
         public int Action { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeSupervisor_GetListSupervisorRequestID";
-        }
+        public override string GetSettingKey() => "EmployeeSupervisor_GetListSupervisorRequestID";
 
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+        public override bool IsValid() => RequestId > 0;
     }
 }

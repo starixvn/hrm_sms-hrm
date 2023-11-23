@@ -51,7 +51,7 @@
         {
             var model = new HospitalizationLeaveBalanceViewModel
             {
-                Year = year ?? DateTime.Now.Year,
+                Year = year ?? DateTimeOffset.Now.Year,
                 TeamIds = teamIds,
                 Employee = employee,
                 EmployeeId = employeeId,
@@ -85,7 +85,7 @@
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
-                AffectedFrom = DateTime.Now
+                AffectedFrom = DateTimeOffset.Now.Date
             };
             return PartialView("MultipleInsert", model);
         }
@@ -95,7 +95,7 @@
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
-                AffectedFrom = DateTime.Now
+                AffectedFrom = DateTimeOffset.Now.Date
             };
             return PartialView(model);
         }
@@ -125,7 +125,7 @@
         public JsonResult Reset(ResetMultipleTransactionCriteria criteria)
         {
             criteria.ActorId = EmployeeSession.EmpId;
-            criteria.Year = DateTime.Now.AddYears(-1).Year;
+            criteria.Year = DateTimeOffset.Now.AddYears(-1).Year;
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
 
             return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
@@ -140,13 +140,14 @@
                 return RedirectToAction("PageNotFound", "Error");
             }
 
+            var year = DateTimeOffset.Now.Year;
             var model = new HospitalizationLeaveTransactionViewModel
             {
                 EmployeeId = id,
                 Nickname = employee.NickName,
-                Year = DateTime.Now.Year,
+                Year = year,
                 IncludedRequestTrans = false,
-                Transactions = GetSickLeaveTransaction(id, DateTime.Now.Year, false)
+                Transactions = GetSickLeaveTransaction(id, year, false)
             };
 
             return View(model);
@@ -171,7 +172,7 @@
             {
                 EmpId = id,
                 Nickname = employee.NickName,
-                AffectedFrom = DateTime.Now,
+                AffectedFrom = DateTimeOffset.Now.Date,
             };
             return View(model);
         }
@@ -189,7 +190,7 @@
                     FromDate = model.AffectedFrom,
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTimeOffset.Now.DateTime,
                     CreatedBy = EmployeeSession.EmpId
                 };
                 CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -247,7 +248,7 @@
 
         public ActionResult ExportSummaryReport(HospitalizationLeaveBalanceViewModel model)
         {
-            string fileName = "SickLeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = "SickLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetSummaryReportCriteria
             {
                 Year = model.Year,
@@ -283,7 +284,7 @@
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                ModifiedDate = DateTime.Now,
+                ModifiedDate = DateTimeOffset.Now.DateTime,
                 ModifiedBy = EmployeeSession.EmpId
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -304,7 +305,7 @@
             var criteria = new DeleteTransactionCriteria
             {
                 TransId = model.TransId,
-                ModifiedDate = DateTime.Now,
+                ModifiedDate = DateTimeOffset.Now.DateTime,
                 ModifiedBy = EmployeeSession.EmpId
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);

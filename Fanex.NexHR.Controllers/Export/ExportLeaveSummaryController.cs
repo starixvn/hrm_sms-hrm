@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Models;
@@ -57,6 +56,7 @@
 
 #pragma warning disable S1541 // Methods and properties should not be too complex
 #pragma warning disable S1067 // Expressions should not be too complex
+
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
 #pragma warning restore S1541 // Methods and properties should not be too complex
         {
@@ -86,6 +86,7 @@
 
             return new EmptyResult();
         }
+
 #pragma warning restore S1067 // Expressions should not be too complex
     }
 }

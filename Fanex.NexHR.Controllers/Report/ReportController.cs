@@ -54,7 +54,7 @@
         {
             var model = new TimesheetViewModel
             {
-                Year = DateTime.Now.Year,
+                Year = DateTimeOffset.Now.Year,
                 EmpId = EmployeeSession.EmpId,
                 IsHavePrivilegeCreateCheckInOutRecord = IsPrivilegeCreateCheckInOut()
             };
@@ -65,10 +65,10 @@
         [HttpPost]
         public ActionResult TimesheetDetails(TimesheetViewModel model)
         {
-            var today = DateTime.Today;
-            var fromDate = new DateTime(model.Year, model.Month, 1);
-            var toDate = (today.Month == model.Month && today.Year == model.Year) ?
-                    today.Date : new DateTime(model.Year, model.Month, DateTime.DaysInMonth(model.Year, model.Month));
+            var today = DateTimeOffset.Now;
+            var fromDate = new DateTimeOffset(model.Year, model.Month, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
+            var toDate = (today.Month == model.Month && today.Year == model.Year)
+                ? today.Date : fromDate.AddMonths(1).AddDays(-1);
 
             var criteria = new GetEmployeeAttendanceCriteria
             {
@@ -134,9 +134,9 @@
         {
             if (model != null)
             {
-                var currentYear = DateTime.Today.Year;
-                model.FromDate = new DateTime(currentYear, 1, 1);
-                model.ToDate = new DateTime(currentYear + 1, 1, 1).AddDays(-1);
+                var currentYear = DateTimeOffset.Now.Year;
+                model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+                model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
 
@@ -165,8 +165,8 @@
         {
             if (model != null)
             {
-                var today = DateTime.Today;
-                model.FromDate = new DateTime(today.Year, 1, 1);
+                var today = DateTimeOffset.Now.Date;
+                model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
                 model.ToDate = today;
                 model.DateRange = Utilities.GetDateRangeByYear();
             }
@@ -197,7 +197,7 @@
         {
             var model = new LeaveSummaryViewModel
             {
-                Year = DateTime.Now.Year,
+                Year = DateTimeOffset.Now.Year,
                 EmployeeId = -1,
                 TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
             };

@@ -49,16 +49,16 @@
             return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
         public ActionResult GetUnits()
         {
             var units = unitService.GetUnit();
             return new CustomJsonResult { Data = units, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
+        public ActionResult Create()
+        {
+            return View();
         }
 
         [HttpPost]

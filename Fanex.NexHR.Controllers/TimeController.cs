@@ -29,7 +29,7 @@
             if (criteria != null)
             {
                 criteria.ModifiedBy = EmployeeSession.EmpId;
-                criteria.ModifiedDate = DateTime.Now;
+                criteria.ModifiedDate = DateTimeOffset.Now.DateTime;
             }
 
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -41,9 +41,9 @@
         {
             var model = new TimeRecordViewModel
             {
-                ForDate = DateTime.Today,
-                Hour = DateTime.Now.Hour,
-                Minute = DateTime.Now.Minute
+                ForDate = DateTimeOffset.Now.Date,
+                Hour = DateTimeOffset.Now.Hour,
+                Minute = DateTimeOffset.Now.Minute
             };
             return View(model);
         }
@@ -73,7 +73,7 @@
             var criteria = new InsertCheckInOutRecordCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                RecordTime = DateTime.Now,
+                RecordTime = DateTimeOffset.Now.DateTime,
                 InOutType = 0,
                 IPAddress = GetClientIpAddress(),
                 Platform = Request.Headers["User-Agent"]
@@ -88,7 +88,7 @@
             var criteria = new InsertCheckInOutRecordCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                RecordTime = DateTime.Now,
+                RecordTime = DateTimeOffset.Now.DateTime,
                 InOutType = 1,
                 IPAddress = GetClientIpAddress(),
                 Platform = Request.Headers["User-Agent"]

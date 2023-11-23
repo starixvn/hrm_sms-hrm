@@ -17,14 +17,8 @@
 
         public string Remark { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Paternity_Update";
-        }
+        public override string GetSettingKey() => "Paternity_Update";
 
-        public override bool IsValid()
-        {
-            return PaternityId > 0 && EmpId > 0 && ModifiedBy > 0 && LeaveDay > 0;
-        }
+        public override bool IsValid() => PaternityId > 0 && EmpId > 0 && ModifiedBy > 0 && LeaveDay > 0;
     }
 }

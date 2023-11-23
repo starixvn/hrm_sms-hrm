@@ -21,14 +21,8 @@
 
         public int Creator { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeRelationship_Insert";
-        }
+        public override string GetSettingKey() => "EmployeeRelationship_Insert";
 
-        public override bool IsValid()
-        {
-            return EmployeeId > 0 && Creator > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
-        }
+        public override bool IsValid() => EmployeeId > 0 && Creator > 0 && !string.IsNullOrEmpty(FullName) && !string.IsNullOrEmpty(Relationship);
     }
 }

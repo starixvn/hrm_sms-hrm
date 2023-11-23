@@ -60,7 +60,7 @@
         {
             logger.Error("InsertScheduleByDefaultShift: Start");
 
-            var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
+            var fromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1);
             var toDate = fromDate.AddDays(6);
             var criteria = new InsertScheduleByDefaultShiftCriteria
             {
@@ -76,7 +76,7 @@
         {
             logger.Error("InsertScheduleByWeeklyDefaultShift: Start");
 
-            var fromDate = DateTime.Now.Date.LastDayOfWeek().AddDays(1);
+            var fromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1);
             var toDate = fromDate.AddDays(6);
             var criteria = new InsertScheduleByWeeklyDefaultShiftCriteria
             {
@@ -92,7 +92,7 @@
         {
             logger.Error("InsertHolidayAutomatically: Start");
 
-            var year = DateTime.Now.Year + 1;
+            var year = DateTimeOffset.Now.Year + 1;
             holidayService.AutoInsertHolidayOnYear(year);
 
             logger.Error("InsertHolidayAutomatically: End");
@@ -114,7 +114,7 @@
 
             var criteria = new UpdateAnnualLeaveBalanceCriteria
             {
-                Year = DateTime.Now.Year + 1
+                Year = DateTimeOffset.Now.Year + 1
             };
             baseService.ExecuteNonQuery(criteria);
 
@@ -127,7 +127,7 @@
 
             var criteria = new UpdateAnnualLeaveBalanceForNewEmployeeCriteria
             {
-                Year = DateTime.Now.Year
+                Year = DateTimeOffset.Now.Year
             };
             baseService.ExecuteNonQuery(criteria);
 
@@ -144,7 +144,7 @@
         public void SendMailRemindUserToUseAnnualLeave()
         {
             logger.Error("SendMailRemindUserToUseAnnualLeave: Start");
-            var year = DateTime.Now.Year;
+            var year = DateTimeOffset.Now.Year;
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = year
@@ -245,7 +245,7 @@
                         nickname,
                         percentByMonth,
                         tableStatistic,
-                        DateTime.Now.Year + 1);
+                        DateTimeOffset.Now.Year + 1);
 
                     BackgroundJob.Enqueue(() => emailService.SendEmail(
                         ConfigSettings.EmailSetting,
@@ -265,7 +265,7 @@
             const byte September = 9;
             const byte December = 12;
 
-            switch (DateTime.Now.Month)
+            switch (DateTimeOffset.Now.Month)
             {
                 case March:
                     percent = "> 75%";
@@ -301,7 +301,7 @@
             const byte TwentyFive = 25;
             const byte Fifty = 50;
             const byte SeventyFive = 75;
-            switch (DateTime.Now.Month)
+            switch (DateTimeOffset.Now.Month)
             {
                 case March:
                     if (!isLocal && percentAnnualLeaveRemaining > SeventyFive)

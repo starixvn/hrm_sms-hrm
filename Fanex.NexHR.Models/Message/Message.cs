@@ -38,8 +38,7 @@
         {
             get
             {
-                string category = string.Empty;
-
+                string category;
                 switch (Category)
                 {
                     case (int)MessageCategory.Notification:

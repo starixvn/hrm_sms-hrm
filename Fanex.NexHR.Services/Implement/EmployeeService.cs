@@ -333,7 +333,7 @@
             string lengOfService = string.Empty;
             if (joinedDate.HasValue)
             {
-                totalDays = ((TimeSpan)(DateTime.Today - joinedDate)).Days;
+                totalDays = ((TimeSpan)(DateTimeOffset.Now.Date - joinedDate)).Days;
                 if (militaryToDate.HasValue && militaryFromDate.HasValue)
                 {
                     totalDays -= ((TimeSpan)(militaryToDate - militaryFromDate)).Days;

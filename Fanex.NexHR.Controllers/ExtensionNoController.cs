@@ -86,19 +86,19 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
+        public ActionResult GetExtentionById(int id, bool isInternal)
+        {
+            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(id, isInternal);
+            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
         public ActionResult Edit(int id, bool isInternal)
         {
             ViewBag.Id = id;
             ViewBag.IsInternal = isInternal;
 
             return View();
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-        public ActionResult GetExtentionById(int id, bool isInternal)
-        {
-            ExtensionNoModel model = extensionNumberService.GetEmployeeExtensionNoById(id, isInternal);
-            return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [HttpPost]

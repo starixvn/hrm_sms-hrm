@@ -45,10 +45,11 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var model = new PostnatalViewModel
             {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now
+                FromDate = currentDateTime,
+                ToDate = currentDateTime
             };
             return PartialView("_Create", model);
         }

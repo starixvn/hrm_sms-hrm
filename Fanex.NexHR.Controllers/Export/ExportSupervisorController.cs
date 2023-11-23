@@ -36,7 +36,7 @@
             IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
             byte[] bytes = exportSupervisorService.ExportEmployeeSupervisor(supervisors);
 
-            return File(bytes, MimeType.XLSX, $"EmployeeSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
+            return File(bytes, MimeType.XLSX, $"EmployeeSupervisor_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
         }
 
         public ActionResult TeamSupervisor(EmployeeAndTeamSupervisorViewModel model)
@@ -48,7 +48,7 @@
             IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
             byte[] bytes = exportSupervisorService.ExportTeamSupervisor(supervisors);
 
-            return File(bytes, MimeType.XLSX, $"TeamSupervisor_{DateTime.Now.ToString("yyyyMMdd")}.xlsx");
+            return File(bytes, MimeType.XLSX, $"TeamSupervisor_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
         }
     }
 }

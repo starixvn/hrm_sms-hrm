@@ -51,7 +51,7 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ModifiedBy = actorId,
-                ModifiedDate = DateTime.Now
+                ModifiedDate = DateTimeOffset.Now.DateTime
             };
             return baseService.ExecuteNonQuery(criteria);
         }
@@ -66,7 +66,7 @@
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ModifiedBy = actorId,
-                ModifiedDate = DateTime.Now
+                ModifiedDate = DateTimeOffset.Now.DateTime
             };
             return baseService.ExecuteNonQuery(criteria);
         }
@@ -77,7 +77,7 @@
             {
                 Id = id,
                 ModifiedBy = actorId,
-                ModifiedDate = DateTime.Now
+                ModifiedDate = DateTimeOffset.Now.DateTime
             };
             return baseService.ExecuteNonQuery(criteria);
         }
@@ -96,29 +96,29 @@
             var newYear = new Holiday
             {
                 HolidayName = $"New Year Day {year}",
-                FromDate = new DateTime(year, 1, 1),
-                ToDate = new DateTime(year, 1, 1)
+                FromDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime,
+                ToDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime
             };
 
             var vitoryDay = new Holiday
             {
                 HolidayName = "Victory Day",
-                FromDate = new DateTime(year, 4, 30),
-                ToDate = new DateTime(year, 4, 30)
+                FromDate = new DateTimeOffset(year, 4, 30, 0, 0, 0, TimeSpan.Zero).DateTime,
+                ToDate = new DateTimeOffset(year, 4, 30, 0, 0, 0, TimeSpan.Zero).DateTime
             };
 
             var labourDay = new Holiday
             {
                 HolidayName = "Labour Day",
-                FromDate = new DateTime(year, 5, 1),
-                ToDate = new DateTime(year, 5, 1)
+                FromDate = new DateTimeOffset(year, 5, 1, 0, 0, 0, TimeSpan.Zero).DateTime,
+                ToDate = new DateTimeOffset(year, 5, 1, 0, 0, 0, TimeSpan.Zero).DateTime
             };
 
             var independenceDay = new Holiday
             {
                 HolidayName = "Independence Day",
-                FromDate = new DateTime(year, 9, 2),
-                ToDate = new DateTime(year, 9, 2)
+                FromDate = new DateTimeOffset(year, 9, 2, 0, 0, 0, TimeSpan.Zero).DateTime,
+                ToDate = new DateTimeOffset(year, 9, 2, 0, 0, 0, TimeSpan.Zero).DateTime
             };
 
             solarHolidays.Add(newYear);

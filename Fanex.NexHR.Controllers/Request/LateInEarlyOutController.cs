@@ -43,13 +43,14 @@
         [HttpGet]
         public ActionResult EmployeeView(int? year)
         {
-            int tempYear = year ?? DateTime.Today.Year;
+            int tempYear = year ?? DateTimeOffset.Now.Year;
             ViewBag.Year = tempYear;
+            var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetLateInEarlyOutRequestByDateCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                FromDate = new DateTime(tempYear, 1, 1),
-                ToDate = new DateTime(tempYear, 12, 31)
+                FromDate = fromDate,
+                ToDate = fromDate.AddYears(1).AddDays(-1)
             };
             IList<LateInEarlyOutRequest> requests = lateInEarlyOutRequestService.GetByDate(criteria);
             foreach (var request in requests)
@@ -66,7 +67,7 @@
             {
                 Employee = EmployeeSession.DisplayName,
                 EmployeeId = EmployeeSession.EmpId,
-                OnDate = DateTime.Today,
+                OnDate = DateTimeOffset.Now.Date,
                 Minute = DefaultMinutes,
                 ReasonId = (byte)LateInEarlyOutReason.Other,
                 RequestType = (byte)RequestType.LateIn,
@@ -123,7 +124,7 @@
             {
                 EmployeeId = request.Requester.EmpId,
                 FromDate = request.OnDate.AddMonths(-1),
-                ToDate = DateTime.Today,
+                ToDate = DateTimeOffset.Now.Date,
                 RequestId = request.RequestId,
                 RequestTypeId = request.RequestTypeId,
             };

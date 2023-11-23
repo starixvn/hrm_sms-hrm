@@ -35,7 +35,7 @@
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
         {
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeBasicInfoTemplatePath);
-            string fileName = "EmployeeBasicInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
@@ -54,7 +54,7 @@
         public void ExportEmployeeDetailsInfo(IList<Employee> employees)
         {
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeDetailsInfoTemplatePath);
-            string fileName = "EmployeeDetailsInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Details Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
@@ -209,7 +209,7 @@
         public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
         {
             string templatePath = HttpContext.Current.Server.MapPath(EmployeeFullInfoTemplatePath);
-            string fileName = "EmployeeFullInfo_" + DateTime.Now.ToString("yyyyMMdd");
+            string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Full Information";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 

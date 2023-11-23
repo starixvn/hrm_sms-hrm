@@ -11,14 +11,8 @@
 
         public int ModifiedBy { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "AnnualLeave_DeleteTransaction";
-        }
+        public override string GetSettingKey() => "AnnualLeave_DeleteTransaction";
 
-        public override bool IsValid()
-        {
-            return LeaveTransId > 0;
-        }
+        public override bool IsValid() => LeaveTransId > 0;
     }
 }

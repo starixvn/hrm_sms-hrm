@@ -33,10 +33,11 @@
         [HRMPermission(Policy.Read, FunctionKey.Message)]
         public ActionResult Index()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var param = new GetMessageByCreatorParam
             {
-                ToDate = DateTime.Now,
-                FromDate = DateTime.Now.AddMonths(-3),
+                ToDate = currentDateTime,
+                FromDate = currentDateTime.AddMonths(-3),
                 IsDisabled = 0,
                 CreatedBy = EmployeeSession.EmpId
             };
@@ -76,7 +77,8 @@
             };
             ViewBag.Employees = employeeService.GetEmployees(criteria);
             ViewBag.Groups = commonDataService.GetAllTeam();
-            var model = new Message { FromDate = DateTime.Now, ToDate = DateTime.Now };
+            var currentDateTime = DateTimeOffset.Now.DateTime;
+            var model = new Message { FromDate = currentDateTime, ToDate = currentDateTime };
 
             return View(model);
         }
@@ -149,10 +151,11 @@
 
         public ActionResult ViewMessageOfEmployee()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var param = new GetMessageByEmployeeParam
             {
-                FromDate = DateTime.Today,
-                ToDate = DateTime.Today,
+                FromDate = currentDateTime,
+                ToDate = currentDateTime,
                 IsDisabled = 0,
                 EmployeeId = EmployeeSession.EmpId
             };

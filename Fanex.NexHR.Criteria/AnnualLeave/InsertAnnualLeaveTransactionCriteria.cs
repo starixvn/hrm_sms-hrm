@@ -23,14 +23,8 @@
 
         public int CreatedBy { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "AnnualLeave_InsertTransaction";
-        }
+        public override string GetSettingKey() => "AnnualLeave_InsertTransaction";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+        public override bool IsValid() => EmpId > 0;
     }
 }

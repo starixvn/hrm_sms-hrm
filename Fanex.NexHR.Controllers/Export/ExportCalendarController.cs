@@ -26,7 +26,7 @@
 
         public ActionResult EmployeeWorkingCalendar(WorkingCalendarFilterViewModel model)
         {
-            string fileName = "EmployeeWorkingCalendar_" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
+            string fileName = "EmployeeWorkingCalendar_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xlsx";
             var criteria = new GetWorkingCalendarWeeklyCriteria
             {
                 EmpId = model.EmployeeId,

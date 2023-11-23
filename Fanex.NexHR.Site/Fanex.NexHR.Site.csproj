@@ -1220,7 +1220,6 @@
     <Content Include="wwwroot\dist\vendors\react-manifest.json" />
     <Content Include="wwwroot\package-lock.json" />
     <Content Include="wwwroot\package.json" />
-    <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx.orig" />
     <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
     <Content Include="wwwroot\sources\libs\SimplePagination\bower.json" />
     <Content Include="wwwroot\sources\libs\SimplePagination\README.md" />

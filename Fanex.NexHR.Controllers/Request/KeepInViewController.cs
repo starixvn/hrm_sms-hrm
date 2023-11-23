@@ -45,13 +45,14 @@
         [HttpGet]
         public ActionResult EmployeeView(int? year)
         {
-            int tempYear = year ?? DateTime.Today.Year;
+            int tempYear = year ?? DateTimeOffset.Now.Year;
             ViewBag.Year = tempYear;
+            var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetKeepInViewRequestByDateCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                FromDate = new DateTime(tempYear, 1, 1),
-                ToDate = new DateTime(tempYear, 12, 31)
+                FromDate = fromDate,
+                ToDate = fromDate.AddYears(1).AddDays(-1)
             };
             IList<KeepInViewRequest> requests = keepInViewRequestService.GetByDate(criteria);
             foreach (var request in requests)
@@ -64,7 +65,7 @@
 
         public ActionResult Create()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.KeepInView);
             var model = new KeepInViewRequestViewModel
             {
@@ -149,7 +150,7 @@
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
                 MinDate = request.OnDate.AddMonths(-1),
-                MaxDate = DateTime.Today.FirstDayOfMonth().AddMonths(2).AddDays(-1),
+                MaxDate = DateTimeOffset.Now.Date.FirstDayOfMonth().AddMonths(2).AddDays(-1),
                 Files = attachFileService.GetAttachFile(id, UploadFolderPath),
                 ShiftId = request.ShiftId
             };

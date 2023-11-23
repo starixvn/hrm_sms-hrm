@@ -55,7 +55,7 @@
             ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
             var model = new LeaveSummaryViewModel
             {
-                Year = year ?? DateTime.Now.Year,
+                Year = year ?? DateTimeOffset.Now.Year,
                 TeamIds = teamIds,
                 Employee = employee,
                 EmployeeId = employeeId ?? -1,
@@ -99,12 +99,11 @@
         [HttpPost]
         public JsonResult Reset(int minbalance, string descriptionReset)
         {
-            int lastYear = DateTime.Now.AddYears(-1).Year;
-            var date = new DateTime(lastYear, 12, 31);
+            var date = new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime;
             var teams = teamService.GetBySupervisor(EmployeeSession.EmpId);
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
-                Year = lastYear,
+                Year = date.Year,
                 EmpId = null,
                 TeamIds = string.Join(",", teams.Select(x => x.Id)),
                 IsLocal = null,
@@ -130,7 +129,7 @@
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
-                AffectedFrom = DateTime.Now
+                AffectedFrom = DateTimeOffset.Now.DateTime
             };
             return PartialView("MultipleInsert", model);
         }
@@ -140,7 +139,7 @@
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
-                AffectedFrom = DateTime.Now
+                AffectedFrom = DateTimeOffset.Now.DateTime
             };
             return PartialView(model);
         }
@@ -148,12 +147,13 @@
         [HRMPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
         public ActionResult Employee(int id)
         {
+            var year = DateTimeOffset.Now.Year;
             var model = new AnnualLeaveBalanceViewModel
             {
                 EmployeeId = id,
-                Year = DateTime.Now.Year,
+                Year = year,
                 ExcludedRequestTrans = true,
-                AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, DateTime.Now.Year),
+                AnnualLeaveBalances = GetAnnualLeaveTransactions(id, false, year),
                 Employee = employeeService.GetEmployeeById(id)
             };
 
@@ -199,7 +199,7 @@
             var model = new AnnualLeaveTransactionViewModel
             {
                 EmpId = id,
-                AffectedFrom = DateTime.Now,
+                AffectedFrom = DateTimeOffset.Now.DateTime,
             };
             return View(model);
         }
@@ -219,7 +219,7 @@
                     FromDate = model.AffectedFrom,
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTimeOffset.Now.DateTime,
                     CreatedBy = EmployeeSession.EmpId
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -275,7 +275,7 @@
                     FromDate = model.AffectedFrom,
                     DeductDays = model.DeductDays,
                     CreditDays = model.CreditDays,
-                    ModifiedDate = DateTime.Now,
+                    ModifiedDate = DateTimeOffset.Now.DateTime,
                     ModifiedBy = EmployeeSession.EmpId
                 };
                 CommandResult result = baseService.ExecuteNonQuery(criteria);
@@ -302,7 +302,7 @@
             var criteria = new DeleteAnnualLeaveTransactionCriteria
             {
                 LeaveTransId = model.LeaveTransId,
-                ModifiedDate = DateTime.Now,
+                ModifiedDate = DateTimeOffset.Now.DateTime,
                 ModifiedBy = EmployeeSession.EmpId
             };
             CommandResult result = baseService.ExecuteNonQuery(criteria);

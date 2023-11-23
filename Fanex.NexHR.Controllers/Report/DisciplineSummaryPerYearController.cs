@@ -37,8 +37,8 @@
             const byte DateRange = 4;
             if (model != null)
             {
-                model.ToYear = DateTime.Today.Year;
-                model.FromYear = DateTime.Today.Year - DateRange;
+                model.ToYear = DateTimeOffset.Now.Year;
+                model.FromYear = DateTimeOffset.Now.Year - DateRange;
             }
 
             return View("~/Views/Report/DisciplineSummaryPerYear/Index.cshtml", model);
@@ -65,8 +65,8 @@
         {
             var criteria = new GetDisciplineSummaryPerYearCriteria
             {
-                FromDate = new DateTime(model.FromYear, 1, 1),
-                ToDate = new DateTime(model.ToYear + 1, 1, 1).AddDays(-1),
+                FromDate = new DateTimeOffset(model.FromYear, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime,
+                ToDate = new DateTimeOffset(model.ToYear + 1, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime,
                 TeamId = model.TeamId,
                 IsLocal = model.IsLocal,
                 EmployeeId = model.EmployeeId,

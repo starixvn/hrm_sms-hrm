@@ -40,10 +40,11 @@
         [HRMPermission(Policy.Read, FunctionKey.EmployeeManagement)]
         public ActionResult Index()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var model = new EmployeeWorkFromHomeFilterViewModel
             {
-                FromDateFilter = DateTime.Now,
-                ToDateFilter = DateTime.Now,
+                FromDateFilter = currentDateTime,
+                ToDateFilter = currentDateTime
             };
 
             ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
@@ -66,10 +67,11 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult Create()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var model = new EmployeeWorkFromHomeViewModel
             {
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now
+                FromDate = currentDateTime,
+                ToDate = currentDateTime
             };
             return PartialView("_Create", model);
         }

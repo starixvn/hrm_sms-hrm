@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Group
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class EditDisciplineRuleCriteria : CriteriaBase

@@ -83,7 +83,7 @@
             {
                 MessageId = id,
                 ModifiedBy = actorId,
-                ModifiedDate = DateTime.Now
+                ModifiedDate = DateTimeOffset.Now.DateTime
             };
             return baseService.ExecuteNonQuery(criteria);
         }

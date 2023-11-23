@@ -39,8 +39,8 @@
         {
             var model = new ShiftStatisticViewModel
             {
-                FromDate = DateTime.Now.FirstDayOfWeek(),
-                ToDate = DateTime.Now.LastDayOfWeek()
+                FromDate = DateTimeOffset.Now.Date.FirstDayOfWeek(),
+                ToDate = DateTimeOffset.Now.Date.LastDayOfWeek().Date
             };
 
             return View("~/Views/Report/ShiftStatistic/Index.cshtml", model);

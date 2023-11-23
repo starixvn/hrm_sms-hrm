@@ -66,16 +66,16 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
-        public ActionResult Edit(int id)
-        {
-            return View(id);
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
         public ActionResult GetById(int id)
         {
             Unit unit = unitService.GetById(id);
             return new CustomJsonResult { Data = unit, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.UnitManagement)]
+        public ActionResult Edit(int id)
+        {
+            return View(id);
         }
 
         [HttpPost]

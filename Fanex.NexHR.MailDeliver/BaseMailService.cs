@@ -245,7 +245,7 @@
                 MailTo = email.MailTo,
                 MailCc = email.MailCc,
                 MailBcc = email.MailBcc,
-                MailDate = DateTime.Now
+                MailDate = DateTimeOffset.Now.DateTime
             };
 
             baseService.ExecuteNonQuery(criteria);
@@ -266,7 +266,7 @@
                 MailId = email.MailId,
                 Message = errorMessage,
                 StackTrace = stackTrace,
-                ErrorTime = DateTime.Now
+                ErrorTime = DateTimeOffset.Now.DateTime
             };
 
             baseService.ExecuteNonQuery(criteria);
@@ -278,7 +278,7 @@
             {
                 MailId = email.MailId,
                 Status = isSucessfull,
-                MailUpdatedDate = DateTime.Now
+                MailUpdatedDate = DateTimeOffset.Now.DateTime
             };
 
             baseService.ExecuteNonQuery(criteria);

@@ -16,14 +16,14 @@
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var now = DateTime.UtcNow;
+            var now = DateTimeOffset.UtcNow;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, username)
                 }),
-                Expires = now.AddMinutes(expireMinutes),
+                Expires = now.AddMinutes(expireMinutes).DateTime,
                 SigningCredentials = credentials
             };
 

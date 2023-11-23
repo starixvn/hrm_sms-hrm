@@ -29,7 +29,7 @@
         [HRMPermission(Policy.Read, FunctionKey.Holiday)]
         public ActionResult Index(int? year)
         {
-            int yearToCheck = year ?? DateTime.Now.Year;
+            int yearToCheck = year ?? DateTimeOffset.Now.Year;
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
             ViewBag.Year = yearToCheck;
 
@@ -67,11 +67,12 @@
         [HRMPermission(Policy.Host, FunctionKey.Holiday)]
         public ActionResult Create()
         {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
             var holiday = new Holiday
             {
                 TypeId = (byte)HolidayType.Regular,
-                FromDate = DateTime.Now,
-                ToDate = DateTime.Now
+                FromDate = currentDateTime,
+                ToDate = currentDateTime
             };
 
             return View(holiday);

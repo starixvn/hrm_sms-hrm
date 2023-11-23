@@ -30,7 +30,7 @@
         {
             var model = new WeeklyFilterViewModel
             {
-                FromDate = DateTime.Today,
+                FromDate = DateTimeOffset.Now.Date,
                 EmployeeStatusId = (byte)EmployeeStatus.Enabled
             };
 
@@ -72,7 +72,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings = workingHoursService.GetMonthlyWorkingHours(param);
             byte[] bytes = workingHoursService.ExportDailyWorkingHours(param.FromDate, monthlyWorkings);
 
-            var fileName = $"{Labels.AttendanceDailyDetail} {param.FromDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"{Labels.AttendanceDailyDetail} {param.FromDate:dd MMM yyyy}.xlsx";
             return File(bytes, MimeType.XLSX, fileName);
         }
     }

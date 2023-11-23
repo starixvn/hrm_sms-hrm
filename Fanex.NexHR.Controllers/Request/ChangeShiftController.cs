@@ -45,9 +45,9 @@
         [HttpGet]
         public ActionResult EmployeeView(int? year)
         {
-            int tempYear = year ?? DateTime.Today.Year;
-            var fromDate = new DateTime(tempYear, 1, 1);
-            var toDate = new DateTime(tempYear, 12, 31).ToEndOfDay();
+            int tempYear = year ?? DateTimeOffset.Now.Year;
+            var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+            var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
             IEnumerable<ChangeShiftRequest> requests = changeShiftService.GetByEmployee(EmployeeSession.EmpId, fromDate, toDate);
             foreach (var request in requests)
             {
@@ -60,7 +60,7 @@
 
         public ActionResult Create()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             VerifierAndApproverForRequest supervisor = GetVerifierApprover(EmployeeSession.EmpId);
             var model = new ChangeShiftViewModel
             {
@@ -83,8 +83,8 @@
         [ValidateInput(false)]
         public CustomJsonResult Create(string model, string details, IList<HttpPostedFileBase> files)
         {
-            CreateChangeShift criteria = JsonConverter.FromJson<CreateChangeShift>(model);
-            List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
+            var criteria = JsonConverter.FromJson<CreateChangeShift>(model);
+            var requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
             criteria.Details = requestDetail;
 
             CommandResult commandResult = changeShiftService.Create(EmployeeSession.EmpId, criteria);
@@ -144,8 +144,8 @@
         [ValidateInput(false)]
         public CustomJsonResult Edit(string model, string details, IList<HttpPostedFileBase> files, string filesRemove)
         {
-            EditChangeShift criteria = JsonConverter.FromJson<EditChangeShift>(model);
-            List<ChangeShiftDetail> requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
+            var criteria = JsonConverter.FromJson<EditChangeShift>(model);
+            var requestDetail = JsonConverter.FromJsonArray<ChangeShiftDetail>(details);
             criteria.Details = requestDetail;
 
             CommandResult commandResult = changeShiftService.Edit(EmployeeSession.EmpId, criteria);

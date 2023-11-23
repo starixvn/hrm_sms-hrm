@@ -15,14 +15,8 @@
 
         public string Remark { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Paternity_Insert";
-        }
+        public override string GetSettingKey() => "Paternity_Insert";
 
-        public override bool IsValid()
-        {
-            return EmpId > 0 && CreatedBy > 0;
-        }
+        public override bool IsValid() => EmpId > 0 && CreatedBy > 0;
     }
 }

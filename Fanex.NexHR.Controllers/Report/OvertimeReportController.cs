@@ -79,7 +79,7 @@
         public ActionResult MonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
         {
             IEnumerable<DailyOvertimeDetails> overtimes = overtimeReportService.GetMonthlyOvertimeDetails(param);
-            ViewBag.Month = new DateTime(param.Year, param.Month, 1);
+            ViewBag.Month = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero);
 
             return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
         }
@@ -119,7 +119,7 @@
             Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> tuple = overtimeReportService.GetMonthlyOvertime(param);
             byte[] bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
 
-            var fileName = $"Monthly Overtime Report {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"Monthly Overtime Report {model.FromDate:dd MMM yyyy} - {model.ToDate:dd MMM yyyy}.xlsx";
 
             return File(bytes, MimeType.XLSX, fileName);
         }

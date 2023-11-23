@@ -49,6 +49,25 @@
             return View(employee);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateInformation(Employee model)
+        {
+            ModelState.Clear();
+            model.Id = EmployeeSession.EmpId;
+            var criteria = SetUpdatePersonalInfoCriteria(model);
+            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
+
+            var result = baseService.ExecuteNonQuery(criteria);
+
+            if (result.IsSuccessful && IsValidUpdateFieldSendMail(model, employee))
+            {
+                SendMailUpdateInfo(model, employee);
+            }
+
+            return Json(result);
+        }
+
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
             IList<Country> countries = commonDataService.GetAllCountry();
@@ -69,25 +88,6 @@
             };
 
             ViewBag.Marriages = Utilities.Marriages;
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateInformation(Employee model)
-        {
-            ModelState.Clear();
-            model.Id = EmployeeSession.EmpId;
-            var criteria = SetUpdatePersonalInfoCriteria(model);
-            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
-
-            var result = baseService.ExecuteNonQuery(criteria);
-
-            if (result.IsSuccessful && IsValidUpdateFieldSendMail(model, employee))
-            {
-                SendMailUpdateInfo(model, employee);
-            }
-
-            return Json(result);
         }
 
         private static bool IsValidUpdateFieldSendMail(Employee model, Employee employee)
@@ -241,7 +241,7 @@
         {
             var viewModel = new EmployeeRelationshipViewModel
             {
-                BirthDay = new DateTime(2000, 1, 1)
+                BirthDay = new DateTimeOffset(2000, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime
             };
 
             return PartialView("_AddRelationship", viewModel);

@@ -134,8 +134,8 @@
             entity.ToDate = requestInfo.ToDate;
             entity.TotalDays = requestInfo.TotalDays;
             entity.IsHalfDay = requestInfo.IsHalfDay ?? false;
-            entity.FromTime = requestInfo.FromTime ?? new DateTime();
-            entity.ToTime = requestInfo.ToTime ?? new DateTime();
+            entity.FromTime = requestInfo.FromTime ?? DateTimeOffset.Now.DateTime;
+            entity.ToTime = requestInfo.ToTime ?? DateTimeOffset.Now.DateTime;
             entity.KeepInViewType = (byte)(requestInfo.KeepInViewType ?? 0);
             entity.LeaveCountDetails = requestInfo.LeaveCountDetails ?? string.Empty;
             entity.LeaveType = new LeaveType
@@ -187,7 +187,7 @@
                 Id = requestInfo.FromShiftId ?? 0,
                 Name = requestInfo.FromShiftName ?? string.Empty
             };
-            entity.RequestedDate = requestInfo.RequestedDate ?? new DateTime();
+            entity.RequestedDate = requestInfo.RequestedDate ?? DateTimeOffset.Now.DateTime;
             entity.TotalMins = requestInfo.TotalMinutes ?? 0;
             entity.ActualLateInEarlyOut = requestInfo.ActualInOutMins ?? 0;
             entity.CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ??

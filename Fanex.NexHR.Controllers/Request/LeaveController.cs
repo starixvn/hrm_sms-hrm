@@ -49,12 +49,13 @@
         [HttpGet]
         public ActionResult EmployeeView(int? year)
         {
-            int tempYear = year ?? DateTime.Today.Year;
+            int tempYear = year ?? DateTimeOffset.Now.Year;
+            var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetLeaveRequestByDateCriteria
             {
                 EmpId = EmployeeSession.EmpId,
-                FromDate = new DateTime(tempYear, 1, 1),
-                ToDate = new DateTime(tempYear, 12, 31)
+                FromDate = fromDate,
+                ToDate = fromDate.AddYears(1).AddDays(-1)
             };
 
             IList<LeaveRequest> leaves = leaveRequestService.GetByDate(criteria);
@@ -71,19 +72,20 @@
         {
             VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.Leave);
             SystemSetting setting = commonDataService.GetSystemSetting();
+            var today = DateTimeOffset.Now.Date;
             var model = new LeaveRequestViewModel
             {
                 LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
                 Employee = EmployeeSession.DisplayName,
                 EmployeeId = EmployeeSession.EmpId,
-                FromDate = DateTime.Now.Date,
-                ToDate = DateTime.Now.Date,
+                FromDate = today,
+                ToDate = today,
                 TotalDays = 1,
                 LeaveTypeList = commonDataService.GetLeaveType(),
                 EmployeeLeaveBalance = GetLeaveBalance(null, null),
                 Verifiers = supervisor.Verifiers,
                 Approvers = supervisor.Approvers,
-                MinDate = DateTime.Today.FirstDayOfMonth().AddMonths(-5),
+                MinDate = today.FirstDayOfMonth().AddMonths(-5),
                 EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
                 EnableSickLeaveBalance = setting.EnableSickLeaveBalance
             };
@@ -235,7 +237,7 @@
             {
                 EmpId = employeeId,
                 RequestId = requestId == -1 ? null : requestId,
-                EffectedDay = toDate ?? DateTime.Now.Date
+                EffectedDay = toDate ?? DateTimeOffset.Now.Date
             };
             EmployeeLeaveBalance employeeLeaveBalance = leaveRequestService.GetLeaveBalance(criteria);
             return Json(employeeLeaveBalance, JsonRequestBehavior.AllowGet);
@@ -265,9 +267,9 @@
 
         public CustomJsonResult GetDisableDate(int leaveTypeId, int employeeId, DateTime date, long? requestId = null)
         {
-            var fromDate = new DateTime(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1);
+            var fromDate = new DateTimeOffset(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
-            var toDate = new DateTime(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month));
+            var toDate = fromDate.AddMonths(1).AddDays(-1);
 
             var param = new GetDisabledDateParam
             {
@@ -441,7 +443,7 @@
                 GetTimeForHalfDayRequest(request, model);
             }
 
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             var minDate = today.FirstDayOfMonth().AddMonths(-5);
             var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
             if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
@@ -478,7 +480,7 @@
             {
                 EmpId = EmployeeSession.EmpId,
                 RequestId = requestId,
-                EffectedDay = year.HasValue ? new DateTime(year.Value, 1, 1) : DateTime.Now.Date
+                EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
             };
             return leaveRequestService.GetLeaveBalance(criteria);
         }

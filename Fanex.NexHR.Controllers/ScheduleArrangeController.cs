@@ -191,7 +191,7 @@
 
         private bool CheckPermission(DateTime fromDate)
         {
-            DateTime firstDayOfWeek = DateTime.Now.FirstDayOfWeek();
+            var firstDayOfWeek = DateTimeOffset.Now.Date.FirstDayOfWeek();
 
             bool isHost;
             if (userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host))

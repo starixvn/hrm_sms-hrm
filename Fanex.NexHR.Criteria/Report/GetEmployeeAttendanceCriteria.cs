@@ -25,14 +25,8 @@
         [SpParam(SqlParamName = "Type")]
         public short AttendanceType { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeAttendance_GetByType";
-        }
+        public override string GetSettingKey() => "EmployeeAttendance_GetByType";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

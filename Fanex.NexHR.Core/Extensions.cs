@@ -59,9 +59,9 @@
 
         public static DateTime GetMaxDate(this DateTime date)
         {
-            if (date.AddMonths(1).Year > DateTime.Now.Year)
+            if (date.AddMonths(1).Year > DateTimeOffset.Now.Year)
             {
-                return DateTime.Now.AddYears(1);
+                return DateTimeOffset.Now.AddYears(1).DateTime;
             }
 
             return date;
@@ -75,7 +75,7 @@
             bool isShowAll = false)
         {
             var list = new List<SelectListItem>();
-            var toYear = DateTime.Now.GetMaxDate().Year;
+            var toYear = DateTimeOffset.Now.DateTime.GetMaxDate().Year;
 
             if (isShowAll)
             {
@@ -458,8 +458,10 @@
 
             if (firstItem != null && firstItem.Value != null)
             {
-                List<SelectListItem> list = new List<SelectListItem>();
-                list.Add(firstItem);
+                var list = new List<SelectListItem>
+                {
+                    firstItem
+                };
 
                 if (selectList != null)
                 {

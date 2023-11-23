@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NexHR.Models;
@@ -8,9 +11,6 @@
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
     using HRM.UserControl.Client.Core.Models.Role;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
 
     public partial class ReportRepository : IReportRepository
     {

@@ -29,7 +29,7 @@
         [HttpGet]
         public ActionResult Index()
         {
-            var today = DateTime.Today;
+            var today = DateTimeOffset.Now.Date;
             var model = new MonthlyFilterViewModel
             {
                 FromDate = today.FirstDayOfMonth(),
@@ -75,7 +75,7 @@
             };
             byte[] bytes = workingHoursService.ExportMonthlyWorkingHours(param);
 
-            var fileName = $"{Labels.AttendanceMonthlyDetail} {param.FromDate.ToString("dd MMM yyyy")} - {param.ToDate.ToString("dd MMM yyyy")}.xlsx";
+            var fileName = $"{Labels.AttendanceMonthlyDetail} {param.FromDate:dd MMM yyyy} - {param.ToDate:dd MMM yyyy}.xlsx";
             return File(bytes, MimeType.XLSX, fileName);
         }
     }

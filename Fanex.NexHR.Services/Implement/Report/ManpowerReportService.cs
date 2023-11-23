@@ -164,8 +164,8 @@
         private static dynamic GetCellValue(int value, int year, int month)
         {
             dynamic result = "-";
-
-            if ((DateTime.Now.Year > year) || (DateTime.Now.Year == year && DateTime.Now.Month >= month))
+            var today = DateTimeOffset.Now;
+            if ((today.Year > year) || (today.Year == year && today.Month >= month))
             {
                 result = value;
             }

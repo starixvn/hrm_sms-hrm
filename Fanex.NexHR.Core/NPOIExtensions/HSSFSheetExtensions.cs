@@ -15,6 +15,11 @@
             }
         }
 
+        public static void CopyRow(this ISheet sheet, ISheet sourceSheet, int sourceRowIndex, int rowIndex)
+        {
+            sheet.CopyRow(sourceSheet, sourceRowIndex, rowIndex, 0, int.MaxValue - 1);
+        }
+
         public static void CopyRow(this ISheet sheet, ISheet sourceSheet, int sourceRowIndex, int rowIndex, int firstColumnIndex, int lastColumnIndex)
         {
             // Expand the sheet to satisfy the number of needed rows.
@@ -85,11 +90,6 @@
 
                 sheet.AddMergedRegion(newRange);
             }
-        }
-
-        public static void CopyRow(this ISheet sheet, ISheet sourceSheet, int sourceRowIndex, int rowIndex)
-        {
-            sheet.CopyRow(sourceSheet, sourceRowIndex, rowIndex, 0, int.MaxValue - 1);
         }
 
         public static void RemoveRow(this ISheet sheet, int rowIndex)

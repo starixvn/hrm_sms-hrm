@@ -59,16 +59,16 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult GetDeparments()
         {
             var departments = departmentService.GetDepartment();
             return new CustomJsonResult { Data = departments, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult Create()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -93,12 +93,6 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
-        public ActionResult Edit(int id)
-        {
-            return View(id);
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
         public ActionResult GetById(int id)
         {
             Section section = sectionService.GetById(id);
@@ -113,6 +107,12 @@
                 Departments = departments
             };
             return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]
+        public ActionResult Edit(int id)
+        {
+            return View(id);
         }
 
 

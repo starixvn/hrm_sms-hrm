@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NexHR.Criteria.Employee
 {
-    using System;
     using Fanex.Data.Repository;
 
     public class GetMemberByManagerCriteria : CriteriaBase
@@ -11,14 +10,8 @@
 
         public bool ExcludedManager { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_GetMemberByManager";
-        }
+        public override string GetSettingKey() => "Employee_GetMemberByManager";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

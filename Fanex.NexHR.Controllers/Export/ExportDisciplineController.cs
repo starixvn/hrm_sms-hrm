@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-    using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Criteria.Discipline;
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;

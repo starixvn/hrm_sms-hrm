@@ -27,7 +27,7 @@
         {
             var model = new ManpowerViewModel
             {
-                Year = year ?? DateTime.Now.Year
+                Year = year ?? DateTimeOffset.Now.Year
             };
             model.Manpowers = reportService.GetManpower(model.Year);
 
@@ -39,7 +39,7 @@
         {
             var model = new ManpowerCategoryViewModel
             {
-                Year = year ?? DateTime.Now.Year
+                Year = year ?? DateTimeOffset.Now.Year
             };
             model.Manpowers = reportService.GetManpowerCategory(model.Year);
 
