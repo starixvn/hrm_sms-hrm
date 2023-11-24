@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -46,7 +47,7 @@
 
                 int totalColumns = columns.Count;
                 var rowIndex = 1;
-                var colIndex = 1;
+                int colIndex;
                 for (var i = 0; i < totalColumns; i++)
                 {
                     colIndex = i + 1;
@@ -405,21 +406,22 @@
 
         private static DateTime GetCheckInTime(DateTime workDate, ShiftBase shift)
         {
-            var checkInTime = TimeSpan.Parse(shift.CheckIn);
+            var checkInTime = ParseTime(shift.CheckIn);
             return workDate.Date.AddDays(shift.IsInAfterDay ? 1 : 0).AddHours(checkInTime.Hours);
         }
 
         private static DateTime GetCheckOutTime(DateTime workDate, ShiftBase shift)
         {
-            var checkOutTime = TimeSpan.Parse(shift.CheckOut);
+            var checkOutTime = ParseTime(shift.CheckOut);
             return workDate.Date.AddDays(shift.IsOutAfterDay ? 1 : 0).AddHours(checkOutTime.Hours);
         }
 
         private static string GetHalfShiftCode(string shortTime)
         {
-            var time = TimeSpan.Parse(shortTime);
-
+            var time = ParseTime(shortTime);
             return time.Minutes > 0 ? time.ToString(@"hh\:mm") : time.ToString("hh");
         }
+
+        private static TimeSpan ParseTime(string time) => TimeSpan.Parse(time, new CultureInfo("en-US"));
     }
 }

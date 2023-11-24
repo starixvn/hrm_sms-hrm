@@ -36,14 +36,12 @@
             var monthxml = new StringBuilder(Constants.BeginRootTag);
             for (var month = 1; month <= Constants.December; month++)
             {
-                var fromDate = new DateTime(param.Year, month, 1);
+                var fromDate = new DateTimeOffset(param.Year, month, 1, 0, 0, 0, TimeSpan.Zero).Date;
                 var toDate = fromDate.LastDayOfMonth();
 
                 if (param.Calendar == (byte)CalendarType.Fiscal)
                 {
-                    var daterange = GetDateRange(fromDate);
-                    fromDate = daterange.Item1;
-                    toDate = daterange.Item2;
+                    (fromDate, toDate) = GetDateRange(fromDate);
                 }
 
                 monthxml.AppendFormat("<Row Month='{0}' FromDate='{1}' ToDate='{2}' />", month, fromDate, toDate);
@@ -65,14 +63,12 @@
 
         public IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
         {
-            var fromDate = new DateTime(param.Year, param.Month, 1);
+            var fromDate = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var toDate = fromDate.LastDayOfMonth();
 
             if (param.Calendar == CalendarType.Fiscal)
             {
-                var daterange = GetDateRange(fromDate);
-                fromDate = daterange.Item1;
-                toDate = daterange.Item2;
+                (fromDate, toDate) = GetDateRange(fromDate);
             }
 
             var criteria = new GetMonthlyOvertimeDetailsReportCriteria
@@ -544,27 +540,27 @@
             worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
         }
 
-        private static Tuple<DateTime, DateTime> GetDateRange(DateTime month)
+        private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
         {
             const byte FromDay = 21;
             const byte ToDay = 20;
-            var newRuleApplyFromMonth = new DateTime(2020, 5, 1);
+            var newRuleApplyFromMonth = new DateTimeOffset(2020, 5, 1, 0, 0, 0, TimeSpan.Zero);
             var lastMonth = month.AddMonths(-1);
-            var fromDate = new DateTime(lastMonth.Year, lastMonth.Month, 10);
-            var toDate = new DateTime(month.Year, month.Month, 9);
+            var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
+            var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
 
             if (month == newRuleApplyFromMonth)
             {
-                toDate = new DateTime(month.Year, month.Month, ToDay);
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
             }
 
             if (month > newRuleApplyFromMonth)
             {
-                fromDate = new DateTime(lastMonth.Year, lastMonth.Month, FromDay);
-                toDate = new DateTime(month.Year, month.Month, ToDay);
+                fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, FromDay, 0, 0, 0, TimeSpan.Zero);
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
             }
 
-            return new Tuple<DateTime, DateTime>(fromDate, toDate);
+            return (fromDate.Date, toDate.Date);
         }
     }
 }

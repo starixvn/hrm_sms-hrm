@@ -52,7 +52,7 @@
         public async Task SyncWorkingShiftAsync()
         {
             var lastModifiedDate = await baseService.GetDataEntityAsync<DateTime>(new GetLastModifiedDateCriteria());
-            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{lastModifiedDate:yyyy-MM-dd}/{DateTime.Now:yyyy-MM-dd}");
+            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{lastModifiedDate:yyyy-MM-dd}/{DateTimeOffset.Now:yyyy-MM-dd}");
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {

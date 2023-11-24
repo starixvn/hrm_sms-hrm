@@ -195,7 +195,7 @@
                 emails = emails.Replace(";;", ";");
             }
 
-            return emails.TrimEnd(new[] { ',', ';' });
+            return emails.TrimEnd(',', ';');
         }
 
         private MimeMessage GetMessageContent(MailRecord email)

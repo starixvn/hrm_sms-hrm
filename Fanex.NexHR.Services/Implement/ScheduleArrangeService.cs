@@ -123,7 +123,7 @@
             {
                 ActorId = actorId,
                 EmployeeId = weeklyDefaultShift.EmployeeId,
-                FromDate = DateTime.Now.LastDayOfWeek().AddDays(1),
+                FromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1),
                 MonShiftId = GetShiftId(weeklyDefaultShift.MonShift.Id),
                 TueShiftId = GetShiftId(weeklyDefaultShift.TueShift.Id),
                 WedShiftId = GetShiftId(weeklyDefaultShift.WedShift.Id),
@@ -157,13 +157,14 @@
 
             foreach (WeeklySchedule weeklySchedule in weeklySchedules)
             {
-                weeklySchedule.WeeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.MonShiftId);
-                weeklySchedule.WeeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.TueShiftId);
-                weeklySchedule.WeeklyDefaultShift.WedShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.WedShiftId);
-                weeklySchedule.WeeklyDefaultShift.ThuShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.ThuShiftId);
-                weeklySchedule.WeeklyDefaultShift.FriShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.FriShiftId);
-                weeklySchedule.WeeklyDefaultShift.SatShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.SatShiftId);
-                weeklySchedule.WeeklyDefaultShift.SunShift = shiftBases.First(x => x.Id == weeklySchedule.WeeklyDefaultShift.SunShiftId);
+                var weeklyDefaultShift = weeklySchedule.WeeklyDefaultShift;
+                weeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklyDefaultShift.MonShiftId);
+                weeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklyDefaultShift.TueShiftId);
+                weeklyDefaultShift.WedShift = shiftBases.First(x => x.Id == weeklyDefaultShift.WedShiftId);
+                weeklyDefaultShift.ThuShift = shiftBases.First(x => x.Id == weeklyDefaultShift.ThuShiftId);
+                weeklyDefaultShift.FriShift = shiftBases.First(x => x.Id == weeklyDefaultShift.FriShiftId);
+                weeklyDefaultShift.SatShift = shiftBases.First(x => x.Id == weeklyDefaultShift.SatShiftId);
+                weeklyDefaultShift.SunShift = shiftBases.First(x => x.Id == weeklyDefaultShift.SunShiftId);
             }
         }
 
@@ -202,6 +203,21 @@
                     weeklySchedule.SundaySchedule,
                     weeklySchedule.IsUsedWeeklyDefaultShift
                     ? GetDefaultShift(weeklyDefaultShift, weeklySchedule.SundaySchedule.WorkDate.DayOfWeek) : defaultShift);
+            }
+        }
+
+        private static void MappingDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
+        {
+            if (dailySchedule.Shift == null && defaultShift != null)
+            {
+                if (defaultShift.Id == Constants.OffDayShiftId)
+                {
+                    dailySchedule.IsOffDay = true;
+                }
+                else
+                {
+                    dailySchedule.Shift = defaultShift;
+                }
             }
         }
 
@@ -262,21 +278,6 @@
             }
 
             MappingDefaultShift(dailySchedule, defaultShift);
-        }
-
-        private static void MappingDefaultShift(DailySchedule dailySchedule, ShiftBase defaultShift)
-        {
-            if (dailySchedule.Shift == null && defaultShift != null)
-            {
-                if (defaultShift.Id == Constants.OffDayShiftId)
-                {
-                    dailySchedule.IsOffDay = true;
-                }
-                else
-                {
-                    dailySchedule.Shift = defaultShift;
-                }
-            }
         }
     }
 }

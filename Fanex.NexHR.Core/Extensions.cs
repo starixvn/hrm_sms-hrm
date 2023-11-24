@@ -205,7 +205,7 @@
 
         public static MvcHtmlString AttendanceNoteHtml(string notes)
         {
-            StringBuilder htmlString = new StringBuilder();
+            var htmlString = new StringBuilder();
             if (!string.IsNullOrEmpty(notes))
             {
                 string[] noteArray = notes.Split(',');
@@ -383,8 +383,7 @@
         private static void SetLinkValue(string noteValue, ref StringBuilder htmlString, bool isLastElement)
         {
             var tag = new TagBuilder("a");
-            var link = string.Empty;
-
+            string link;
             if (noteValue.Contains("Missing"))
             {
                 link = "/checkinout/employeeview";
@@ -436,7 +435,7 @@
                 case (byte)RequestType.Leave:
                     return Labels.Leave;
 
-                case (int)RequestType.KeepInView:
+                case (byte)RequestType.KeepInView:
                     return Labels.KeepInView;
 
                 case (byte)RequestType.Overtime:
@@ -483,11 +482,8 @@
             Func<TEnum, bool> predicate = null, string optionLabel = null,
             object htmlAttributes = null) where TEnum : struct, IConvertible
         {
-            var enumList = predicate == null ? Enum.GetValues(typeof(TEnum))
-                .Cast<TEnum>()
-                : Enum.GetValues(typeof(TEnum))
-                    .Cast<TEnum>()
-                    .Where(e => predicate(e));
+            var enumList = predicate == null ? Enum.GetValues(typeof(TEnum)).Cast<TEnum>()
+                : Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Where(e => predicate(e));
 
             var selectList = enumList
                 .Select(e => new SelectListItem
@@ -519,7 +515,7 @@
         {
             if (values != null)
             {
-                var valueList = values.GetType() == typeof(string[]) ? values as string[] : values.ToString().Split(new[] { ',' });
+                var valueList = values.GetType() == typeof(string[]) ? values as string[] : values.ToString().Split(',');
 
                 var list = new List<SelectListItem>();
                 foreach (SelectListItem item in selectList)

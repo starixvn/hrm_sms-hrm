@@ -22,12 +22,12 @@
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime FromDate { get; set; } = DateTime.Now.Date;
+        public DateTime FromDate { get; set; } = DateTimeOffset.Now.Date;
 
         [Required]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ToDate { get; set; } = DateTime.Now.Date;
+        public DateTime ToDate { get; set; } = DateTimeOffset.Now.Date;
 
         public int EmployeeId { get; set; } = -1;
 

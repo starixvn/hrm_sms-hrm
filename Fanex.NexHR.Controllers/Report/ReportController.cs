@@ -224,9 +224,9 @@
                 LeaveType = model.LeaveType
             };
 
-            string[] leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',') : new string[] { };
+            var leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',').ToList() : new List<string>();
             IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
-            string leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
+            string leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
             ViewBag.HeaderTitle = string.Format("{0} {1}", leaveType, model.Year);
 
             var leaveSumaries = reportService.GetUnpaidLeave(criteria);

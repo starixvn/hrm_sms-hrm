@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NexHR.Core;
@@ -81,7 +82,7 @@
             ViewBag.IsTopManager = EmployeeSession.IsTopManager;
             ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-            ViewBag.Shifts = shiftService.GetAll(isShowOff: false);
+            ViewBag.Shifts = shiftService.GetAll();
 
             return View(model);
         }
@@ -89,9 +90,10 @@
         [HttpPost]
         public CustomJsonResult Create(string requestModel, IList<HttpPostedFileBase> files)
         {
+            var cultureInfo = new CultureInfo("en-US");
             var model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
-            var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime);
-            var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime);
+            var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
+            var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo);
             var criteria = new CreateKeepInViewRequestCriteria
             {
                 EmpId = model.EmployeeId,
@@ -100,11 +102,11 @@
                 IsHalfDay = model.HalfDay,
                 Remark = model.Remark,
                 FromTime = (fromTime < toTime && model.CrossDay)
-                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime)
-                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo),
                 ToTime = model.CrossDay
-                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 CreatedBy = EmployeeSession.EmpId,
@@ -156,7 +158,7 @@
             };
 
             ViewBag.IsTopManager = request.Requester.IsTopManager;
-            ViewBag.Shifts = shiftService.GetAll(isShowOff: false);
+            ViewBag.Shifts = shiftService.GetAll();
 
             return View(viewModel);
         }
@@ -164,6 +166,7 @@
         [HttpPost]
         public CustomJsonResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
         {
+            var cultureInfo = new CultureInfo("en-US");
             var model = JsonConverter.FromJson<KeepInViewRequestViewModel>(requestModel);
             var criteria = new EditKeepInViewRequestCriteria
             {
@@ -173,10 +176,10 @@
                 KeepInViewType = model.KeepInViewType,
                 Remark = model.Remark,
                 IsHalfDay = model.HalfDay,
-                FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime),
+                FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo),
                 ToTime = model.CrossDay
-                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime)
-                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime),
+                        ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
+                        : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo),
                 VerifierId = model.VerifierId,
                 ApproverId = model.ApproverId,
                 ModifiedBy = EmployeeSession.EmpId,

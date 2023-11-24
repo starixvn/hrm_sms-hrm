@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Criteria.AnnualLeave;
     using Fanex.NexHR.Criteria.Employee;

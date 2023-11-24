@@ -221,26 +221,26 @@
 
         public DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
-            var fromTime = DateTime.Now;
+            var fromTime = DateTimeOffset.Now;
             var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == (byte)WorkType.Leave && t.IsHalfDay);
             if (leaveHalfDay != null)
             {
                 fromTime = leaveHalfDay.FromTime;
             }
 
-            return fromTime;
+            return fromTime.DateTime;
         }
 
         public DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails)
         {
-            var toTime = DateTime.Now;
+            var toTime = DateTimeOffset.Now;
             var leaveHalfDay = leaveDetails.FirstOrDefault(t => t.WorkType == (byte)WorkType.Leave && t.IsHalfDay);
             if (leaveHalfDay != null)
             {
                 toTime = leaveHalfDay.ToTime;
             }
 
-            return toTime;
+            return toTime.DateTime;
         }
 
         private void SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)

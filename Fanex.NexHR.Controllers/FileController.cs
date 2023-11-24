@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Web;
     using System.Web.Hosting;
     using System.Web.Mvc;
@@ -38,7 +39,7 @@
 
         private string SaveFileToServer(HttpPostedFileBase file, int categoryId, bool isOverride)
         {
-            var fileName = Path.GetFileName(file.FileName);
+            var fileName = new StringBuilder(Path.GetFileName(file.FileName));
             var dir = "~/file/uploads/" + categoryId;
             var pathAttach = string.Format("{0}/{1}", dir, fileName);
 
@@ -46,7 +47,7 @@
             {
                 while (System.IO.File.Exists(Server.MapPath(pathAttach)))
                 {
-                    fileName = "(1)" + fileName;
+                    fileName.Insert(0, "(1)");
                     pathAttach = string.Format("{0}/{1}", dir, fileName);
                 }
             }
@@ -56,7 +57,7 @@
                 Directory.CreateDirectory(Server.MapPath(dir));
             }
 
-            var path = Path.Combine(Server.MapPath(dir), fileName);
+            var path = Path.Combine(Server.MapPath(dir), fileName.ToString());
             file.SaveAs(path);
             const byte StartIndex = 2;
 

@@ -71,11 +71,12 @@
 
         public IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null)
         {
+            var fromDate = new DateTimeOffset(requestDate.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetDisableDateForMoveOffDayRequestCriteria
             {
                 EmployeeId = employeeId,
-                FromDate = new DateTime(requestDate.Year, 1, 1),
-                ToDate = new DateTime(requestDate.Year, 12, 31),
+                FromDate = fromDate,
+                ToDate = fromDate.AddYears(1).AddDays(-1),
                 RequestId = requestId
             };
             IList<DateTime> dates = baseService.GetData<DateTime>(criteria).ToList();
@@ -125,7 +126,7 @@
             {
                 RequestId = requestId
             };
-            IEnumerable<ChangeShiftDetail> details = baseService.GetData<ChangeShiftDetail>(criteria);
+            var details = baseService.GetData<ChangeShiftDetail>(criteria);
             foreach (ChangeShiftDetail detail in details)
             {
                 if (detail.FromShiftId == Constants.OffDayShiftId)

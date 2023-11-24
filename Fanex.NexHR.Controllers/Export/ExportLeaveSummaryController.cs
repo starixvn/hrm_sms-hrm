@@ -31,7 +31,7 @@
 
         public ActionResult AnnualLeaveSummary(LeaveSummaryViewModel model)
         {
-            string fileName = "LeaveSummary_" + DateTime.Now.ToString("yyyyMMdd") + ".xls";
+            string fileName = $"LeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
             byte? isLocal = null;
             if (model.Category != null)
             {

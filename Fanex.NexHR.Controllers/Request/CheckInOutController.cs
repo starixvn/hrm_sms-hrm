@@ -236,7 +236,7 @@
                 var checkContainColon = shift.BeginCheckInTime.Contains(":");
                 if (checkContainColon)
                 {
-                    var time = shift.BeginCheckInTime.Split(new[] { ':' });
+                    var time = shift.BeginCheckInTime.Split(':');
                     viewModel.Hour = int.Parse(time[0]);
                     viewModel.Minute = int.Parse(time[1]);
                 }

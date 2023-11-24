@@ -8,8 +8,8 @@
 
     public class DailyOvertimeDetailsViewModel
     {
-        public DateTime FromDate { get; set; } = DateTime.Now.AddMonths(-1);
-        public DateTime ToDate { get; set; } = DateTime.Now;
+        public DateTime FromDate { get; set; } = DateTimeOffset.Now.AddMonths(-1).Date;
+        public DateTime ToDate { get; set; } = DateTimeOffset.Now.Date;
         public string TeamIds { get; set; }
         public IEnumerable<EntityBase<int>> Teams { get; set; }
         public string Employee { get; set; }

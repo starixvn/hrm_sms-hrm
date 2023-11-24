@@ -83,12 +83,6 @@
         }
 
         [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-        public ActionResult Edit(int id)
-        {
-            return View(id);
-        }
-
-        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
         public ActionResult GetById(int Id)
         {
             Department department = departmentService.GetById(Id);
@@ -104,6 +98,12 @@
             };
 
             return new CustomJsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HRMPermission(Policy.Host, FunctionKey.DepartmentManagement)]
+        public ActionResult Edit(int id)
+        {
+            return View(id);
         }
 
         [HttpPost]

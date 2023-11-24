@@ -144,7 +144,7 @@
                 Name = string.Format("<div>You have a Change Shift Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
-                    stringBuilder.ToString(),
+                    stringBuilder,
                     request.Remark),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
@@ -252,7 +252,7 @@
                 Name = string.Format("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
                     request.FullName,
                     request.Nickname,
-                    stringBuilder.ToString(),
+                    stringBuilder,
                     request.Remark),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
@@ -367,34 +367,32 @@
         {
             var disciplines = new List<TodolistDiscipline>();
             IList<Models.Request.LeaveDisciplineModel> details = requestService.GetLeaveRequestDetailToReviewDiscipline(request.RequestId);
-            if (details != null && details.Any())
+            foreach (var item in details)
             {
-                foreach (var item in details)
+                if (item.LeaveDetail.Any() && !item.IsOffDayOrHoliday)
                 {
-                    if (item.LeaveDetail.Any() && !item.IsOffDayOrHoliday)
+                    var isUnpaid = item.IsUnpaidLeave || item.IsUnpaidLeaveAbsent;
+                    if (isUnpaid || item.IsAbsent || item.IsUnplannedLeave || item.IsSevenDaysLeave)
                     {
-                        if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave || item.IsSevenDaysLeave)
+                        var leaveDetail = item.LeaveDetail[0];
+                        disciplines.Add(new TodolistDiscipline
                         {
-                            var leaveDetail = item.LeaveDetail[0];
-                            disciplines.Add(new TodolistDiscipline
-                            {
-                                WorkDate = item.WorkDate.Date,
-                                TypeId = (byte)item.DisciplineTypeId,
-                                Name = item.DisciplineTypeName,
-                                Details = string.Format("Leave Type: {0}", leaveDetail.LeaveTypeName)
-                            });
-                        }
+                            WorkDate = item.WorkDate.Date,
+                            TypeId = (byte)item.DisciplineTypeId,
+                            Name = item.DisciplineTypeName,
+                            Details = string.Format("Leave Type: {0}", leaveDetail.LeaveTypeName)
+                        });
+                    }
 
-                        if (item.IsWeekendLeave)
+                    if (item.IsWeekendLeave)
+                    {
+                        disciplines.Add(new TodolistDiscipline
                         {
-                            disciplines.Add(new TodolistDiscipline
-                            {
-                                WorkDate = item.WorkDate.Date,
-                                TypeId = (byte)DisciplineType.WeekendLeave,
-                                Name = EnumHelper.GetDescription(DisciplineType.WeekendLeave),
-                                Details = string.Format("Leave Type: {0}", Labels.WeekendLeave)
-                            });
-                        }
+                            WorkDate = item.WorkDate.Date,
+                            TypeId = (byte)DisciplineType.WeekendLeave,
+                            Name = EnumHelper.GetDescription(DisciplineType.WeekendLeave),
+                            Details = string.Format("Leave Type: {0}", Labels.WeekendLeave)
+                        });
                     }
                 }
             }
@@ -464,7 +462,7 @@
                     TypeId = (byte)DisciplineType.MissingCheckInOut,
                     Name = EnumHelper.GetDescription(DisciplineType.MissingCheckInOut),
                     Details = string.Format("<div>- Request Type: {0}</div>{1}<div>- Request Time: {2}</div><div>- Reason: {3}</div>",
-                        detail.RequestType.ToString(),
+                        detail.RequestType,
                         detail.FromShift != null ? $"<div>- Shift: {detail.FromShift.Name}</div>" : string.Empty,
                         detail.RequestedDate.ToShortFormatedDate(),
                         reason)
@@ -504,7 +502,7 @@
                     Name = EnumHelper.GetDescription(disciplineType),
                     Details = string.Format("{0}<div>- {1}: {2}'</div><div>- Reason: {3}</div>",
                         detail.FromShift != null ? $"<div>- Shift: {detail.FromShift.Name}</div>" : string.Empty,
-                        detail.RequestType.ToString(),
+                        detail.RequestType,
                         detail.TotalMins,
                         reason)
                 });
@@ -543,7 +541,7 @@
                     case (short)LeaveTypes.KeepInViewByHour:
                     case (short)LeaveTypes.BusinessDuringWorking:
                         var minutes = (request.ToTime.Value - request.FromTime.Value).TotalMinutes;
-                        result = $"{(minutes / Constants.TotalMinuteInHour).ToString("0.#")} hour(s)";
+                        result = $"{minutes / Constants.TotalMinuteInHour:0.#} hour(s)";
                         break;
 
                     default:

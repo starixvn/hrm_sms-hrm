@@ -8,7 +8,7 @@
 
     public class YearlyOvertimeViewModel
     {
-        public int Year { get; set; } = DateTime.Now.Year;
+        public int Year { get; set; } = DateTimeOffset.Now.Year;
         public string Employee { get; set; }
         public IEnumerable<EntityBase<int>> Teams { get; set; }
         public string TeamIds { get; set; }

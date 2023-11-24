@@ -51,9 +51,9 @@
             string templatePath = HttpContext.Current.Server.MapPath(path);
             string fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
-            string[] leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',') : new string[] { };
+            var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
             IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
-            string type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Any(y => x.Id.ToString() == y)).Select(x => x.Name));
+            string type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
             /// Fill report title.

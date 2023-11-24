@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Services
 {
     using System.Collections.Generic;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.Group;
@@ -11,7 +10,7 @@
     {
         Team GetById(int id);
 
-        IList<Team> GetAll(bool isDeleted = false , string keyword = null);
+        IList<Team> GetAll(bool isDeleted = false, string keyword = null);
 
         CommandResult Delete(int actorId, int id);
 

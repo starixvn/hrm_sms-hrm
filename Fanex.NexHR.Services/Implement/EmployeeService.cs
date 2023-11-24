@@ -77,7 +77,7 @@
                 {
                     if(employee.Roles != null && employee.Roles.Any())
                     {
-                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                        employee.Roles = roles.Where(x => employee.Roles.Exists(y => y.RoleId == x.RoleId)).ToList();
                     }
                 }
             }
@@ -101,7 +101,7 @@
                 {
                     if (employee.Roles != null && employee.Roles.Any())
                     {
-                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                        employee.Roles = roles.Where(x => employee.Roles.Exists(y => y.RoleId == x.RoleId)).ToList();
                     }
                 }
             }

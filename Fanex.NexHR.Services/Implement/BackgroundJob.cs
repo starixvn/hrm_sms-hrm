@@ -220,9 +220,10 @@
                 var nickname = groupSupervisor.First().Key.Nickname;
                 var email = groupSupervisor.First().Key.Email;
 
-                foreach (var item in groupSupervisor)
+                var sections = groupSupervisor.Select(x => x.Key).ToList();
+                foreach (var item in sections)
                 {
-                    var statisticSection = statistics.FirstOrDefault(x => x.SectionId == item.Key.SectionId && x.DepartmentId == item.Key.DepartmentId);
+                    var statisticSection = statistics.FirstOrDefault(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
                     if (statisticSection != null)
                     {
                         tableStatistic.AppendFormat(

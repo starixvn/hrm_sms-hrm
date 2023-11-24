@@ -45,13 +45,14 @@
                 int titleCol = DataTbaleTitleFirstCol;
                 var titleStyle = workSheet.Cells[DataTableTitleRow, DataTbaleTitleFirstCol];
 
-                foreach (var title in tableTitles)
+                var workDates = tableTitles.Select(x => x.Key).ToList();
+                foreach (var workDate in workDates)
                 {
                     var titleCell = workSheet.Cells[DataTableTitleRow, titleCol++];
 
                     titleStyle.Copy(titleCell);
-                    titleCell.Style.Font.Color.SetColor(title.Key.DayOfWeek == DayOfWeek.Saturday || title.Key.DayOfWeek == DayOfWeek.Sunday ? Color.Red : Color.White);
-                    titleCell.Value = title.Key.ToString("dd MMM, yyyy (ddd)");
+                    titleCell.Style.Font.Color.SetColor(workDate.DayOfWeek == DayOfWeek.Saturday || workDate.DayOfWeek == DayOfWeek.Sunday ? Color.Red : Color.White);
+                    titleCell.Value = workDate.ToString("dd MMM, yyyy (ddd)");
                 }
 
                 //Table Summary
@@ -71,16 +72,17 @@
                 int rowIndex = FirstDataTableRow;
                 int colIndex = 1;
 
-                foreach (var shift in tableShifts)
+                var shifts = tableShifts.Select(x => x.Key).ToList();
+                foreach (var shift in shifts)
                 {
                     var rowTableStyle = rowIndex % 2 != 0 ? oddRowStyle : evenRowStyle;
                     rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
-                    workSheet.Cells[rowIndex, colIndex++].Value = shift.Key;
+                    workSheet.Cells[rowIndex, colIndex++].Value = shift;
 
                     for (int i = 0; i < totalCol; i++)
                     {
                         rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
-                        var data = shiftStatistics.FirstOrDefault(shiftStatistic => shiftStatistic.Code == shift.Key && shiftStatistic.WorkDate == tableTitles[i].Key);
+                        var data = shiftStatistics.FirstOrDefault(shiftStatistic => shiftStatistic.Code == shift && shiftStatistic.WorkDate == tableTitles[i].Key);
                         workSheet.Cells[rowIndex, colIndex++].Value = data is null ? 0 : data.Total;
                     }
 

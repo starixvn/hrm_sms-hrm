@@ -1350,6 +1350,10 @@
       <Project>{245f4ded-6e59-453e-be42-2efb1f4648d3}</Project>
       <Name>Fanex.NexHR.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
+      <Project>{89f85e0d-f859-4780-b21b-bd3f3976388b}</Project>
+      <Name>Fanex.NexHR.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
       <Project>{2024da01-8438-47c4-b0cf-e1a93d78d624}</Project>
       <Name>Fanex.NexHR.Resources</Name>

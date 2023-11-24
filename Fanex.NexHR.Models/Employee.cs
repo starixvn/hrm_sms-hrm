@@ -90,13 +90,7 @@
 
         public byte Marriage { get; set; }
 
-        public string MarriageName
-        {
-            get
-            {
-                return ((MarriageStatus)Marriage).ToString();
-            }
-        }
+        public string MarriageName => ((MarriageStatus)Marriage).ToString();
 
         [DataType(DataType.Date)]
         public DateTime? MilitaryFromDate { get; set; }
@@ -197,9 +191,7 @@
 
             set
             {
-                {
-                    Roles = value != null ? value.Select(i => new Role { RoleId = Convert.ToInt16(i) }).ToList() : new List<Role>();
-                }
+                Roles = value != null ? value.Select(i => new Role { RoleId = Convert.ToInt16(i) }).ToList() : new List<Role>();
             }
         }
 

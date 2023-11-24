@@ -6,20 +6,12 @@
 
     public class MemoViewModel
     {
-        public MemoViewModel()
-        {
-            MemoCategories = new List<LookupData>();
-            Memos = new List<Memo>();
-            Year = DateTime.Now.Year;
-            Category = -1;
-        }
+        public int Year { get; set; } = DateTimeOffset.Now.Year;
 
-        public int Year { get; set; }
+        public int Category { get; set; } = -1;
 
-        public int Category { get; set; }
+        public IList<LookupData> MemoCategories { get; set; } = new List<LookupData>();
 
-        public IList<LookupData> MemoCategories { get; set; }
-
-        public IList<Memo> Memos { get; set; }
+        public IList<Memo> Memos { get; set; } = new List<Memo>();
     }
 }

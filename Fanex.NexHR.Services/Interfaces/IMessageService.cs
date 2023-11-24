@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using Fanex.NexHR.Core.Models;
-    using Fanex.NexHR.Criteria.Message;
     using Fanex.NexHR.Models.Message;
 
     public interface IMessageService

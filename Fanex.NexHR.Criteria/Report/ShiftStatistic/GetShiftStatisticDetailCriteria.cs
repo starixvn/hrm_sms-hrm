@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Criteria.Report
 {
     using System;
-    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetShiftStatisticDetailCriteria : CriteriaBase

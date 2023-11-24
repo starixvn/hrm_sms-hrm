@@ -40,13 +40,13 @@
 
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
         {
-            var today = DateTime.Today;
-            var fromDate = new DateTime(year, 1, 1);
-            var toDate = DateTime.Today;
+            var today = DateTimeOffset.Now;
+            var fromDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            var toDate = today;
 
             if (today.Year != year)
             {
-                toDate = new DateTime(year, Constants.December, 1);
+                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
             }
 
             if (today.Day > ToDay)
@@ -56,14 +56,14 @@
 
             if(toDate.Year > year)
             {
-                toDate = new DateTime(year, Constants.December, 1);
+                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
             }
 
             var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
             {
                 EmployeeId = employeeId,
-                FromDate = fromDate,
-                ToDate = toDate
+                FromDate = fromDate.Date,
+                ToDate = toDate.Date
             };
             IEnumerable<MonthlyOvertimeRequest> monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
@@ -72,13 +72,13 @@
 
         public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
         {
-            var dateRange = GetDateRange(month.FirstDayOfMonth());
+            (var fromDate, var toDate) = GetDateRange(month.FirstDayOfMonth());
             var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
             {
                 EmployeeId = employeeId,
                 Month = month.FirstDayOfMonth(),
-                FromDate = dateRange.Item1,
-                ToDate = dateRange.Item2
+                FromDate = fromDate,
+                ToDate = toDate
             };
             MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
@@ -116,7 +116,7 @@
         public void SendMailToReminderClaimOvertime(string subject, string content)
         {
             var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
-            IList<SupervisorNameModel> employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
+            var employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
 
             if (employees != null)
             {
@@ -143,11 +143,11 @@
         {
             var isInvalid = false;
             var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
-            IList<DailyOvertimeRequest> overtimes = baseService.GetData<DailyOvertimeRequest>(criteria).ToList();
+            var overtimes = baseService.GetData<DailyOvertimeRequest>(criteria).ToList();
             if (overtimes != null && overtimes.Any())
             {
                 var index = 0;
-                while (!isInvalid && index < overtimes.Count())
+                while (!isInvalid && index < overtimes.Count)
                 {
                     isInvalid = CheckInvalidOvertimes(overtimes[index]);
                     index++;
@@ -228,8 +228,7 @@
 
         private static List<List<string>> SplitList(List<string> locations, int size)
         {
-            List<List<string>> emails = new List<List<string>>();
-
+            var emails = new List<List<string>>();
             for (int i = 0; i < locations.Count; i += size)
             {
                 emails.Add(locations.GetRange(i, Math.Min(size, locations.Count - i)));
@@ -238,25 +237,25 @@
             return emails;
         }
 
-        private static Tuple<DateTime, DateTime> GetDateRange(DateTime month)
+        private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
         {
-            var newRuleApplyFromMonth = new DateTime(2020, 5, 1);
+            var newRuleApplyFromMonth = new DateTimeOffset(2020, 5, 1, 0, 0, 0, TimeSpan.Zero);
             var lastMonth = month.AddMonths(-1);
-            var fromDate = new DateTime(lastMonth.Year, lastMonth.Month, 10);
-            var toDate = new DateTime(month.Year, month.Month, 9);
+            var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
+            var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
 
             if(month == newRuleApplyFromMonth)
             {
-                toDate = new DateTime(month.Year, month.Month, ToDay);
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
             }
 
             if (month > newRuleApplyFromMonth)
             {
-                fromDate = new DateTime(lastMonth.Year, lastMonth.Month, FromDay);
-                toDate = new DateTime(month.Year, month.Month, ToDay);
+                fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, FromDay, 0, 0, 0, TimeSpan.Zero);
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
             }
 
-            return new Tuple<DateTime, DateTime>(fromDate, toDate);
+            return (fromDate.Date, toDate.Date);
         }
     }
 }

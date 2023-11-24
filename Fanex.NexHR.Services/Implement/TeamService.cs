@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
@@ -42,7 +41,6 @@
             {
                 IsDeleted = isDeleted,
                 Keyword = keyword
-
             };
             IList<Team> teams = teamRepository.GetAll(criteria);
 

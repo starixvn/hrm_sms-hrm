@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NexHR.Repositories
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
     using Fanex.Data;
     using Fanex.Data.Repository;

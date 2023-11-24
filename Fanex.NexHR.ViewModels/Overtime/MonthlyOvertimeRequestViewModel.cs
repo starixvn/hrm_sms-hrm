@@ -8,7 +8,7 @@
     {
         public string Employee { get; set; }
         public int EmployeeId { get; set; }
-        public int Year { get; set; } = DateTime.Now.Year;
+        public int Year { get; set; } = DateTimeOffset.Now.Year;
         public IEnumerable<MonthlyOvertimeRequest> OvertimeRequests { get; set; }
     }
 }

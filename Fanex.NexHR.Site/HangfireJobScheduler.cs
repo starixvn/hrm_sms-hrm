@@ -9,10 +9,7 @@
 
     public static class HangfireJobScheduler
     {
-#pragma warning disable S1541 // Methods and properties should not be too complex
-
         public static void ScheduleRecurringJobs()
-#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             IBackgroundJobService backgroundJob = DependencyResolver.Current.GetService<BackgroundJobService>();
 
@@ -78,6 +75,20 @@
                     }); // 01 Sep at 00:01AM
             }
 
+            if (ConfigSettings.EnableSyncWorkingShift)
+            {
+                RecurringJob.AddOrUpdate("Sync working shift from OWP",
+                    () => backgroundJob.SyncWorkingShiftAsync(), "*/5 * * * *", new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Local
+                    }); // every 5 minutes
+            }
+
+            AnnualLeaveBalanceJobs(backgroundJob);
+        }
+
+        private static void AnnualLeaveBalanceJobs(IBackgroundJobService backgroundJob)
+        {
             if (ConfigSettings.EnableUpdateAnnualLeaveBalanceForNewEmployee)
             {
                 RecurringJob.AddOrUpdate("Add annual leave balance for new employee",
@@ -100,15 +111,6 @@
                     {
                         TimeZone = TimeZoneInfo.Local
                     }); // run once a year at 00:05AM of 31 December
-            }
-
-            if (ConfigSettings.EnableSyncWorkingShift)
-            {
-                RecurringJob.AddOrUpdate("Sync working shift from OWP",
-                    () => backgroundJob.SyncWorkingShiftAsync(), "*/5 * * * *", new RecurringJobOptions
-                    {
-                        TimeZone = TimeZoneInfo.Local
-                    }); // every 5 minutes
             }
 
             if (ConfigSettings.EnableRemindAnnualLeaveBalance)
