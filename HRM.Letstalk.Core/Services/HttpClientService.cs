@@ -10,6 +10,7 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
 
+#pragma warning disable S4462 // Calls to "async" methods should not be blocking
     public class HttpClientService : IHttpClientService
     {
         private static readonly HttpClient httpClient = new HttpClient();

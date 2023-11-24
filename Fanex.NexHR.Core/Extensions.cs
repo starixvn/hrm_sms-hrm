@@ -318,7 +318,8 @@
             IDictionary<string, object> htmlAttributes)
         {
             ModelMetadata modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            string propertyName = expression.Body.ToString().Split('.').Last();
+            var propertyNames = expression.Body.ToString().Split('.').ToList();
+            var propertyName = propertyNames[propertyNames.Count - 1];
 
             var checkbox = new TagBuilder(InputTagBuilder);
             checkbox.MergeAttribute("id", propertyName);

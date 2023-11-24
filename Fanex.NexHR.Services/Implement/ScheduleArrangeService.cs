@@ -144,7 +144,7 @@
 
         private static void MappingWeeklyDefaultShift(IEnumerable<WeeklySchedule> weeklySchedules, IList<Shift> shifts)
         {
-            IEnumerable<ShiftBase> shiftBases = shifts.Select(x => new ShiftBase
+            var shiftBases = shifts.Select(x => new ShiftBase
             {
                 Id = x.Id,
                 Code = x.Code,
@@ -153,11 +153,11 @@
                 CheckOut = x.BeginCheckOutTime,
                 IsInAfterDay = x.IsInAfterDay,
                 IsOutAfterDay = x.IsOutAfterDay
-            });
+            }).ToList();
 
-            foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+            var weeklyDefaultShifts = weeklySchedules.Select(x => x.WeeklyDefaultShift).ToList();
+            foreach (var weeklyDefaultShift in weeklyDefaultShifts)
             {
-                var weeklyDefaultShift = weeklySchedule.WeeklyDefaultShift;
                 weeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklyDefaultShift.MonShiftId);
                 weeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklyDefaultShift.TueShiftId);
                 weeklyDefaultShift.WedShift = shiftBases.First(x => x.Id == weeklyDefaultShift.WedShiftId);

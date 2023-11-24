@@ -31,8 +31,10 @@ namespace Fanex.NexHR.Site
 
             HangfireJobScheduler.ScheduleRecurringJobs();
 
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12;
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
     }
 

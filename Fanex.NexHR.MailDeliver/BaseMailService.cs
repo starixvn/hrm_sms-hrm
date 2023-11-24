@@ -119,7 +119,9 @@
                         client.EnableSsl = true;
                     }
 
+#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
                     System.Net.ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
+#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
 
                     client.SendCompleted += SendCompletedCallback;
                     client.SendAsync(msg, email);

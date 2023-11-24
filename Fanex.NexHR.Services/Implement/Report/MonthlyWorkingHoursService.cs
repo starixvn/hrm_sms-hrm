@@ -152,7 +152,7 @@
             {
                 template.Cells[StartHeaderRowIndex, StartUPLColumnIndex, EndHeaderRowIndex, EndUPLColumnIndex]
                     .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex + TotalUPLColumns - 1]);
-                worksheet.Cells[StartHeaderRowIndex, colIndex].Value = $"Unpaid Leaves {month.ToString("MMM-yyyy")}";
+                worksheet.Cells[StartHeaderRowIndex, colIndex].Value = $"Unpaid Leaves {month:MMM-yyyy}";
 
                 colIndex += TotalUPLColumns;
             }

@@ -2,11 +2,12 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class TimeRecordViewModel
     {
+        private const byte MaxHour = 23;
+        private const byte MaxMinute = 59;
+
         [Required]
         public int EmpId { get; set; }
 
@@ -27,12 +28,12 @@
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
-        [Range(0, 23, ErrorMessage = "Hour is less than 23")]
+        [Range(0, MaxHour, ErrorMessage = "Hour is less than 23")]
         public int Hour { get; set; }
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
-        [Range(0, 59, ErrorMessage = "Minutes is less than 59")]
+        [Range(0, MaxMinute, ErrorMessage = "Minutes is less than 59")]
         public int Minute { get; set; }
     }
 }

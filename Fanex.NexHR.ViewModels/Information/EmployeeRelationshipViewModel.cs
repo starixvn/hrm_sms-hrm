@@ -2,14 +2,15 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
     using Fanex.NexHR.Resources;
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class EmployeeRelationshipViewModel
     {
+        private const byte MaxLengthFullName = 200;
+        private const byte MaxLengthPhone = 50;
+
         [Required]
-        [StringLength(200, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
+        [StringLength(MaxLengthFullName, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
@@ -19,11 +20,11 @@
 
         [RegularExpression(@"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$", ErrorMessage = "Phone number is invalid")]
         [Display(Name = "Phone")]
-        [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
+        [StringLength(MaxLengthPhone, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
         public string Phone { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
+        [StringLength(MaxLengthPhone, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
         [Display(Name = "Relationship")]
         public string Relationship { get; set; }
 
