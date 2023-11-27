@@ -251,14 +251,16 @@
     <Content Include="wwwroot\dist\js\addtimerecord.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
     <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
+    <Content Include="wwwroot\dist\js\auth.index.js" />
     <Content Include="wwwroot\dist\js\changeshift.create.js" />
     <Content Include="wwwroot\dist\js\changeshift.edit.js" />
     <Content Include="wwwroot\dist\js\changeshift.myrequest.js" />
     <Content Include="wwwroot\dist\js\checkinout.create.js" />
     <Content Include="wwwroot\dist\js\checkinout.edit.js" />
     <Content Include="wwwroot\dist\js\checkinout.myrequest.js" />
+    <Content Include="wwwroot\dist\js\department.create.js" />
     <Content Include="wwwroot\dist\js\department.edit.js" />
-    <Content Include="wwwroot\dist\js\department.index.js" />
+    <Content Include="wwwroot\dist\js\department.home.js" />
     <Content Include="wwwroot\dist\js\discipline.detail.js" />
     <Content Include="wwwroot\dist\js\discipline.summary.js" />
     <Content Include="wwwroot\dist\js\discipline.summary.per.year.js" />
@@ -274,15 +276,16 @@
     <Content Include="wwwroot\dist\js\employee.user.management.js" />
     <Content Include="wwwroot\dist\js\employee.workfromhome.js" />
     <Content Include="wwwroot\dist\js\extensionno.create.js" />
-    <Content Include="wwwroot\dist\js\extensionno.index.js" />
+    <Content Include="wwwroot\dist\js\extensionno.edit.js" />
+    <Content Include="wwwroot\dist\js\extensionno.home.js" />
     <Content Include="wwwroot\dist\js\external.group.js" />
     <Content Include="wwwroot\dist\js\function.index.js" />
     <Content Include="wwwroot\dist\js\holiday.edit.js" />
     <Content Include="wwwroot\dist\js\holiday.index.js" />
     <Content Include="wwwroot\dist\js\home.index.js" />
     <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js" />
-    <Content Include="wwwroot\dist\js\joblevel.js" />
-    <Content Include="wwwroot\dist\js\jobtitle.js" />
+    <Content Include="wwwroot\dist\js\joblevel.index.js" />
+    <Content Include="wwwroot\dist\js\jobtitle.index.js" />
     <Content Include="wwwroot\dist\js\keepinview.create.js" />
     <Content Include="wwwroot\dist\js\keepinview.edit.js" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
@@ -292,7 +295,6 @@
     <Content Include="wwwroot\dist\js\leave.create.js" />
     <Content Include="wwwroot\dist\js\leave.myrequest.js" />
     <Content Include="wwwroot\dist\js\leave.request.detail.js" />
-    <Content Include="wwwroot\dist\js\login.js" />
     <Content Include="wwwroot\dist\js\main.js" />
     <Content Include="wwwroot\dist\js\memo.edit.js" />
     <Content Include="wwwroot\dist\js\memo.js" />
@@ -331,8 +333,9 @@
     <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\js\section.create.js" />
     <Content Include="wwwroot\dist\js\section.edit.js" />
-    <Content Include="wwwroot\dist\js\section.index.js" />
+    <Content Include="wwwroot\dist\js\section.home.js" />
     <Content Include="wwwroot\dist\js\shift.edit.js" />
     <Content Include="wwwroot\dist\js\sick.leave.balance.index.js" />
     <Content Include="wwwroot\dist\js\team.discipline.rule.js" />
@@ -341,8 +344,9 @@
     <Content Include="wwwroot\dist\js\team.edit.shift.manager.js" />
     <Content Include="wwwroot\dist\js\team.edit.supervisor.js" />
     <Content Include="wwwroot\dist\js\team.index.js" />
+    <Content Include="wwwroot\dist\js\unit.create.js" />
     <Content Include="wwwroot\dist\js\unit.edit.js" />
-    <Content Include="wwwroot\dist\js\unit.index.js" />
+    <Content Include="wwwroot\dist\js\unit.home.js" />
     <Content Include="wwwroot\dist\js\workingcalendar.js" />
     <Content Include="wwwroot\dist\styles\account.changepwd.css" />
     <Content Include="wwwroot\dist\styles\account.changepwd.js" />
@@ -1038,7 +1042,6 @@
     <Content Include="wwwroot\dist\js\checkinout.edit.js.map" />
     <Content Include="wwwroot\dist\js\checkinout.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\department.edit.js.map" />
-    <Content Include="wwwroot\dist\js\department.index.js.map" />
     <Content Include="wwwroot\dist\js\discipline.detail.js.map" />
     <Content Include="wwwroot\dist\js\discipline.summary.js.map" />
     <Content Include="wwwroot\dist\js\discipline.summary.per.year.js.map" />
@@ -1054,15 +1057,12 @@
     <Content Include="wwwroot\dist\js\employee.user.management.js.map" />
     <Content Include="wwwroot\dist\js\employee.workfromhome.js.map" />
     <Content Include="wwwroot\dist\js\extensionno.create.js.map" />
-    <Content Include="wwwroot\dist\js\extensionno.index.js.map" />
     <Content Include="wwwroot\dist\js\external.group.js.map" />
     <Content Include="wwwroot\dist\js\function.index.js.map" />
     <Content Include="wwwroot\dist\js\holiday.edit.js.map" />
     <Content Include="wwwroot\dist\js\holiday.index.js.map" />
     <Content Include="wwwroot\dist\js\home.index.js.map" />
     <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js.map" />
-    <Content Include="wwwroot\dist\js\joblevel.js.map" />
-    <Content Include="wwwroot\dist\js\jobtitle.js.map" />
     <Content Include="wwwroot\dist\js\keepinview.create.js.map" />
     <Content Include="wwwroot\dist\js\keepinview.edit.js.map" />
     <Content Include="wwwroot\dist\js\keepinview.myrequest.js.map" />
@@ -1072,7 +1072,6 @@
     <Content Include="wwwroot\dist\js\leave.create.js.map" />
     <Content Include="wwwroot\dist\js\leave.myrequest.js.map" />
     <Content Include="wwwroot\dist\js\leave.request.detail.js.map" />
-    <Content Include="wwwroot\dist\js\login.js.map" />
     <Content Include="wwwroot\dist\js\main.js.map" />
     <Content Include="wwwroot\dist\js\memo.edit.js.map" />
     <Content Include="wwwroot\dist\js\memo.js.map" />
@@ -1112,7 +1111,6 @@
     <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
     <Content Include="wwwroot\dist\js\schedule.arrange.js.map" />
     <Content Include="wwwroot\dist\js\section.edit.js.map" />
-    <Content Include="wwwroot\dist\js\section.index.js.map" />
     <Content Include="wwwroot\dist\js\shift.edit.js.map" />
     <Content Include="wwwroot\dist\js\sick.leave.balance.index.js.map" />
     <Content Include="wwwroot\dist\js\team.discipline.rule.js.map" />
@@ -1122,7 +1120,6 @@
     <Content Include="wwwroot\dist\js\team.edit.supervisor.js.map" />
     <Content Include="wwwroot\dist\js\team.index.js.map" />
     <Content Include="wwwroot\dist\js\unit.edit.js.map" />
-    <Content Include="wwwroot\dist\js\unit.index.js.map" />
     <Content Include="wwwroot\dist\js\workingcalendar.js.map" />
     <Content Include="wwwroot\dist\styles\account.changepwd.js.map" />
     <Content Include="wwwroot\dist\styles\account.edit.profile.js.map" />
@@ -1340,6 +1337,17 @@
     <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_multiselect.scss" />
     <Content Include="wwwroot\sources\styles\vendors\_weekpicker.scss" />
+    <Content Include="wwwroot\dist\js\auth.index.js.map" />
+    <Content Include="wwwroot\dist\js\department.create.js.map" />
+    <Content Include="wwwroot\dist\js\department.home.js.map" />
+    <Content Include="wwwroot\dist\js\extensionno.edit.js.map" />
+    <Content Include="wwwroot\dist\js\extensionno.home.js.map" />
+    <Content Include="wwwroot\dist\js\joblevel.index.js.map" />
+    <Content Include="wwwroot\dist\js\jobtitle.index.js.map" />
+    <Content Include="wwwroot\dist\js\section.create.js.map" />
+    <Content Include="wwwroot\dist\js\section.home.js.map" />
+    <Content Include="wwwroot\dist\js\unit.create.js.map" />
+    <Content Include="wwwroot\dist\js\unit.home.js.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">
