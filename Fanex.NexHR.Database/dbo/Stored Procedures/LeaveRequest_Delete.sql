@@ -1,5 +1,7 @@
 ﻿
 
+
+
 CREATE PROCEDURE [dbo].[LeaveRequest_Delete] @RequestId BIGINT
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -101,6 +103,9 @@ BEGIN
 	WHERE RequestId = @RequestId
 
 	DELETE dbo.tmpHospitalizationLeaveBalance WITH (ROWLOCK, UPDLOCK)
+	WHERE RequestId = @RequestId
+
+	DELETE dbo.HospitalLeave WITH (ROWLOCK, UPDLOCK)
 	WHERE RequestId = @RequestId
 
 	DELETE dbo.tmpSickLeaveBalance WITH (ROWLOCK, UPDLOCK)

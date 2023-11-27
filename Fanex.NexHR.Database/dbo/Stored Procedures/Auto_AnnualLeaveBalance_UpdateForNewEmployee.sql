@@ -98,6 +98,7 @@ BEGIN
 			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
 			WHERE emp.EmpId = lt.EmpId
 				AND lt.FromDate >= @FromDate
+				AND YEAR(lt.FromDate) = @Year
 				AND lt.CreditDays > 0
 				AND lt.RequestId IS NULL
 			)
@@ -128,6 +129,7 @@ BEGIN
 			FROM dbo.LeaveTrans AS lt WITH (NOLOCK)
 			WHERE emp.EmpId = lt.EmpId
 				AND lt.FromDate >= @FromDate
+				AND YEAR(lt.FromDate) = @Year
 				AND lt.CreditDays > 0
 				AND lt.RequestId IS NULL
 			)

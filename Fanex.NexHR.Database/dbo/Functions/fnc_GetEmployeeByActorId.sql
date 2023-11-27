@@ -117,7 +117,7 @@ RETURN WITH cteEmployee AS (
 				)
 		
 		UNION
-		SELECT e.EmpId
+		SELECT ee.EmpId
 		FROM dbo.Employee AS e WITH (NOLOCK)
 			INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.GroupId = e.GroupId
 		WHERE e.EmpId = @EmpId

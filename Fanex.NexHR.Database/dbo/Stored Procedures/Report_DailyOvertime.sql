@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Report_DailyOvertime] @ActorId INT
+﻿
+
+CREATE PROCEDURE [dbo].[Report_DailyOvertime] @ActorId INT
 	,@fromDate DATE
 	,@toDate DATE
 	,@TeamIds VARCHAR(MAX) = NULL
@@ -58,7 +60,7 @@ BEGIN
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
 		) AS member ON emp.EmpId = member.EmpId
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId AND empsum.IsTopManager = 0
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		INNER JOIN dbo.Section AS sec WITH (NOLOCK) ON gr.SectionId = sec.SectionId
 		INNER JOIN dbo.Department AS dept WITH (NOLOCK) ON sec.DepartmentId = dept.DepartmentId

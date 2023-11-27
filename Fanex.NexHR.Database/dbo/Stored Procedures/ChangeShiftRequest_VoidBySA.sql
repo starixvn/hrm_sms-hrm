@@ -1,6 +1,5 @@
 ﻿
 
-
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_VoidBySA] @RequestId BIGINT
 	,@ActorId INT
 	,@Comment NVARCHAR(500) = ''
@@ -195,6 +194,13 @@ BEGIN
 		,@toDate = @ToDate
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
+
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate
+		,@EmployeeIds = @EmpId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment

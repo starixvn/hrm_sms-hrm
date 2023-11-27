@@ -65,7 +65,7 @@ BEGIN
 			SELECT TOP 1 shift.ShiftId
 			FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
 			WHERE shift.EmployeeId = emp.EmpId
-				AND shift.ShiftId > 0
+				--AND shift.ShiftId > 0
 				AND shift.FromDate <= @FromDate
 			ORDER BY shift.FromDate DESC
 			) AS shift
@@ -201,6 +201,9 @@ BEGIN
 	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tblDate AS tblc WITH (NOLOCK) ON empca.EmpId = tblc.EmpId
 		AND empca.WorkDate = tblc.WorkDate
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND emp.isDeleted = 0
 	WHERE empca.ShiftId IS NULL
 		AND tblc.ShiftId IS NOT NULL
 		AND empca.IsOffDay = 0
@@ -208,6 +211,21 @@ BEGIN
 		AND empca.IsLeaveDay = 0
 		AND empca.IsKeepInView = 0
 		AND empca.ChangeShiftId IS NULL
+		AND emp.JoinedDate <= tblc.WorkDate
+		AND (
+			emp.ResignedDate IS NULL
+			OR emp.ResignedDate > tblc.WorkDate
+			)
+
+	--UPDATE empca
+	--SET empca.ShiftId = NULL
+	--	,empca.ModifiedDate = @MofifiedDate
+	--FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+	--	INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
+	--	AND emp.[Enabled] = 1
+	--	AND emp.isDeleted = 0
+	--WHERE empca.ShiftId IS NOT NULL
+	--	AND emp.JoinedDate > empca.WorkDate
 
 	DROP TABLE #tblDate
 END

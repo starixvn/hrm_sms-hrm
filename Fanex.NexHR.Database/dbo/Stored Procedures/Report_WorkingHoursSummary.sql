@@ -1,4 +1,6 @@
 ﻿
+
+
 CREATE PROCEDURE [dbo].[Report_WorkingHoursSummary] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -34,25 +36,28 @@ BEGIN
 		,@WeddingLeaveTypeId SMALLINT = 6
 		,@SuspendWorkLeaveTypeId SMALLINT = 3
 		,@HospitalizationLeaveTypeId SMALLINT = 9
+		,@CompanyEventLeaveTypeId SMALLINT = 38
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@VerifiedStatusId TINYINT = 2
 		,@ApprovedStatusId TINYINT = 4
 		,@ProcessedStatusId TINYINT = 6
-	DECLARE @tblGroupIds TABLE (GroupId INT)
-	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+	CREATE TABLE #tblGroupIds (GroupId INT PRIMARY KEY)
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT PRIMARY KEY)
 
 	IF ISNULL(@TeamIds, '') <> ''
 	BEGIN
-		INSERT INTO @tblGroupIds (GroupId)
-		SELECT val
+		INSERT INTO #tblGroupIds (GroupId)
+		SELECT DISTINCT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
+		WHERE ISNUMERIC(val) = 1
 	END
 
 	INSERT INTO #tblEmployeeIds (EmployeeId)
-	SELECT emp.EmpId
+	SELECT DISTINCT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		AND empsum.IsTopManager = 0
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
@@ -84,7 +89,7 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl WITH (NOLOCK)
 			WHERE tbl.GroupId = emp.GroupId
 			)
 
@@ -271,6 +276,20 @@ BEGIN
 						END
 				ELSE 0
 				END) AS MaternityLeave
+		,SUM(CASE 
+				WHEN empca.IsOffDay = 0
+					AND empca.IsHoliday = 0
+					AND empca.IsLeaveDay = 1
+					AND (
+						empca.LeaveTypeId = @CompanyEventLeaveTypeId
+						OR empca.LeaveTypeId2 = @CompanyEventLeaveTypeId
+						) THEN CASE 
+						WHEN ISNULL(empca.LeaveTypeId2, 0) <> 0
+							AND ISNULL(empca.LeaveTypeId, 0) <> ISNULL(empca.LeaveTypeId2, 0) THEN 0.5
+						ELSE empca.LeaveDay
+						END
+				ELSE 0
+				END) AS CompanyEvent
 		,SUM(ISNULL(ot.NormalHours, 0)) AS NormalOvertimeHours
 		,SUM(ISNULL(ot.OffHours, 0)) AS OffOvertimeHours
 		,SUM(ISNULL(ot.PublicHours, 0)) AS PublicOvertimeHours
@@ -300,5 +319,7 @@ BEGIN
 		,dept.Code
 	ORDER BY emp.NickName
 
+	DROP TABLE #tblGroupIds
+	
 	DROP TABLE #tblEmployeeIds
 END

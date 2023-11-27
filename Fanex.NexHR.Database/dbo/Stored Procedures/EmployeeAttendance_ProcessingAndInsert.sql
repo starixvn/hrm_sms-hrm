@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[EmployeeAttendance_ProcessingAndInsert] @empId INT = NULL
+﻿CREATE PROCEDURE [dbo].[EmployeeAttendance_ProcessingAndInsert] @empId INT = NULL
 	,@fromTime DATETIME
 	,@toTime DATETIME
 	,@onlyUpdate BIT = 0
@@ -82,16 +81,20 @@ BEGIN
 		,RecordTime
 		,InOutType
 		)
-	SELECT Id
-		,EmpId
-		,RecordTime
-		,InOutType
-	FROM dbo.TimeRecord WITH (NOLOCK)
-	WHERE RecordTime BETWEEN DATEADD(HH, - 2, CONVERT(VARCHAR(10), @fromTime, 111))
+	SELECT tr.Id
+		,tr.EmpId
+		,tr.RecordTime
+		,tr.InOutType
+	FROM dbo.TimeRecord AS tr WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON tr.EmpId = emp.EmpId
+	WHERE emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+		AND tr.RecordTime BETWEEN DATEADD(HH, - 2, CONVERT(VARCHAR(10), @fromTime, 111))
 			AND DATEADD(d, 2, CONVERT(VARCHAR(10), @toTime, 111))
+		AND emp.JoinedDate <= CAST(tr.RecordTime AS DATE)
 		AND (
 			@empId IS NULL
-			OR EmpId = @empId
+			OR tr.EmpId = @empId
 			)
 
 	IF EXISTS (

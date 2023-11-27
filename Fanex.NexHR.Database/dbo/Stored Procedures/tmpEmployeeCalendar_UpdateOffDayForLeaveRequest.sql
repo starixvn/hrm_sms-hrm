@@ -1,6 +1,4 @@
 ﻿
-
-
 CREATE PROCEDURE [dbo].[tmpEmployeeCalendar_UpdateOffDayForLeaveRequest] @requestId BIGINT = NULL
 	,@empId INT
 	,@leaveTypeId INT
@@ -21,7 +19,7 @@ BEGIN
 
 	DECLARE @tempFromDate DATE
 		,@tempToDate DATE
-		,@OffDaysbyWeek TINYINT
+		,@OffDaysbyWeek SMALLINT
 		,@DefaultDateFirst TINYINT = @@datefirst
 		-- leave type 
 		,@UnpaidLeave TINYINT = 25
@@ -51,8 +49,8 @@ BEGIN
 		SET @tempFromDate = @FromDate
 		SET @tempToDate = DATEADD(DAY, 6, @tempFromDate)
 
-		DECLARE @TotalOffDaysUsed TINYINT = 0
-			,@OffDayLeft TINYINT = 0
+		DECLARE @TotalOffDaysUsed SMALLINT = 0
+			,@OffDayLeft SMALLINT = 0
 		DECLARE @tblOffDay TABLE (WorkDate DATE)
 
 		SELECT @TotalOffDaysUsed = COUNT(1)

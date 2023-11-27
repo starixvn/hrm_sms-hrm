@@ -13,6 +13,10 @@ Param's Explanation:
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT MAX(UC_ModifiedDate)
+	DECLARE @modifiedDate DATETIME
+
+	SELECT @modifiedDate = MAX(UC_ModifiedDate)
 	FROM dbo.Employee WITH (NOLOCK)
+
+	SELECT ISNULL(@modifiedDate, '2023-11-10')
 END

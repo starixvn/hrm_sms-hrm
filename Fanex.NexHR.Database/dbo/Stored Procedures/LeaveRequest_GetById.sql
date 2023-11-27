@@ -17,6 +17,7 @@ BEGIN
 		,lr.FromDate
 		,lr.ToDate
 		,lr.TotalDays
+		,hl.IsHospitalApplication
 		,wk.Remark
 		,lr.RefNo
 		,wk.CreatedDate
@@ -47,6 +48,7 @@ BEGIN
 		LEFT JOIN dbo.Employee AS ve WITH (NOLOCK) ON wk.VerifierId = ve.EmpId
 		LEFT JOIN dbo.Employee AS ap WITH (NOLOCK) ON wk.ApproverId = ap.EmpId
 		LEFT JOIN dbo.Employee AS pr WITH (NOLOCK) ON wk.HRId = pr.EmpId
+		LEFT JOIN dbo.HospitalLeave AS hl WITH (NOLOCK) ON hl.RequestId = lr.RequestId
 	WHERE lr.RequestId = @RequestId
 
 	SELECT ldt.RequestId

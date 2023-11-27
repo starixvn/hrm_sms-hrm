@@ -91,25 +91,31 @@ BEGIN
 
 	-- overtime
 	SELECT @TotalOvertimePendingByVerifier = COUNT(1)
-	FROM dbo.OTMonthlyRequest WITH (NOLOCK)
-	WHERE VerifierId = @EmployeeId
-		AND CurrentStatus = @PendingStatusId
+	FROM dbo.OTMonthlyRequest AS ot WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ot.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+	WHERE ot.VerifierId = @EmployeeId
+		AND ot.CurrentStatus = @PendingStatusId
 		AND (
-			ISNULL(NormalHours, 0) <> 0
-			OR ISNULL(OffHours, 0) <> 0
-			OR ISNULL(PublicHours, 0) <> 0
-			OR ISNULL(SpecialHours, 0) <> 0
+			ISNULL(ot.NormalHours, 0) <> 0
+			OR ISNULL(ot.OffHours, 0) <> 0
+			OR ISNULL(ot.PublicHours, 0) <> 0
+			OR ISNULL(ot.SpecialHours, 0) <> 0
 			)
 
 	SELECT @TotalOvertimePendingByApprover = COUNT(1)
-	FROM dbo.OTMonthlyRequest WITH (NOLOCK)
-	WHERE ApproverId = @EmployeeId
-		AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId)
+	FROM dbo.OTMonthlyRequest AS ot WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON ot.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+	WHERE ot.ApproverId = @EmployeeId
+		AND ot.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId)
 		AND (
-			ISNULL(NormalHours, 0) <> 0
-			OR ISNULL(OffHours, 0) <> 0
-			OR ISNULL(PublicHours, 0) <> 0
-			OR ISNULL(SpecialHours, 0) <> 0
+			ISNULL(ot.NormalHours, 0) <> 0
+			OR ISNULL(ot.OffHours, 0) <> 0
+			OR ISNULL(ot.PublicHours, 0) <> 0
+			OR ISNULL(ot.SpecialHours, 0) <> 0
 			)
 
 	-- pending
@@ -123,72 +129,75 @@ BEGIN
 		,ToDate
 		)
 	SELECT CASE 
-			WHEN VerifierId = @EmployeeId
-				AND VerifierId <> ApproverId THEN @VerifierId
-			WHEN ApproverId = @EmployeeId THEN @ApproverId
+			WHEN req.VerifierId = @EmployeeId
+				AND req.VerifierId <> req.ApproverId THEN @VerifierId
+			WHEN req.ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
-			WHEN RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
-			WHEN RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
-			WHEN RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
-			WHEN RequestType = @LeaveTypeId THEN @LeaveTypeId
-			WHEN RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
+			WHEN req.RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
+			WHEN req.RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
+			WHEN req.RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
+			WHEN req.RequestType = @LeaveTypeId THEN @LeaveTypeId
+			WHEN req.RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
 			END
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
-							AND CurrentStatus = @PendingStatusId THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
+						WHEN req.VerifierId = @EmployeeId
+							AND req.CurrentStatus = @PendingStatusId THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
-							AND CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId) THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId) THEN 1
+						WHEN req.VerifierId = @EmployeeId
+							AND req.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId) THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
-							AND CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
+						WHEN req.VerifierId = @EmployeeId
+							AND req.CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
-		,MIN(CreatedDate) AS FromDate
-		,MAX(CreatedDate) AS ToDate
-	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
+		,MIN(req.CreatedDate) AS FromDate
+		,MAX(req.CreatedDate) AS ToDate
+	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND emp.isDeleted = 0
 	WHERE (
-			VerifierId = @EmployeeId
-			OR ApproverId = @EmployeeId
+			req.VerifierId = @EmployeeId
+			OR req.ApproverId = @EmployeeId
 			)
 		AND CASE 
-			WHEN VerifierId = @EmployeeId
-				AND CurrentStatus = @PendingStatusId THEN 1
-			WHEN ApproverId = @EmployeeId
-				AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
+			WHEN req.VerifierId = @EmployeeId
+				AND req.CurrentStatus = @PendingStatusId THEN 1
+			WHEN req.ApproverId = @EmployeeId
+				AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
 			ELSE 0
 			END = 1
 	GROUP BY CASE 
-			WHEN VerifierId = @EmployeeId
-				AND VerifierId <> ApproverId THEN @VerifierId
-			WHEN ApproverId = @EmployeeId THEN @ApproverId
+			WHEN req.VerifierId = @EmployeeId
+				AND req.VerifierId <> req.ApproverId THEN @VerifierId
+			WHEN req.ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
-			WHEN RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
-			WHEN RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
-			WHEN RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
-			WHEN RequestType = @LeaveTypeId THEN @LeaveTypeId
-			WHEN RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
+			WHEN req.RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
+			WHEN req.RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
+			WHEN req.RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
+			WHEN req.RequestType = @LeaveTypeId THEN @LeaveTypeId
+			WHEN req.RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
 			END
 	
 	UNION
@@ -209,72 +218,75 @@ BEGIN
 		,TotalRejected
 		)
 	SELECT CASE 
-			WHEN VerifierId = @EmployeeId
-				AND VerifierId <> ApproverId THEN @VerifierId
-			WHEN ApproverId = @EmployeeId THEN @ApproverId
+			WHEN req.VerifierId = @EmployeeId
+				AND req.VerifierId <> req.ApproverId THEN @VerifierId
+			WHEN req.ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
-			WHEN RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
-			WHEN RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
-			WHEN RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
-			WHEN RequestType = @LeaveTypeId THEN @LeaveTypeId
-			WHEN RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
+			WHEN req.RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
+			WHEN req.RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
+			WHEN req.RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
+			WHEN req.RequestType = @LeaveTypeId THEN @LeaveTypeId
+			WHEN req.RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
 			END
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
-							AND CurrentStatus = @PendingStatusId THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
+						WHEN req.VerifierId = @EmployeeId
+							AND req.CurrentStatus = @PendingStatusId THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
-							AND CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId) THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId) THEN 1
+						WHEN req.VerifierId = @EmployeeId
+							AND req.CurrentStatus IN (@VerifiedStatusId, @ApprovedStatusId, @ProcessedStatusId) THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@ApprovedStatusId, @ProcessedStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
 		,SUM(CASE 
 				WHEN CASE 
-						WHEN VerifierId = @EmployeeId
+						WHEN req.VerifierId = @EmployeeId
 							AND CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
-						WHEN ApproverId = @EmployeeId
-							AND CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
+						WHEN req.ApproverId = @EmployeeId
+							AND req.CurrentStatus IN (@NotVerifiedStatusId, @RejectedStatusId, @VoidStatusId) THEN 1
 						ELSE 0
 						END = 1 THEN 1
 				ELSE 0
 				END)
-	FROM dbo.WorkingTimeRequest WITH (NOLOCK)
-	WHERE CreatedDate >= @fromdate
-		AND CreatedDate < @toDate
+	FROM dbo.WorkingTimeRequest AS req WITH (NOLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON req.EmpId = emp.EmpId
+		AND emp.[Enabled] = 1
+		AND emp.isDeleted = 0
+	WHERE req.CreatedDate >= @fromdate
+		AND req.CreatedDate < @toDate
 		AND (
-			VerifierId = @EmployeeId
-			OR ApproverId = @EmployeeId
+			req.VerifierId = @EmployeeId
+			OR req.ApproverId = @EmployeeId
 			)
 		AND CASE 
-			WHEN VerifierId = @EmployeeId
-				AND CurrentStatus = @PendingStatusId THEN 1
-			WHEN ApproverId = @EmployeeId
-				AND CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
+			WHEN req.VerifierId = @EmployeeId
+				AND req.CurrentStatus = @PendingStatusId THEN 1
+			WHEN req.ApproverId = @EmployeeId
+				AND req.CurrentStatus IN (@PendingStatusId, @VerifiedStatusId) THEN 1
 			ELSE 0
 			END = 0
 	GROUP BY CASE 
-			WHEN VerifierId = @EmployeeId
-				AND VerifierId <> ApproverId THEN @VerifierId
-			WHEN ApproverId = @EmployeeId THEN @ApproverId
+			WHEN req.VerifierId = @EmployeeId
+				AND req.VerifierId <> req.ApproverId THEN @VerifierId
+			WHEN req.ApproverId = @EmployeeId THEN @ApproverId
 			END
 		,CASE 
-			WHEN RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
-			WHEN RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
-			WHEN RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
-			WHEN RequestType = @LeaveTypeId THEN @LeaveTypeId
-			WHEN RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
+			WHEN req.RequestType IN (@CheckInTypeId, @CheckOutTypeId) THEN @CheckInTypeId
+			WHEN req.RequestType IN (@LateInTypeId, @EarlyOutTypeId) THEN @LateInTypeId
+			WHEN req.RequestType = @ChangeShiftTypeId THEN @ChangeShiftTypeId
+			WHEN req.RequestType = @LeaveTypeId THEN @LeaveTypeId
+			WHEN req.RequestType = @KeepInViewTypeId THEN @KeepInViewTypeId
 			END
 	
 	UNION

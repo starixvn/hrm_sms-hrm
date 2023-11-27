@@ -1,7 +1,8 @@
-﻿CREATE PROCEDURE [dbo].[ScheduleArrangement_SyncWorkingShift] @ActorId INT
+﻿
+CREATE PROCEDURE [dbo].[ScheduleArrangement_SyncWorkingShift] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
-	,@EmployeeIds VARCHAR(MAX) = ''
+	,@EmployeeIds NVARCHAR(MAX) = ''
 	,@WorkingShiftXml NVARCHAR(MAX) = ''
 	,@ErrCode INT = 0 OUTPUT
 	,@ErrMsg NVARCHAR(200) = '' OUTPUT
@@ -42,7 +43,7 @@ BEGIN
 		,TotalHours DECIMAL(10, 2)
 		)
 
-	CREATE TABLE #tmpEmployeeIds (EmpId INT)
+	CREATE TABLE #tmpEmployeeIds (EmpId INT PRIMARY KEY)
 
 	CREATE TABLE #tmpEmployeeCalendar (
 		EmpId INT
@@ -55,8 +56,9 @@ BEGIN
 	IF ISNULL(@EmployeeIds, '') <> ''
 	BEGIN
 		INSERT INTO #tmpEmployeeIds (EmpId)
-		SELECT val
+		SELECT DISTINCT val
 		FROM dbo.fnc_strSplit(@EmployeeIds, ',')
+		WHERE ISNUMERIC(val) = 1
 	END
 
 	BEGIN TRY

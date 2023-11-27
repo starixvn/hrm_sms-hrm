@@ -27,18 +27,22 @@ BEGIN
 		,@Deleted TINYINT = 3
 		-- leave type 
 		,@KIVByHourLeaveType INT = 48
-	DECLARE @tblGroupIds TABLE (GroupId INT)
-	CREATE TABLE #tblEmployeeIds (EmployeeId INT)
+	CREATE TABLE #tblGroupIds (GroupId INT PRIMARY KEY)
+	CREATE TABLE #tblEmployeeIds (EmployeeId INT PRIMARY KEY)
 
 	IF ISNULL(@TeamIds, '') <> ''
-		INSERT INTO @tblGroupIds (GroupId)
+	BEGIN
+		INSERT INTO #tblGroupIds (GroupId)
 		SELECT val
 		FROM dbo.fnc_strSplit(@TeamIds, ',')
+		WHERE ISNUMERIC(val) = 1
+	END
 
 	INSERT INTO #tblEmployeeIds (EmployeeId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		AND empsum.IsTopManager = 0
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
@@ -70,7 +74,7 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM @tblGroupIds AS tbl
+			FROM #tblGroupIds AS tbl WITH (NOLOCK)
 			WHERE tbl.GroupId = emp.GroupId
 			)
 
@@ -188,6 +192,7 @@ BEGIN
 	ORDER BY EmployeeId
 		,WorkDate
 
+	DROP TABLE #tblGroupIds
 	DROP TABLE #tblEmployeeIds
 	DROP TABLE #tblEmployeeCalendar
 END

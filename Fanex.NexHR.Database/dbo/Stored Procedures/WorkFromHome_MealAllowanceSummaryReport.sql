@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[WorkFromHome_MealAllowanceSummaryReport] @FromDate DATE
+﻿CREATE PROCEDURE [dbo].[WorkFromHome_MealAllowanceSummaryReport] @FromDate DATE
 	,@ToDate DATE
 	,@TeamId VARCHAR(MAX) = ''
 	,@EmployeeId INT = NULL
@@ -33,7 +32,7 @@ BEGIN
 	INSERT INTO #tblEmpIds (EmpId)
 	SELECT e.EmpId
 	FROM dbo.Employee AS e WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId
+		INNER JOIN dbo.EmployeeSummary AS es WITH (NOLOCK) ON e.EmpId = es.EmpId AND es.IsTopManager = 0
 	WHERE (
 			@EmployeeId IS NULL
 			OR e.EmpId = @EmployeeId

@@ -22,21 +22,21 @@ Param's Explanation:
 BEGIN
 	CREATE TABLE #tblstatus (Currentstatus TINYINT)
 
-	CREATE TABLE #tblGroupsList (GroupId INT)
+	CREATE TABLE #tblGroupsList (GroupId INT PRIMARY KEY)
 
-	CREATE TABLE #tblEmployeeId (EmpId INT)
+	CREATE TABLE #tblEmployeeId (EmpId INT PRIMARY KEY)
 
-	CREATE TABLE #tblRequestId (RequestId INT)
+	CREATE TABLE #tblRequestId (RequestId INT PRIMARY KEY)
 
 	CREATE TABLE #tblTotalDaysRequestInMonth (
-		empid INT
+		EmpId INT
 		,RequestType TINYINT
 		,TotalDaysRequest INT
 		)
 
 	CREATE TABLE #tblRequestInDaily (
 		RequestID BIGINT
-		,empid INT
+		,EmpId INT
 		,RequestType TINYINT
 		,InOutMins INT
 		,ActualInOutMins INT
@@ -78,7 +78,7 @@ BEGIN
 			OR @role LIKE '%6%'
 		BEGIN
 			INSERT INTO #tblEmployeeId (EmpID)
-			SELECT DISTINCT e.EmpId
+			SELECT e.EmpId
 			FROM dbo.Employee AS e WITH (NOLOCK)
 		END
 		ELSE IF @role LIKE '%2%'
@@ -107,12 +107,9 @@ BEGIN
 	INSERT INTO #tblRequestId (RequestId)
 	SELECT r.RequestId
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-		INNER JOIN #tblEmployeeId AS eid ON r.EmpId = eid.EmpId
+		INNER JOIN #tblEmployeeId AS eid WITH (NOLOCK) ON r.EmpId = eid.EmpId
 		INNER JOIN dbo.Employee AS e WITH (NOLOCK) ON e.empID = eid.empID
-		AND (
-			e.isDeleted IS NULL
-			OR e.isDeleted = 0
-			)
+		AND e.isDeleted = 0
 		LEFT JOIN dbo.EmployeeSummary AS e_s WITH (NOLOCK) ON e_s.EmpId = eid.EmpId
 	WHERE (
 			@requestType = 0
@@ -143,8 +140,8 @@ BEGIN
 				AND (
 					EXISTS (
 						SELECT 1
-						FROM #tblEmployeeId
-						WHERE EmpId = r.EmpId
+						FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+						WHERE tblemp.EmpId = r.EmpId
 						)
 					OR r.VerifierId = @SupervisorID
 					OR r.ApproverId = @SupervisorID
@@ -155,24 +152,26 @@ BEGIN
 				AND (
 					EXISTS (
 						SELECT 1
-						FROM #tblEmployeeId
-						WHERE EmpId = r.EmpId
+						FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+						WHERE tblemp.EmpId = r.EmpId
 						)
 					)
 				)
 			)
 		AND (
 			ISNULL(@status, '') = ''
-			OR r.currentstatus IN (
-				SELECT Currentstatus
-				FROM #tblstatus
+			OR EXISTS (
+				SELECT 1
+				FROM #tblstatus AS tblstatus WITH (NOLOCK)
+				WHERE tblstatus.Currentstatus = r.CurrentStatus
 				)
 			)
 		AND (
 			e.GroupId IS NULL
-			OR e.GroupId IN (
-				SELECT GroupId
-				FROM #tblGroupsList
+			OR EXISTS (
+				SELECT 1
+				FROM #tblGroupsList AS tblgr WITH (NOLOCK)
+				WHERE tblgr.GroupId = e.GroupId
 				)
 			)
 		AND (
@@ -194,9 +193,10 @@ BEGIN
 		INNER JOIN dbo.LateInEarlyOutRequest AS inout WITH (NOLOCK) ON wt.RequestId = inout.RequestId
 		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
-		AND ee.GroupId IN (
-			SELECT GroupId
-			FROM #tblGroupsList
+		AND EXISTS (
+			SELECT 1
+			FROM #tblGroupsList AS tblgr WITH (NOLOCK)
+			WHERE tblgr.GroupId = ee.GroupId
 			)
 		AND (
 			DATEDIFF(MM, inout.OnDate, @fromdate) = 0
@@ -204,8 +204,8 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblEmployeeId
-			WHERE EmpId = wt.EmpId
+			FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+			WHERE tblemp.EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
@@ -222,9 +222,10 @@ BEGIN
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
-		AND ee.GroupId IN (
+		AND EXISTS (
 			SELECT GroupId
-			FROM #tblGroupsList
+			FROM #tblGroupsList AS tblgr WITH (NOLOCK)
+			WHERE tblgr.GroupId = ee.GroupId
 			)
 		AND (
 			DATEDIFF(MM, lr.FromDate, @fromdate) = 0
@@ -232,8 +233,8 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblEmployeeId
-			WHERE EmpId = wt.EmpId
+			FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+			WHERE tblemp.EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
@@ -255,8 +256,8 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblEmployeeId
-			WHERE EmpId = wt.EmpId
+			FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+			WHERE tblemp.EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
@@ -279,8 +280,8 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblEmployeeId
-			WHERE EmpId = wt.EmpId
+			FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+			WHERE tblemp.EmpId = wt.EmpId
 			)
 	GROUP BY wt.RequestType
 
@@ -296,9 +297,10 @@ BEGIN
 		INNER JOIN dbo.CheckInOutRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 		INNER JOIN dbo.Employee AS ee WITH (NOLOCK) ON ee.EmpId = wt.EmpId
 	WHERE wt.currentstatus = 6
-		AND ee.GroupId IN (
+		AND EXISTS (
 			SELECT GroupId
-			FROM #tblGroupsList
+			FROM #tblGroupsList AS tblgr WITH (NOLOCK)
+			WHERE tblgr.GroupId = ee.GroupId
 			)
 		AND (
 			DATEDIFF(MM, lr.OnDate, @fromdate) = 0
@@ -306,8 +308,8 @@ BEGIN
 			)
 		AND EXISTS (
 			SELECT 1
-			FROM #tblEmployeeId
-			WHERE EmpId = wt.EmpId
+			FROM #tblEmployeeId AS tblemp WITH (NOLOCK)
+			WHERE tblemp.EmpId = wt.EmpId
 			)
 	GROUP BY wt.empid
 		,wt.RequestType
@@ -369,7 +371,7 @@ BEGIN
 		,lr.TotalDays
 		,1
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON wt.RequestId = rq.RequestId
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 		LEFT JOIN dbo.LeaveRequestDetail AS ldt WITH (NOLOCK) ON lr.RequestId = ldt.RequestId
 	WHERE lr.TotalDays = 0.5
@@ -392,7 +394,7 @@ BEGIN
 		,lr.TotalDays
 		,0
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON wt.RequestId = rq.RequestId
 		INNER JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 	WHERE lr.TotalDays <> 0.5
 
@@ -426,7 +428,7 @@ BEGIN
 		,NULL
 		,lr.KeepInViewType
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON wt.RequestId = rq.RequestId
 		INNER JOIN dbo.KeepInViewRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 
 	INSERT INTO #tblRequestInDaily (
@@ -453,7 +455,7 @@ BEGIN
 			ELSE 0
 			END
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON wt.RequestId = rq.RequestId
 		INNER JOIN dbo.CheckInOutRequest AS lr WITH (NOLOCK) ON wt.RequestId = lr.RequestId
 		LEFT JOIN dbo.EmployeeCalendar AS ec WITH (NOLOCK) ON ec.WorkDate = lr.OnDate
 		AND ec.EmpId = lr.EmpId
@@ -505,7 +507,7 @@ BEGIN
 		,MAX(csd.FromShift) FromShift
 		,MAX(csd.ToShift) ToShift
 	FROM dbo.WorkingTimeRequest AS wt WITH (NOLOCK)
-		INNER JOIN #tblRequestId AS rq ON wt.RequestId = rq.RequestId
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON wt.RequestId = rq.RequestId
 		INNER JOIN dbo.ChangeShiftRequest AS cs WITH (NOLOCK) ON wt.RequestId = cs.RequestId
 		INNER JOIN dbo.ChangeShiftRequestDetail AS csd WITH (NOLOCK) ON csd.RequestId = cs.RequestId
 	GROUP BY wt.RequestID
@@ -540,10 +542,10 @@ BEGIN
 			,CreatedDate
 			,EmpId
 		FROM dbo.WorkingTimeRequest AS rq WITH (NOLOCK)
-			INNER JOIN #tblRequestId AS r ON r.RequestId = rq.RequestId
+			INNER JOIN #tblRequestId AS r WITH (NOLOCK) ON r.RequestId = rq.RequestId
 		) AS wt
-		INNER JOIN #tblRequestInDaily AS rd ON wt.RequestId = rd.RequestID
-		INNER JOIN #tblRequestId AS r1 ON r1.RequestId = rd.RequestId
+		INNER JOIN #tblRequestInDaily AS rd WITH (NOLOCK) ON wt.RequestId = rd.RequestID
+		INNER JOIN #tblRequestId AS r1 WITH (NOLOCK) ON r1.RequestId = rd.RequestId
 	ORDER BY wt.RequestId
 
 	SELECT r.RequestId
@@ -627,8 +629,8 @@ BEGIN
 		,r.ReworkCount
 		,dbo.fnc_GetAnnualLeaveBalanceByYear(r.EmpId, YEAR(rd.FromDate), r.RequestId) AS AnnualLeaveBalance
 	FROM dbo.WorkingTimeRequest AS r WITH (NOLOCK)
-		INNER JOIN #tblRequestInDaily AS rd ON r.RequestId = rd.RequestID
-		INNER JOIN #tblRequestId AS rq ON r.RequestId = rq.RequestId
+		INNER JOIN #tblRequestInDaily AS rd WITH (NOLOCK) ON r.RequestId = rd.RequestID
+		INNER JOIN #tblRequestId AS rq WITH (NOLOCK) ON r.RequestId = rq.RequestId
 		LEFT JOIN dbo.LateInEarlyOutRequest AS inout WITH (NOLOCK) ON r.RequestId = inout.RequestId
 		LEFT JOIN dbo.LeaveRequest AS lr WITH (NOLOCK) ON r.RequestId = lr.RequestId
 		LEFT JOIN dbo.CheckInOutRequest AS inoutmiss WITH (NOLOCK) ON r.RequestId = inoutmiss.RequestId
@@ -657,7 +659,7 @@ BEGIN
 	SELECT csrd.RequestId
 		,csrd.OnDate
 		,csrd.ToDate
-	FROM #tblRequestId AS r
+	FROM #tblRequestId AS r WITH (NOLOCK)
 		INNER JOIN ChangeShiftRequest AS csr WITH (NOLOCK) ON csr.RequestId = r.RequestId
 		INNER JOIN ChangeShiftRequestDetail AS csrd WITH (NOLOCK) ON csr.RequestId = csrd.RequestId
 

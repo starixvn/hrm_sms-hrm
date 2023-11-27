@@ -18,12 +18,12 @@ BEGIN
 	CREATE TABLE #tmpEmployeeCalendarChange
 	(
 		EmpId INT,
-		WorkDate DATETIME
+		WorkDate DATE
 	)
 
 	INSERT INTO #tmpEmployeeCalendarChange(EmpId, WorkDate)
 	SELECT [EmpId]
-	   ,[WorkDate]
+	   ,CAST([WorkDate] AS DATE)
 	FROM dbo.EmployeeCalendar WITH (NOLOCK)
 	WHERE @FromDate IS NULL
 	OR ModifiedDate > @FromDate
@@ -35,7 +35,7 @@ BEGIN
 	WHERE @FromDate IS NULL
 	OR ca.ModifiedDate > @FromDate
 	UNION
-	SELECT EmpId, AttendanceDate
+	SELECT EmpId, CAST(AttendanceDate AS DATE)
 	FROM dbo.EmployeeAttendance
 	WHERE @FromDate IS NULL
 	OR InsertDate > @FromDate
@@ -46,6 +46,19 @@ BEGIN
 	WHERE @FromDate IS NULL
 	OR wfh.ModifiedDate > @FromDate
 
+	SELECT 
+	a.UserId,
+	a.WorkDate,
+	a.[ShiftId],
+	a.[IsHoliday],
+	a.IsOffDay,
+	a.IsLeaveDay,
+	a.LeaveTypeId,
+	a.LeaveDay,
+	CASE WHEN a.ModifiedDate IS NULL THEN '2023-01-01' ELSE a.ModifiedDate END AS ModifiedDate,
+	HasCheckIn
+	FROM 
+	(
 	SELECT
 	  tcl.[WorkDate]
       ,tcl.[EmpId] AS UserId
@@ -65,7 +78,8 @@ BEGIN
 	INNER JOIN dbo.tmpEmployeeCalendar as tcl  ON tcl.EmpId = tmp.EmpId AND tcl.WorkDate = tmp.WorkDate
 	LEFT JOIN dbo.EmployeeAttendance AS att ON tmp.EmpId = att.EmpId AND tmp.WorkDate = att.AttendanceDate
 	LEFT JOIN dbo.EmployeeWorkFromHome AS wfh ON tmp.EmpId = wfh.EmpId AND tmp.WorkDate BETWEEN wfh.FromDate AND wfh.ToDate
-
+	) AS a
+	WHERE a.WorkDate > DATEADD(dd, -30, GETDATE())
 	DROP TABLE #tmpEmployeeCalendarChange
 
 END

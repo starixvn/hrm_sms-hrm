@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[EmployeeSupervisor] (
+CREATE TABLE [dbo].[EmployeeSupervisor] (
     [OwnerId]      INT          NOT NULL,
     [EmpId]        INT          NOT NULL,
     [ActionType]   TINYINT      NOT NULL,
@@ -14,8 +14,16 @@
 
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IDX_EmpId_ActionType_IsDeleted]
+CREATE NONCLUSTERED INDEX [IX_EmployeeSupervisor_IsDeleted_ActionType]
+    ON [dbo].[EmployeeSupervisor]([IsDeleted] ASC, [ActionType] ASC)
+    ON [Employee];
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_EmployeeSupervisor_EmpId_ActionType_IsDeleted]
     ON [dbo].[EmployeeSupervisor]([EmpId] ASC, [ActionType] ASC, [IsDeleted] ASC)
     ON [Employee];
 

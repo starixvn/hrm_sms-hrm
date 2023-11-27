@@ -111,7 +111,7 @@ BEGIN
 	UNION
 	SELECT @EmpId
 
-	SELECT EmpId
+	SELECT DISTINCT EmpId
 	FROM #tblEmployee WITH (NOLOCK)
 
 	DROP TABLE #tblEmployee

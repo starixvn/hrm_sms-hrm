@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Report_MonthlyOvertime] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
@@ -73,7 +74,7 @@ BEGIN
 	INSERT INTO @tblEmployeeId (EmpId)
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId AND empsum.IsTopManager = 0
 		INNER JOIN @tblGroupIds AS tblgr ON emp.GroupId = tblgr.GroupId
 		INNER JOIN (
 		SELECT EmpId

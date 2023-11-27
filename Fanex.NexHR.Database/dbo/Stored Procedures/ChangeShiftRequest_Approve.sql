@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Approve] @RequestId BIGINT
 	,@RoleId TINYINT
 	,@ActorId INT
@@ -271,6 +272,28 @@ BEGIN
 			,ModifiedDate = @ProcessedDate
 		WHERE RequestId = @RequestId
 	END
+
+	IF @TypeId = @ChangeShift
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(OnDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromDate = MIN(OnDate)
+			,@ToDate = MAX(ToDate)
+		FROM dbo.ChangeShiftRequestDetail WITH (NOLOCK)
+		WHERE RequestId = @RequestId
+	END
+
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate
+		,@EmployeeIds = @EmpId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment

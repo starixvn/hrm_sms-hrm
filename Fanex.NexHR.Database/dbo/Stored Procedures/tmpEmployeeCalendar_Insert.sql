@@ -181,7 +181,7 @@ BEGIN
 			SELECT TOP 1 empshift.ShiftId
 			FROM dbo.ScheduleArrangementDefaultShift AS empshift WITH (NOLOCK)
 			WHERE empshift.EmployeeId = emp.EmpId
-				AND empshift.ShiftId > 0
+				--AND empshift.ShiftId > 0
 				AND empshift.FromDate <= @tempDate
 			ORDER BY empshift.FromDate DESC
 			) AS empshift
@@ -215,7 +215,14 @@ BEGIN
 		AND empca.WorkDate = tmp.WorkDate
 	WHERE (
 			empca.RequestId IS NULL
-			OR (empca.RequestId IS NOT NULL AND (empca.RequestTypeId = @ChangeShiftRequestTypeId OR empca.RequestTypeId = @KeepInViewRequestTypeId))
+			OR (
+				empca.RequestId IS NOT NULL
+				AND (
+					empca.RequestTypeId =  @LeaveRequestTypeId
+					OR empca.RequestTypeId = @ChangeShiftRequestTypeId
+					OR empca.RequestTypeId = @KeepInViewRequestTypeId
+					)
+				)
 			)
 		AND (
 			ISNULL(empca.ShiftId, 0) != ISNULL(tmp.ShiftId, 0)

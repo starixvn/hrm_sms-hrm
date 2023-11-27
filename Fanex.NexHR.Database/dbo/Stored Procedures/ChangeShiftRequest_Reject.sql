@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Reject] @RequestId BIGINT
 	,@ActorId INT
 	,@RoleId TINYINT
@@ -225,6 +226,13 @@ BEGIN
 		,@toDate = @ToDate
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
+
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate
+		,@EmployeeIds = @EmpId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 
 	EXEC dbo.ChangeShiftRequest_WriteLog @RequestId = @RequestId
 		,@Comment = @Comment

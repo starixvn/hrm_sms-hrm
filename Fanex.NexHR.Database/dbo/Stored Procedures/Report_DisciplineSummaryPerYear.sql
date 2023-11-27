@@ -96,7 +96,7 @@ BEGIN
 			ELSE 0
 			END
 	FROM dbo.Employee AS emp WITH (NOLOCK)
-		INNER JOIN dbo.EmployeeSummary AS empSum WITH (NOLOCK) ON emp.EmpId = empSum.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empSum WITH (NOLOCK) ON emp.EmpId = empSum.EmpId AND empSum.IsTopManager = 0
 		INNER JOIN dbo.[Group] AS gr WITH (NOLOCK) ON emp.GroupId = gr.GroupId
 		AND gr.IsDeleted = 0
 		LEFT JOIN dbo.Discipline AS dis WITH (NOLOCK) ON dis.EmpId = emp.EmpId

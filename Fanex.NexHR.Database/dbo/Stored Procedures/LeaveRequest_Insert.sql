@@ -9,6 +9,7 @@ CREATE PROCEDURE [dbo].[LeaveRequest_Insert] @EmpId INT
 	,@VerifierId INT = NULL
 	,@ApproverId INT = NULL
 	,@RefNo NVARCHAR(200) = ''
+	,@IsHospitalApplication BIT	= NULL
 	,@ListDetail VARCHAR(MAX)
 	,@RequestId BIGINT = 0 OUTPUT
 	,@ErrCode INT = 0 OUTPUT
@@ -549,24 +550,16 @@ BEGIN
 		RETURN;
 	END
 
-	DECLARE @WorkingHours FLOAT
-
-	SELECT @WorkingHours = WorkingHours
-	FROM dbo.EmployeeSummary WITH (NOLOCK)
-	WHERE EmpId = @EmpId
-
-	SET @WorkingHours = ISNULL(@WorkingHours, 9)
-
 	IF EXISTS (
 			SELECT 1
 			FROM #tblLeaveRequestDetail WITH (NOLOCK)
 			WHERE IsHalfDay = 1
 				AND LeaveType IN (@AnnualLeaveType, @UnpaidLeaveType, @KIVByDayLeaveType)
-				AND DATEDIFF(MINUTE, FromTime, ToTime) > (@WorkingHours / 2 * 60)
+				AND DATEDIFF(MINUTE, FromTime, ToTime) > 300
 			)
 	BEGIN
 		SET @ErrCode = 113
-		SET @ErrMsg = 'You can not request leave half day over ' + CONVERT(NVARCHAR(10), @WorkingHours / 2) + ' hours.'
+		SET @ErrMsg = 'You can not request leave half day over 5 hours.'
 
 		RETURN;
 	END
@@ -801,6 +794,8 @@ BEGIN
 			,@EmpId = @EmpId
 
 		EXEC dbo.LeaveRequest_InsertTmpHospitalizationLeaveTrans @RequestId = @RequestId
+
+		EXEC dbo.HospitalLeave_Insert @RequestId = @RequestId, @IsHospitalApplication = @IsHospitalApplication
 
 		EXEC dbo.LeaveRequest_InsertTmpSickLeaveTrans @RequestId = @RequestId
 

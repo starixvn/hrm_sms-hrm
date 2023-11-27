@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE PROCEDURE [dbo].[LeaveRequest_EmployeeCalendar_ResetOffDay] @empId INT
 	,@LeaveTypeId INT
 	,@fromDate DATE
@@ -106,8 +107,8 @@ BEGIN
 			INNER JOIN #tblResetOff AS resoff WITH (NOLOCK) ON empca.EmpId = resoff.EmpId
 			AND empca.WorkDate = resoff.WorkDate
 			INNER JOIN dbo.ScheduleArrangementDefaultShift AS empshift WITH (NOLOCK) ON empshift.EmployeeId = empca.EmpId
-		WHERE empshift.ShiftId > 0
-			AND empshift.FromDate <= resoff.WorkDate
+		WHERE empshift.FromDate <= resoff.WorkDate
+			--AND empshift.ShiftId > 0
 	END
 
 	DROP TABLE #tblResetOff

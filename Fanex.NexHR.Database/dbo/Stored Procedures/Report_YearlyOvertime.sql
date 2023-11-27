@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[Report_YearlyOvertime] @ActorId INT
 	,@MonthXml VARCHAR(MAX)
 	,@TeamIds VARCHAR(MAX) = ''
@@ -73,7 +74,7 @@ BEGIN
 	SELECT emp.EmpId
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN #tblGroupIds AS tblgr WITH (NOLOCK) ON emp.GroupId = tblgr.GroupId
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId AND empsum.IsTopManager = 0
 		INNER JOIN (
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)

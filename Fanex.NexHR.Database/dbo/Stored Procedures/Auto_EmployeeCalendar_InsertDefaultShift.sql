@@ -80,7 +80,7 @@ BEGIN
 		SELECT TOP 1 shift.ShiftId
 		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
 		WHERE shift.EmployeeId = emp.EmpId
-			AND shift.ShiftId > 0
+			--AND shift.ShiftId > 0
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift
@@ -133,7 +133,7 @@ BEGIN
 		SELECT TOP 1 shift.ShiftId
 		FROM dbo.ScheduleArrangementDefaultShift AS shift WITH (NOLOCK)
 		WHERE shift.EmployeeId = emp.EmpId
-			AND shift.ShiftId > 0
+			--AND shift.ShiftId > 0
 			AND shift.FromDate <= @FromDate
 		ORDER BY shift.FromDate DESC
 		) AS shift

@@ -1,4 +1,5 @@
 ﻿
+
 CREATE PROCEDURE [dbo].[ChangeShiftRequest_Delete] @RequestId BIGINT
 	,@ActorId INT
 	,@ErrCode INT = 0 OUTPUT
@@ -81,4 +82,11 @@ BEGIN
 		,@toDate = @ToDate
 		,@empIds = @EmpId
 		,@isUpdateRequestData = 1
+
+	EXEC dbo.ScheduleArrangement_UpdateOffDayReplacement @ActorId = @ActorId
+		,@FromDate = @FromDate
+		,@ToDate = @ToDate
+		,@EmployeeIds = @EmpId
+		,@ErrCode = @ErrCode OUTPUT
+		,@ErrMsg = @ErrMsg OUTPUT
 END

@@ -95,7 +95,7 @@ BEGIN
 			,shift.[Name]
 		FROM #tblEmployeeCalendar AS tbl WITH (NOLOCK)
 			LEFT JOIN dbo.[Shift] AS shift WITH (NOLOCK) ON tbl.ShiftId = shift.ShiftId
-		WHERE tbl.ShiftId IS NULL
+		WHERE ISNULL(tbl.ShiftId, -1) = -1
 			AND IsKeepInView = 0
 			AND IsLeaveDay = 0
 			AND IsHoliday = 0

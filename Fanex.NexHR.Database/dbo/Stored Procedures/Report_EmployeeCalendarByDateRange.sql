@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
+﻿
+
+CREATE PROCEDURE [dbo].[Report_EmployeeCalendarByDateRange] @ActorId INT
 	,@FromDate DATE
 	,@ToDate DATE
 	,@TeamIds VARCHAR(MAX) = ''
@@ -37,7 +39,7 @@ BEGIN
 		SELECT EmpId
 		FROM dbo.fnc_GetEmployeeByActorId(@ActorId, 0, 1)
 		) AS member ON emp.EmpId = member.EmpId
-		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId AND empsum.IsTopManager = 0
 	WHERE (
 			@EmployeeStatusId IS NULL
 			OR (
