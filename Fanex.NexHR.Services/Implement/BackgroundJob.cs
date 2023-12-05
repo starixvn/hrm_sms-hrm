@@ -162,7 +162,7 @@
 
                 CheckSendMail(ref isSentMail, employee.IsLocal, ref percentInMail, percentAnnualLeaveRemaining);
 
-                    validEmployees.Add(employee);
+                validEmployees.Add(employee);
 
                 var body = string.Format(
                         bodyTemplate,

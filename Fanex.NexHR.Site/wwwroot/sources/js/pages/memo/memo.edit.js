@@ -1,12 +1,15 @@
 ﻿import $ from 'jquery/dist/jquery';
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
-import { initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, resolveClientUrl, axiosError } from '../../shared/common.functions';
 import axios from 'axios';
 import tinymce from 'tinymce/tinymce';
-import 'tinymce/themes/silver';
-import '../../date';
+import 'tinymce/themes/silver/index';
+import 'tinymce/icons/default/index';
+
 import '../memo/tinymce.plugins';
+import '../../date';
+
+import { initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, resolveClientUrl, axiosError } from '../../shared/common.functions';
 
 $(function () {
     var $memoType, $contentBlock, $fileList, $fileAttachContent, $memoContent, $fileUploader, $form, $memoTypeValue, $attachedFileBlock;
@@ -23,9 +26,9 @@ $(function () {
                     attachLinkSplit = attachLink.split('/'),
                     attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
                     pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
-								<a href="javascript:;">\
-									<i class="fa fa-times fa-lg icon-delete" data-id="'+ attachLink + '"></i>\
-								</a></div>';
+                                <a href="javascript:;">\
+                                    <i class="fa fa-times fa-lg icon-delete" data-id="'+ attachLink + '"></i>\
+                                </a></div>';
 
                 $fileList.append(pattern);
             }
