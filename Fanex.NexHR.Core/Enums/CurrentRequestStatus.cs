@@ -13,7 +13,7 @@
         [StringValue("Verified")]
         Verified,
 
-        [StringValue("NotVerified")]
+        [StringValue("Not Verified")]
         NotVerified,
 
         [StringValue("Approved")]

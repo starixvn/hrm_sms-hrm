@@ -94,14 +94,18 @@
         {
             var leaveDateTime = GetDateTimeForLeaveRequest(request);
             var leaveDayDetail = GetLeaveDayDetail(request);
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a Leave Request (Type: {0}) of <strong>{1} ({2})</strong> {3}</div>",
+                request.LeaveTypeName,
+                request.FullName,
+                request.Nickname,
+                string.Format("<span class='request leave'>{0}</span> {1}", leaveDateTime, leaveDayDetail));
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Leave Request (Type: {0}) of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
-                    request.LeaveTypeName,
-                    request.FullName,
-                    request.Nickname,
-                    string.Format("<span class='request leave'>{0}</span> {1}", leaveDateTime, leaveDayDetail),
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };
@@ -111,22 +115,22 @@
 
         private TodolistItem GetChangeShiftRequest(int actorId, RequestEntity request)
         {
-            var stringBuilder = new StringBuilder();
+            var details = new StringBuilder();
             if (request.ChangeShiftTypeId == (byte)ChangeShiftType.MoveOffDay)
             {
                 foreach (ChangeShiftDetail changeOffDate in request.ChangeShiftDetails)
                 {
                     var date = GetMessageForMoveOffDay(changeOffDate.OnDate, changeOffDate.ToDate ?? changeOffDate.OnDate);
-                    stringBuilder.AppendFormat("<span class='request change-shift'>{0}</span>", date);
+                    details.AppendFormat("<span class='request change-shift'>{0}</span>", date);
                 }
 
-                stringBuilder.Append("Move off day");
+                details.Append("Move off day");
             }
             else
             {
                 if (request.FromDate.Date == request.ToDate.Date)
                 {
-                    stringBuilder.AppendFormat(
+                    details.AppendFormat(
                             "<span class='request change-shift'>{0} → {1}</span> {2}",
                             request.FromShiftName,
                             request.ToShiftName,
@@ -135,17 +139,21 @@
                 else
                 {
                     var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
-                    stringBuilder.AppendFormat("<span class='request change-shift'>{0}</span>", date);
+                    details.AppendFormat("<span class='request change-shift'>{0}</span>", date);
                 }
             }
 
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a Change Shift Request of <strong>{0} ({1})</strong> {2}</div>",
+                request.FullName,
+                request.Nickname,
+                details);
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Change Shift Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
-                    request.FullName,
-                    request.Nickname,
-                    stringBuilder,
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };
@@ -158,14 +166,18 @@
             var template = "<span class='request " + (request.RequestTypeId == (byte)RequestType.CheckIn ? "check-in" : "check-out") + "'>{0} {1}</span> {2}";
             var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
 
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a {0} Request of <strong>{1} ({2})</strong> {3}</div>",
+                request.RequestTypeId == (byte)RequestType.CheckIn ? "Check In" : "Check Out",
+                request.FullName,
+                request.Nickname,
+                string.Format(template, time, request.FromShiftName, request.FromDate.ToDateMonthYearFormatedDate()));
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a {0} Request of <strong>{1} ({2})</strong> {3}</div><div><strong>Remark</strong>: {4}</div>",
-                    request.RequestTypeId == (byte)RequestType.CheckIn ? "Check In" : "Check Out",
-                    request.FullName,
-                    request.Nickname,
-                    string.Format(template, time, request.FromShiftName, request.FromDate.ToDateMonthYearFormatedDate()),
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };
@@ -175,19 +187,23 @@
 
         private TodolistItem GetLateInRequest(int actorId, RequestEntity request)
         {
-            var actualLateIn = request.ActualInOutMinutes == 0 ? "N/A" : ("+" + request.ActualInOutMinutes + "'");
+            var details = string.Format("<span class='request late-in'>+{0}' {1}</span> {2} (Actual: {3})",
+                request.InOutMinutes,
+                request.FromShiftName,
+                Utilities.GetMessageDateString(request.FromDate, request.ToDate),
+                request.ActualInOutMinutes == 0 ? "N/A" : ("+" + request.ActualInOutMinutes + "'"));
+
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a Late In Request of <strong>{0} ({1})</strong> {2}</div>",
+                request.FullName,
+                request.Nickname,
+                details);
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Late In Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
-                    request.FullName,
-                    request.Nickname,
-                    string.Format("<span class='request late-in'>+{0}' {1}</span> {2} (Actual: {3})",
-                        request.InOutMinutes,
-                        request.FromShiftName,
-                        Utilities.GetMessageDateString(request.FromDate, request.ToDate),
-                        actualLateIn),
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };
@@ -197,19 +213,23 @@
 
         private TodolistItem GetEarlyOutRequest(int actorId, RequestEntity request)
         {
-            var actualEarlyOut = request.ActualInOutMinutes == 0 ? "N/A" : ("-" + request.ActualInOutMinutes + "'");
+            var details = string.Format("<span class='request early-out'>-{0}' {1}</span> {2} (Actual: {3})",
+                request.InOutMinutes,
+                request.FromShiftName,
+                Utilities.GetMessageDateString(request.FromDate, request.ToDate),
+                request.ActualInOutMinutes == 0 ? "N/A" : ("-" + request.ActualInOutMinutes + "'"));
+
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a Early Out Request of <strong>{0} ({1})</strong> {2}</div>",
+                request.FullName,
+                request.Nickname,
+                details);
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
 
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Early Out Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
-                    request.FullName,
-                    request.Nickname,
-                    string.Format("<span class='request early-out'>-{0}' {1}</span> {2} (Actual: {3})",
-                        request.InOutMinutes,
-                        request.FromShiftName,
-                        Utilities.GetMessageDateString(request.FromDate, request.ToDate),
-                        actualEarlyOut),
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };
@@ -219,12 +239,12 @@
 
         private TodolistItem GetKeepInViewRequest(int actorId, RequestEntity request)
         {
-            var stringBuilder = new StringBuilder();
+            var details = new StringBuilder();
             if (request.KeepInViewTypeId == (byte)KeepInViewTypes.KeepInViewByDay)
             {
                 if (request.TotalDays.Equals(Constants.HalfDayOffValue))
                 {
-                    stringBuilder.AppendFormat(
+                    details.AppendFormat(
                         "<span class='request keepinview'>{0} ({1} → {2})</span> 0.5 day",
                         request.FromDate.ToDateMonthYearFormatedDate(),
                         request.FromTime.Value.ToShortTime(),
@@ -232,14 +252,14 @@
                 }
                 else
                 {
-                    stringBuilder.AppendFormat("<span class='request keepinview'>{0}</span> 1 day", request.FromDate.ToDateMonthYearFormatedDate());
+                    details.AppendFormat("<span class='request keepinview'>{0}</span> 1 day", request.FromDate.ToDateMonthYearFormatedDate());
                 }
             }
             else
             {
                 var minutes = (request.ToTime.Value - request.FromTime.Value).TotalMinutes;
                 var hours = minutes / Constants.TotalMinuteInHour;
-                stringBuilder.AppendFormat(
+                details.AppendFormat(
                     "<span class='request keepinview'>{0} ({1} → {2})</span> {3} hour(s)",
                     request.FromDate.ToDateMonthYearFormatedDate(),
                     request.FromTime.Value.ToShortTime(),
@@ -247,13 +267,17 @@
                     hours.ToString("0.#"));
             }
 
+            var name = new StringBuilder();
+            name.AppendFormat("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div>",
+                request.FullName,
+                request.Nickname,
+                details);
+            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
+            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+
             var item = new TodolistItem
             {
-                Name = string.Format("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div><div><strong>Remark</strong>: {3}</div>",
-                    request.FullName,
-                    request.Nickname,
-                    stringBuilder,
-                    request.Remark),
+                Name = name.ToString(),
                 TypeId = 1,
                 Actions = GetAction(actorId, request)
             };

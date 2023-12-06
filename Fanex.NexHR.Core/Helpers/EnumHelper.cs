@@ -15,8 +15,7 @@
             if (enumType != null)
             {
                 FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
-                DescriptionAttribute[] attributes =
-                    (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 description = attributes.Length > 0 ? attributes[0].Description : enumType.ToString();
             }
 
@@ -36,8 +35,7 @@
             if (enumType != null)
             {
                 FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
-                StringValueAttribute[] attributes =
-                    (StringValueAttribute[])fi.GetCustomAttributes(typeof(StringValueAttribute), false);
+                var attributes = (StringValueAttribute[])fi.GetCustomAttributes(typeof(StringValueAttribute), false);
                 description = attributes.Length > 0 ? attributes[0].Value : enumType.ToString();
             }
 
