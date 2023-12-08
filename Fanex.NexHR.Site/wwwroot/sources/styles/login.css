@@ -205,6 +205,6 @@ input[type="submit"], input[type="reset"], input[type="button"], a.button, butto
     display: none;
 }
 
-.username-field{
-    position : relative;
+.textbox-outer {
+    position: relative;
 }
