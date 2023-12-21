@@ -100,8 +100,8 @@
                 request.FullName,
                 request.Nickname,
                 string.Format("<span class='request leave'>{0}</span> {1}", leaveDateTime, leaveDayDetail));
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -148,8 +148,8 @@
                 request.FullName,
                 request.Nickname,
                 details);
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -172,8 +172,8 @@
                 request.FullName,
                 request.Nickname,
                 string.Format(template, time, request.FromShiftName, request.FromDate.ToDateMonthYearFormatedDate()));
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -198,8 +198,8 @@
                 request.FullName,
                 request.Nickname,
                 details);
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -224,8 +224,8 @@
                 request.FullName,
                 request.Nickname,
                 details);
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -272,8 +272,8 @@
                 request.FullName,
                 request.Nickname,
                 details);
-            name.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)request.StatusId));
-            name.AppendFormat("<div><strong>Remark</strong>: {0}</div>", request.Remark);
+            AppendStatus(name, request.StatusId);
+            AppendRemark(name, request.Remark);
 
             var item = new TodolistItem
             {
@@ -595,6 +595,16 @@
             }
 
             return fromDate.ToString("dd") + " → " + toDate.ToDateMonthYearFormatedDate();
+        }
+
+        private static void AppendStatus(StringBuilder builder, byte statusId)
+        {
+            builder.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)statusId));
+        }
+
+        private static void AppendRemark(StringBuilder builder, string remark)
+        {
+            builder.AppendFormat("<div><strong>Remark</strong>: {0}</div>", remark);
         }
     }
 }
