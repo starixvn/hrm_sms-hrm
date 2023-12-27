@@ -4,6 +4,7 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
+    using Fanex.Logging;
     using Microsoft.IdentityModel.Tokens;
 
     public static class JwtManager
@@ -16,14 +17,16 @@
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var now = DateTimeOffset.UtcNow;
+#pragma warning disable S6566 // Use "DateTimeOffset" instead of "DateTime"
+            var now = DateTime.UtcNow;
+#pragma warning restore S6566 // Use "DateTimeOffset" instead of "DateTime"
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, username)
                 }),
-                Expires = now.AddMinutes(expireMinutes).DateTime,
+                Expires = now.AddMinutes(expireMinutes),
                 SigningCredentials = credentials
             };
 
@@ -53,6 +56,8 @@
             }
             catch (Exception ex)
             {
+                LogService.Error(ex.Message, ex);
+
                 return null;
             }
         }
