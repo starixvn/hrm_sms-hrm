@@ -3,7 +3,10 @@
     using System;
     using System.ComponentModel;
     using System.Configuration;
+    using System.Net;
     using System.Net.Mail;
+    using System.Net.Security;
+    using System.Security.Cryptography.X509Certificates;
     using System.Text;
     using Criteria;
     using Fanex.NexHR.Core;
@@ -119,9 +122,7 @@
                         client.EnableSsl = true;
                     }
 
-#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback += (s, cert, chain, sslPolicyErrors) => true;
-#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+                    ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
 
                     client.SendCompleted += SendCompletedCallback;
                     client.SendAsync(msg, email);
@@ -285,5 +286,8 @@
 
             baseService.ExecuteNonQuery(criteria);
         }
+
+        private bool RemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            => sslPolicyErrors == SslPolicyErrors.None;
     }
 }

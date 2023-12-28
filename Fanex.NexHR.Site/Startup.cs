@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Configuration;
 using Fanex.Common;
 using Fanex.NexHR.Core;
@@ -31,11 +33,12 @@ namespace Fanex.NexHR.Site
 
             HangfireJobScheduler.ScheduleRecurringJobs();
 
-#pragma warning disable S4830 // Server certificates should be verified during SSL/TLS connections
-            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-#pragma warning restore S4830 // Server certificates should be verified during SSL/TLS connections
+            ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
+
+        private static bool RemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+            => sslPolicyErrors == SslPolicyErrors.None;
     }
 
     public class UnityJobActivator : JobActivator
