@@ -287,7 +287,7 @@
             baseService.ExecuteNonQuery(criteria);
         }
 
-        private bool RemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        private static bool RemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
             => sslPolicyErrors == SslPolicyErrors.None;
     }
 }
