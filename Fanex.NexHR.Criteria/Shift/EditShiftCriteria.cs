@@ -12,9 +12,8 @@
 
         public string CheckOutTime { get; set; }
 
-        public bool IsInAfterDay { get; set; }
-
-        public bool IsOutAfterDay { get; set; }
+        public byte CheckInDateType { get; set; }
+        public byte CheckOutDateType { get; set; }
 
         public bool IsDisabled { get; set; }
 

@@ -176,6 +176,7 @@
     <Compile Include="Enums\AttendanceFilter.cs" />
     <Compile Include="Enums\CalendarType.cs" />
     <Compile Include="Enums\ChangeShiftType.cs" />
+    <Compile Include="Enums\CheckInOutDateType.cs" />
     <Compile Include="Enums\CheckInOutReason.cs" />
     <Compile Include="Enums\CurrentRequestStatus.cs" />
     <Compile Include="Enums\DateRangeOption.cs" />

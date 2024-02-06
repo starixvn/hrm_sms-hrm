@@ -26,7 +26,7 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.ShiftManagement)]
-        public ActionResult Index(int? statusId = (int)ShiftStatus.Active)
+        public ActionResult Index(byte? statusId = (byte)ShiftStatus.Active)
         {
             var model = new ShiftByStatusViewModel
             {
@@ -41,7 +41,11 @@
         [HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
         public ActionResult Create()
         {
-            var model = new CreateShiftModel();
+            var model = new CreateShiftModel
+            {
+                CheckInDateType = CheckInOutDateType.Today,
+                CheckOutDateType = CheckInOutDateType.Today
+            };
             ViewBag.Successed = false;
             return View(model);
         }
@@ -85,8 +89,8 @@
                     MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
                     HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
                     MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
-                    IsInAfterDay = shift.IsInAfterDay,
-                    IsOutAfterDay = shift.IsOutAfterDay,
+                    CheckInDateType = shift.CheckInDateType,
+                    CheckOutDateType = shift.CheckOutDateType,
                     IsDisabled = shift.IsDisabled,
                     IsUsed = shift.IsUsed
                 };
@@ -135,16 +139,16 @@
             return Json(shift, JsonRequestBehavior.AllowGet);
         }
 
-        private static int GetTime(string time, int index)
+        private static byte GetTime(string time, byte index)
         {
-            var value = 0;
+            byte value = 0;
             if (!string.IsNullOrWhiteSpace(time))
             {
                 var timeArr = time.Split(':');
                 const byte TotalItems = 2;
                 if (timeArr.Length == TotalItems)
                 {
-                    value = int.Parse(timeArr[index]);
+                    value = byte.Parse(timeArr[index]);
                 }
             }
 

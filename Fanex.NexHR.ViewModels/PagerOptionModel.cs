@@ -5,9 +5,9 @@
 
     public class PagerOptionModel
     {
-        public int ItemsPerPage { get; set; }
+        public short ItemsPerPage { get; set; }
 
-        public int CurrentPage { get; set; }
+        public short CurrentPage { get; set; }
 
         public int TotalItem { get; set; }
 

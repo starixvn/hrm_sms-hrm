@@ -32,9 +32,9 @@
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.Hidden("InTime", shift != null ? shift.BeginCheckInTime : string.Empty)
         @Html.Hidden("OutTime", shift != null ? shift.BeginCheckOutTime : string.Empty)
-        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLower() : string.Empty)
-        @Html.Hidden("IsInAfterDay", shift != null ? shift.IsInAfterDay.ToString().ToLower() : string.Empty)
-        @Html.Hidden("IsOutAfterDay", shift != null ? shift.IsOutAfterDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLowerInvariant() : string.Empty)
+        @Html.Hidden("CheckInDateType", shift != null ? ((byte)shift.CheckInDateType).ToString() : string.Empty)
+        @Html.Hidden("CheckOutDateType", shift != null ? ((byte)shift.CheckOutDateType).ToString() : string.Empty)
 
         <div class="form-group">
             <div class="label-form">

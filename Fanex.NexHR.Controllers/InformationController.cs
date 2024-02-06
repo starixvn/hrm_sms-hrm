@@ -97,7 +97,7 @@
                 || !IsEquals(employee.PlaceOfIdCard, model.PlaceOfIdCard);
 
             var isValidAddressInfo = !IsEquals(employee.Phone, model.Phone)
-                || !IsEquals(employee.Address, model.Address)
+                || !IsEquals(employee.PermanentAddress, model.PermanentAddress)
                 || !IsEquals(employee.CurrentAddress, model.CurrentAddress);
 
             return isValidCardInfo || isValidAddressInfo;
@@ -190,7 +190,7 @@
                 LetsTalk = employee.LetsTalk,
                 ChineseName = employee.ChineseName,
                 Marriage = employee.Marriage,
-                PermanentAddress = employee.Address,
+                PermanentAddress = employee.PermanentAddress,
                 CurrentAddress = employee.CurrentAddress,
                 IdCardNumber = employee.CardNo,
                 PassportNo = employee.PassportNo,

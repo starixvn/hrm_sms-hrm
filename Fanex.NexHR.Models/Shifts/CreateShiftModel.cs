@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NexHR.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using Fanex.NexHR.Core.Enums;
 
     public class CreateShiftModel
     {
@@ -14,31 +15,28 @@
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, MaximumHours, ErrorMessage = "Hour is less than 23")]
         [Required]
-        public int HourTimeIn { get; set; }
+        public byte HourTimeIn { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, MaximumMinutes, ErrorMessage = "Minutes is less than 59")]
         [Required]
-        public int MinuteTimeIn { get; set; }
+        public byte MinuteTimeIn { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, MaximumHours, ErrorMessage = "Hour is less than 23")]
         [Required]
-        public int HourTimeOut { get; set; }
+        public byte HourTimeOut { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:f2}", ApplyFormatInEditMode = true)]
         [Range(0, MaximumMinutes, ErrorMessage = "Minutes is less than 59")]
         [Required]
-        public int MinuteTimeOut { get; set; }
-
-        [Required]
-        public bool IsInAfterDay { get; set; }
-
-        [Required]
-        public bool IsOutAfterDay { get; set; }
+        public byte MinuteTimeOut { get; set; }
 
         public string TimeIn => HourTimeIn.ToString().PadLeft(PaddingLeftWidth, '0') + ":" + MinuteTimeIn.ToString().PadLeft(PaddingLeftWidth, '0');
 
         public string TimeOut => HourTimeOut.ToString().PadLeft(PaddingLeftWidth, '0') + ":" + MinuteTimeOut.ToString().PadLeft(PaddingLeftWidth, '0');
+
+        public CheckInOutDateType CheckInDateType { get; set; }
+        public CheckInOutDateType CheckOutDateType { get; set; }
     }
 }

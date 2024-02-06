@@ -90,6 +90,7 @@
             {
                 var criteria = new GetAllEmployeeCriteria
                 {
+                    CompanyId = EmployeeSession.CompanyId,
                     Query = model.Keyword,
                     TeamIds = model.TeamIds,
                     EnableUser = model.IsEnable,
@@ -104,7 +105,7 @@
                 {
                     CurrentPage = model.CurrentPage,
                     ItemsPerPage = model.ItemsPerPage,
-                    TotalItem = (int)criteria.TotalRow
+                    TotalItem = criteria.TotalRow
                 };
                 ViewBag.PagerOption = pagerOption;
                 ViewBag.IsShowJobtitle = roleService.GetByUserId(userControlSession.UserId)
@@ -119,7 +120,7 @@
         {
             teamIds = teamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             IList<LookupData> listJobTitle = commonDataService.GetLookupDataByCode(Constants.JobTitle);
-            IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
+            var jobTitles = listJobTitle.Select(j => new SelectListItem
             {
                 Text = j.Name,
                 Value = j.Id.ToString(),
@@ -150,6 +151,7 @@
             {
                 var criteria = new GetAllEmployeeCriteria
                 {
+                    CompanyId = EmployeeSession.CompanyId,
                     Query = model.Keyword,
                     TeamIds = model.TeamIds,
                     EnableUser = model.IsEnable,
@@ -165,7 +167,7 @@
                 {
                     CurrentPage = model.CurrentPage,
                     ItemsPerPage = model.ItemsPerPage,
-                    TotalItem = (int)criteria.TotalRow
+                    TotalItem = criteria.TotalRow
                 };
                 ViewBag.PagerOption = pagerOption;
             }
@@ -642,7 +644,7 @@
                 Skype = model.Skype,
                 LetsTalk = model.LetsTalk,
                 Marriage = model.Marriage,
-                PermanentAddress = model.Address,
+                PermanentAddress = model.PermanentAddress,
                 CurrentAddress = model.CurrentAddress,
                 IdCardNumber = model.CardNo,
                 PassportNo = model.PassportNo,

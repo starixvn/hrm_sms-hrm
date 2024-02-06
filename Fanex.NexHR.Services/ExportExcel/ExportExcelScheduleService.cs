@@ -10,6 +10,7 @@
     using System.Web;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.ScheduleArrange;
     using OfficeOpenXml;
@@ -222,7 +223,7 @@
                 SumEmployeeWorkingOnShift(employeeWorkingOnShifts, weeklySchedule.SundaySchedule);
             }
 
-            return employeeWorkingOnShifts.OrderBy(x => x.IsInAfterDay).ThenBy(x => x.IsOutAfterDay)
+            return employeeWorkingOnShifts.OrderBy(x => x.CheckInDateType).ThenBy(x => x.CheckOutDateType)
                 .ThenBy(x => x.CheckIn).ThenBy(x => x.CheckOut).ToList();
         }
 
@@ -238,8 +239,8 @@
                     x => x.Code == shift.Code
                         && x.CheckIn == shift.CheckIn
                         && x.CheckOut == shift.CheckOut
-                        && x.IsInAfterDay == shift.IsInAfterDay
-                        && x.IsOutAfterDay == shift.IsOutAfterDay
+                        && x.CheckInDateType == shift.CheckInDateType
+                        && x.CheckOutDateType == shift.CheckOutDateType
                     );
                 if (findExists == null)
                 {
@@ -248,8 +249,8 @@
                         Code = shift.Code,
                         CheckIn = shift.CheckIn,
                         CheckOut = shift.CheckOut,
-                        IsInAfterDay = shift.IsInAfterDay,
-                        IsOutAfterDay = shift.IsOutAfterDay
+                        CheckInDateType = shift.CheckInDateType,
+                        CheckOutDateType = shift.CheckOutDateType
                     };
                     item.Weekdays[(int)dailySchedule.WorkDate.DayOfWeek] = 1;
 
@@ -382,8 +383,8 @@
                     shift.CheckIn = GetHalfShiftCode(dailySchedule.LeaveType.ToTime.Value.ToShortTime());
                     shift.CheckOut = GetHalfShiftCode(dailySchedule.Shift.CheckOut);
                     shift.Code = $"{shift.CheckIn} >{shift.CheckOut}";
-                    shift.IsInAfterDay = dailySchedule.Shift.IsInAfterDay;
-                    shift.IsOutAfterDay = dailySchedule.Shift.IsOutAfterDay;
+                    shift.CheckInDateType = dailySchedule.Shift.CheckInDateType;
+                    shift.CheckOutDateType = dailySchedule.Shift.CheckOutDateType;
                     shift.IsShift = true;
                 }
                 else if (dailySchedule.LeaveType.ToTime.Value == checkOutTime)
@@ -391,8 +392,8 @@
                     shift.CheckIn = GetHalfShiftCode(dailySchedule.Shift.CheckIn);
                     shift.CheckOut = GetHalfShiftCode(dailySchedule.LeaveType.FromTime.Value.ToShortTime());
                     shift.Code = $"{shift.CheckIn} >{shift.CheckOut}";
-                    shift.IsInAfterDay = dailySchedule.Shift.IsInAfterDay;
-                    shift.IsOutAfterDay = dailySchedule.Shift.IsOutAfterDay;
+                    shift.CheckInDateType = dailySchedule.Shift.CheckInDateType;
+                    shift.CheckOutDateType = dailySchedule.Shift.CheckOutDateType;
                     shift.IsShift = true;
                 }
                 else
@@ -407,13 +408,44 @@
         private static DateTime GetCheckInTime(DateTime workDate, ShiftBase shift)
         {
             var checkInTime = ParseTime(shift.CheckIn);
-            return workDate.Date.AddDays(shift.IsInAfterDay ? 1 : 0).AddHours(checkInTime.Hours);
+            switch (shift.CheckInDateType)
+            {
+                case CheckInOutDateType.Yesterday:
+                    workDate = workDate.Date.AddDays(-1).AddHours(checkInTime.Hours);
+                    break;
+
+                case CheckInOutDateType.Tomorrow:
+                    workDate = workDate.Date.AddDays(1).AddHours(checkInTime.Hours);
+                    break;
+
+                default:
+                    // nothing
+                    break;
+            }
+
+            return workDate;
         }
 
         private static DateTime GetCheckOutTime(DateTime workDate, ShiftBase shift)
         {
             var checkOutTime = ParseTime(shift.CheckOut);
-            return workDate.Date.AddDays(shift.IsOutAfterDay ? 1 : 0).AddHours(checkOutTime.Hours);
+
+            switch (shift.CheckInDateType)
+            {
+                case CheckInOutDateType.Yesterday:
+                    workDate = workDate.Date.AddDays(-1).AddHours(checkOutTime.Hours);
+                    break;
+
+                case CheckInOutDateType.Tomorrow:
+                    workDate = workDate.Date.AddDays(1).AddHours(checkOutTime.Hours);
+                    break;
+
+                default:
+                    // nothing
+                    break;
+            }
+
+            return workDate;
         }
 
         private static string GetHalfShiftCode(string shortTime)

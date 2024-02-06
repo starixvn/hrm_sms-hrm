@@ -12,11 +12,11 @@ $(function () {
             confirm('Are you sure you want to delete this shift?', () => {
                 axios({
                     url: resolveClientUrl('shift/delete'),
-                    method: "POST",
+                    method: 'POST',
                     data: { shiftId: id }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
-                        document.location = resolveClientUrl("shift/index");
+                        document.location = resolveClientUrl('shift/index');
                     }
                     else {
                         alert(response.Message);
@@ -33,14 +33,14 @@ $(function () {
     }
 
     function initInputAttr() {
-        if ($("#IsUsed").val() === "True") {
-            $("#Name").attr("disabled", "disabled");
-            $("#HourTimeIn").attr("disabled", "disabled");
-            $("#MinuteTimeIn").attr("disabled", "disabled");
-            $("#HourTimeOut").attr("disabled", "disabled");
-            $("#MinuteTimeOut").attr("disabled", "disabled");
-            $("#IsInAfterDay").attr("disabled", "disabled");
-            $("#IsOutAfterDay").attr("disabled", "disabled");
+        if ($('#IsUsed').val() === 'True') {
+            $('#Name').prop('disabled', true);
+            $('#HourTimeIn').prop('disabled', true);
+            $('#MinuteTimeIn').prop('disabled', true);
+            $('#HourTimeOut').prop('disabled', true);
+            $('#MinuteTimeOut').prop('disabled', true);
+            $('#CheckInDateType').prop('disabled', true);
+            $('#CheckOutDateType').prop('disabled', true);
         }
     }
 

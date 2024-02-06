@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using Fanex.Logging;
     using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
@@ -57,7 +58,7 @@
             if (response.IsSuccessStatusCode)
             {
                 var rawData = await response.Content.ReadAsStringAsync();
-                var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
+                var workingShifts = JsonConvert.DeserializeObject<IList<SyncWorkingShift>>(rawData);
                 workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)
                     && (!x.LastUpdated.HasValue || x.LastUpdated.Value > lastModifiedDate)).ToList();
                 if (workingShifts != null && workingShifts.Any())
@@ -111,7 +112,7 @@
             if (response.IsSuccessStatusCode)
             {
                 var rawData = await response.Content.ReadAsStringAsync();
-                var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
+                var workingShifts = JsonConvert.DeserializeObject<IList<SyncWorkingShift>>(rawData);
                 workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)).ToList();
                 if (workingShifts != null && workingShifts.Any())
                 {
@@ -145,7 +146,7 @@
             return commandResult;
         }
 
-        private static void ProcessData(WorkingShiftSyncModel shift)
+        private static void ProcessData(SyncWorkingShift shift)
         {
             shift.EmployeeID = shift.EmployeeID.Trim();
             shift.ShiftCode = shift.ShiftCode?.Trim();
@@ -158,7 +159,7 @@
                 shift.CheckInTime = shift.ShiftStartTime.Value.ToString("HH:mm");
                 if (shift.ShiftStartTime.Value.Date > shift.ShiftDate.Date)
                 {
-                    shift.IsInAfterDay = true;
+                    shift.CheckInDateType = CheckInOutDateType.Tomorrow;
                 }
             }
 
@@ -167,14 +168,14 @@
                 shift.CheckOutTime = shift.ShiftEndTime.Value.ToString("HH:mm");
                 if (shift.ShiftEndTime.Value.Date > shift.ShiftDate.Date)
                 {
-                    shift.IsOutAfterDay = true;
+                    shift.CheckOutDateType = CheckInOutDateType.Tomorrow;
                 }
             }
 
             GetTotalHours(shift);
         }
 
-        private static void CheckOffDay(WorkingShiftSyncModel shift)
+        private static void CheckOffDay(SyncWorkingShift shift)
         {
             if (shift.ShiftCode?.IndexOf("OFF", StringComparison.OrdinalIgnoreCase) >= 0
                 && !shift.IsOffDay)
@@ -183,7 +184,7 @@
             }
         }
 
-        private static void CheckPublicHoliday(WorkingShiftSyncModel shift)
+        private static void CheckPublicHoliday(SyncWorkingShift shift)
         {
             if (!string.IsNullOrWhiteSpace(shift.ShiftCode)
                 && shift.ShiftCode.Equals("PH", StringComparison.OrdinalIgnoreCase)
@@ -193,7 +194,7 @@
             }
         }
 
-        private static void GetTotalHours(WorkingShiftSyncModel shift)
+        private static void GetTotalHours(SyncWorkingShift shift)
         {
             if (shift.ShiftStartTime.HasValue && shift.ShiftEndTime.HasValue)
             {

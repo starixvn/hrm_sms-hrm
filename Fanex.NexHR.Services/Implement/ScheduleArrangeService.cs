@@ -151,8 +151,8 @@
                 Name = x.Name,
                 CheckIn = x.BeginCheckInTime,
                 CheckOut = x.BeginCheckOutTime,
-                IsInAfterDay = x.IsInAfterDay,
-                IsOutAfterDay = x.IsOutAfterDay
+                CheckInDateType = x.CheckInDateType,
+                CheckOutDateType = x.CheckOutDateType
             }).ToList();
 
             var weeklyDefaultShifts = weeklySchedules.Select(x => x.WeeklyDefaultShift).ToList();

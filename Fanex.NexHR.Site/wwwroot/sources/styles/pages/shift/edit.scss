@@ -22,7 +22,8 @@
     }
 
     .input-form .form-control {
-        max-width: 50px;
+        min-width: 50px;
+        width: fit-content;
     }
 
     .checkbox-label {

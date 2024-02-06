@@ -18,14 +18,18 @@
         </Setting>
         <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="nexhrx" Plain="0">
             <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
-            <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
             <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
         </Setting>
         <Setting Key="Employee_GetUploadedFile" SpName="Employee_GetUploadedFile" DbName="nexhrx" Plain="0"></Setting>
+        <Setting Key="Employee_GetAll" SpName="Employee_GetAll" DbName="nexhrx" Plain="0">
+            <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+            <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" Class="Employee" />
+            <Mapping DataField="DOB" ObjectProperty="DateOfBirth" Class="Employee" />
+            <Mapping DataField="TeamID" ObjectProperty="Id" Class="Team" />
+        </Setting>
         <Setting Key="Employee_GetEmployees" SpName="Employee_GetEmployees" DbName="nexhrx" Plain="0">
             <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
             <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" Class="Employee" />
-            <Mapping DataField="PermanentAddress" ObjectProperty="Address" Class="Employee" />
             <Mapping DataField="DOB" ObjectProperty="DateOfBirth" Class="Employee" />
             <Mapping DataField="TeamID" ObjectProperty="Id" Class="Team" />
         </Setting>

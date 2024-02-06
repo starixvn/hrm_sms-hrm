@@ -1,4 +1,5 @@
-﻿@model ShiftByStatusViewModel
+﻿@using System.Text;
+@model ShiftByStatusViewModel
 @{
     ViewBag.Title = Labels.ShiftInfo;
     var isHost = (bool)ViewBag.IsHost;
@@ -44,7 +45,7 @@
             <th class="left">@Labels.Shift</th>
             <th>@Labels.In</th>
             <th>@Labels.Out</th>
-			<th>@Labels.Status</th>
+            <th>@Labels.Status</th>
             @if (isHost)
             {
                 <th>@Labels.Edit</th>
@@ -58,20 +59,37 @@
             foreach (Shift item in Model.Shifts)
             {
                 i++;
+                var checkinTime = new StringBuilder(item.BeginCheckInTime + ((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : " - " + item.EndCheckInTime));
+                var checkoutTime = new StringBuilder(item.BeginCheckOutTime + ((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : " - " + item.EndCheckOutTime));
+
+                switch (item.CheckInDateType)
+                {
+                    case CheckInOutDateType.Yesterday:
+                        checkinTime.Insert(0, "-");
+                        break;
+                    case CheckInOutDateType.Tomorrow:
+                        checkinTime.Append("+");
+                        break;
+                }
+
+                switch (item.CheckOutDateType)
+                {
+                    case CheckInOutDateType.Yesterday:
+                        checkoutTime.Insert(0, "-");
+                        break;
+                    case CheckInOutDateType.Tomorrow:
+                        checkoutTime.Append("+");
+                        break;
+                }
+
                 <tr>
                     <td>@i</td>
-					<td class="align-left">
-						@item.Name
-					</td>
-					<td>
-						@item.BeginCheckInTime@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : " - " + item.EndCheckInTime)@(item.IsInAfterDay ? "+" : "")
-					</td>
-					<td>
-						@item.BeginCheckOutTime@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : " - " + item.EndCheckOutTime)@(item.IsOutAfterDay ? "+" : "")
-					</td>
-					<td>
-						@(item.IsDisabled ? Labels.Disabled : Labels.Active)
-					</td>
+                    <td class="align-left">@item.Name</td>
+                    <td>@checkinTime.ToString()</td>
+                    <td>@checkoutTime.ToString()</td>
+                    <td>
+                        @(item.IsDisabled ? Labels.Disabled : Labels.Active)
+                    </td>
                     @if (isHost)
                     {
                         <td class="cmd">

@@ -2,11 +2,12 @@
 {
     using System;
     using System.Xml.Serialization;
+    using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.XMLExtensions;
 
     [Serializable]
     [XMLName("Row")]
-    public class WorkingShiftSyncModel
+    public class SyncWorkingShift
     {
         private const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss:fff";
 
@@ -31,9 +32,8 @@
         public bool IsOffDay { get; set; }
         public bool IsPublicHoliday { get; set; }
 
-        public bool IsInAfterDay { get; set; }
-
-        public bool IsOutAfterDay { get; set; }
+        public CheckInOutDateType CheckInDateType { get; set; }
+        public CheckInOutDateType CheckOutDateType { get; set; }
 
         public bool IsCrossDay { get; set; }
 

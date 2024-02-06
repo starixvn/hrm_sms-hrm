@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Mvc;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Core.Services;
@@ -19,16 +18,16 @@
             this.baseService = baseService;
         }
 
-        public IList<Shift> GetAll(int statusId = 1, bool isShowOff = false)
+        public IList<Shift> GetAll(byte statusId = 1, bool isShowOff = false)
         {
-            IList<Shift> shifts = baseService.GetData<Shift>(new GetAllShiftCriteria()).ToList();
+            var shifts = baseService.GetData<Shift>(new GetAllShiftCriteria()).ToList();
 
-            if (statusId == (int)ShiftStatus.Active)
+            if (statusId == (byte)ShiftStatus.Active)
             {
                 shifts = shifts.Where(t => !t.IsDisabled).ToList();
             }
 
-            if (statusId == (int)ShiftStatus.Disabled)
+            if (statusId == (byte)ShiftStatus.Disabled)
             {
                 shifts = shifts.Where(t => t.IsDisabled).ToList();
             }
@@ -54,19 +53,6 @@
             return queriedShifts ?? new List<Shift>();
         }
 
-        public IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false)
-        {
-            IList<SelectListItem> list = new List<SelectListItem>();
-            IList<Shift> shifts = GetAll(statusId, isShowOff);
-
-            if (shifts.Any())
-            {
-                list = shifts.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name }).ToList();
-            }
-
-            return list;
-        }
-
         public Shift GetByDate(int employeeId, DateTime date)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
@@ -90,8 +76,8 @@
                 Name = model.Name,
                 CheckInTime = model.TimeIn,
                 CheckOutTime = model.TimeOut,
-                IsInAfterDay = model.IsInAfterDay,
-                IsOutAfterDay = model.IsOutAfterDay,
+                CheckInDateType = (byte)model.CheckInDateType,
+                CheckOutDateType = (byte)model.CheckOutDateType,
                 ActorId = actorId
             };
             return baseService.ExecuteNonQuery(criteria);
@@ -105,8 +91,8 @@
                 Name = model.Name,
                 CheckInTime = model.TimeIn,
                 CheckOutTime = model.TimeOut,
-                IsInAfterDay = model.IsInAfterDay,
-                IsOutAfterDay = model.IsOutAfterDay,
+                CheckInDateType = (byte)model.CheckInDateType,
+                CheckOutDateType = (byte)model.CheckOutDateType,
                 IsDisabled = model.IsDisabled,
                 ActorId = actorId
             };

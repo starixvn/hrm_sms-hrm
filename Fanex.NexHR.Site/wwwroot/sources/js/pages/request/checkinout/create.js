@@ -100,25 +100,31 @@ $(document).ready(function () {
             domElements.$minute.val(outtime.substring(3, 5));
         }
     };
-    let checkInOrOutInNextDay = function (isInOutAfterDay) {
+    let getDateCheckInOut = function (checkInOutDateType) {
         const attendantDate = new Date(domElements.$attendantDate.val());
-        if (isInOutAfterDay === 'true') {
-            const requestDate = new Date(attendantDate.getTime() + 86400000);
-            domElements.$forDate.val(moment(requestDate).format('DD MMM, YYYY'));
-        } else {
-            domElements.$forDate.val(moment(attendantDate).format('DD MMM, YYYY'));
+        let requestDate;
+        switch (checkInOutDateType) {
+            case 1: // yesterday
+                requestDate = moment(attendantDate).subtract(1, 'days');
+                break;
+
+            case 3: // tomorrow
+                requestDate = moment(attendantDate).add(1, 'days');
+                break;
         }
+
+        domElements.$forDate.val(moment(requestDate).format('DD MMM, YYYY'));
     };
     let checkCrossDay = function () {
-        const isInAfterDay = $('#IsInAfterDay').val(),
-            isOutAfterDay = $('#IsOutAfterDay').val();
+        const checkInDateType = $('#CheckInDateType').val(),
+            checkOutDateType = $('#CheckOutDateType').val();
 
         if (domElements.$checkInTypeId.prop('checked')) {
-            checkInOrOutInNextDay(isInAfterDay);
+            getDateCheckInOut(checkInDateType);
         }
 
         if (domElements.$checkOutTypeId.prop('checked')) {
-            checkInOrOutInNextDay(isOutAfterDay);
+            getDateCheckInOut(checkOutDateType);
         }
     };
     let validateForm = function () {
@@ -253,8 +259,8 @@ $(document).ready(function () {
                 $('#InTime').val(shift.BeginCheckInTime);
                 $('#OutTime').val(shift.BeginCheckOutTime);
                 $('#CrossDay').val(shift.CrossDay);
-                $('#IsInAfterDay').val(shift.IsInAfterDay);
-                $('#IsOutAfterDay').val(shift.IsOutAfterDay);
+                $('#CheckInDateType').val(shift.CheckInDateType);
+                $('#CheckOutDateType').val(shift.CheckOutDateType);
                 bindingHourAndMinute();
                 checkCrossDay();
             }

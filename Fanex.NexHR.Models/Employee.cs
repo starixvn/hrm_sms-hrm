@@ -112,7 +112,7 @@
         public DateTime? PromotionDate { get; set; }
 
         [Display(Name = "Permanent Address")]
-        public string Address { get; set; }
+        public string PermanentAddress { get; set; }
 
         public string CurrentAddress { get; set; }
 

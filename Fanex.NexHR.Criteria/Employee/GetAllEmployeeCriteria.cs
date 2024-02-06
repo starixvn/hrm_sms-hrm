@@ -5,70 +5,29 @@
 
     public class GetAllEmployeeCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public string Query { get; set; }
 
         public string TeamIds { get; set; }
 
-        public int? Enable
-        {
-            get
-            {
-                int? disableUsers = null;
-                if (EnableUser.HasValue)
-                {
-                    disableUsers = EnableUser.Value ? 1 : 0;
-                }
+        public short? PageNumber { get; set; }
 
-                return disableUsers;
-            }
-        }
+        public short? PageSize { get; set; }
 
-        public int? IsDelete
-        {
-            get
-            {
-                int? deleteUsers = null;
-                if (IsDeleteUser.HasValue)
-                {
-                    deleteUsers = IsDeleteUser.Value ? 1 : 0;
-                }
-
-                return deleteUsers;
-            }
-        }
-
-        public int? IsLocal
-        {
-            get
-            {
-                int? localUser = null;
-                if (IsLocalUser.HasValue)
-                {
-                    localUser = IsLocalUser.Value ? 1 : 0;
-                }
-
-                return localUser;
-            }
-        }
-
-        public int? PageNumber { get; set; }
-
-        public int? PageSize { get; set; }
-
-        public int? TotalRow { get; set; }
+        public int TotalRow { get; set; }
 
         public int? TitleId { get; set; }
 
-        [SpParam(Ignored = true)]
+        [SpParam(SqlParamName = "Enable")]
         public bool? EnableUser { get; set; }
 
-        [SpParam(Ignored = true)]
+        [SpParam(SqlParamName = "IsDelete")]
         public bool? IsDeleteUser { get; set; }
 
-        [SpParam(Ignored = true)]
+        [SpParam(SqlParamName = "IsLocal")]
         public bool? IsLocalUser { get; set; }
 
-        public override string GetSettingKey() => "Employee_GetEmployees";
+        public override string GetSettingKey() => "Employee_GetAll";
 
         public override bool IsValid() => true;
     }

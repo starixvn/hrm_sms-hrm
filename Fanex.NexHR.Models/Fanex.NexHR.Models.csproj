@@ -221,7 +221,7 @@
     <Compile Include="Supervisor\TeamSupervisorModel.cs" />
     <Compile Include="Supervisor\TeamSupervisorReportModel.cs" />
     <Compile Include="SyncData\SyncByApiSetting.cs" />
-    <Compile Include="SyncData\WorkingShiftSyncModel.cs" />
+    <Compile Include="SyncData\SyncWorkingShift.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="TimeRecordModel.cs" />
     <Compile Include="Unit\Unit.cs" />

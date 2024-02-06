@@ -2,6 +2,12 @@
 @using System.Web.Mvc.Html5
 @model CreateShiftModel
 @{
+    var dateTypeOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "1", Text = "Yesterday" },
+        new SelectListItem { Value = "2", Text = "Today" },
+        new SelectListItem { Value = "3", Text = "Tomorrow" }
+    };
     ViewBag.Title = @Labels.Shift;
 }
 @section css{
@@ -24,7 +30,7 @@
             <div class="label-form">
                 @Html.LabelFor(model => model.Name, new { @class = "control-label" })*
             </div>
-            <div class="input-form input-form-custom">
+            <div class="input-form">
                 @Html.TextBoxFor(model => model.Name, new { maxlength = "20", @class = "form-control shift-name" })
             </div>
         </div>
@@ -33,14 +39,11 @@
             <div class="label-form">
                 @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn, new { @class = "control-label" })*
             </div>
-            <div class="input-form input-form-custom">
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.CheckInDateType, dateTypeOptions, new { @class = "form-control" })
                 @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn", @class = "form-control" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MinuteTimeIn", MaxLength = "2", id = "MinuteTimeIn", @class = "form-control" })
-                <div class="checkbox-group">
-                    @Html.CheckBoxCustomFor(model => model.IsInAfterDay)
-                    @Html.LabelFor(model => model.IsInAfterDay, new { @class = "checkbox-label" })
-                </div>
             </div>
         </div>
 
@@ -49,13 +52,10 @@
                 @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut, new { @class = "control-label" })*
             </div>
             <div class="input-form">
+                @Html.DropDownListFor(model => model.CheckInDateType, dateTypeOptions, new { @class = "form-control" })
                 @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut", @class = "form-control" })
                 :
                 @Html.Html5Number(0, 59, 1, Model.MinuteTimeOut, new { Name = "MinuteTimeOut", MaxLength = "2", id = "MinuteTimeOut", @class = "form-control" })
-                <div class="checkbox-group">
-                    @Html.CheckBoxCustomFor(model => model.IsOutAfterDay)
-                    @Html.LabelFor(model => model.IsOutAfterDay, new { @class = "checkbox-label" })
-                </div>
             </div>
         </div>
 
