@@ -40,16 +40,17 @@
         {
             foreach (LogObjectDetail log in logs)
             {
-                IEnumerable<FieldValue> oldValues = ReadXmlString(log.OldData);
-                IEnumerable<FieldValue> newValues = ReadXmlString(log.Data);
-                IEnumerable<string> fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
+                var oldValues = ReadXmlString(log.OldData);
+                var newValues = ReadXmlString(log.Data);
+                var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
 
                 foreach (string fieldName in fieldNames)
                 {
                     var oldValue = oldValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
                     var newValue = newValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
 
-                    if (!string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
+                    if ((!string.IsNullOrWhiteSpace(oldValue) || !string.IsNullOrWhiteSpace(newValue))
+                        && !string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
                     {
                         log.Fields.Add(new FieldValue
                         {

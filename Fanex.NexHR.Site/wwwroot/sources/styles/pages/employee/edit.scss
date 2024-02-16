@@ -31,8 +31,9 @@
                 padding-bottom: 7px;
 
                 .user-role {
-                    display: flex;
-                    flex-wrap: wrap;
+                    display: grid;
+                    grid-template-columns: auto auto auto auto;
+                    grid-column-gap: 10px;
 
                     .checkbox {
                         margin-right: 5px;

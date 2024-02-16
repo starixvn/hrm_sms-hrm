@@ -677,19 +677,18 @@
 
         private string BuildRole(IList<Role> roles)
         {
-            var result = string.Empty;
-            if (roles != null)
+            IList<Role> systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+            var defaultRoles = systemRoles.Where(x => x.IsDefault).Select(x => x.RoleId);
+
+            if (roles != null && roles.Count > 0)
             {
-                result = string.Join(",", roles.Select(i => i.RoleId));
+                var result = string.Join(",", roles.Select(i => i.RoleId));
+                return roles.Any(x => defaultRoles.Any(y => x.RoleId == y)) ? result : string.Join(",", defaultRoles) + "," + result;
             }
-
-            return string.IsNullOrEmpty(result) ? BuildDefaultRole() : BuildDefaultRole() + "," + result;
-        }
-
-        private string BuildDefaultRole()
-        {
-            IList<Role> roles = roleService.GetBySiteId(userControlSession.SiteId);
-            return string.Join(",", roles.Where(x => x.IsDefault).Select(x => x.RoleId));
+            else
+            {
+                return string.Join(",", defaultRoles);
+            }
         }
 
         private bool? GetCategory(bool? isLocal = null)
