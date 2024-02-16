@@ -82,6 +82,11 @@ export const DisciplineType = {
     WeekendLeave: 10,
     SevenDaysLeave: 11
 };
+export const CheckInOutDateType = {
+    Yesterday: 1,
+    Today: 2,
+    Tomorrow: 3
+};
 export const Messages = {
     notAvailable: 'Not available',
     invalidInputData: 'Invalid input data',

@@ -89,6 +89,7 @@
         {
             var criteria = new GetMemberMonthlyOvertimeRequestCriteria
             {
+                CompanyId = param.CompanyId,
                 ActorId = param.ActorId,
                 Month = param.Month,
                 StatusIds = param.StatusIds,

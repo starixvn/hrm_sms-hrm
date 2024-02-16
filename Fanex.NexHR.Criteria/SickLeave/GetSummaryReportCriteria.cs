@@ -5,6 +5,8 @@
 
     public class GetSummaryReportCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
+
         [SpParam(SqlParamName = "EmpId")]
         public int? EmployeeId { get; set; }
 

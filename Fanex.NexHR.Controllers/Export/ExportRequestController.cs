@@ -46,6 +46,7 @@
 
             var criteria = new GetRequestCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 SupervisorId = EmployeeSession.EmpId,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
@@ -77,6 +78,7 @@
             bool? isLocal = null;
             var criteria = new GetRequestCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 EmpId = employeeId,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
@@ -108,6 +110,7 @@
             model.ViewType = RequestViewType.CompanySpace;
             var criteria = new GetRequestCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,

@@ -4,6 +4,7 @@
 
     public class GetMemberByManagerCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public string Query { get; set; }
 
         public int SupervisorId { get; set; }

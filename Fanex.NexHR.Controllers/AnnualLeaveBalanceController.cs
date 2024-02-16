@@ -103,6 +103,7 @@
             var teams = teamService.GetBySupervisor(EmployeeSession.EmpId);
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = date.Year,
                 EmpId = null,
                 TeamIds = string.Join(",", teams.Select(x => x.Id)),
@@ -110,12 +111,12 @@
                 Role = string.Empty,
                 SupervisorId = null
             };
-            IList<LeaveSummary> entityList = reportService.GetAnnualLeaveBalanceReport(criteria);
+            IList<LeaveSummary> balances = reportService.GetAnnualLeaveBalanceReport(criteria);
             var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
             {
                 ActorId = EmployeeSession.EmpId,
                 Description = descriptionReset,
-                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
+                AnnualLeaves = balances.Where(m => m.LeaveBalance > minbalance).ToList(),
                 FromDate = date,
                 ResetDays = minbalance
             };
@@ -241,6 +242,7 @@
         {
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,

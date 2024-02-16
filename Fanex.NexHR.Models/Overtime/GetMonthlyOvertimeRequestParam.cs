@@ -4,6 +4,7 @@
 
     public class GetMonthlyOvertimeRequestParam
     {
+        public short CompanyId { get; set; }
         public int ActorId { get; set; }
         public DateTime? Month { get; set; }
         public int? EmployeeId { get; set; }

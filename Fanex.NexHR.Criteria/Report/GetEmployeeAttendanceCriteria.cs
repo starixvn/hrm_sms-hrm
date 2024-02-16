@@ -6,6 +6,7 @@
 
     public class GetEmployeeAttendanceCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int? SupervisorId { get; set; }
 
         public DateTime Fromtime { get; set; }

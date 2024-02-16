@@ -40,6 +40,7 @@
 
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
@@ -54,14 +55,11 @@
             return ExcelFile(hssfworkbook, fileName);
         }
 
-#pragma warning disable S1541 // Methods and properties should not be too complex
-#pragma warning disable S1067 // Expressions should not be too complex
-
         public ActionResult UnpaidLeaveSummary(LeaveSummaryViewModel model)
-#pragma warning restore S1541 // Methods and properties should not be too complex
         {
             var criteria = new GetUnpaidLeaveCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,
@@ -72,13 +70,13 @@
             IList<LeaveSummary> leaveSumaries = reportService.GetUnpaidLeave(criteria);
             if (model.Period.Equals("1"))
             {
-                leaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+                leaveSumaries = GetFirstHaftLeaveSummary(leaveSumaries);
             }
             else
             {
                 if (model.Period.Equals("2"))
                 {
-                    leaveSumaries = leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+                    leaveSumaries = GetSecondHaftLeaveSummary(leaveSumaries);
                 }
             }
 
@@ -87,6 +85,16 @@
             return new EmptyResult();
         }
 
+#pragma warning disable S1067 // Expressions should not be too complex
+        private IList<LeaveSummary> GetFirstHaftLeaveSummary(IList<LeaveSummary> leaveSumaries)
+        {
+            return leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+        }
+
+        private IList<LeaveSummary> GetSecondHaftLeaveSummary(IList<LeaveSummary> leaveSumaries)
+        {
+            return leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+        }
 #pragma warning restore S1067 // Expressions should not be too complex
     }
 }

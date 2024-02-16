@@ -43,6 +43,7 @@
         {
             var param = new GetMonthlyOvertimeParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -62,6 +63,7 @@
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetYearlyOvertimeParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 Year = model.Year,
                 Calendar = model.Calendar,
@@ -90,6 +92,7 @@
             model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
             var param = new GetDailyOvertimeDetailsParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -108,6 +111,7 @@
         {
             var param = new GetMonthlyOvertimeParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -129,6 +133,7 @@
         {
             var param = new GetYearlyOvertimeParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 Year = model.Year,
                 Calendar = model.Calendar,
@@ -149,6 +154,7 @@
         {
             var param = new GetDailyOvertimeDetailsParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,

@@ -29,6 +29,7 @@
         {
             var criteria = new GetWeekendLeaveSummaryCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamId = model.TeamId,
@@ -48,6 +49,7 @@
         {
             var criteria = new GetWeekendLeaveDetailCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamId = model.TeamId,

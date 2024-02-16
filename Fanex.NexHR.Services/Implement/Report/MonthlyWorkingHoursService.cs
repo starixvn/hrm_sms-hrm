@@ -42,6 +42,7 @@
         {
             var criteria = new GetMonthlyWorkingHoursCriteria
             {
+                CompanyId = param.CompanyId,
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,
@@ -58,6 +59,7 @@
         {
             var criteria = new GetEmployeeRequestCriteria
             {
+                CompanyId = param.CompanyId,
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,

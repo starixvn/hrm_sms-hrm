@@ -48,6 +48,7 @@
         {
             var criteria = new GetEmployeeAttendanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 SupervisorId = model.SupervisorId,
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,
@@ -67,6 +68,7 @@
         {
             var criteria = new GetEmployeeAttendanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 SupervisorId = model.SupervisorId,
                 Fromtime = model.FromDate,
                 Totime = model.ToDate,

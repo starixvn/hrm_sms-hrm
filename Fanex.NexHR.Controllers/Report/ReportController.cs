@@ -72,6 +72,7 @@
 
             var criteria = new GetEmployeeAttendanceCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Fromtime = fromDate,
                 Totime = toDate,
                 AttendanceType = 0, //show All
@@ -147,6 +148,7 @@
         {
             var criteria = new GetWeekendLeaveSummaryCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamId = model.TeamId,
@@ -178,6 +180,7 @@
         {
             var criteria = new GetWeekendLeaveDetailCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 TeamId = model.TeamId,
@@ -216,6 +219,7 @@
         {
             var criteria = new GetUnpaidLeaveCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
                 TeamIds = model.TeamIds,

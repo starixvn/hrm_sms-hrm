@@ -4,6 +4,7 @@
 
     public class GetYearlyOvertimeReportCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int ActorId { get; set; }
         public string TeamIds { get; set; }
         public string Employee { get; set; }

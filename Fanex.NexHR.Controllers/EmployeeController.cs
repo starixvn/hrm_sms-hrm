@@ -440,6 +440,7 @@
         {
             var criteria = new GetMemberByManagerCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 SupervisorId = EmployeeSession.EmpId,
                 Query = keyword,
                 ExcludedManager = false

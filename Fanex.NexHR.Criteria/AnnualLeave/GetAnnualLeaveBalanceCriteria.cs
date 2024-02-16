@@ -4,6 +4,7 @@
 
     public class GetAnnualLeaveBalanceCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int? EmpId { get; set; }
 
         public string TeamIds { get; set; }
@@ -16,14 +17,8 @@
 
         public string Role { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Report_LeaveSummary";
-        }
+        public override string GetSettingKey() => "Report_LeaveSummary";
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+        public override bool IsValid() => true;
     }
 }

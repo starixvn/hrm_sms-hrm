@@ -271,6 +271,7 @@
             bool? isLocal = null;
             var criteria = new GetRequestCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 EmpId = employeeId,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,

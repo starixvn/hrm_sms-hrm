@@ -4,6 +4,7 @@
 
     public class GetUnpaidLeaveCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int? EmpId { get; set; }
 
         public string TeamIds { get; set; }
@@ -16,14 +17,8 @@
 
         public string LeaveType { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "Report_UnpaidLeaveSummary";
-        }
+        public override string GetSettingKey() => "Report_UnpaidLeaveSummary";
 
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
+        public override bool IsValid() => Year > 0;
     }
 }

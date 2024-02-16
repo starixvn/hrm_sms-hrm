@@ -5,6 +5,7 @@
 
     public class GetEmployeeRequestCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int ActorId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }

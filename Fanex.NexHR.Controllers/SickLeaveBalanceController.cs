@@ -69,6 +69,7 @@
             model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
             var criteria = new GetSummaryReportCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmployeeId = model.EmployeeId,
                 TeamIds = model.TeamIds,
@@ -124,6 +125,7 @@
         [HRMPermission(Policy.Host, FunctionKey.SickLeaveBalance)]
         public JsonResult Reset(ResetMultipleTransactionCriteria criteria)
         {
+            criteria.CompanyId = EmployeeSession.CompanyId;
             criteria.ActorId = EmployeeSession.EmpId;
             criteria.Year = DateTimeOffset.Now.AddYears(-1).Year;
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
@@ -251,6 +253,7 @@
             string fileName = "SickLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
             var criteria = new GetSummaryReportCriteria
             {
+                CompanyId = EmployeeSession.CompanyId,
                 Year = model.Year,
                 EmployeeId = model.EmployeeId,
                 TeamIds = model.TeamIds,

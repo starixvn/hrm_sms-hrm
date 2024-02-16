@@ -32,6 +32,7 @@
         {
             var criteria = new GetEmployeeWorkingCalendarByDateCriteria
             {
+                CompanyId = param.CompanyId,
                 ActorId = param.ActorId,
                 FromDate = param.FromDate,
                 ToDate = param.ToDate,

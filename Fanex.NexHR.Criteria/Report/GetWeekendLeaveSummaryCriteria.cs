@@ -6,6 +6,7 @@
 
     public class GetWeekendLeaveSummaryCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
@@ -26,14 +27,8 @@
 
         public int MinTotalLeave { get; set; }
 
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate;
-        }
+        public override bool IsValid() => FromDate <= ToDate;
 
-        public override string GetSettingKey()
-        {
-            return "Report_GetWeekendLeaveSummary";
-        }
+        public override string GetSettingKey() => "Report_GetWeekendLeaveSummary";
     }
 }

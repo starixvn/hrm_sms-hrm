@@ -5,6 +5,7 @@
 
     public class GetMemberMonthlyOvertimeRequestCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int ActorId { get; set; }
         public int? EmployeeId { get; set; }
         public string TeamIds { get; set; }

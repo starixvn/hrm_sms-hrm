@@ -117,6 +117,7 @@
 
             var param = new GetMonthlyOvertimeRequestParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 Month = model.Month,
                 TeamIds = model.TeamIds,
@@ -170,6 +171,7 @@
 
             var param = new GetMonthlyOvertimeRequestParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 Month = model.Month,
                 TeamIds = model.TeamIds,

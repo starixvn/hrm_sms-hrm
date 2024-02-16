@@ -45,6 +45,7 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
@@ -65,6 +66,7 @@
         {
             var param = new GetMonthlyWorkingHoursParam
             {
+                CompanyId = EmployeeSession.CompanyId,
                 ActorId = EmployeeSession.EmpId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,

@@ -7,6 +7,7 @@
 
     public class GetRequestCriteria : CriteriaBase
     {
+        public short CompanyId { get; set; }
         public int? SupervisorId { get; set; }
 
         public int? EmpId { get; set; }
