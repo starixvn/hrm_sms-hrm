@@ -268,13 +268,15 @@
         public CustomJsonResult GetDisableDate(int leaveTypeId, int employeeId, DateTime date, long? requestId = null)
         {
             var fromDate = new DateTimeOffset(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
+            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
+            var toDate = new DateTimeOffset(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month), 0, 0, 0, TimeSpan.Zero).Date;
             var param = new GetDisabledDateParam
             {
                 LeaveTypeId = leaveTypeId,
                 RequestId = requestId,
                 EmployeeId = employeeId,
                 FromDate = fromDate,
-                ToDate = fromDate.AddMonths(1).AddDays(-1)
+                ToDate = toDate
             };
             IEnumerable<DateTime> dates = leaveRequestService.GetDisabledDate(param);
             return new CustomJsonResult { Data = dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
