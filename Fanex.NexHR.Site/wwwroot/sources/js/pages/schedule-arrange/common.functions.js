@@ -55,6 +55,10 @@ function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDef
                 if (dailySchedule.shift !== null) {
                     shift.value = dailySchedule.shift.code;
                 }
+
+                if (dailySchedule.isChangeShift) {
+                    shift.class = 'changeshift';
+                }
             } else {
                 shift.value = dailySchedule.leaveType.code;
                 shift.class = shift.classOfLeave;
