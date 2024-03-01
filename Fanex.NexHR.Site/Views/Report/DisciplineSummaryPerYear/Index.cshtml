@@ -73,7 +73,7 @@
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-                    {
+                                    {
                         new SelectListItem() {Text = Labels.All, Value = string.Empty},
                         new SelectListItem() {Text = Labels.Expat, Value = "false"},
                         new SelectListItem() {Text = Labels.Local, Value = "true"}
@@ -91,6 +91,22 @@
                 @Html.TextBoxFor(model => model.Employee,
                     new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
                 @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label field-length-service">@Labels.LengthOfService</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var lengOfService = new List<SelectListItem>
+                                    {
+                        new SelectListItem() {Text = "By Group Date", Value = "false"},
+                        new SelectListItem() {Text = "By Company Date", Value = "true"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.LengthOfService, lengOfService, new { @class = "category form-control" })
             </div>
         </div>
 

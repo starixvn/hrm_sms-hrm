@@ -619,11 +619,29 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By Company Date.
+        /// </summary>
+        public static string ByCompanyDate {
+            get {
+                return ResourceManager.GetString("ByCompanyDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By Day.
         /// </summary>
         public static string ByDay {
             get {
                 return ResourceManager.GetString("ByDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By Group Date.
+        /// </summary>
+        public static string ByGroupDate {
+            get {
+                return ResourceManager.GetString("ByGroupDate", resourceCulture);
             }
         }
         

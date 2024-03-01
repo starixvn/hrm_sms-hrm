@@ -2007,4 +2007,10 @@
   <data name="Waive" xml:space="preserve">
     <value>Waive</value>
   </data>
+  <data name="ByCompanyDate" xml:space="preserve">
+    <value>By Company Date</value>
+  </data>
+  <data name="ByGroupDate" xml:space="preserve">
+    <value>By Group Date</value>
+  </data>
 </root>
