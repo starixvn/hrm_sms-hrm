@@ -28,8 +28,8 @@
         private enum BasicInfo
         {
             RowStartHeader = 2,
-            RowStartBody = 3,
-            TotalColumns = 21
+            RowStartBody = 4,
+            TotalColumns = 22
         }
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -42,7 +42,7 @@
             /// Fill report title.
             writer.CopyRows(0, 2);
             /// Fill report header.
-            writer.CopyRows((byte)BasicInfo.RowStartHeader, 1);
+            writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
 
             FillContentRowEmployeeBasicInfoReport(employees, ref writer);
             writer.SyncColumnsWidth((byte)BasicInfo.TotalColumns);
@@ -86,7 +86,7 @@
         {
             object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
 
-            var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
+            var writeRowNumber = (rowIndex % 2 == 0) ? 5 : 4;
 
             writer.WriteRow(writeRowNumber, record);
 
@@ -110,7 +110,8 @@
                 employee.ConfirmedDate,
                 employee.ResignedDate,
                 employee.ResignedReason,
-                LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+                LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+                LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate),
                 DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
                 Gender = employee.Gender == 0 ? "F" : "M",
                 CellPhone = employee.Phone,
@@ -216,11 +217,11 @@
             /// Fill report title.
             writer.CopyRows(0, 2);
             /// Fill report header.
-            writer.CopyRows(2, 1);
+            writer.CopyRows(2, 2);
 
             WriteFullProfileBody(writer, profiles);
-            writer.SyncColumnsWidth(56);
-            writer.CreateFreezePane(0, 3);
+            writer.SyncColumnsWidth(57);
+            writer.CreateFreezePane(0, 4);
 
             writer.Render();
         }
@@ -231,7 +232,7 @@
             var currentRow = 3;
             foreach (var p in profiles)
             {
-                var writeRowNumber = (currentRow % 2 == 0) ? 4 : 3;
+                var writeRowNumber = (currentRow % 2 == 0) ? 5 : 4;
 
                 var record = CreateRecordEployeeFullProfile(p, currentRow);
                 writer.WriteRow(writeRowNumber, record);
@@ -264,7 +265,8 @@
                 ConfirmedDate = FormatDate(p.ConfirmedDate),
                 ResignedDate = FormatDate(p.ResignedDate),
                 p.ResignedReason,
-                LengthOfService = employeeService.CaculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
+                LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
+                LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
                 p.JobTitle,
                 p.JobLevel,
                 TeamDate = FormatDate(p.TeamDate),

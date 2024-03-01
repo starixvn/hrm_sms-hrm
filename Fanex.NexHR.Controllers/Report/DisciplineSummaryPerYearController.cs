@@ -77,7 +77,7 @@
 
             foreach(var employee in employees)
             {
-                employee.LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+                employee.LengthOfService = employeeService.CaculateLengthOfService(model.LengthOfService ? employee.CompanyDate : employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
                 employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
             }
 

@@ -13,6 +13,7 @@
         public string Team { get; set; }
         public string Section { get; set; }
         public DateTime? JoinedDate { get; set; }
+        public DateTime? CompanyDate { get; set; }
         public DateTime? MilitaryFromDate { get; set; }
         public DateTime? MilitaryToDate { get; set; }
         public string LengthOfService { get; set; }

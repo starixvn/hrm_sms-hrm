@@ -9,5 +9,6 @@
         public string Employee { get; set; }
         public int? EmployeeId { get; set; }
         public bool IsShowAll { get; set; }
+        public bool LengthOfService { get; set; }
     }
 }

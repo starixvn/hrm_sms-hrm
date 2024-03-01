@@ -274,7 +274,8 @@
                 employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
                 employee.EmpShiftList = GetShiftMonitors(supervisors);
                 employee.ActingEmpList = GetActingSupervisors(supervisors);
-                ViewBag.LengthOfService = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+                ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+                ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
 
                 ComposeViewBagsForEditEmployee();
                 return View(employee);
