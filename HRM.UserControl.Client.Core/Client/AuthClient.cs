@@ -51,7 +51,7 @@
 
         private static class RelativePaths
         {
-            public const string LoginPath = "api/auth/login";
+            public const string LoginPath = "api/v1/auth/login";
             public const string ReCheckInPath = "api/auth/recheckin";
             public const string LogoutPath = "api/auth/logout";
         }
