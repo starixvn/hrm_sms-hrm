@@ -85,11 +85,11 @@
             public const string GetFunctionPermissionPath = "api/user/getFunctionPermission?siteId={0}&userId={1}";
             public const string GetAllUserPath = "api/user/getAll?keyword={0}&statusId={1}";
             public const string GetUserByIdPath = "api/user/getById/{0}";
-            public const string CreateUserPath = "api/user/create";
-            public const string UpdateUserInfoPath = "api/user/update";
+            public const string CreateUserPath = "api/v1/user/create";
+            public const string UpdateUserInfoPath = "api/v1/user/update";
             public const string AssignRoleToUserPath = "api/user/assignRole";
-            public const string UpdatePasswordPath = "api/user/updatePassword";
-            public const string ResetPasswordPath = "api/user/resetPassword";
+            public const string UpdatePasswordPath = "api/v1/user/updatePassword";
+            public const string ResetPasswordPath = "api/v1/user/resetPassword";
             public const string DeleteUserPath = "api/user/delete";
         }
     }
