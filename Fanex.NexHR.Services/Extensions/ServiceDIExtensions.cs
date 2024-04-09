@@ -55,7 +55,6 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<ILeaveRequestService, LeaveRequestService>(TypeLifetime.Singleton);
             container.RegisterType<IDisciplineService, DisciplineService>(TypeLifetime.Singleton);
             container.RegisterType<IScheduleArrangeService, ScheduleArrangeService>(TypeLifetime.Singleton);
-            container.RegisterType<IBackgroundJobService, BackgroundJobService>(TypeLifetime.Singleton);
             container.RegisterType<IPostnatalService, PostnatalService>(TypeLifetime.Singleton);
             container.RegisterType<IPaternityService, PaternityService>(TypeLifetime.Singleton);
             container.RegisterType<IDashboardService, DashboardService>(TypeLifetime.Singleton);

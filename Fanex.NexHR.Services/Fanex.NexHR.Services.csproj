@@ -163,7 +163,6 @@
     <Compile Include="Implement\AnnualLeaveBalanceService.cs" />
     <Compile Include="Implement\API\APITodolistRequestService.cs" />
     <Compile Include="Implement\AttachFileService.cs" />
-    <Compile Include="Implement\BackgroundJob.cs" />
     <Compile Include="Implement\CommonDataService.cs" />
     <Compile Include="Implement\DashboardService.cs" />
     <Compile Include="Implement\DepartmentService.cs" />
@@ -208,7 +207,6 @@
     <Compile Include="Interfaces\API\IAPITodolistRequestService.cs" />
     <Compile Include="Interfaces\IAnnualLeaveBalanceService.cs" />
     <Compile Include="Interfaces\IAttachFileService.cs" />
-    <Compile Include="Interfaces\IBackgroundJob.cs" />
     <Compile Include="Interfaces\IDashboardService.cs" />
     <Compile Include="Interfaces\IDepartmentService.cs" />
     <Compile Include="Interfaces\IDisciplineService.cs" />

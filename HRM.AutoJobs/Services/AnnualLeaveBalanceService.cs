@@ -1,157 +1,70 @@
-﻿namespace Fanex.NexHR.Services
+﻿namespace HRM.AutoJobs.Services
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
-    using System.Web.Hosting;
-    using Fanex.NexHR.Core;
-    using Fanex.NexHR.Core.Services;
-    using Fanex.NexHR.Criteria.BackgroundJob;
-    using Fanex.NexHR.Models.BackgroundJob;
-    using Fanex.NexHR.Services.Interfaces;
-    using Hangfire;
+    using HRM.AutoJobs.Criteria;
+    using HRM.AutoJobs.Models;
+    using HRM.AutoJobs.Models.MailDeliver;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Logging;
 
-    public class BackgroundJobService : IBackgroundJobService
+    public class AnnualLeaveBalanceService : IAnnualLeaveBalanceService
     {
-        private readonly log4net.ILog logger = log4net.LogManager.GetLogger(typeof(BackgroundJobService));
+        private const string RemindUseALTemplatePath = "EmailTemplates/RemindUseAL.txt";
+        private const string StatisticALBalanceTemplatePath = "EmailTemplates/StatisticALBalance.txt";
 
-        private readonly string RemindUseALEmailTemplate = "~/app_data/emails/RemindUseAL.cshtml";
-        private readonly string StatisticEmailTemplate = "~/app_data/emails/StatisticALBalance.cshtml";
-
+        private readonly IWebHostEnvironment hostEnvironment;
+        private readonly ILogger logfile;
         private readonly IBaseService baseService;
-        private readonly IHolidayService holidayService;
-        private readonly ISyncWorkingShiftService syncWorkingShiftService;
-        private readonly IEmailService emailService;
+        private readonly IBaseMailService mailService;
         private readonly ILetstalkService letstalkService;
 
-        public BackgroundJobService(IBaseService baseService,
-            IHolidayService holidayService,
-            ISyncWorkingShiftService syncWorkingShiftService,
-            IEmailService emailService,
+        public AnnualLeaveBalanceService(
+            IWebHostEnvironment hostEnvironment,
+            ILogger<AnnualLeaveBalanceService> logfile,
+            IBaseService baseService,
+            IBaseMailService mailService,
             ILetstalkService letstalkService)
         {
+            this.hostEnvironment = hostEnvironment;
+            this.logfile = logfile;
             this.baseService = baseService;
-            this.holidayService = holidayService;
-            this.syncWorkingShiftService = syncWorkingShiftService;
-            this.emailService = emailService;
+            this.mailService = mailService;
             this.letstalkService = letstalkService;
         }
 
-        public void ImportTimeRecord()
+        public async Task InsertForNextYearAsync()
         {
-            var criteria = new ImportTimeRecordCriteria();
-            baseService.ExecuteNonQuery(criteria);
-        }
-
-        public void PublishSchedule()
-        {
-            logger.Error("PublishSchedule: Start");
-
-            var criteria = new PublishScheduleCriteria();
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("PublishSchedule: End");
-        }
-
-        public void InsertScheduleByDefaultShift()
-        {
-            logger.Error("InsertScheduleByDefaultShift: Start");
-
-            var fromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1);
-            var toDate = fromDate.AddDays(6);
-            var criteria = new InsertScheduleByDefaultShiftCriteria
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("InsertScheduleByDefaultShift: End");
-        }
-
-        public void InsertScheduleByWeeklyDefaultShift()
-        {
-            logger.Error("InsertScheduleByWeeklyDefaultShift: Start");
-
-            var fromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1);
-            var toDate = fromDate.AddDays(6);
-            var criteria = new InsertScheduleByWeeklyDefaultShiftCriteria
-            {
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("InsertScheduleByWeeklyDefaultShift: End");
-        }
-
-        public void InsertHolidayAutomatically()
-        {
-            logger.Error("InsertHolidayAutomatically: Start");
-
-            var year = DateTimeOffset.Now.Year + 1;
-            holidayService.AutoInsertHolidayOnYear(year);
-
-            logger.Error("InsertHolidayAutomatically: End");
-        }
-
-        public void UpdateWorkingHourPerDay()
-        {
-            logger.Error("UpdateWorkingHourPerDay: Start");
-
-            var criteria = new UpdateWorkingHourPerDayCriteria();
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("UpdateWorkingHourPerDay: End");
-        }
-
-        public void UpdateAnnualLeaveBalance()
-        {
-            logger.Error("UpdateAnnualLeaveBalance: Start");
-
-            var criteria = new UpdateAnnualLeaveBalanceCriteria
+            var command = new UpdateAnnualLeaveBalanceCommand
             {
                 Year = DateTimeOffset.Now.Year + 1
             };
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("UpdateAnnualLeaveBalance: End");
+            await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public void UpdateAnnualLeaveBalanceForNewEmployee()
+        public async Task InsertForNewEmployeeAsync()
         {
-            logger.Error("UpdateAnnualLeaveBalanceForNewEmployee: Start");
-
-            var criteria = new UpdateAnnualLeaveBalanceForNewEmployeeCriteria
+            var command = new InsertAnnualLeaveBalanceForNewEmployeeCommand
             {
-                Year = DateTimeOffset.Now.Year
+                Year = DateTimeOffset.Now.Year + 1
             };
-            baseService.ExecuteNonQuery(criteria);
-
-            logger.Error("UpdateAnnualLeaveBalanceForNewEmployee: End");
+            await baseService.ExecuteNonQueryAsync(command);
         }
 
-        public async Task SyncWorkingShiftAsync()
+        public async Task RemindUsedALAsync()
         {
-            await syncWorkingShiftService.SyncWorkingShiftAsync();
-        }
-
-        #region Auto send mail remind user to use AL
-
-        public void SendMailRemindUserToUseAnnualLeave()
-        {
-            logger.Error("SendMailRemindUserToUseAnnualLeave: Start");
             var year = DateTimeOffset.Now.Year;
             var criteria = new GetAnnualLeaveBalanceCriteria
             {
                 Year = year
             };
-            var (employees, supervisors, statistics) = baseService.FetchMultiple<AnnualLeaveBalance, EmployeeSupervisor, SectionStatisticAnnualLeave>(criteria);
-            var bodyTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(RemindUseALEmailTemplate)));
-
+            var (employees, supervisors, statistics) = await baseService.FetchMultipleAsync<AnnualLeaveBalance, EmployeeSupervisor, SectionStatisticAnnualLeave>(criteria);
+            var bodyTemplate = ReadTextFile(Path.Combine(hostEnvironment.ContentRootPath, RemindUseALTemplatePath));
             var validEmployees = new List<AnnualLeaveBalance>();
 
             foreach (var employee in employees)
@@ -173,22 +86,25 @@
 
                 if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
                 {
-                    BackgroundJob.Enqueue(() => emailService.SendEmail(
-                        ConfigSettings.EmailSetting,
-                        employee.Email,
-                        string.Empty,
-                        "Annual Leave Balance Reminder",
-                        body));
+                    var mailItem = new MailRecord
+                    {
+                        MailTo = employee.Email,
+                        MailCc = string.Empty,
+                        Subject = "Annual Leave Balance Reminder",
+                        Body = body
+                    };
+                    var thread = new Thread(async () => await SendEmailAsync(mailItem));
+                    thread.Start();
                 }
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(employee.LetsTalk, "Annual Leave Balance Reminder", body));
+                var letstalkThread = new Thread(async () => await SendLetstalkNotificationAsync(employee.Letstalk, "Annual Leave Balance Reminder", body));
+                letstalkThread.Start();
             }
 
             SendMailStatisticAnnualLeave(validEmployees, supervisors, statistics);
-            logger.Error("SendMailRemindUserToUseAnnualLeave: End");
         }
 
-        public void SendMailStatisticAnnualLeave(
+        private void SendMailStatisticAnnualLeave(
             List<AnnualLeaveBalance> validEmployees,
             IEnumerable<EmployeeSupervisor> supervisors,
             IEnumerable<SectionStatisticAnnualLeave> statistics)
@@ -209,10 +125,10 @@
                 .GroupBy(x => x.Key.OwnerId).ToList();
 
             const string tableALTemplate = "<tr><td style=\"border: 1px solid;\">{0}</td>"
-                            + "<td style=\"border: 1px solid;\">{1}</td>"
-                            + "<td style=\"text-align: center; border: 1px solid;\">{2}</td>"
-                            + "<td style=\"text-align: center; border: 1px solid;\">{3}</td>"
-                            + "<td style=\"text-align: center; border: 1px solid;\">{4}%</td></tr>";
+                + "<td style=\"border: 1px solid;\">{1}</td>"
+                + "<td style=\"text-align: center; border: 1px solid;\">{2}</td>"
+                + "<td style=\"text-align: center; border: 1px solid;\">{3}</td>"
+                + "<td style=\"text-align: center; border: 1px solid;\">{4}%</td></tr>";
 
             foreach (var groupSupervisor in groupSupervisors)
             {
@@ -239,22 +155,56 @@
 
                 if (!string.IsNullOrWhiteSpace(email))
                 {
-                    var statisticTemplate = Utilities.ReadTextFile(Path.GetFullPath(HostingEnvironment.MapPath(StatisticEmailTemplate)));
-
+                    var bodyTemplate = ReadTextFile(Path.GetFullPath(hostEnvironment.ContentRootPath, StatisticALBalanceTemplatePath));
                     var body = string.Format(
-                        statisticTemplate,
+                        bodyTemplate,
                         nickname,
                         percentByMonth,
                         tableStatistic,
                         DateTimeOffset.Now.Year + 1);
 
-                    BackgroundJob.Enqueue(() => emailService.SendEmail(
-                        ConfigSettings.EmailSetting,
-                        email,
-                        string.Empty,
-                        "Department / Section Annual Leave Balance Reminder",
-                        body));
+                    var mailItem = new MailRecord
+                    {
+                        MailTo = email,
+                        MailCc = string.Empty,
+                        Subject = "Department / Section Annual Leave Balance Reminder",
+                        Body = body
+                    };
+                    var thread = new Thread(async () => await SendEmailAsync(mailItem));
+                    thread.Start();
                 }
+            }
+        }
+
+        private async Task SendEmailAsync(MailRecord mailRecord)
+        {
+            try
+            {
+                await mailService.SendEmailAsync(mailRecord);
+            }
+            catch (Exception ex)
+            {
+                logfile.LogError(ex, ex.Message);
+            }
+        }
+
+        private async Task SendLetstalkNotificationAsync(string letstalkId, string subject, string message)
+        {
+            try
+            {
+                await letstalkService.SendNotificationAsync(letstalkId, subject, message);
+            }
+            catch (Exception ex)
+            {
+                logfile.LogError(ex, ex.Message);
+            }
+        }
+
+        private static string ReadTextFile(string filePath)
+        {
+            using (var sr = new StreamReader(filePath))
+            {
+                return sr.ReadToEnd();
             }
         }
 
@@ -292,6 +242,7 @@
         }
 
 #pragma warning disable S1541 // Methods and properties should not be too complex
+
         private static void CheckSendMail(ref bool isSentMail, bool isLocal, ref string percentInMail, float percentAnnualLeaveRemaining)
 #pragma warning restore S1541 // Methods and properties should not be too complex
         {
@@ -340,7 +291,5 @@
                     break;
             }
         }
-
-        #endregion Auto send mail remind user to use AL
     }
 }

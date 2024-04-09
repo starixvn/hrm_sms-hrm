@@ -12,14 +12,11 @@
     using Fanex.NexHR.Core.Services;
     using Fanex.NexHR.Core.XMLExtensions;
     using Fanex.NexHR.Criteria.ScheduleArrange;
-    using Fanex.NexHR.Criteria.SyncData;
     using Fanex.NexHR.Models.SyncData;
     using Newtonsoft.Json;
 
     public interface ISyncWorkingShiftService
     {
-        Task SyncWorkingShiftAsync();
-
         Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
     }
 
@@ -46,42 +43,6 @@
             else
             {
                 _httpClient = new HttpClient();
-            }
-        }
-
-        public async Task SyncWorkingShiftAsync()
-        {
-            var lastModifiedDate = await baseService.GetDataEntityAsync<DateTime>(new GetLastModifiedDateCriteria());
-            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{lastModifiedDate:yyyy-MM-dd}/{DateTimeOffset.Now:yyyy-MM-dd}");
-            var response = await _httpClient.GetAsync(url);
-            if (response.IsSuccessStatusCode)
-            {
-                var rawData = await response.Content.ReadAsStringAsync();
-                var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
-                workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)
-                    && (!x.LastUpdated.HasValue || x.LastUpdated.Value > lastModifiedDate)).ToList();
-                if (workingShifts != null && workingShifts.Any())
-                {
-                    foreach (var shift in workingShifts)
-                    {
-                        ProcessData(shift);
-                    }
-
-                    int totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
-                    for (int i = 0; i < totalBatch; i++)
-                    {
-                        var command = new ImportWorkingShiftCommand
-                        {
-                            WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString()
-                        };
-                        baseService.ExecuteNonQuery(command);
-                    }
-                }
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
             }
         }
 
