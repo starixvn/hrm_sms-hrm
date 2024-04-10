@@ -33,46 +33,46 @@
             if (ConfigSettings.EnableUpdateWorkingHourPerDay)
             {
                 RecurringJob.AddOrUpdate("Update working hour per day",
-                    () => backgroundJob.UpdateWorkingHourPerDay(), "01 00 * * *", new RecurringJobOptions
+                    () => backgroundJob.UpdateWorkingHourPerDay(), "00 08 * * *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // everyday at 00:01AM
+                    }); // everyday at 08:00AM
             }
 
             if (ConfigSettings.EnablePublishSchedule)
             {
                 RecurringJob.AddOrUpdate("Public schedule",
-                    () => backgroundJob.PublishSchedule(), "05 00 * * *", new RecurringJobOptions
+                    () => backgroundJob.PublishSchedule(), "05 08 * * *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // everyday at 00:05AM
+                    }); // everyday at 08:05AM
             }
 
             if (ConfigSettings.EnableInsertScheduleByDefaultShift)
             {
                 RecurringJob.AddOrUpdate("Insert schedule by default shift",
-                    () => backgroundJob.InsertScheduleByDefaultShift(), "10 00 * * FRI", new RecurringJobOptions
+                    () => backgroundJob.InsertScheduleByDefaultShift(), "10 08 * * FRI", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // every friday at 00:10AM
+                    }); // every friday at 08:10AM
             }
 
             if (ConfigSettings.EnableInsertScheduleByWeeklyDefaultShift)
             {
                 RecurringJob.AddOrUpdate("Insert schedule by weekly default shift",
-                    () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "15 00 * * FRI", new RecurringJobOptions
+                    () => backgroundJob.InsertScheduleByWeeklyDefaultShift(), "15 08 * * FRI", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // every friday at 00:15AM
+                    }); // every friday at 08:15AM
             }
 
             if (ConfigSettings.EnableInsertHolidayAutomatically)
             {
                 RecurringJob.AddOrUpdate("Add holiday for next year",
-                    () => backgroundJob.InsertHolidayAutomatically(), "01 00 1 9 *", new RecurringJobOptions
+                    () => backgroundJob.InsertHolidayAutomatically(), "00 08 1 9 *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // 01 Sep at 00:01AM
+                    }); // 01 Sep at 08:00AM
             }
 
             if (ConfigSettings.EnableSyncWorkingShift)
@@ -92,34 +92,34 @@
             if (ConfigSettings.EnableUpdateAnnualLeaveBalanceForNewEmployee)
             {
                 RecurringJob.AddOrUpdate("Add annual leave balance for new employee",
-                    () => backgroundJob.UpdateAnnualLeaveBalanceForNewEmployee(), "02 00 * * *", new RecurringJobOptions
+                    () => backgroundJob.UpdateAnnualLeaveBalanceForNewEmployee(), "02 08 * * *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // everyday at 00:02AM
+                    }); // everyday at 08:02AM
             }
 
             if (ConfigSettings.EnableUpdateAnnualLeaveBalance)
             {
                 RecurringJob.AddOrUpdate("Add annual leave balance for next year",
-                    () => backgroundJob.UpdateAnnualLeaveBalance(), "05 00 1 9 *", new RecurringJobOptions
+                    () => backgroundJob.UpdateAnnualLeaveBalance(), "05 08 1 9 *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // run once a year at 00:05AM of 1 September
+                    }); // run once a year at 08:05AM of 1 September
 
                 RecurringJob.AddOrUpdate("New employee - Add annual leave balance for next year",
-                    () => backgroundJob.UpdateAnnualLeaveBalance(), "05 00 L 12 *", new RecurringJobOptions
+                    () => backgroundJob.UpdateAnnualLeaveBalance(), "05 08 L 12 *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // run once a year at 00:05AM of 31 December
+                    }); // run once a year at 08:05AM of 31 December
             }
 
             if (ConfigSettings.EnableRemindAnnualLeaveBalance)
             {
                 RecurringJob.AddOrUpdate("Reminder to use AL",
-                    () => backgroundJob.SendMailRemindUserToUseAnnualLeave(), "20 00 1 3,6,9,12 *", new RecurringJobOptions
+                    () => backgroundJob.SendMailRemindUserToUseAnnualLeave(), "00 08 1 3,6,9,12 *", new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
-                    }); // first day of month, only in Mar, Jun, Sep, Dec
+                    }); // first day of month, only in Mar, Jun, Sep, Dec at 08:00AM
             }
         }
     }
