@@ -51,7 +51,7 @@
         {
             var command = new InsertAnnualLeaveBalanceForNewEmployeeCommand
             {
-                Year = DateTimeOffset.Now.Year + 1
+                Year = DateTimeOffset.Now.Year
             };
             await baseService.ExecuteNonQueryAsync(command);
         }
