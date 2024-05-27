@@ -24,14 +24,17 @@ function dataChangeEvent() {
 }
 
 function GetOrgChart() {
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#TeamIds').val(),
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            selectedItems: $('#TeamIds').val(),
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 }
 
 function searchKeyword() {
@@ -51,6 +54,7 @@ function exportReport() {
         axios({
             url: resolveClientUrl('WorkingHoursSummaryReport/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

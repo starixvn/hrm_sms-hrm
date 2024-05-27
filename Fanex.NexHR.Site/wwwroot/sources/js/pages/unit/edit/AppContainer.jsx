@@ -15,7 +15,11 @@ const AppContainer = () => {
     };
 
     useEffect(() => {
-        axios(resolveClientUrl(`Unit/getById/${window.unitId}`)).then(response => {
+        axios({
+            url: resolveClientUrl(`Unit/getById/${window.unitId}`),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setUnit(response.data);
         }).catch(axiosError);
     }, []);
@@ -23,12 +27,18 @@ const AppContainer = () => {
     const hanldeSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Unit/Edit'), {
-            unitId: values.id,
-            code: values.code.trim(),
-            name: values.name.trim(),
-            isActive: values.isActive
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Unit/Edit'),
+            {
+                unitId: values.id,
+                code: values.code.trim(),
+                name: values.name.trim(),
+                isActive: values.isActive
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());
@@ -45,7 +55,7 @@ const AppContainer = () => {
     const renderForm = ({ errors, isSubmitting }) => {
         return (
             <div className="card">
-                <Errors errors={errors}/>
+                <Errors errors={errors} />
                 <Form className="form-horizontal">
                     <div className="form-group">
                         <div className="label-form">
@@ -95,7 +105,7 @@ const AppContainer = () => {
                 code: unit.code || '',
                 isActive: unit.isActive || false
             }}
-            validationSchema={ validationSchema }
+            validationSchema={validationSchema}
             onSubmit={hanldeSubmit}
         >
             {renderForm}

@@ -46,6 +46,7 @@ import { parse } from 'qs';
         axios({
             url: resolveClientUrl('time/ProcessInOut'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { inoutType, recordTimeId }
         }).then(response => {
             unblockUI();
@@ -98,6 +99,7 @@ import { parse } from 'qs';
         axios({
             url: resolveClientUrl('Report/TimeRecordDetail'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text',
             data: $('form.filter').serialize()
         }).then(response => {
@@ -123,15 +125,18 @@ import { parse } from 'qs';
     }
 
     $(document).ready(function () {
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    isSelectedAll: true,
-                    hasSearchBox: true
-                });
-                query();
-            }).catch(axiosError);
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            query();
+        }).catch(axiosError);
 
         $('#Employee').change(function () {
             if ($.trim($(this).val()).length === 0) {
@@ -153,6 +158,7 @@ import { parse } from 'qs';
             axios({
                 url: resolveClientUrl('ExportTimeRecord/Export'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

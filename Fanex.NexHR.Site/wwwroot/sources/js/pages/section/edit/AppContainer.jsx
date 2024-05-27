@@ -12,7 +12,11 @@ const AppContainer = () => {
     const [section, setSection] = useState(null);
 
     useEffect(() => {
-        axios(resolveClientUrl(`Section/GetById/${window.sectionId}`)).then(response => {
+        axios({
+            url: resolveClientUrl(`Section/GetById/${window.sectionId}`),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setSection(response.data);
         }).catch(axiosError);
     }, []);
@@ -24,13 +28,19 @@ const AppContainer = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Section/Edit'), {
-            sectionId: values.id,
-            code: values.code.trim(),
-            name: values.name.trim(),
-            isActive: values.isActive,
-            departmentId: values.department
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Section/Edit'),
+            {
+                sectionId: values.id,
+                code: values.code.trim(),
+                name: values.name.trim(),
+                isActive: values.isActive,
+                departmentId: values.department
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

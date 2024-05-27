@@ -46,25 +46,31 @@ $(document).ready(function () {
         return isValid;
     };
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                noneSelectedText: 'Select a team',
-                singleSelection: true,
-                onSelect: function () {
-                    $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
-                }
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            noneSelectedText: 'Select a team',
+            singleSelection: true,
+            onSelect: function () {
+                $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            }
+        });
+    }).catch(axiosError);
 
     $('#generate').on('click', function () {
-        axios(resolveClientUrl('employee/GenerateEmployeeCode'))
-            .then(response => {
-                let data = response.data;
+        axios({
+            url: resolveClientUrl('employee/GenerateEmployeeCode'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            let data = response.data;
 
-                $('#Code').val('X' + data);
-            }).catch(axiosError);
+            $('#Code').val('X' + data);
+        }).catch(axiosError);
     });
 
     domElements.$btnSubmit.on('click', function () {

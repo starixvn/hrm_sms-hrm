@@ -11,6 +11,7 @@ $(function () {
                 axios({
                     url: resolveClientUrl('Menu/delete'),
                     method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     data: { id: id }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
@@ -20,7 +21,6 @@ $(function () {
                         alert(response.Message);
                     }
                 }).catch(axiosError);
-
             });
         })
     }

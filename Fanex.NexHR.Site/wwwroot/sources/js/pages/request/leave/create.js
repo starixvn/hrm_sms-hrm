@@ -241,6 +241,7 @@ const LeaveRequest = (function ($) {
                 axios({
                     url: resolveClientUrl('Leave/LeaveRequestDetail'),
                     method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: { 'employeeId': employeeId, 'fromDate': fromDate, 'toDate': toDate, 'requestId': requestId },
                     responseType: 'text'
                 }).then(response => {
@@ -402,6 +403,7 @@ const LeaveRequest = (function ($) {
             axios({
                 url: resolveClientUrl('shift/getshiftbydate'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { employeeId: LeaveRequest.employeeId.val(), date: LeaveRequest.fromDate.val() }
             }).then(response => {
                 const data = response.data;
@@ -462,6 +464,8 @@ const LeaveRequest = (function ($) {
                 source: function (request, response) {
                     axios({
                         url: resolveClientUrl('request/GetEmployeesByActingUser'),
+                        method: 'GET',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
                         params: {
                             role: 5,
                             requestType: requestType,
@@ -652,13 +656,19 @@ const LeaveRequest = (function ($) {
         },
         getVerifierAndApprover: function () {
             const promises = [
-                axios(resolveClientUrl('request/getVerifiers'), {
+                axios({
+                    url: resolveClientUrl('request/getVerifiers'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         employeeId: LeaveRequest.employeeId.val(),
                         requestType: LeaveRequest.requestType.val()
                     }
                 }),
-                axios(resolveClientUrl('request/getApprovers'), {
+                axios({
+                    url: resolveClientUrl('request/getApprovers'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         employeeId: LeaveRequest.employeeId.val(),
                         requestType: LeaveRequest.requestType.val()
@@ -687,6 +697,7 @@ const LeaveRequest = (function ($) {
             axios({
                 url: resolveClientUrl('leave/GetLeaveBalance'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: LeaveRequest.employeeId.val(),
                     requestId: LeaveRequest.requestId.val(),
@@ -708,6 +719,7 @@ const LeaveRequest = (function ($) {
         getTotalLeaveDay: function () {
             axios({
                 url: resolveClientUrl('leave/getTotalLeaveDay'),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     leaveTypeId: parseInt(LeaveRequest.leaveTypeId.val(), 10),
                     RequestId: LeaveRequest.requestId.val(),
@@ -726,6 +738,7 @@ const LeaveRequest = (function ($) {
             axios({
                 url: resolveClientUrl('leave/getDisableDate'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     leaveTypeId: parseInt(LeaveRequest.leaveTypeId.val(), 10),
                     requestId: LeaveRequest.requestId.val(),

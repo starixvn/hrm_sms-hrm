@@ -31,7 +31,10 @@ export default class ShiftManager extends Component {
 
     getEmployees = query => {
         if (query.trim().length > 1) {
-            axios(resolveClientUrl('employee/getemployees'), {
+            axios({
+                url: resolveClientUrl('employee/getemployees'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     query,
                     enable: true,
@@ -59,13 +62,19 @@ export default class ShiftManager extends Component {
 
         let promise;
         if (this.props.pageType === PageType.Team) {
-            promise = axios(resolveClientUrl('Team/GetShiftManagerByTeamId'), {
+            promise = axios({
+                url: resolveClientUrl('Team/GetShiftManagerByTeamId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     teamId: this.props.objectId
                 }
             });
         } else {
-            promise = axios(resolveClientUrl('Employee/GetShiftManagerByEmployeeId'), {
+            promise = axios({
+                url: resolveClientUrl('Employee/GetShiftManagerByEmployeeId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: this.props.objectId
                 }

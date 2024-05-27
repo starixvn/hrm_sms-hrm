@@ -63,8 +63,15 @@ export default class App extends Component {
 
     componentDidMount() {
         const promises = [
-            axios(resolveClientUrl('Section/GetOrgChart')),
-            axios(resolveClientUrl('Calendar/GetShift'), {
+            axios({
+                url: resolveClientUrl('Section/GetOrgChart'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }),
+            axios({
+                url: resolveClientUrl('Calendar/GetShift'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     query: '',
                     isShowOff: true
@@ -134,7 +141,10 @@ export default class App extends Component {
     }
 
     getEmployees = query => {
-        axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/GetEmployees'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 teamIds: this.state.filter.teamIds,
                 query: query
@@ -156,7 +166,10 @@ export default class App extends Component {
             toDate = moment(filter.toDate).format(DateFormat);
         blockUI();
 
-        axios(resolveClientUrl('ScheduleArrange/GetWeeklySchedule'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/GetWeeklySchedule'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -207,7 +220,10 @@ export default class App extends Component {
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
         blockUI();
-        axios(resolveClientUrl('ScheduleArrange/ExportExcel'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/ExportExcel'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: fromDate,
                 toDate: toDate,
@@ -228,7 +244,10 @@ export default class App extends Component {
             toDate = moment(filter.toDate).format('DD-MMM-YYYY');
 
         blockUI();
-        axios(resolveClientUrl('ScheduleArrange/ExportExcelDriverPickup'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/ExportExcelDriverPickup'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: fromDate,
                 toDate: toDate,

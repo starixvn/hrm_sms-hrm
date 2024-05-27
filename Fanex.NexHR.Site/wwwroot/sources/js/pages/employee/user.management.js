@@ -49,6 +49,7 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
         axios({
             url: resolveClientUrl('employee/ListEmployee'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text',
             data: $('form.filter').serialize()
         }).then(response => {
@@ -118,7 +119,9 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
 
     $(document).ready(function () {
         axios({
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,

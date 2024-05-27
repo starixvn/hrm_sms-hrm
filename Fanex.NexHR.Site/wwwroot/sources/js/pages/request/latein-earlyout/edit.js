@@ -39,6 +39,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('lateinearlyout/GetActualLateInEarlyOut'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: domElements.$employeeId.val(),
                 workDate: domElements.$onDate.val()

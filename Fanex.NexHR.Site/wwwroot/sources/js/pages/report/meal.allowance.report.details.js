@@ -21,6 +21,7 @@ let query = function () {
     axios({
         url: resolveClientUrl('MealAllowanceReport/MealAllowanceDetailsGrid'),
         method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: parse($('form.filter-detail').serialize()),
         responseType: 'text'
     }).then(response => {
@@ -43,6 +44,7 @@ $(document).on('click', '#btnExcelDetails', function () {
     axios({
         url: resolveClientUrl('MealAllowanceReport/ExportExcel'),
         method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: parse($('form.filter-detail').serialize()),
         responseType: 'blob'
     }).then(response => {
@@ -54,13 +56,16 @@ $(document).on('click', '#btnExcelDetails', function () {
 $(document).ready(function () {
     initDatepicker();
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-            query();
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+        query();
+    }).catch(axiosError);
 });

@@ -27,7 +27,10 @@ const AppContainer = () => {
 
     const getEmployees = query => {
         if (query.trim().length >= 2) {
-            axios.get(resolveClientUrl('employee/getemployees'), {
+            axios({
+                url: resolveClientUrl('employee/getemployees'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { query }
             }).then(response => {
                 const { data } = response;
@@ -48,7 +51,10 @@ const AppContainer = () => {
     };
 
     const getGroupExtension = isInternal => {
-        axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetGroupExtension'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { isInternal }
         }).then(response => {
             setSelectExtension(response.data);
@@ -70,14 +76,22 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-        axios.post(resolveClientUrl('ExtensionNo/Create'), {
-            FullName: values.FullName,
-            NickName: values.NickName,
-            ExtensionNo: values.ExtensionNo,
-            IsInternal: values.IsInternal,
-            EmpId: values.EmpId,
-            TeamId: values.TeamId
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('ExtensionNo/Create'),
+            {
+                FullName: values.FullName,
+                NickName: values.NickName,
+                ExtensionNo: values.ExtensionNo,
+                IsInternal: values.IsInternal,
+                EmpId: values.EmpId,
+                TeamId: values.TeamId
+            },
+            {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());

@@ -16,11 +16,17 @@ const AppContainer = () => {
     const hanldeSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Unit/Create'), {
-            code: values.code.trim(),
-            name: values.name.trim(),
-            isActive: values.isActive
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Unit/Create'),
+            {
+                code: values.code.trim(),
+                name: values.name.trim(),
+                isActive: values.isActive
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());

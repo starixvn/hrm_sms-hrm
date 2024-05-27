@@ -13,7 +13,8 @@ const hospitalizationLeaveBalance = (function ($) {
     function getSection() {
         axios({
             method: 'GET',
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -109,6 +110,7 @@ const hospitalizationLeaveBalance = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('HospitalizationLeaveBalance/Adjust'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
                                     EmpIds: $("#EmpIds").val(),
                                     Description: $form.find("#Description").val(),
@@ -158,6 +160,7 @@ const hospitalizationLeaveBalance = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('HospitalizationLeaveBalance/Reset'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
                                     ResetDays: parseInt($form.find("#ResetDays").val(), 10),
                                     Description: $form.find("#Description").val()

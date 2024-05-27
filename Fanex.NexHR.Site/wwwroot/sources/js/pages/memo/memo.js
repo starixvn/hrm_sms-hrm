@@ -8,6 +8,7 @@ $(document).ready(function () {
             axios({
                 url: resolveClientUrl('Memo/delete'),
                 method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { id: memoId }
             }).then(response => {
                 $('#row_' + memoId).remove();

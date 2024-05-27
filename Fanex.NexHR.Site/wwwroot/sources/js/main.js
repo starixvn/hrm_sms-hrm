@@ -25,6 +25,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('Employee/ToogleLeftNavigation'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             data: { isShow: isShow }
         }).catch(axiosError);
     }

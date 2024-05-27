@@ -65,6 +65,7 @@ function query() {
     axios({
         url: resolveClientUrl('report/PartialListWeekendLeaveSummary'),
         method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
@@ -77,17 +78,20 @@ function query() {
 $(document).ready(function () {
     initEventForDateRangeDropdown();
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+        $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
-            query();
-        }).catch(axiosError);
+        query();
+    }).catch(axiosError);
 
     initDatepicker();
 
@@ -106,6 +110,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ExportWeekendLeave/ExportWeekendLeaveSummaryReport'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

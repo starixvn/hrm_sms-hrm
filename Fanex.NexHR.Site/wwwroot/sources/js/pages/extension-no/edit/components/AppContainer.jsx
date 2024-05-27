@@ -27,7 +27,10 @@ const AppContainer = () => {
     });
 
     const getExtentionById = (isInternal, id) => {
-        axios.get(resolveClientUrl('ExtensionNo/GetExtentionById'), {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetExtentionById'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 id: id,
                 isInternal: isInternal
@@ -39,7 +42,10 @@ const AppContainer = () => {
 
     const getEmployees = query => {
         if (query.trim().length >= 2) {
-            axios.get(resolveClientUrl('employee/getemployees'), {
+            axios({
+                url: resolveClientUrl('employee/getemployees'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { query }
             }).then(response => {
                 const { data } = response;
@@ -60,7 +66,10 @@ const AppContainer = () => {
     };
 
     const getGroupExtension = isInternal => {
-        axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetGroupExtension'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { isInternal }
         }).then(response => {
             setSelectExtension(response.data);
@@ -81,7 +90,10 @@ const AppContainer = () => {
 
     const handleChangeInternal = () => {
         setIsInternal(event.target.checked);
-        axios(resolveClientUrl('ExtensionNo/GetGroupExtension'), {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetGroupExtension'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { isInternal: event.target.checked }
         }).then(response => {
             setSelectExtension(response.data);
@@ -100,15 +112,21 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-        axios.post(resolveClientUrl('ExtensionNo/Edit'), {
-            FullName: values.FullName,
-            NickName: values.NickName,
-            ExtensionNo: values.ExtensionNo,
-            IsInternal: values.IsInternal,
-            EmpId: values.EmpId,
-            EmployeeExtensionId: extensionDetail.employeeExtensionId,
-            TeamId: values.TeamId
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('ExtensionNo/Edit'),
+            {
+                FullName: values.FullName,
+                NickName: values.NickName,
+                ExtensionNo: values.ExtensionNo,
+                IsInternal: values.IsInternal,
+                EmpId: values.EmpId,
+                EmployeeExtensionId: extensionDetail.employeeExtensionId,
+                TeamId: values.TeamId
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

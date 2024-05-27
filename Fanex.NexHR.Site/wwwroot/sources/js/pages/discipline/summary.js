@@ -74,6 +74,8 @@ import {
             source: function (request, response) {
                 axios({
                     url: resolveClientUrl('discipline/GetMemberToAddOtherDiscipline'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         keyword: request.term
                     }
@@ -140,7 +142,8 @@ import {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('discipline/AddOtherDiscipline'),
-                                data: $('#frmAddOtherDiscipline').serialize(),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                data: $('#frmAddOtherDiscipline').serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
                                     showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
@@ -178,6 +181,7 @@ import {
                 axios({
                     method: 'GET',
                     url: resolveClientUrl('discipline/ViewOtherDiscipline'),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     responseType: 'text',
                     params: {
                         employeeId: empId,
@@ -233,6 +237,7 @@ import {
                 axios({
                     url: resolveClientUrl('discipline/DeleteOtherDiscipline'),
                     method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         employeeId: empId,
                         workDate: workdate,
@@ -291,6 +296,7 @@ import {
             axios({
                 method: 'GET',
                 url: resolveClientUrl('discipline/PartialAddOtherDiscipline'),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 $dialogAddOtherDiscipline.html(response.data);
@@ -319,6 +325,7 @@ import {
         axios({
             method: 'POST',
             url: resolveClientUrl('discipline/getDisciplineSummaryGrid'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             data: $('form.form-filter').serialize(),
             responseType: 'text'
         }).then(response => {
@@ -339,7 +346,8 @@ import {
         initEventForDateRangeDropdown();
         axios({
             method: 'GET',
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -367,6 +375,7 @@ import {
             axios({
                 url: resolveClientUrl('ExportDiscipline/ExportDisciplineSummaryReport'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.form-filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

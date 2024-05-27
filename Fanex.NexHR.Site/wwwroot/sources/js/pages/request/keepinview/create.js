@@ -34,13 +34,19 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(resolveClientUrl('request/getVerifiers'), {
+            axios({
+                url: resolveClientUrl('request/getVerifiers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
                 }
             }),
-            axios(resolveClientUrl('request/getApprovers'), {
+            axios({
+                url: resolveClientUrl('request/getApprovers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.KeepInView
@@ -71,6 +77,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('keepinview/getDisabledDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
@@ -141,6 +148,7 @@ $(document).ready(function () {
             axios({
                 url: resolveClientUrl('request/getEmployeesByActingUser'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     role: RoleSystem.OnBehalfRequest,
                     requestType: RequestType.KeepInView,
@@ -213,6 +221,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: domElements.$employeeId.val(),
                 date: domElements.$date.val()

@@ -37,10 +37,16 @@ export default class Login extends Component {
         const { fields } = this.state;
         const isValid = this.validate();
         if (isValid) {
-            axios.post(resolveClientUrl('Auth/Login'), {
-                username: fields['username'],
-                password: btoa(unescape(encodeURIComponent(fields['password'])))
-            }).then(response => {
+            axios.post(
+                resolveClientUrl('Auth/Login'),
+                {
+                    username: fields['username'],
+                    password: btoa(unescape(encodeURIComponent(fields['password'])))
+                },
+                {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                }
+            ).then(response => {
                 const { data } = response;
                 if (data.isSuccessfull) {
                     this.setState({

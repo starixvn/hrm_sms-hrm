@@ -25,16 +25,19 @@ function searchKeyWord() {
 }
 
 function getOrgChart() {
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            const teamIds = $('#TeamIds').val();
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        const teamIds = $('#TeamIds').val();
 
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                selectedItems: teamIds,
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            selectedItems: teamIds,
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 }
 
 function exportExcel() {
@@ -44,6 +47,7 @@ function exportExcel() {
         axios({
             url: resolveClientUrl('OvertimeReport/ExportYearlyOvertime'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

@@ -62,29 +62,29 @@ $(function () {
                     let ignoredDisciplines = [],
                         comment = $(this).find('textarea#Comment').val();
 
-                        $(this).find('table.table tbody tr').each(function () {
-                            let $tr = $(this),
-                                chkIgnore = $tr.find('.chk-ignore'),
-                                chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore');
+                    $(this).find('table.table tbody tr').each(function () {
+                        let $tr = $(this),
+                            chkIgnore = $tr.find('.chk-ignore'),
+                            chkWeekendLeaveIgnore = $tr.find('.chk-weekend-ignore');
 
-                            if (chkIgnore.length === 1) {
-                                ignoredDisciplines.push({
-                                    WorkDate: chkIgnore.data('workdate'),
-                                    EmployeeId: employeeId,
-                                    DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
-                                    IsIgnored: chkIgnore.prop('checked')
-                                });
-                            }
+                        if (chkIgnore.length === 1) {
+                            ignoredDisciplines.push({
+                                WorkDate: chkIgnore.data('workdate'),
+                                EmployeeId: employeeId,
+                                DisciplineTypeId: chkIgnore.data('disciplinetypeid'),
+                                IsIgnored: chkIgnore.prop('checked')
+                            });
+                        }
 
-                            if (chkWeekendLeaveIgnore.length === 1) {
-                                ignoredDisciplines.push({
-                                    WorkDate: chkWeekendLeaveIgnore.data('workdate'),
-                                    EmployeeId: employeeId,
-                                    DisciplineTypeId: 10,
-                                    IsIgnored: chkWeekendLeaveIgnore.prop('checked')
-                                });
-                            }
-                        });
+                        if (chkWeekendLeaveIgnore.length === 1) {
+                            ignoredDisciplines.push({
+                                WorkDate: chkWeekendLeaveIgnore.data('workdate'),
+                                EmployeeId: employeeId,
+                                DisciplineTypeId: 10,
+                                IsIgnored: chkWeekendLeaveIgnore.prop('checked')
+                            });
+                        }
+                    });
 
                     $(this).find('.validation-summary-valid').hide();
                     processRequest(requestId, requestTypeId, roleId, command, comment, ignoredDisciplines, viewType);
@@ -115,6 +115,7 @@ $(function () {
         axios({
             method: 'GET',
             url: resolveClientUrl('request/PartialViewProcessRequest'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: model,
             responseType: 'text'
         }).then(response => {
@@ -500,14 +501,17 @@ $(function () {
         initDatepicker();
         $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
 
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    selectedItems: $('#TeamIds').val(),
-                    hasSearchBox: true
-                });
-            }).catch(axiosError);
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamIds').val(),
+                hasSearchBox: true
+            });
+        }).catch(axiosError);
 
         bindMenu('.hr-actions', 'hrMenu');
         bindMenu('.verifier-actions', 'verifierMenu');
@@ -522,6 +526,7 @@ $(function () {
             axios({
                 url: $(this).attr('id'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 $('#dialoghistorycontent').html(response.data);

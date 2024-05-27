@@ -26,7 +26,7 @@
                     else
                     {
                         var response = filterContext.HttpContext.Response;
-                        response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         response.Write("<center><b>Unauthorized</b></center>");
                     }
                 }

@@ -15,10 +15,15 @@ const AppContainer = () => {
 
     const getDepartments = params => {
         setFilterParams(params);
-        axios.post(resolveClientUrl('Department/GetDepartments'), params)
-            .then(response => {
-                setDepartments(response.data)
-            }).catch(axiosError);
+        axios.post(
+            resolveClientUrl('Department/GetDepartments'),
+            params,
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
+            setDepartments(response.data)
+        }).catch(axiosError);
     };
 
     useEffect(() => {
@@ -34,9 +39,15 @@ const AppContainer = () => {
 
     const handleConfirmDelete = () => {
         setDeleteModalDialog({ show: false });
-        axios.post(resolveClientUrl('Department/Delete'), {
-            id: deleteModalDialog.department.id
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Department/Delete'),
+            {
+                id: deleteModalDialog.department.id
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());

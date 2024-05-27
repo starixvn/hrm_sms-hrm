@@ -30,13 +30,19 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(resolveClientUrl('request/GetVerifiers'), {
+            axios({
+                url: resolveClientUrl('request/GetVerifiers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
                 }
             }),
-            axios(resolveClientUrl('request/GetApprovers'), {
+            axios({
+                url: resolveClientUrl('request/GetApprovers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.LateIn
@@ -66,6 +72,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('lateinearlyout/GetDisabledDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
@@ -100,6 +107,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('lateinearlyout/GetActualLateInEarlyOut'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: domElements.$employeeId.val(),
                 workDate: domElements.$onDate.val()
@@ -176,6 +184,7 @@ $(document).ready(function () {
             axios({
                 url: resolveClientUrl('request/GetEmployeesByActingUser'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     role: RoleSystem.OnBehalfRequest,
                     requestType: RequestType.LateIn,

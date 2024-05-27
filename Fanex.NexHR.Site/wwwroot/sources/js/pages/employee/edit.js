@@ -137,18 +137,21 @@ $(document).ready(function () {
         defaultDate: $('#DateOfBirth').val()
     });
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                noneSelectedText: 'Select a team',
-                singleSelection: true,
-                selectedItems: $('#Team_Id').val(),
-                onSelect: function () {
-                    $('#Team_Id').val($('#Team').multiSelectTreeView('getSelectedItems'));
-                }
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            noneSelectedText: 'Select a team',
+            singleSelection: true,
+            selectedItems: $('#Team_Id').val(),
+            onSelect: function () {
+                $('#Team_Id').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            }
+        });
+    }).catch(axiosError);
 
     $('#postform').click(function () {
         var isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');

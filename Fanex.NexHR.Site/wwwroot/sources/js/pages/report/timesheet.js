@@ -65,6 +65,7 @@ const timesheetModule = (function ($) {
         axios({
             url: resolveClientUrl('report/TimesheetDetails'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -99,6 +100,7 @@ const timesheetModule = (function ($) {
             axios({
                 url: resolveClientUrl('time/AddChekInTime'),
                 method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'json'
             }).then(response => {
                 let data = response.data;
@@ -116,6 +118,7 @@ const timesheetModule = (function ($) {
             axios({
                 url: resolveClientUrl('time/AddChekOutTime'),
                 method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'json'
             }).then(response => {
                 let data = response.data;

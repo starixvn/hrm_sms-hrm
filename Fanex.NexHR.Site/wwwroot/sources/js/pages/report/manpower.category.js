@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { parse } from 'qs';
 
-import { axiosError, floatThead, blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable} from '../../shared/common.functions';
+import { axiosError, floatThead, blockUI, unblockUI, downloadFile, resolveClientUrl, sortTable } from '../../shared/common.functions';
 
 $(document).ready(function () {
     floatThead('table#data');
@@ -20,6 +20,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ManpowerReport/ExportManpowerCategory'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

@@ -36,16 +36,19 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                this.teamOptions = response.data;
-                const { floatData } = buildData(response.data);
-                const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            this.teamOptions = response.data;
+            const { floatData } = buildData(response.data);
+            const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
-                this.getWeeklyShedules(filter);
+            this.getWeeklyShedules(filter);
 
-                this.setState({ filter: filter });
-            }).catch(axiosError);
+            this.setState({ filter: filter });
+        }).catch(axiosError);
     }
 
     handleFilterChange = (name, value) => {
@@ -53,7 +56,10 @@ export default class App extends Component {
     };
 
     getEmployees = query => {
-        axios(resolveClientUrl('ScheduleArrange/GetEmployees'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/GetEmployees'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 teamIds: this.state.filter.teamIds,
                 query: query,
@@ -77,7 +83,10 @@ export default class App extends Component {
 
         blockUI();
 
-        axios(resolveClientUrl('ScheduleArrange/GetWeeklySchedule'), {
+        axios({
+            url: resolveClientUrl('ScheduleArrange/GetWeeklySchedule'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: fromDate,
                 toDate: toDate,

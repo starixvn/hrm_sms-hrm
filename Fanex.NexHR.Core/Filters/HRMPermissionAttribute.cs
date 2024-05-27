@@ -33,7 +33,7 @@
                 else
                 {
                     var response = filterContext.HttpContext.Response;
-                    response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
+                    response.StatusCode = (int)HttpStatusCode.Forbidden;
                     response.Write("<center><b>Access denied!</b></center>");
                 }
             }

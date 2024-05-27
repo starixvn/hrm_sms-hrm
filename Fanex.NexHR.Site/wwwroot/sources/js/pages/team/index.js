@@ -6,7 +6,6 @@ import axios from 'axios';
 
 import { axiosError, floatThead, confirm, resolveClientUrl, alert, autoIndex, sortTable } from '../../shared/common.functions';
 
-
 function deleteTeam(id) {
     confirm('Are you sure you want to delete this team ?', function () {
         axios({
@@ -25,13 +24,13 @@ function deleteTeam(id) {
             } else {
                 alert(response.data.Message);
             }
-            }).catch(axiosError);
+        }).catch(axiosError);
     });
 }
 
 function initSortTable() {
     $('th.col-sorter').on('click', function () {
-        sortTable('table#data',this);
+        sortTable('table#data', this);
         $("table#data tbody tr").each(function (index) {
             var initIndex = index + 1;
             $(this).find("td:eq(0)").html(initIndex++);

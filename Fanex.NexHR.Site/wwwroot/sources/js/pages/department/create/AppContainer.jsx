@@ -23,7 +23,11 @@ const AppContainer = () => {
     };
 
     useEffect(() => {
-        axios(resolveClientUrl(`Department/GetUnits`)).then(response => {
+        axios({
+            url: resolveClientUrl(`Department/GetUnits`),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setUnits(response.data);
         }).catch(axiosError);
     }, []);
@@ -31,12 +35,18 @@ const AppContainer = () => {
     const hanldeSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Department/Create'), {
-            code: values.name.trim(),
-            name: values.code.trim(),
-            isActive: values.isActive,
-            unitId: values.unit
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Department/Create'),
+            {
+                code: values.name.trim(),
+                name: values.code.trim(),
+                isActive: values.isActive,
+                unitId: values.unit
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());

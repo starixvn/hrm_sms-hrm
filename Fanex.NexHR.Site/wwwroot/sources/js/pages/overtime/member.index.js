@@ -50,14 +50,17 @@ $(document).ready(function () {
         $('.monpickr-selected-month.monpickr-input.ui-widget-content').val('');
     }
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#TeamIds').val(),
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            selectedItems: $('#TeamIds').val(),
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 
     floatThead('table#data');
 
@@ -238,6 +241,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('Overtime/ExportMemberOvertime'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

@@ -183,6 +183,7 @@ function axiosError(error) {
                 url = 'error/PageNotFound';
                 break;
 
+            case 403:
             case 405:
                 url = 'error/AccessDenied';
                 break;

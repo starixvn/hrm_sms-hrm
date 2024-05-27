@@ -13,6 +13,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ShiftStatisticReport/ShiftStatistic'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
@@ -28,16 +29,19 @@ $(document).ready(function () {
 
     initDatepicker();
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
 
-            $('#btnSearch').trigger('click');
-        }).catch(axiosError);
+        $('#btnSearch').trigger('click');
+    }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
@@ -58,6 +62,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ShiftStatisticReport/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: params,
             responseType: 'blob'
         }).then(response => {

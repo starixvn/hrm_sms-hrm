@@ -21,7 +21,11 @@ const AppContainer = () => {
     });
 
     const getAllEnternalGroup = () => {
-        axios(resolveClientUrl('ExtensionNo/GetAllExternalGroup')).then(response => {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetAllExternalGroup'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setExternalGroups(response.data)
         }).catch(axiosError);
     };
@@ -32,9 +36,15 @@ const AppContainer = () => {
 
     const handleCreate = external => {
         setModalDialog({ create: false });
-        axios.post(resolveClientUrl('ExtensionNo/CreateExternalGroup'), {
-            teamName: external.TeamName.trim()
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('ExtensionNo/CreateExternalGroup'),
+            {
+                teamName: external.TeamName.trim()
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 getAllEnternalGroup();
@@ -55,7 +65,12 @@ const AppContainer = () => {
 
     const handleConfirm = () => {
         setDeleteModalDialog({ show: false });
-        axios.post(resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${deleteModalDialog.externalId}`)).then(response => {
+        axios.post(
+            resolveClientUrl(`ExtensionNo/DeleteExternalGroup/${deleteModalDialog.externalId}`),
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
@@ -76,10 +91,16 @@ const AppContainer = () => {
 
     const handleEdit = external => {
         setModalDialog({ edit: false });
-        axios.post(resolveClientUrl('ExtensionNo/EditExternalGroup'), {
-            teamName: external.TeamName.trim(),
-            teamId: external.TeamId
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('ExtensionNo/EditExternalGroup'),
+            {
+                teamName: external.TeamName.trim(),
+                teamId: external.TeamId
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

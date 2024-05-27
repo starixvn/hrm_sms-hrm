@@ -19,6 +19,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('MealAllowanceReport/GetMealAllowanceSummary'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -40,14 +41,17 @@ $(document).ready(function () {
         query();
     });
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
@@ -55,6 +59,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('MealAllowanceReport/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {
@@ -69,6 +74,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('MealAllowanceReport/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('.filter-details form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

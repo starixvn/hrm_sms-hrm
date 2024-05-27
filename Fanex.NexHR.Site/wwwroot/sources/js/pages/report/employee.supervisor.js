@@ -14,6 +14,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
         axios({
             url: resolveClientUrl('report/EmployeeSupervisorDetails'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -34,15 +35,18 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
     }
 
     $(document).ready(function () {
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    isSelectedAll: true
-                });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true
+            });
 
-                query();
-            }).catch(axiosError);
+            query();
+        }).catch(axiosError);
 
         $('#category').on('change', function () {
             $('#IsLocal').val($(this).val());
@@ -59,6 +63,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
             axios({
                 url: resolveClientUrl('ExportSupervisor/EmployeeSupervisor'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

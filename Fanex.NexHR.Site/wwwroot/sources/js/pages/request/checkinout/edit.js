@@ -129,6 +129,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: domElements.$employeeId.val(),
                 date: domElements.$attendantDate.val()

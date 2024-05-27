@@ -53,7 +53,10 @@ export default class DisciplineManager extends Component {
     getDisciplineManagers = () => {
         blockUI();
         if (this.props.pageType === PageType.Team) {
-            axios(resolveClientUrl('Team/GetDisciplineManagerByTeamId'), {
+            axios({
+                url: resolveClientUrl('Team/GetDisciplineManagerByTeamId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     teamId: this.props.objectId
                 }
@@ -61,7 +64,10 @@ export default class DisciplineManager extends Component {
                 this.setState({ managers: response.data });
             }).catch(axiosError).then(() => unblockUI());
         } else {
-            axios(resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'), {
+            axios({
+                url: resolveClientUrl('Employee/GetDisciplineManagerByEmployeeId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: this.props.objectId
                 }

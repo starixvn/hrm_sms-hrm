@@ -12,6 +12,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
         axios({
             url: resolveClientUrl('report/TeamSupervisorDetails'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -32,15 +33,18 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
     }
 
     $(document).ready(function () {
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    isSelectedAll: true
-                });
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true
+            });
 
-                query();
-            }).catch(axiosError);
+            query();
+        }).catch(axiosError);
 
         $("#btnSubmit").on('click', function () {
             query();
@@ -53,6 +57,7 @@ import { axiosError, blockUI, unblockUI, floatThead, resolveClientUrl, downloadF
             axios({
                 url: resolveClientUrl('ExportSupervisor/TeamSupervisor'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

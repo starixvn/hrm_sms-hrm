@@ -18,8 +18,13 @@ const AppContainer = () => {
     });
 
     const getJobLevels = () => {
-        axios.post(resolveClientUrl('JobLevel/GetJobLevels'), {
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('JobLevel/GetJobLevels'),
+            {},
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             setJobLevels(response.data)
         }).catch(axiosError);
     };
@@ -32,9 +37,15 @@ const AppContainer = () => {
     const handleHideCreateModalDialog = () => setShowModalDialog({ create: false });
 
     const handleCreate = jobLevel => {
-        axios.post(resolveClientUrl(`JobLevel/Insert`), {
-            name: jobLevel.name.trim(),
-        }).then(response => {
+        axios.post(
+            resolveClientUrl(`JobLevel/Insert`),
+            {
+                name: jobLevel.name.trim(),
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             setShowModalDialog({ create: false });
             if (data.isSuccessful) {
@@ -52,10 +63,16 @@ const AppContainer = () => {
     };
 
     const handleEdit = jobLevel => {
-        axios.post(resolveClientUrl(`JobLevel/Update`), {
-            id: jobLevelEdit.id,
-            name: jobLevel.name.trim(),
-        }).then(response => {
+        axios.post(
+            resolveClientUrl(`JobLevel/Update`),
+            {
+                id: jobLevelEdit.id,
+                name: jobLevel.name.trim(),
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             setShowModalDialog({ edit: false });
             if (data.isSuccessful) {
@@ -78,9 +95,15 @@ const AppContainer = () => {
 
     const handleConfirmDelete = () => {
         setDeleteModalDialog({ show: false });
-        axios.post(resolveClientUrl('JobLevel/Delete'), {
-            id: deleteModalDialog.jobLevel.id
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('JobLevel/Delete'),
+            {
+                id: deleteModalDialog.jobLevel.id
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());

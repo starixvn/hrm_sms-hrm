@@ -11,6 +11,8 @@ import { axiosError, resolveClientUrl } from '../../shared/common.functions';
             source: function (request, response) {
                 axios({
                     url: resolveClientUrl('employee/getemployees'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         query: request.term,
                         enable: true,

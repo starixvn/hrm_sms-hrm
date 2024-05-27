@@ -16,7 +16,11 @@ const AppContainer = () => {
     };
 
     useEffect(() => {
-        axios(resolveClientUrl(`Department/getById/${window.departmentId}`)).then(response => {
+        axios({
+            url: resolveClientUrl(`Department/getById/${window.departmentId}`),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setDepartment(response.data);
         }).catch(axiosError);
     }, []);
@@ -24,13 +28,19 @@ const AppContainer = () => {
     const hanldeSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Department/Edit'), {
-            departmentId: values.id,
-            code: values.code.trim(),
-            name: values.name.trim(),
-            isActive: values.isActive,
-            unitId: values.unit
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Department/Edit'),
+            {
+                departmentId: values.id,
+                code: values.code.trim(),
+                name: values.name.trim(),
+                isActive: values.isActive,
+                unitId: values.unit
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

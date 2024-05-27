@@ -11,7 +11,9 @@ import '../../shared/employee.search.in.team';
 const annualLeaveBalance = (function ($) {
     function getSection() {
         axios({
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -115,7 +117,10 @@ const annualLeaveBalance = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('AnnualLeaveBalance/Adjust'),
-                                data: { annualLeaveJson: JSON.stringify(annualLeaveMuiltiple) }
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                data: {
+                                    annualLeaveJson: JSON.stringify(annualLeaveMuiltiple)
+                                }
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
                                     alert('Adjust successfully.');
@@ -159,6 +164,7 @@ const annualLeaveBalance = (function ($) {
                             axios({
                                 url: resolveClientUrl('AnnualLeaveBalance/Reset'),
                                 method: 'POST',
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $form.serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {

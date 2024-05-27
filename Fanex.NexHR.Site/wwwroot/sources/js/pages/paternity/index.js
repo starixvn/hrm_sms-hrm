@@ -19,6 +19,7 @@ const paternityModule = (function ($) {
         axios({
             method: 'GET',
             url: resolveClientUrl('paternity/ListPaternity?year=' + $('#Year').val()),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text'
         }).then(response => {
             $(domElement.Table).html(response.data);
@@ -67,6 +68,7 @@ const paternityModule = (function ($) {
             axios({
                 url: resolveClientUrl('Paternity/create'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -91,6 +93,7 @@ const paternityModule = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('Paternity/Create'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $(domElement.CreateForm).serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
@@ -140,6 +143,7 @@ const paternityModule = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('Paternity/Update/' + PaternityId),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $(domElement.EditForm).serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
@@ -172,6 +176,8 @@ const paternityModule = (function ($) {
             source: function (request, response) {
                 axios({
                     url: resolveClientUrl('Employee/GetMemberByGender'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         keyword: request.term,
                         gender: 1 //male
@@ -217,6 +223,7 @@ const paternityModule = (function ($) {
             axios({
                 url: resolveClientUrl('Paternity/edit/' + paternityId),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -235,7 +242,8 @@ const paternityModule = (function ($) {
             confirm('Are you sure you want to remove this paternity?', function () {
                 axios({
                     method: 'POST',
-                    url: resolveClientUrl('Paternity/delete/' + paternityId)
+                    url: resolveClientUrl('Paternity/delete/' + paternityId),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
                         alert('Remove employee paternity successfully!', query);

@@ -29,13 +29,19 @@ $(document).ready(function () {
     let getDataAfterChangeEmployee = function () {
         const employeeId = domElements.$employeeId.val();
         const promises = [
-            axios(resolveClientUrl('request/GetVerifiers'), {
+            axios({
+                url: resolveClientUrl('request/GetVerifiers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.CheckIn
                 }
             }),
-            axios(resolveClientUrl('request/GetApprovers'), {
+            axios({
+                url: resolveClientUrl('request/GetApprovers'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: employeeId,
                     requestType: RequestType.CheckIn
@@ -66,6 +72,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('checkinout/GetDisabledDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 requestTypeId: requestTypeId,
                 employeeId: domElements.$employeeId.val(),
@@ -186,6 +193,7 @@ $(document).ready(function () {
             axios({
                 url: resolveClientUrl('request/GetEmployeesByActingUser'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     role: RoleSystem.OnBehalfRequest,
                     requestType: RequestType.CheckIn,
@@ -242,6 +250,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: domElements.$employeeId.val(),
                 date: domElements.$attendantDate.val()

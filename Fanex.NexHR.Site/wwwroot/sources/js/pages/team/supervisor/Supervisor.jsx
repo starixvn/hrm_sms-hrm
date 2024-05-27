@@ -32,7 +32,10 @@ export default class Supervisor extends Component {
 
     getEmployees = query => {
         if (query.trim().length > 1) {
-            axios(resolveClientUrl('employee/getemployees'), {
+            axios({
+                url: resolveClientUrl('employee/getemployees'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     query,
                     enable: true,
@@ -61,14 +64,20 @@ export default class Supervisor extends Component {
 
         let promise;
         if (this.props.pageType === PageType.Team) {
-            promise = axios(resolveClientUrl('Team/GetTeamSupervisorByRoleId'), {
+            promise = axios({
+                url: resolveClientUrl('Team/GetTeamSupervisorByRoleId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     teamId: this.props.objectId,
                     roleId: this.roleId
                 }
             });
         } else {
-            promise = axios(resolveClientUrl('Employee/GetEmployeeSupervisorByRoleId'), {
+            promise = axios({
+                url: resolveClientUrl('Employee/GetEmployeeSupervisorByRoleId'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     employeeId: this.props.objectId,
                     roleId: this.roleId

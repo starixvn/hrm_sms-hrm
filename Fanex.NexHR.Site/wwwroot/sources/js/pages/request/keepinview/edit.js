@@ -38,6 +38,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('keepinview/getDisabledDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 requestId: requestId,
                 requestTypeId: requestTypeId,
@@ -137,6 +138,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('shift/getShiftByDate'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 employeeId: employeeId,
                 date: domElements.$date.val()

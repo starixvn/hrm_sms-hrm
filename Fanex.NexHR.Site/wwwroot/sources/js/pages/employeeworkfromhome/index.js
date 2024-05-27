@@ -29,6 +29,7 @@ const workFromHomeModule = (function ($) {
         axios({
             url: resolveClientUrl('EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: $("#FromDateFilter").val(),
                 toDate: $("#ToDateFilter").val(),
@@ -97,6 +98,7 @@ const workFromHomeModule = (function ($) {
             axios({
                 url: resolveClientUrl('EmployeeWorkFromHome/create'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -234,11 +236,13 @@ const workFromHomeModule = (function ($) {
             source: function (request, response) {
                 axios({
                     url: resolveClientUrl('employee/getemployees'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         query: request.term,
                         enable: true,
                         isDelete: false
-                    },
+                    }
                 }).then(res => {
                     response($.map(res.data, function (item) {
                         return {
@@ -281,6 +285,7 @@ const workFromHomeModule = (function ($) {
             axios({
                 url: resolveClientUrl('EmployeeWorkFromHome/Edit/' + employeeworkfromhomeId),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -299,6 +304,7 @@ const workFromHomeModule = (function ($) {
             confirm('Are you sure you want to remove this employee work from home?', function () {
                 axios({
                     method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     url: resolveClientUrl('EmployeeWorkFromHome/Delete/' + employeeworkfromhomeId),
                 }).then(response => {
                     if (response.data.IsSuccessful) {
@@ -344,15 +350,18 @@ const workFromHomeModule = (function ($) {
         initDatepicker();
         initExportExcel();
 
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    isSelectedAll: true,
-                    hasSearchBox: true
-                });
-                getEmployeeWorkFromHome();
-            }).catch(axiosError);
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            getEmployeeWorkFromHome();
+        }).catch(axiosError);
     }
 
     return {

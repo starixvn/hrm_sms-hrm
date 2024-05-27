@@ -71,6 +71,7 @@ $(function () {
             axios({
                 url: resolveClientUrl('changeshift/ViewHistory/' + $(this).attr('requestid')),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 $('#dialoghistorycontent').html(response.data);

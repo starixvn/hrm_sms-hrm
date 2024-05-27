@@ -8,7 +8,8 @@ var deleteMessage = function (messageId) {
     confirm('Are you sure you want to delete this message?', function () {
         axios({
             url: resolveClientUrl('Message/Delete'),
-            method: "POST",
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 id: messageId
             }
@@ -22,7 +23,8 @@ var deleteMessage = function (messageId) {
 var detailMessage = function (messageId) {
     axios({
         url: resolveClientUrl('Message/EditMessageStatus'),
-        method: "POST",
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: {
             id: messageId
         }
@@ -43,7 +45,6 @@ var init = function () {
         var id = $(this).attr('data-id');
         deleteMessage(id);
     });
-
 }
 
 $(document).ready(function () {

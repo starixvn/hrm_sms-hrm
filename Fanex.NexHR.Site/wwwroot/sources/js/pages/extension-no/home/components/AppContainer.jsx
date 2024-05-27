@@ -16,7 +16,11 @@ const AppContainer = () => {
     });
 
     const getExtensionNo = () => {
-        axios(resolveClientUrl('ExtensionNo/GetExtensionNo')).then(response => {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetExtensionNo'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setExtensions(response.data)
         }).catch(axiosError);
     };
@@ -31,7 +35,12 @@ const AppContainer = () => {
 
     const handleConfirmDelete = () => {
         setDeleteModalDialog({ show: false });
-        axios.post(resolveClientUrl(`ExtensionNo/Delete/${deleteModalDialog.empId}`)).then(response => {
+        axios.post(
+            resolveClientUrl(`ExtensionNo/Delete/${deleteModalDialog.empId}`),
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());

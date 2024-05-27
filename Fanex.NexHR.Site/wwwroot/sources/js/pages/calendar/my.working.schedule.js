@@ -24,7 +24,10 @@ $(document).ready(function () {
         },
         events: function (fetchInfo, successCallback, failureCallback) {
             blockUI();
-            axios(resolveClientUrl('calendar/GetWorkingSchedule'), {
+            axios({
+                url: resolveClientUrl('calendar/GetWorkingSchedule'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     date: moment(fetchInfo.start).format('DD-MMM-YYYY')
                 }

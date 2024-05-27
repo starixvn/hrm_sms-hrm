@@ -29,6 +29,7 @@ var editAccount = (function ($) {
             axios({
                 url: $(domElement.EditInformationForm).attr('action'),
                 method: $(domElement.EditInformationForm).attr('method'),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 data: $(domElement.EditInformationForm).serialize()
             }).then(response => {
                 if (response.data.IsSuccessful) {
@@ -71,6 +72,7 @@ var editAccount = (function ($) {
         axios({
             method: 'POST',
             url: resolveClientUrl('File/MyProfileUploadFile'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             data: fd
         }).then(response => {
             getFileUpload();
@@ -91,6 +93,7 @@ var editAccount = (function ($) {
                 axios({
                     method: 'POST',
                     url: resolveClientUrl('File/DeleteMyProfileUploadedFile'),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     data: { fileName }
                 }).then(response => {
                     if (response.data.isSuccessful) {
@@ -120,6 +123,7 @@ var editAccount = (function ($) {
         axios({
             method: 'GET',
             url: resolveClientUrl('Information/GetFileUploaded'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text'
         }).then(response => {
             $(domElement.ListFileUpload).html(response.data);
@@ -132,6 +136,7 @@ var editAccount = (function ($) {
         axios({
             method: 'GET',
             url: resolveClientUrl('Information/GetEmployeeRelationship'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text'
         }).then(response => {
             $(domElement.Relationship).html(response.data);
@@ -153,6 +158,7 @@ var editAccount = (function ($) {
                 axios({
                     url: baseUrl + id,
                     method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     responseType: 'text'
                 }).then(response => {
                     $(domElement.CreateForm).html(response.data);
@@ -170,6 +176,7 @@ var editAccount = (function ($) {
                                     axios({
                                         method: $(domElement.CreateForm).find('form').attr('method'),
                                         url: $(domElement.CreateForm).find('form').attr('action'),
+                                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                         data: $(domElement.CreateForm).find('form').serialize()
                                     }).then(response => {
                                         if (response.data.IsSuccessful) {
@@ -205,6 +212,7 @@ var editAccount = (function ($) {
             axios({
                 url,
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 $(domElement.CreateForm).html(response.data);
@@ -222,6 +230,7 @@ var editAccount = (function ($) {
                                 axios({
                                     method: $(domElement.CreateForm).find('form').attr('method'),
                                     url: $(domElement.CreateForm).find('form').attr('action'),
+                                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                     data: $(domElement.CreateForm).find('form').serialize()
                                 }).then(response => {
                                     if (response.data.IsSuccessful) {
@@ -255,7 +264,8 @@ var editAccount = (function ($) {
             confirm(title, function () {
                 axios({
                     method: 'POST',
-                    url: url + id
+                    url: url + id,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
                         onDeleteSuccess();

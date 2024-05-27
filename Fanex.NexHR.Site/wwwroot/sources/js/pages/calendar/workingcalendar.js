@@ -13,6 +13,7 @@ const workingCalendarModule = (function ($) {
         axios({
             url: resolveClientUrl('calendar/WorkingCalendarDetails'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 fromDate: $('#FromDate').val(),
                 toDate: $('#ToDate').val(),
@@ -40,8 +41,16 @@ const workingCalendarModule = (function ($) {
 
     function initModule() {
         const promises = [
-            axios(resolveClientUrl('Section/GetOrgChart')),
-            axios(resolveClientUrl('calendar/GetJobTitle'))
+            axios({
+                url: resolveClientUrl('Section/GetOrgChart'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }),
+            axios({
+                url: resolveClientUrl('calendar/GetJobTitle'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
         ];
 
         Promise.all(promises)
@@ -71,6 +80,7 @@ const workingCalendarModule = (function ($) {
             axios({
                 url: resolveClientUrl('ExportCalendar/EmployeeWorkingCalendar'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     fromDate: $('#FromDate').val(),
                     toDate: $('#ToDate').val(),

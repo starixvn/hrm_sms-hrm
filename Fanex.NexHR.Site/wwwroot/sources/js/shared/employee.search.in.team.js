@@ -7,6 +7,8 @@ $(document).ready(function () {
         source: function (request, response) {
             axios({
                 url: resolveClientUrl('employee/getmemberbymanager'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     keyword: request.term
                 }

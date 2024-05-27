@@ -37,6 +37,7 @@ import {
         axios({
             url: resolveClientUrl('disciplineSummaryPerYear/getDisciplineSummaryGrid'),
             method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             data: $('form.form-filter').serialize(),
             responseType: 'text'
         }).then(response => {
@@ -50,7 +51,9 @@ import {
         $disciplineTable = $('#discipline-summary-table');
         initDatepicker();
         axios({
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -84,6 +87,7 @@ import {
             axios({
                 url: resolveClientUrl('disciplineSummaryPerYear/ExportExcel'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.form-filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

@@ -21,6 +21,7 @@ const postnatalModule = (function ($) {
         axios({
             method: 'GET',
             url: resolveClientUrl('postnatal/getPostnatalGrid?year=' + $('#Year').val()),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             responseType: 'text'
         }).then(response => {
             $(domElement.Table).html(response.data);
@@ -72,6 +73,7 @@ const postnatalModule = (function ($) {
             axios({
                 url: resolveClientUrl('postnatal/create'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -96,6 +98,7 @@ const postnatalModule = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('postnatal/Create'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $(domElement.CreateForm).serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
@@ -145,6 +148,7 @@ const postnatalModule = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('postnatal/Update/' + postnatalId),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $(domElement.EditForm).serialize()
                             }).then(response => {
                                 if (response.data.IsSuccessful) {
@@ -177,6 +181,8 @@ const postnatalModule = (function ($) {
             source: function (request, response) {
                 axios({
                     url: resolveClientUrl('employee/GetMemberByGender'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     params: {
                         keyword: request.term,
                         gender: 0 //female
@@ -223,6 +229,7 @@ const postnatalModule = (function ($) {
             axios({
                 url: resolveClientUrl('postnatal/edit/' + postnatalId),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text'
             }).then(response => {
                 domElement.$dialog.html(response.data);
@@ -241,7 +248,8 @@ const postnatalModule = (function ($) {
             confirm('Are you sure you want to remove this postnatal?', function () {
                 axios({
                     method: 'POST',
-                    url: resolveClientUrl('postnatal/delete/' + postnatalId)
+                    url: resolveClientUrl('postnatal/delete/' + postnatalId),
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 }).then(response => {
                     if (response.data.IsSuccessful) {
                         alert('Remove employee postnatal successfully!', getPostnatal);

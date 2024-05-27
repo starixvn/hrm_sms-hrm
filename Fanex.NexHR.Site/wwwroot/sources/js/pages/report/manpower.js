@@ -20,6 +20,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ManpowerReport/ExportManpower'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

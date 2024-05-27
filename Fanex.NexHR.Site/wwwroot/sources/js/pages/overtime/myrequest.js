@@ -8,6 +8,8 @@ $(document).ready(function () {
         source: function (request, response) {
             axios({
                 url: resolveClientUrl('overtime/GetActingEmployees'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
                     query: request.term
                 }

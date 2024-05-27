@@ -15,6 +15,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('MonthlyWorkingHours/GetMonthlyWorkingHours'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -32,14 +33,17 @@ $(document).ready(function () {
 
     initDatepicker();
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
@@ -53,6 +57,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('MonthlyWorkingHours/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

@@ -24,15 +24,25 @@ const AppContainer = () => {
 
     const getJobTitles = params => {
         setFilterParams(params);
-        axios.post(resolveClientUrl('JobTitle/GetJobTitles'), params)
-            .then(response => {
-                setJobTitles(response.data)
-            }).catch(axiosError);
+        axios.post(
+            resolveClientUrl('JobTitle/GetJobTitles'),
+            params,
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
+            setJobTitles(response.data)
+        }).catch(axiosError);
     };
 
     const getJobCategory = () => {
-        axios.post(resolveClientUrl('JobTitle/GetJobCategory'), {
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('JobTitle/GetJobCategory'),
+            {},
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             setJobCategories(response.data)
         }).catch(axiosError);
     };
@@ -46,10 +56,16 @@ const AppContainer = () => {
     const handleHideCreateModalDialog = () => setShowModalDialog({ create: false });
 
     const handleCreate = jobTitle => {
-        axios.post(resolveClientUrl(`JobTitle/Insert`), {
-            name: jobTitle.name.trim(),
-            categoryId: jobTitle.categoryId ? jobTitle.categoryId : jobCategories[0].value
-        }).then(response => {
+        axios.post(
+            resolveClientUrl(`JobTitle/Insert`),
+            {
+                name: jobTitle.name.trim(),
+                categoryId: jobTitle.categoryId ? jobTitle.categoryId : jobCategories[0].value
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             setShowModalDialog({ create: false });
             if (data.isSuccessful) {
@@ -71,11 +87,17 @@ const AppContainer = () => {
     };
 
     const handleEdit = jobTitle => {
-        axios.post(resolveClientUrl(`JobTitle/Update`), {
-            id: jobTitleEdit.id,
-            name: jobTitle.name.trim(),
-            categoryId: jobTitle.categoryId
-        }).then(response => {
+        axios.post(
+            resolveClientUrl(`JobTitle/Update`),
+            {
+                id: jobTitleEdit.id,
+                name: jobTitle.name.trim(),
+                categoryId: jobTitle.categoryId
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             setShowModalDialog({ edit: false });
             if (data.isSuccessful) {
@@ -100,9 +122,15 @@ const AppContainer = () => {
 
     const handleConfirmDelete = () => {
         setDeleteModalDialog({ show: false });
-        axios.post(resolveClientUrl('JobTitle/Delete'), {
-            id: deleteModalDialog.jobTitle.id
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('JobTitle/Delete'),
+            {
+                id: deleteModalDialog.jobTitle.id
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());

@@ -208,6 +208,7 @@ var LeaveRequestDetail = (function ($) {
             axios({
                 url: resolveClientUrl('shift/getshiftbydate'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { employeeId: $('#EmployeeId').val(), date: trObject.find('.tdleavedate').attr('data-date') }
             }).then(response => {
                 const data = response.data;

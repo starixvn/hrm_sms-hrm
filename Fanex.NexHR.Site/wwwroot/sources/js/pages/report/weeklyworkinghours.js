@@ -14,6 +14,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('WeeklyWorkingHours/GetWeeklyWorkingHours'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -53,14 +54,17 @@ $(document).ready(function () {
         $('#week-picker').toggle();
     });
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
@@ -74,6 +78,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('WeeklyWorkingHours/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

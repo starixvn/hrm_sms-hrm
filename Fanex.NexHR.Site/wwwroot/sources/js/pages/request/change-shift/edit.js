@@ -97,6 +97,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('changeshift/GetChangeShiftDetail'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 requestId: domElements.$requestId.val(),
                 employeeId: domElements.$employeeId.val(),

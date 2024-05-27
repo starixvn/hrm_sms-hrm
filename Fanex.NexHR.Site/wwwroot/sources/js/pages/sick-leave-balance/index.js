@@ -12,7 +12,9 @@ import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from 
 const sickLeaveBalance = (function ($) {
     function getSection() {
         axios({
-            url: resolveClientUrl('Section/GetOrgChart')
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
@@ -108,6 +110,7 @@ const sickLeaveBalance = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('SickLeaveBalance/Adjust'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
                                     EmpIds: $("#EmpIds").val(),
                                     Description: $form.find("#Description").val(),
@@ -157,6 +160,7 @@ const sickLeaveBalance = (function ($) {
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('SickLeaveBalance/Reset'),
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
                                     ResetDays: parseInt($form.find("#ResetDays").val(), 10),
                                     Description: $form.find("#Description").val()

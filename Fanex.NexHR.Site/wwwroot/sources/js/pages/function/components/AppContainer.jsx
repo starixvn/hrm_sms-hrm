@@ -13,17 +13,28 @@ const AppContainer = () => {
     const [rolePermission, setRolePermission] = useState(null);
 
     const getSystemRoles = () => {
-        axios.post(resolveClientUrl('Function/GetSystemRoles'))
-            .then(response => {
-                setSystemRoles(response.data)
-            }).catch(axiosError);
+        axios.post(
+            resolveClientUrl('Function/GetSystemRoles'),
+            {},
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
+            setSystemRoles(response.data)
+        }).catch(axiosError);
     };
 
     const getRolePermission = () => {
         blockUI();
-        axios.post(resolveClientUrl('Function/GetRolePermission'), {
-            roleId: roleId
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Function/GetRolePermission'),
+            {
+                roleId: roleId
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             setRolePermission(response.data);
         }).catch(axiosError).finally(unblockUI);
     };
@@ -41,10 +52,16 @@ const AppContainer = () => {
     };
 
     const handleSubmit = () => {
-        axios.post(resolveClientUrl(`Function/AssignPermission`), {
-            roleId: rolePermission.roleId,
-            permissions: rolePermission.permissions
-        }).then(response => {
+        axios.post(
+            resolveClientUrl(`Function/AssignPermission`),
+            {
+                roleId: rolePermission.roleId,
+                permissions: rolePermission.permissions
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

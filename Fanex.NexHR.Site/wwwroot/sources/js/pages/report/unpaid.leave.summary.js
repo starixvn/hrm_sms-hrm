@@ -13,6 +13,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('report/GetUnpaidLeaveSummary'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 year: $('#Year').val(),
                 teamIds: $('#TeamIds').val(),
@@ -29,24 +30,30 @@ $(document).ready(function () {
         }).catch(axiosError).then(() => unblockUI());
     };
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true,
-                hasSearchBox: true
-            });
-        }).catch(axiosError);
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true,
+            hasSearchBox: true
+        });
+    }).catch(axiosError);
 
-    axios(resolveClientUrl('Report/GetUnpaidLeaveType'))
-        .then(response => {
-            $('#LeaveType').multiSelectTreeView({
-                data: response.data,
-                isSelectedAll: true
-            });
+    axios({
+        url: resolveClientUrl('Report/GetUnpaidLeaveType'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#LeaveType').multiSelectTreeView({
+            data: response.data,
+            isSelectedAll: true
+        });
 
-            query();
-        }).catch(axiosError);
+        query();
+    }).catch(axiosError);
 
     $('#Period').multiSelectTreeView({
         data: [{ text: '1H', checked: false, enable: true, isLeaf: true, id: 1 }, { text: '2H', checked: false, enable: true, isLeaf: true, id: 2 }],
@@ -64,6 +71,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('ExportLeaveSummary/UnpaidLeaveSummary'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 year: $('#Year').val(),
                 teamIds: $('#TeamIds').val(),

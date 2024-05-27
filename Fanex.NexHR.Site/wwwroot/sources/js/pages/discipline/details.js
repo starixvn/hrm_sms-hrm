@@ -256,6 +256,7 @@ import { DisciplineType } from '../../shared/constants';
         axios({
             url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.form-filter').serialize()),
             responseType: 'text'
         }).then(response => {
@@ -271,15 +272,18 @@ import { DisciplineType } from '../../shared/constants';
         initEventForDateRangeDropdown();
         initDatepicker();
 
-        axios(resolveClientUrl('Section/GetOrgChart'))
-            .then(response => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    selectedItems: $('#TeamId').val(),
-                    hasSearchBox: true
-                });
-                query();
-            }).catch(axiosError);
+        axios({
+            url: resolveClientUrl('Section/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                selectedItems: $('#TeamId').val(),
+                hasSearchBox: true
+            });
+            query();
+        }).catch(axiosError);
 
         $('form.form-filter #FromDate, form.form-filter #ToDate').on('change', function () {
             $('form.form-filter #DateRange').val('0');
@@ -297,6 +301,7 @@ import { DisciplineType } from '../../shared/constants';
             axios({
                 url: resolveClientUrl('ExportDiscipline/ExportDisciplineDetailReport'),
                 method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: parse($('form.form-filter').serialize()),
                 responseType: 'blob'
             }).then(response => {

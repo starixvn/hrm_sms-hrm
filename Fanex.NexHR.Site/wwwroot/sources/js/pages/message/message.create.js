@@ -60,7 +60,8 @@ function initSearchEmployee() {
 function initSearchTeam() {
     axios({
         url: resolveClientUrl('Section/GetOrgChart'),
-        method: "GET"
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
     }).then(response => {
         $('#Groups').multiSelectTreeView({
             data: response.data,
@@ -71,7 +72,7 @@ function initSearchTeam() {
 }
 
 function GetSelectedEmployeeEmails() {
-    let result = "";
+    let result = '';
     let employeeEmails = $('#Employees option:selected');
 
     if (employeeEmails) {
@@ -84,7 +85,7 @@ function GetSelectedEmployeeEmails() {
                     result = email;
                 }
                 else {
-                    result += "," + email;
+                    result += ',' + email;
                 }
             }
         }
@@ -96,7 +97,7 @@ function GetSelectedEmployeeEmails() {
 function GetSelectedGroupEmails() {
     let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
 
-    let result = "";
+    let result = '';
     let selectedArr = selectedGroups.split(',');
     for (var i = 0; i < selectedArr.length; i++) {
         if (selectedArr[i]) {
@@ -106,7 +107,7 @@ function GetSelectedGroupEmails() {
                     result = email;
                 }
                 else {
-                    result += "," + email;
+                    result += ',' + email;
                 }
             }
         }
@@ -165,13 +166,14 @@ function Submit() {
         let isValid = validateForm();
 
         let form = $('#CreateForm');
-        let $error = $("#error");
+        let $error = $('#error');
 
         if (isValid) {
             hideValidationSummaryErrors(true);
             axios({
                 url: form[0].action,
-                method: "POST",
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 data: form.serialize()
             }).then(response => {
                 if (response.data.Code === 0) {

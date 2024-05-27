@@ -69,6 +69,7 @@ function query() {
     axios({
         url: resolveClientUrl('report/AttendanceDetails'),
         method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: parse($('form.filter').serialize()),
         responseType: 'text'
     }).then(response => {
@@ -94,16 +95,19 @@ $(document).ready(function () {
         $(this).val(event.target.checked);
     });
 
-    axios(resolveClientUrl('Section/GetOrgChart'))
-        .then(response => {
-            $('#Team').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#TeamIds').val(),
-                hasSearchBox: true
-            });
+    axios({
+        url: resolveClientUrl('Section/GetOrgChart'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    }).then(response => {
+        $('#Team').multiSelectTreeView({
+            data: response.data,
+            selectedItems: $('#TeamIds').val(),
+            hasSearchBox: true
+        });
 
-            query();
-        }).catch(axiosError);
+        query();
+    }).catch(axiosError);
 
     initDatepicker();
 
@@ -123,6 +127,7 @@ $(document).ready(function () {
         axios({
             url: resolveClientUrl('AttendanceReport/ExportExcel'),
             method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {

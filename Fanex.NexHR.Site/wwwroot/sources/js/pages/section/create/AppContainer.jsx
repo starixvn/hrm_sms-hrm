@@ -15,7 +15,11 @@ const AppContainer = () => {
     };
 
     const getDepartments = () => {
-        axios(resolveClientUrl('Section/GetDeparments')).then(response => {
+        axios({
+            url: resolveClientUrl('Section/GetDeparments'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
             setDeparments(response.data);
         }).catch(axiosError);
     };
@@ -27,12 +31,18 @@ const AppContainer = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        axios.post(resolveClientUrl('Section/Create'), {
-            Code: values.name.trim(),
-            Name: values.code.trim(),
-            IsActive: values.isActive,
-            DepartmentId: values.department
-        }).then(response => {
+        axios.post(
+            resolveClientUrl('Section/Create'),
+            {
+                Code: values.name.trim(),
+                Name: values.code.trim(),
+                IsActive: values.isActive,
+                DepartmentId: values.department
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());
