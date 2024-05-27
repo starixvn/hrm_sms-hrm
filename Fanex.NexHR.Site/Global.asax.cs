@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Diagnostics;
+    using System.Net;
     using System.Web;
     using System.Web.Http;
     using System.Web.Mvc;
@@ -61,7 +62,28 @@
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError();
-            ExceptionHandler.Handle(ex, TraceEventType.Error);
+            if(ex.GetType() == typeof(UnauthorizedAccessException))
+            {
+                var httpContext = HttpContext.Current;
+                if (httpContext != null)
+                {
+                    RequestContext requestContext = ((MvcHandler)httpContext.CurrentHandler).RequestContext;
+                    if (requestContext.HttpContext.Request.IsAjaxRequest())
+                    {
+                        httpContext.Response.Clear();
+                        httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        httpContext.Response.End();
+                    }
+                    else
+                    {
+                        httpContext.Response.Redirect("~/Auth/Login");
+                    }
+                }
+            }
+            else
+            {
+                ExceptionHandler.Handle(ex, TraceEventType.Error);
+            }
         }
     }
 }
