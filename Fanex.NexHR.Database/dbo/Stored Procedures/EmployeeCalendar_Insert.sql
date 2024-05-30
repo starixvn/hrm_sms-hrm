@@ -19,7 +19,7 @@ BEGIN
 
 	DECLARE @MofifiedDate DATETIME = GETDATE()
 
-	CREATE TABLE #tblDate (
+	CREATE TABLE #tmpDate (
 		EmpId INT
 		,WorkDate DATE
 		,ShiftId INT
@@ -27,7 +27,7 @@ BEGIN
 
 	WHILE @FromDate <= @ToDate
 	BEGIN
-		INSERT INTO #tblDate (
+		INSERT INTO #tmpDate (
 			EmpId
 			,WorkDate
 			,ShiftId
@@ -50,7 +50,7 @@ BEGIN
 		WHERE @EmpId IS NULL
 			OR emp.EmpId = @EmpId
 
-		INSERT INTO #tblDate (
+		INSERT INTO #tmpDate (
 			EmpId
 			,WorkDate
 			,ShiftId
@@ -118,7 +118,7 @@ BEGIN
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
 		AND empsum.IsDefaultSchedule = 1
-		INNER JOIN #tblDate AS tblc ON emp.EmpId = tblc.EmpId
+		INNER JOIN #tmpDate AS tblc ON emp.EmpId = tblc.EmpId
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
 	WHERE emp.[Enabled] = 1
@@ -174,7 +174,7 @@ BEGIN
 	FROM dbo.Employee AS emp WITH (NOLOCK)
 		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON empsum.EmpId = emp.EmpId
 		AND empsum.IsDefaultSchedule = 0
-		INNER JOIN #tblDate AS tblc ON emp.EmpId = tblc.EmpId
+		INNER JOIN #tmpDate AS tblc ON emp.EmpId = tblc.EmpId
 		LEFT JOIN dbo.Holiday AS holiday WITH (NOLOCK) ON tblc.WorkDate BETWEEN holiday.FromDate
 			AND holiday.ToDate
 	WHERE emp.[Enabled] = 1
@@ -199,7 +199,7 @@ BEGIN
 	SET empca.ShiftId = tblc.ShiftId
 		,empca.ModifiedDate = @MofifiedDate
 	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tblDate AS tblc WITH (NOLOCK) ON empca.EmpId = tblc.EmpId
+		INNER JOIN #tmpDate AS tblc WITH (NOLOCK) ON empca.EmpId = tblc.EmpId
 		AND empca.WorkDate = tblc.WorkDate
 		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
 		AND emp.[Enabled] = 1
@@ -227,5 +227,31 @@ BEGIN
 	--WHERE empca.ShiftId IS NOT NULL
 	--	AND emp.JoinedDate > empca.WorkDate
 
-	DROP TABLE #tblDate
+	UPDATE empca
+	SET empca.IsHoliday = 1
+		,empca.ModifiedDate = @MofifiedDate
+	FROM dbo.EmployeeCalendar AS empca WITH (ROWLOCK, UPDLOCK)
+		INNER JOIN dbo.Employee AS emp WITH (NOLOCK) ON empca.EmpId = emp.EmpId
+		INNER JOIN dbo.EmployeeSummary AS empsum WITH (NOLOCK) ON emp.EmpId = empsum.EmpId
+		INNER JOIN #tmpDate AS tblc ON emp.EmpId = tblc.EmpId
+	WHERE emp.[Enabled] = 1
+		AND ISNULL(emp.IsDeleted, 0) = 0
+		AND (
+			@EmpId IS NULL
+			OR emp.EmpId = @EmpId
+			)
+		AND (
+			emp.ResignedDate IS NULL
+			OR emp.ResignedDate > tblc.WorkDate
+			)
+		AND emp.JoinedDate <= tblc.WorkDate
+		AND empca.IsHoliday = 0
+		AND (empsum.IsLocal = 1 OR empsum.IsExpatUseHoliday = 1)
+		AND EXISTS (
+			SELECT 1
+			FROM dbo.Holiday AS holiday WITH (NOLOCK)
+			WHERE tblc.WorkDate BETWEEN holiday.FromDate AND holiday.ToDate
+			)
+
+	DROP TABLE #tmpDate
 END
