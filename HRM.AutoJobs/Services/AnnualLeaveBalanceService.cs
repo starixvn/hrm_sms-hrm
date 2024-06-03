@@ -155,7 +155,7 @@
 
                 if (!string.IsNullOrWhiteSpace(email))
                 {
-                    var bodyTemplate = ReadTextFile(Path.GetFullPath(hostEnvironment.ContentRootPath, StatisticALBalanceTemplatePath));
+                    var bodyTemplate = ReadTextFile(Path.Combine(hostEnvironment.ContentRootPath, StatisticALBalanceTemplatePath));
                     var body = string.Format(
                         bodyTemplate,
                         nickname,
