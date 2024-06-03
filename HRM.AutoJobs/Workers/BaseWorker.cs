@@ -28,23 +28,16 @@
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            while (!stoppingToken.IsCancellationRequested)
             {
-                while (!stoppingToken.IsCancellationRequested)
-                {
-                    var cronExpression = CronExpression.Parse(jobSetting.CronExpression);
-                    var currentUtcTime = DateTimeOffset.UtcNow.UtcDateTime;
-                    var occurenceTime = cronExpression.GetNextOccurrence(currentUtcTime);
+                var cronExpression = CronExpression.Parse(jobSetting.CronExpression);
+                var currentUtcTime = DateTimeOffset.UtcNow.UtcDateTime;
+                var occurenceTime = cronExpression.GetNextOccurrence(currentUtcTime);
 
-                    var delay = occurenceTime.GetValueOrDefault() - currentUtcTime;
-                    await Task.Delay(delay, stoppingToken);
+                var delay = occurenceTime.GetValueOrDefault() - currentUtcTime;
+                await Task.Delay(delay, stoppingToken);
 
-                    await RunJobAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                await logger.ErrorAsync($"{jobSetting.JobName}: Error - {ex}");
+                await RunJobAsync();
             }
         }
 
