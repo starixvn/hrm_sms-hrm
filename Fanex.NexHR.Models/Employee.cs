@@ -7,7 +7,7 @@
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Resources;
-    using HRM.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.Role;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class Employee : EntityBase<int>
@@ -68,7 +68,7 @@
 
         public string UnitName { get; set; }
 
-        public Team Team { get; set; } 
+        public Team Team { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? TeamDate { get; set; }

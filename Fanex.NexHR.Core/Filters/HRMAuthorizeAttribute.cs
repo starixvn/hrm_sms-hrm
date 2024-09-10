@@ -4,7 +4,7 @@
     using System.Net;
     using System.Web.Mvc;
     using System.Web.Security;
-    using HRM.UserControl.Client.Core;
+    using GO.UserControl.Client.Core;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class HRMAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter

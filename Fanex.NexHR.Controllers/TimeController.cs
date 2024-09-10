@@ -8,8 +8,8 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Time;
     using Fanex.NexHR.ViewModels.Time;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class TimeController : BaseController
     {

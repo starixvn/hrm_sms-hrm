@@ -10,8 +10,8 @@
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.WorkingCalendarReport)]
     public class WorkingCalendarSummaryReportController : BaseController

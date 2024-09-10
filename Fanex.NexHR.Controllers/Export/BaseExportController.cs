@@ -2,7 +2,7 @@
 {
     using System.IO;
     using System.Web.Mvc;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class BaseExportController : BaseController

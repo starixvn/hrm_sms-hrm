@@ -12,8 +12,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels.Department;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class DepartmentController : BaseController
     {

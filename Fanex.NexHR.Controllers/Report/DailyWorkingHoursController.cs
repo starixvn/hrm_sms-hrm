@@ -10,8 +10,8 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Report.WorkingHours;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.AttendanceDailyReport)]
     public class DailyWorkingHoursController : BaseController

@@ -8,9 +8,9 @@
     using Fanex.NexHR.Models.Log;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services.Interfaces;
-    using HRM.UserControl.Client.Core.Models.Role;
-    using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
 
     public interface IEmployeeLogService
     {

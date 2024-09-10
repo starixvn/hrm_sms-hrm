@@ -6,7 +6,7 @@
     using Fanex.NexHR.Criteria.EmployeeWorkFromHome;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     public class ExportEmployeeWorkFromHomeController : BaseExportController

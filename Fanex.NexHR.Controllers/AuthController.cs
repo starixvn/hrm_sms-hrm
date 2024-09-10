@@ -11,10 +11,10 @@
     using Fanex.NexHR.Core.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
-    using HRM.UserControl.Client.Core.Configurations;
-    using HRM.UserControl.Client.Core.Models.Auth;
-    using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core;
+    using GO.UserControl.Client.Core.Models.Auth;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
 
     public class AuthController : Controller
     {

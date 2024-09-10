@@ -11,8 +11,8 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.ShiftStatisticReport)]
     public class ShiftStatisticReportController : BaseController

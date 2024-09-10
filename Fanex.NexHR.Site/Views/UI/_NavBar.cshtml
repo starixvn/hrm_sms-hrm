@@ -1,4 +1,4 @@
-﻿@using HRM.UserControl.Client.Core.Models
+﻿@using GO.UserControl.Client.Core.Models
 @model IEnumerable<MenuItem>
 @{
     var menus = Model.GroupBy(i => i.MenuItemName).Select(g => g.First()).ToList();

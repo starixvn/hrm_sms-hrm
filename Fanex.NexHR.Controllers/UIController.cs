@@ -8,9 +8,9 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.UI;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Models;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Models;
+    using GO.UserControl.Client.Core.Session;
 
     public class UIController : BaseController
     {

@@ -10,8 +10,8 @@
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
     using ViewModels.Postnatal;
 
     public class PostnatalController : BaseController

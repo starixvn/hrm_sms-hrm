@@ -9,8 +9,8 @@
     using Fanex.NexHR.Models.Report.MealAllowance;
     using Fanex.NexHR.Services.Implement.Report;
     using Fanex.NexHR.ViewModels.Report;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.MealAllowanceReport)]
     public class MealAllowanceReportController : BaseController
@@ -73,7 +73,6 @@
             ViewBag.ToDate = model.ToDate;
             return PartialView("~/Views/Report/MealAllowance/_MealAllowanceSummary.cshtml", mealAllowanceSummary);
         }
-
 
         [HttpGet]
         public ActionResult ExportExcel(MealAllowanceReportViewModel model)

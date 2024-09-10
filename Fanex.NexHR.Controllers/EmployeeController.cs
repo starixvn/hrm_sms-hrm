@@ -21,11 +21,11 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Employee;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Models.Role;
-    using HRM.UserControl.Client.Core.Models.User;
-    using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.User;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
     using Simplicode.Imaging;
 
     public class EmployeeController : BaseController

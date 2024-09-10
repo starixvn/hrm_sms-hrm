@@ -6,7 +6,7 @@
     using Fanex.NexHR.Models.Discipline;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
 
     public class ExportDisciplineController : BaseController
     {

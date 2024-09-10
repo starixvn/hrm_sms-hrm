@@ -14,8 +14,8 @@
     using Fanex.NexHR.Services.Interfaces;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Section;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class SectionController : BaseController
     {
@@ -114,7 +114,6 @@
         {
             return View(id);
         }
-
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.SectionManagement)]

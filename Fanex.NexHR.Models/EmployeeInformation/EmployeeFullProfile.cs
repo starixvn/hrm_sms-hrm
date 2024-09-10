@@ -6,7 +6,7 @@
     using System.Linq;
     using Fanex.NexHR.Core.Enums;
     using Fanex.NexHR.Models.Supervisor;
-    using HRM.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.Role;
 
     public class EmployeeFullProfile
     {

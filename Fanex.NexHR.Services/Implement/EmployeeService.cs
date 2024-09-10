@@ -19,8 +19,8 @@
     using Fanex.NexHR.Repositories;
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.ViewModels.AnnualLeave;
-    using HRM.UserControl.Client.Core.Configurations;
-    using HRM.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core;
+    using GO.UserControl.Client.Core.Services;
 
     public class EmployeeService : IEmployeeService
     {
@@ -73,9 +73,9 @@
                 employees = employeeRepository.GetEmployees(criteria);
 
                 var roles = roleService.GetBySiteId(userControlSettings.SiteId);
-                foreach(var employee in employees)
+                foreach (var employee in employees)
                 {
-                    if(employee.Roles != null && employee.Roles.Any())
+                    if (employee.Roles != null && employee.Roles.Any())
                     {
                         employee.Roles = roles.Where(x => employee.Roles.Exists(y => y.RoleId == x.RoleId)).ToList();
                     }

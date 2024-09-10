@@ -7,7 +7,7 @@
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Models.EmployeeInformation;
     using Fanex.NexHR.Models.Supervisor;
-    using HRM.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.Role;
 
     public class EmployeeRepository : IEmployeeRepository
     {
@@ -50,7 +50,8 @@
                     var employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
                         {
-                            e.Team = new Team {
+                            e.Team = new Team
+                            {
                                 Id = t.TeamId,
                                 Code = t.TeamCode,
                                 Name = t.TeamName,

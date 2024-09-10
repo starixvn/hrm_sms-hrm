@@ -16,9 +16,9 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Overtime;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
     using Hangfire;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
 
     public class OvertimeController : BaseController
     {

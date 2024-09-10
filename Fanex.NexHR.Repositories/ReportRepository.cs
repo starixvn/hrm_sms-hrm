@@ -9,7 +9,7 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Models.Supervisor;
     using Fanex.NexHR.ViewModels;
-    using HRM.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.Role;
 
     public partial class ReportRepository : IReportRepository
     {

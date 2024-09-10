@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using Criteria.Report;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
     using Models.Report;
     using Services;
     using ViewModels.Report;

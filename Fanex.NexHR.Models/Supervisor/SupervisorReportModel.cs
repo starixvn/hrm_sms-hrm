@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NexHR.Models.Supervisor
 {
-    using Fanex.NexHR.Models.Group;
-    using HRM.UserControl.Client.Core.Models.Role;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NexHR.Models.Group;
+    using GO.UserControl.Client.Core.Models.Role;
 
     public class SupervisorReportModel
     {
@@ -37,6 +37,5 @@
         public string Department { get; set; }
 
         public string Section { get; set; }
-
     }
 }

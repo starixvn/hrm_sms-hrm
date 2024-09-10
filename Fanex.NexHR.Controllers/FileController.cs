@@ -9,7 +9,7 @@
     using System.Web.Mvc;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Resources;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
 
     public class FileController : BaseController
     {

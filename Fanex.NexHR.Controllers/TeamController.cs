@@ -18,8 +18,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.EmployeeGroup;
     using Fanex.NexHR.ViewModels.Team;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMPermission(Policy.Read, FunctionKey.TeamManagement)]
     public class TeamController : BaseController
@@ -65,7 +65,7 @@
 
         [HttpPost]
         [HRMPermission(Policy.Host, FunctionKey.TeamManagement)]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
         public ActionResult Create(TeamViewModel model)
         {
             model.Sections = sectionService.GetSection();
@@ -136,7 +136,7 @@
                 ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
                 ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
                 ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
-                ExpatWorkingHoursbyWeek= team.ExpatWorkingHoursbyWeek,
+                ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
                 HeadId = unitHead?.EmpId,
                 UnitHead = unitHead?.DisplayName,
                 ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),

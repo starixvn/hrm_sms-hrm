@@ -8,8 +8,8 @@
     using Fanex.NexHR.Criteria.Employee;
     using Fanex.NexHR.Models.Message;
     using Fanex.NexHR.Services;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class MessageController : BaseController
     {

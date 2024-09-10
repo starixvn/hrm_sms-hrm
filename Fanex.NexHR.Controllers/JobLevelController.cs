@@ -9,8 +9,8 @@
     using Fanex.NexHR.Criteria.JobLevel;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services.Interfaces;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class JobLevelController : BaseController
     {

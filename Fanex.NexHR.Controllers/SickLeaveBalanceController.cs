@@ -15,8 +15,8 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.AnnualLeave;
     using Fanex.NexHR.ViewModels.HospitalizationLeave;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
     using NPOI.HSSF.UserModel;
 
     [HRMPermission(Policy.Read, FunctionKey.SickLeaveBalance)]

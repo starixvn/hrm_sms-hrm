@@ -5,8 +5,8 @@
     using System.Net;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using HRM.UserControl.Client.Core;
-    using HRM.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core;
+    using GO.UserControl.Client.Core.Enumerables;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class HRMPermissionAttribute : FilterAttribute, IAuthorizationFilter

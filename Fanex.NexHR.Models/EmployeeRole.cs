@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NexHR.Models
 {
-    using HRM.UserControl.Client.Core.Models.Role;
+    using GO.UserControl.Client.Core.Models.Role;
 
     public class EmployeeRole
     {

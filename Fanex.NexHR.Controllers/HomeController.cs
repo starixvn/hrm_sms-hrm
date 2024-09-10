@@ -6,9 +6,9 @@
     using Core.Constants;
     using Fanex.NexHR.Models.Dashboard;
     using Fanex.NexHR.Services;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
 
     public class HomeController : BaseController
     {

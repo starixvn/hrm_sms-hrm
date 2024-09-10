@@ -18,9 +18,9 @@
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
     using Fanex.NexHR.ViewModels.Report;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Models;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Models;
+    using GO.UserControl.Client.Core.Session;
 
     [ValidateInput(false)]
     public class ReportController : BaseController
@@ -209,8 +209,6 @@
         }
 
         [HRMPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
-#pragma warning disable S1541 // Methods and properties should not be too complex
-#pragma warning disable S1067 // Expressions should not be too complex
         public ActionResult GetUnpaidLeaveSummary(LeaveSummaryViewModel model)
 #pragma warning restore S1541 // Methods and properties should not be too complex
         {
@@ -245,6 +243,7 @@
 
             return PartialView("_UnpaidLeaveSummaryDetails", model);
         }
+
 #pragma warning restore S1067 // Expressions should not be too complex
 
         public ActionResult EmployeeSupervisor()

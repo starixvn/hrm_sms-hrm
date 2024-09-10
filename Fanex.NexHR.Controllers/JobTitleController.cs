@@ -12,8 +12,8 @@
     using Fanex.NexHR.Criteria.Lookup;
     using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
     using Resources;
 
     public class JobTitleController : BaseExportController

@@ -16,9 +16,9 @@
     using Fanex.Logging.Extensions.Web;
     using Fanex.Logging.Sentry.RavenClient;
     using Fanex.NexHR.Core.Providers;
-    using HRM.UserControl.Client.AspNetMvc.Configurations;
-    using HRM.UserControl.Client.AspNetMvc.Session;
-    using HRM.UserControl.Client.Core;
+    using GO.UserControl.Client.AspNetMvc;
+    using GO.UserControl.Client.AspNetMvc.Session;
+    using GO.UserControl.Client.Core;
     using SharpRaven;
 
     public class MvcApplication : HttpApplication
@@ -62,7 +62,7 @@
         protected void Application_Error(object sender, EventArgs e)
         {
             var ex = Server.GetLastError();
-            if(ex.GetType() == typeof(UnauthorizedAccessException))
+            if (ex.GetType() == typeof(UnauthorizedAccessException))
             {
                 var httpContext = HttpContext.Current;
                 if (httpContext != null)

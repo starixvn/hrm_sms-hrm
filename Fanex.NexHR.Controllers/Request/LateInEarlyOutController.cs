@@ -13,8 +13,8 @@
     using Fanex.NexHR.Models.Request;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Request;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class LateInEarlyOutController : BaseController
     {

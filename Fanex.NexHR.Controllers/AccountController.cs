@@ -9,10 +9,10 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Employee;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Models.User;
-    using HRM.UserControl.Client.Core.Services;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Models.User;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
 
     public class AccountController : BaseController
     {

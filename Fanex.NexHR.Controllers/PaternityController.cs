@@ -9,8 +9,8 @@
     using Fanex.NexHR.Criteria.Paternity;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Paternity;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class PaternityController : BaseController
     {

@@ -4,7 +4,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Core.Models;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
 
     [HRMAuthorize]
     public class BaseController : Controller

@@ -15,8 +15,8 @@
     using Fanex.NexHR.Resources;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Discipline;
-    using HRM.UserControl.Client.Core.Enumerables;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
 
     public class DisciplineController : BaseController
     {
@@ -225,7 +225,7 @@
             {
                 int currentMonth = currentDate.Month;
                 int currentYear = currentDate.Year;
-                if(currentMonth == December)
+                if (currentMonth == December)
                 {
                     dateRange.Add(new SelectListItem
                     {
@@ -233,7 +233,7 @@
                         Value = string.Format("1{0}", currentYear + 1)
                     });
                 }
-                else if(currentMonth >= 1 && currentMonth <= May)
+                else if (currentMonth >= 1 && currentMonth <= May)
                 {
                     dateRange.Add(new SelectListItem
                     {

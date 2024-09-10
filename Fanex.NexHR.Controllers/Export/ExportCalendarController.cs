@@ -8,7 +8,7 @@
     using Fanex.NexHR.Models.Report;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels;
-    using HRM.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core.Session;
 
     public class ExportCalendarController : BaseExportController
     {
