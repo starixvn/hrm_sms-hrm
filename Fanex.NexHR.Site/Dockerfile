@@ -32,6 +32,8 @@ COPY Fanex.NexHR.Repositories\packages.config Fanex.NexHR.Repositories\
 COPY Fanex.NexHR.Services\*.csproj Fanex.NexHR.Services\
 COPY Fanex.NexHR.Services\packages.config Fanex.NexHR.Services\
 
+COPY HRM.Letstalk.Core\*.csproj HRM.Letstalk.Core\
+
 COPY Fanex.NexHR.Controllers\*.csproj Fanex.NexHR.Controllers\
 COPY Fanex.NexHR.Controllers\packages.config Fanex.NexHR.Controllers\
 
@@ -49,6 +51,7 @@ COPY Fanex.NexHR.ViewModels\ Fanex.NexHR.ViewModels\
 COPY Fanex.NexHR.Criteria\ Fanex.NexHR.Criteria\
 COPY Fanex.NexHR.Repositories\ Fanex.NexHR.Repositories\
 COPY Fanex.NexHR.Services\ Fanex.NexHR.Services\
+COPY HRM.Letstalk.Core\ HRM.Letstalk.Core\
 COPY Fanex.NexHR.Controllers\ Fanex.NexHR.Controllers\
 COPY Fanex.NexHR.Site\ Fanex.NexHR.Site\
 
