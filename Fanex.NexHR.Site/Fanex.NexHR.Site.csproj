@@ -1024,7 +1024,7 @@
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
     <None Include="WebConfigs\Web.HM_PROD.config" />
-    <None Include="WebConfigs\Web.Local.config" />
+    <None Include="WebConfigs\Web.LOCAL.config" />
     <None Include="WebConfigs\Web.SMS_PROD.config" />
     <Content Include="wwwroot\.babelrc" />
     <Content Include="wwwroot\dist\js\account.changepwd.js.map" />
