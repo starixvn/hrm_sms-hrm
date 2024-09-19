@@ -829,7 +829,6 @@
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <None Include="packages.config" />
-    <Content Include="SystemLog\logfile.log" />
     <Content Include="Views\Account\ChangePwd.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\_HistoryDetail.cshtml" />
