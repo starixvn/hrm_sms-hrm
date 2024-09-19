@@ -274,7 +274,7 @@
       <Name>Fanex.NexHR.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj">
-      <Project>{f57bc2a2-bfa1-49c0-ae61-5432948db735}</Project>
+      <Project>{523f0ee0-6da2-4a64-97bc-9bb0e1f4ed02}</Project>
       <Name>HRM.Letstalk.Core</Name>
     </ProjectReference>
   </ItemGroup>

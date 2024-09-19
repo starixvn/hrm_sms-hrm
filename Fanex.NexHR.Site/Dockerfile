@@ -33,6 +33,7 @@ COPY Fanex.NexHR.Services\*.csproj Fanex.NexHR.Services\
 COPY Fanex.NexHR.Services\packages.config Fanex.NexHR.Services\
 
 COPY HRM.Letstalk.Core\*.csproj HRM.Letstalk.Core\
+COPY HRM.Letstalk.Core\packages.config HRM.Letstalk.Core\
 
 COPY Fanex.NexHR.Controllers\*.csproj Fanex.NexHR.Controllers\
 COPY Fanex.NexHR.Controllers\packages.config Fanex.NexHR.Controllers\
