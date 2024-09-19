@@ -51,7 +51,6 @@ COPY Fanex.NexHR.Repositories\ Fanex.NexHR.Repositories\
 COPY Fanex.NexHR.Services\ Fanex.NexHR.Services\
 COPY Fanex.NexHR.Controllers\ Fanex.NexHR.Controllers\
 COPY Fanex.NexHR.Site\ Fanex.NexHR.Site\
-COPY SonarQube SonarQube\
 
 RUN MSBuild.exe "Fanex.NexHR.Site\Fanex.NexHR.Site.csproj" `
     /t:Build;WebPublish /m `
