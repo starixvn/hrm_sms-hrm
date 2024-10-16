@@ -765,7 +765,6 @@
     <Content Include="wwwroot\sources\styles\images\uicon.png" />
     <Content Include="wwwroot\sources\styles\login.css" />
     <Content Include="wwwroot\dist\js\time.checkinout.js.map" />
-    <Content Include="wwwroot\dist\styles\time.checkinout.css.map" />
     <Content Include="wwwroot\dist\styles\time.checkinout.js.map" />
     <None Include="wwwroot\sources\styles\pages\time\checkinout.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
