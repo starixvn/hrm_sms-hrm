@@ -12,6 +12,7 @@
         public static byte SiteId => Convert.ToByte(ConfigurationManager.AppSettings["SiteId"]);
         public static string ApplicationDomain => ConfigurationManager.AppSettings["ApplicationDomain"];
         public static string SyncWorkingShiftUrl => ConfigurationManager.AppSettings["SyncWorkingShiftUrl"];
+        public static string WhitelistIPs => ConfigurationManager.AppSettings["WhitelistIPs"];
         public static bool EnableManualSyncWorkingShift
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
 

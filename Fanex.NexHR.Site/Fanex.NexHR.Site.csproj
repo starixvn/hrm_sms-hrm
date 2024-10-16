@@ -343,6 +343,7 @@
     <Content Include="wwwroot\dist\js\team.edit.shift.manager.js" />
     <Content Include="wwwroot\dist\js\team.edit.supervisor.js" />
     <Content Include="wwwroot\dist\js\team.index.js" />
+    <Content Include="wwwroot\dist\js\time.checkinout.js" />
     <Content Include="wwwroot\dist\js\unit.create.js" />
     <Content Include="wwwroot\dist\js\unit.edit.js" />
     <Content Include="wwwroot\dist\js\unit.home.js" />
@@ -415,6 +416,7 @@
     <Content Include="wwwroot\dist\styles\holiday.index.js" />
     <Content Include="wwwroot\dist\styles\home.index.css" />
     <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\images\checkinout.jpg" />
     <Content Include="wwwroot\dist\styles\images\icons.png" />
     <Content Include="wwwroot\dist\styles\images\sprite_btn.png" />
     <Content Include="wwwroot\dist\styles\images\sprite_ico_2012-05-15.png" />
@@ -506,6 +508,8 @@
     <Content Include="wwwroot\dist\styles\team.index.js" />
     <Content Include="wwwroot\dist\styles\team.supervisor.index.css" />
     <Content Include="wwwroot\dist\styles\team.supervisor.index.js" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.css" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.js" />
     <Content Include="wwwroot\dist\styles\unit.create.css" />
     <Content Include="wwwroot\dist\styles\unit.create.js" />
     <Content Include="wwwroot\dist\styles\unit.index.css" />
@@ -699,6 +703,8 @@
     <Content Include="wwwroot\sources\js\pages\team\supervisor\table\Row.jsx" />
     <Content Include="wwwroot\sources\js\pages\team\supervisor\table\table.jsx" />
     <Content Include="wwwroot\sources\js\pages\team\supervisor\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\time\checkinout\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\time\checkinout\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\common.functions.js" />
     <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />
     <Content Include="wwwroot\sources\js\pages\unit\create\index.jsx" />
@@ -744,6 +750,7 @@
     <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
     <Content Include="wwwroot\sources\styles\images\bgLogin.png" />
     <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\checkinout.jpg" />
     <Content Include="wwwroot\sources\styles\images\Hongma-logo.png" />
     <Content Include="wwwroot\sources\styles\images\icons.png" />
     <Content Include="wwwroot\sources\styles\images\panel_bg.png" />
@@ -757,6 +764,10 @@
     <Content Include="wwwroot\sources\styles\images\titlebg.png" />
     <Content Include="wwwroot\sources\styles\images\uicon.png" />
     <Content Include="wwwroot\sources\styles\login.css" />
+    <Content Include="wwwroot\dist\js\time.checkinout.js.map" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.css.map" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.js.map" />
+    <None Include="wwwroot\sources\styles\pages\time\checkinout.scss" />
     <Content Include="wwwroot\webpack.config.dev.js" />
     <Content Include="wwwroot\webpack.config.js" />
     <Content Include="wwwroot\webpack.config.vendor.js" />
@@ -1023,6 +1034,7 @@
     <Content Include="Views\Unit\Create.cshtml" />
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
+    <Content Include="Views\Time\CheckInOut.cshtml" />
     <None Include="WebConfigs\Web.HM_PROD.config" />
     <Content Include="WebConfigs\Web.LOCAL.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

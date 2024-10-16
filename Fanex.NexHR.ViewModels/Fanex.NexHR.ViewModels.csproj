@@ -145,6 +145,7 @@
     <Compile Include="Section\EditSectionViewModel.cs" />
     <Compile Include="Shifts\ShiftByStatusViewModel.cs" />
     <Compile Include="Team\DisciplineRuleViewModel.cs" />
+    <Compile Include="Time\CheckInOutViewModel.cs" />
     <Compile Include="Time\TimeRecordViewModel.cs" />
     <Compile Include="UI\HeaderViewModel.cs" />
     <Compile Include="Unit\AddUnitViewModel.cs" />

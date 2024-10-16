@@ -1,25 +1,109 @@
 ﻿namespace Fanex.NexHR.Controllers
 {
     using System;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Time;
+    using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Time;
     using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Models.Auth;
+    using GO.UserControl.Client.Core.Services;
     using GO.UserControl.Client.Core.Session;
+    using NetTools;
 
     public class TimeController : BaseController
     {
         private readonly IBaseService baseService;
+        private readonly IAuthService authService;
+        private readonly ICryptoService cryptoService;
+        private readonly IHRMAuthService hrmAuthService;
 
         public TimeController(
             IUserControlSession userControlSession,
-            IBaseService baseService) : base(userControlSession)
+            IBaseService baseService,
+            IAuthService authService,
+            ICryptoService cryptoService,
+            IHRMAuthService hrmAuthService) : base(userControlSession)
         {
             this.baseService = baseService;
+            this.authService = authService;
+            this.cryptoService = cryptoService;
+            this.hrmAuthService = hrmAuthService;
+        }
+
+        [AllowAnonymous]
+        public ActionResult CheckInOut()
+        {
+            if(ConfigSettings.WhitelistIPs.Equals("*"))
+            {
+                return View();
+            }
+
+            var clientIP = IPAddress.Parse(GetClientIpAddress());
+            if (ConfigSettings.WhitelistIPs.Split(';').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIP)))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("AccessDenied", "Error");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult CheckInOut(CheckInOutViewModel model)
+        {
+            model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
+            var token = cryptoService.GenerateRijndaelKeyIV();
+            string[] keyiv = token.Split(':');
+            var rijndaelKey = keyiv[0];
+            var rijndaelIV = keyiv[1];
+            var loginParam = new LoginParam
+            {
+                Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
+                Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
+                Token = token,
+                IP = GetClientIpAddress(),
+                Platform = Request.Browser.Platform,
+                BrowserName = Request.Browser.Browser,
+                NetSessionId = Session.SessionID
+            };
+            var loginResult = authService.Login(loginParam);
+            if (loginResult.IsSuccessfull)
+            {
+                EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
+                if (employee == null)
+                {
+                    loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
+                    return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
+
+                var criteria = new InsertCheckInOutRecordCriteria
+                {
+                    EmpId = employee.EmpId,
+                    RecordTime = DateTimeOffset.Now.DateTime,
+                    InOutType = model.InOutType,
+                    IPAddress = GetClientIpAddress(),
+                    Platform = Request.Headers["User-Agent"]
+                };
+                CommandResult result = baseService.ExecuteNonQuery(criteria);
+                loginResult = new LoginResult { IsSuccessfull = result.IsSuccessful, ErrorMessage = result.Message };
+
+                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+            else
+            {
+                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
 
         [HttpPost]

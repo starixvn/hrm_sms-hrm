@@ -1,0 +1,168 @@
+﻿@import '../../abstracts/mixins';
+@import '~bootstrap/dist/css/bootstrap.css';
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome.scss';
+
+@mixin flex($align: center, $wrap: wrap, $justify-content: flex-start) {
+    display: flex;
+    align-items: $align;
+    flex-wrap: $wrap;
+    justify-content: $justify-content;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    font-family: "Roboto";
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.app-container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.checkinout {
+    width: 100%;
+
+    &-flex {
+        padding: 6rem 0;
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        justify-content: space-between;
+    }
+
+    &-logo {
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: center;
+
+        .img {
+            height: 25rem;
+            width: 25rem;
+            background-image: url('../../images/checkinout.jpg');
+            background-repeat: no-repeat, no-repeat;
+            background-size: cover;
+        }
+    }
+
+    &-form {
+        width: 42rem;
+        background: #fff;
+        box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.16);
+        border-radius: 8px;
+        @include flex(flex-start, nowrap, center);
+        padding: 4rem 4rem 3rem 4rem;
+        max-height: 90rem;
+
+        form {
+            width: 100%;
+            position: relative;
+
+            .material-textfield {
+                position: relative;
+                margin-bottom: 2rem;
+
+                label {
+                    position: absolute;
+                    font-size: 1.6rem;
+                    left: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background-color: white;
+                    color: #888;
+                    padding: 0 0.3rem;
+                    margin: -0.2rem 0.3rem;
+                    transition: 0.1s ease-out;
+                    transform-origin: left top;
+                    pointer-events: none;
+                    font-weight: normal;
+                }
+
+                .custom-input {
+                    font-size: 1.6rem;
+                    outline: none;
+                    border: 1px solid rgba(0, 42, 102, 0.5);
+                    border-radius: 4px;
+                    padding: 1.4rem 1.5rem;
+                    color: #333;
+                    transition: 0.1s ease-out;
+                    box-sizing: border-box;
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+
+                    &:focus {
+                        border: 1px solid #013b8e;
+                    }
+
+                    &:focus + label {
+                        color: #888;
+                        top: 0;
+                        transform: translateY(-50%) scale(0.8);
+                        padding: 0 1.3rem;
+                    }
+
+                    &:placeholder {
+                        color: #333333;
+                    }
+
+                    &:not(:placeholder-shown) + label {
+                        top: 0;
+                        transform: translateY(-50%) scale(0.8);
+                    }
+                }
+            }
+        }
+    }
+
+    &-btn {
+        text-align: center;
+        display: flex;
+        gap: 1.5rem;
+
+        .btn-primary {
+            line-height: 1.9rem;
+            font-size: 1.6rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            transition: 0.35s;
+        }
+    }
+}
+
+.modal-dialog {
+    top: 25%;
+    max-width: 300px;
+
+    .modal-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+
+        .modal-body {
+            text-align: center;
+            padding-top: 4rem;
+
+            .fa-check-circle {
+                font-size: 30px;
+                color: #2aaa55;
+            }
+
+            .fa-exclamation-circle {
+                font-size: 30px;
+                color: #e74c3c;
+            }
+
+            p {
+                margin: 1rem 0;
+            }
+        }
+    }
+}

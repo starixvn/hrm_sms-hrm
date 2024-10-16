@@ -85,6 +85,7 @@ module.exports = {
         [`${styleDistPath}/joblevel`]: `${styleSourcePath}/pages/joblevel/joblevel.scss`,
         [`${styleDistPath}/employee.workfromhome`]: `${styleSourcePath}/pages/workfromhome/index.scss`,
         [`${styleDistPath}/discipline.summary.per.year`]: `${styleSourcePath}/pages/report/discipline.summary.per.year.scss`,
+        [`${styleDistPath}/time.checkinout`]: `${styleSourcePath}/pages/time/checkinout.scss`,
 
         //
         [`${jsDistPath}/main`]: './sources/js/main.js',
@@ -189,6 +190,7 @@ module.exports = {
         [`${jsDistPath}/employee.workfromhome`]: `${jsSourcePath}/employeeworkfromhome/index.js`,
         [`${jsDistPath}/hospitalization.leave.balance.index`]: `${jsSourcePath}/hospitalization-leave-balance/index.js`,
         [`${jsDistPath}/sick.leave.balance.index`]: `${jsSourcePath}/sick-leave-balance/index.js`,
-        [`${jsDistPath}/discipline.summary.per.year`]: `${jsSourcePath}/report/discipline.summary.per.year.js`
+        [`${jsDistPath}/discipline.summary.per.year`]: `${jsSourcePath}/report/discipline.summary.per.year.js`,
+        [`${jsDistPath}/time.checkinout`]: `${jsSourcePath}/time/checkinout/index.jsx`
     }
 };
