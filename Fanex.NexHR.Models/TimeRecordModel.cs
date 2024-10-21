@@ -14,7 +14,7 @@
         public DateTime RecordTime { get; set; }
         public byte? InOutType { get; set; }
 
-        public string GetInOutName
+        public string InOutName
         {
             get
             {

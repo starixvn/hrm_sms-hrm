@@ -101,6 +101,7 @@
         <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="nexhrx" Plain="0" />
         <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="nexhrx" Plain="0" />
         <Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="nexhrx" Plain="0" />
+        <Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="nexhrx" Plain="0" />
     </Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="nexhrx" Plain="0"></Setting>

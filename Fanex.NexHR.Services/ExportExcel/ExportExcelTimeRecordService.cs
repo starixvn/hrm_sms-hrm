@@ -50,7 +50,7 @@
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
                         workSheet.Cells[rowIndex, colIndex++].Value = detail.RecordTime.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + detail.RecordTime.ToString(@"mm\'");
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.GetInOutName;
+                        workSheet.Cells[rowIndex, colIndex++].Value = detail.InOutName;
                         workSheet.Cells[rowIndex, colIndex].Value = detail.IsCheckInOutOnline ? "Yes" : "No";
                         rowIndex++;
                         colIndex = 1;

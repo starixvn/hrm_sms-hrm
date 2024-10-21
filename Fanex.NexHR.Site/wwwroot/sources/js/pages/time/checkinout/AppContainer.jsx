@@ -2,14 +2,14 @@
 import { Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
-import ToastLayout from '../../../shared/layouts/ToastLayout';
-import { axiosError, resolveClientUrl } from '../../../shared/common.functions';
+import { resolveClientUrl } from '../../../shared/common.functions';
 
 export default class AppContainer extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            records: [],
             fields: {
                 username: '',
                 password: ''
@@ -22,6 +22,22 @@ export default class AppContainer extends Component {
             }
         };
     }
+
+    componentDidMount() {
+        this.getCheckInOutRecord();
+    }
+
+    getCheckInOutRecord = () => {
+        axios({
+            url: resolveClientUrl('Time/GetCheckInOutOnlineRecord'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            this.setState({
+                records: response.data
+            });
+        });
+    };
 
     validate = () => {
         const fields = this.state.fields;
@@ -57,7 +73,11 @@ export default class AppContainer extends Component {
                         errMsg: data.errorMessage
                     }
                 });
-            }).catch(axiosError);
+
+                if (data.isSuccessfull) {
+                    this.getCheckInOutRecord();
+                }
+            });
         }
     };
 
@@ -95,10 +115,9 @@ export default class AppContainer extends Component {
     };
 
     render() {
-        const { modalDialog, fields } = this.state;
+        const { modalDialog, fields, records } = this.state;
         return (
             <div className='app-container'>
-                <ToastLayout />
                 <div className='checkinout-flex'>
                     <div className='checkinout-form'>
                         <form>
@@ -124,6 +143,38 @@ export default class AppContainer extends Component {
                                 <input type='button' className='btn btn-primary' value='Check out' onClick={this.handleCheckout} />
                             </div>
                         </form>
+                    </div>
+                    <div className='checkinout-records'>
+                        <table className='table'>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Emp ID</th>
+                                    <th>Full Name</th>
+                                    <th>Transaction Time</th>
+                                    <th>In/Out</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    records.length === 0 &&
+                                    <tr><td colSpan='5'>No data</td></tr>
+                                }
+                                {
+                                    records.map((record, index) => {
+                                        return (
+                                            <tr key={record.recordTimeId}>
+                                                <td>{index + 1}</td>
+                                                <td>{record.code}</td>
+                                                <td className='align-left'>{record.fullName}</td>
+                                                <td>{record.recordTime}</td>
+                                                <td>{record.inOutName}</td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <Modal keyboard={false} backdrop='static' show={modalDialog.show}>

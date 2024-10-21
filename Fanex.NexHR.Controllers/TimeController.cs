@@ -11,6 +11,7 @@
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
     using Fanex.NexHR.Criteria.Time;
+    using Fanex.NexHR.Models;
     using Fanex.NexHR.Services;
     using Fanex.NexHR.ViewModels.Time;
     using GO.UserControl.Client.Core.Enumerables;
@@ -56,6 +57,17 @@
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetCheckInOutOnlineRecord()
+        {
+            var criteria = new GetCheckInOutOnlineRecordCriteria
+            {
+                Date = DateTimeOffset.Now.Date
+            };
+            var records = baseService.GetData<TimeRecordModel>(criteria);
+            return new CustomJsonResult { Data = records, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
         [AllowAnonymous]

@@ -23,8 +23,23 @@ html {
 
 .app-container {
     width: 100%;
+    height: 100vh;
     margin-right: auto;
     margin-left: auto;
+
+    /*
+    @media (min-width: 768px) {
+        padding: 0 5rem;
+    }
+
+    @media (min-width: 992px) {
+        padding: 0 8rem;
+    }
+
+    @media (min-width: 1600px) {
+        padding: 0 24rem 0 20rem;
+    }
+    */
 }
 
 .checkinout {
@@ -33,9 +48,9 @@ html {
     &-flex {
         padding: 6rem 0;
         display: flex;
-        align-items: center;
-        height: 100vh;
-        justify-content: space-between;
+        //align-items: center;
+        height: 100%;
+        //justify-content: space-between;
     }
 
     &-logo {
@@ -58,8 +73,8 @@ html {
         box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.16);
         border-radius: 8px;
         @include flex(flex-start, nowrap, center);
-        padding: 4rem 4rem 3rem 4rem;
-        max-height: 90rem;
+        padding: 4rem;
+        max-height: 58rem;
 
         form {
             width: 100%;
@@ -134,6 +149,11 @@ html {
             transition: 0.35s;
         }
     }
+
+    &-records {
+        margin: 0 0 .9rem 3.9rem;
+        overflow: auto;
+    }
 }
 
 .modal-dialog {
@@ -162,6 +182,68 @@ html {
 
             p {
                 margin: 1rem 0;
+            }
+        }
+    }
+}
+
+$table-border-color: #d2d2d2;
+
+table.table {
+    width: 100%;
+    border-collapse: separate !important;
+
+    thead tr th, tbody tr td, tbody tr th {
+        font-weight: normal;
+        vertical-align: middle;
+        padding: 5px 7px;
+        line-height: 1.42857143;
+        border-top-width: 0;
+        border-right: 1px solid $table-border-color;
+        border-bottom: 1px solid $table-border-color;
+        text-align: center;
+
+        &.align-left {
+            text-align: left;
+        }
+
+        &.align-right {
+            text-align: right;
+        }
+
+        &:first-child {
+            border-left: 1px solid $table-border-color;
+        }
+    }
+
+    thead {
+        color: #fff;
+        position: sticky;
+        top: 0px;
+
+        tr {
+            a {
+                color: #ef9e36;
+            }
+
+            th {
+                border-color: #646d80;
+            }
+
+            &:nth-child(n + 1) {
+                background: #0d3761;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            &:hover {
+                background: #e3eceb !important;
+            }
+
+            &:nth-child(odd) {
+                background: #ececec;
             }
         }
     }
