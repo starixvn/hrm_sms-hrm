@@ -54,7 +54,7 @@ html {
     }
 
     &-logo {
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
         display: flex;
         justify-content: center;
 
@@ -65,6 +65,14 @@ html {
             background-repeat: no-repeat, no-repeat;
             background-size: cover;
         }
+    }
+
+    &-datetime {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 16px;
+        font-weight: bold;
+        color: #0d3761;
     }
 
     &-form {
@@ -222,10 +230,6 @@ table.table {
         top: 0px;
 
         tr {
-            a {
-                color: #ef9e36;
-            }
-
             th {
                 border-color: #646d80;
             }

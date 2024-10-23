@@ -9,6 +9,7 @@ export default class AppContainer extends Component {
         super(props);
 
         this.state = {
+            time: new Date(),
             records: [],
             fields: {
                 username: '',
@@ -25,7 +26,16 @@ export default class AppContainer extends Component {
 
     componentDidMount() {
         this.getCheckInOutRecord();
+        this.ticker = setInterval(this.tick, 1000);
     }
+
+    componentWillUnmount() {
+        clearInterval(this.ticker);
+    }
+
+    tick = () => {
+        this.setState({ time: new Date() });
+    };
 
     getCheckInOutRecord = () => {
         axios({
@@ -115,7 +125,7 @@ export default class AppContainer extends Component {
     };
 
     render() {
-        const { modalDialog, fields, records } = this.state;
+        const { modalDialog, fields, records, time } = this.state;
         return (
             <div className='app-container'>
                 <div className='checkinout-flex'>
@@ -124,6 +134,9 @@ export default class AppContainer extends Component {
                             <div className='checkinout-logo'>
                                 <div className='img' />
                             </div>
+                            <p className='checkinout-datetime'>
+                                {time.toDateString()} {time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })}
+                            </p>
                             <div className='material-textfield'>
                                 <input type='text' className='custom-input' value={fields.username}
                                     id='username' name='username' placeholder='' autoComplete='off'
