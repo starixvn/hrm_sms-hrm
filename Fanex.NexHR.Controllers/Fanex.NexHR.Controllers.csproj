@@ -43,6 +43,9 @@
     <Reference Include="Fanex.Data.Repository, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Data.Repository.4.2.2\lib\net461\Fanex.Data.Repository.dll</HintPath>
     </Reference>
+    <Reference Include="Fanex.Logging, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.2.0.1\lib\net461\Fanex.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="GO.UserControl.Client.AspNetMvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GO.UserControl.Client.AspNetMvc.1.0.1\lib\net472\GO.UserControl.Client.AspNetMvc.dll</HintPath>
     </Reference>

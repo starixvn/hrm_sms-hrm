@@ -7,6 +7,7 @@
     using System.Web.Mvc;
     using Core.Models;
     using Core.Services;
+    using Fanex.Logging;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Filters;
@@ -48,13 +49,15 @@
                 return View();
             }
 
-            var clientIP = IPAddress.Parse(GetClientIpAddress());
+            var clientIpAddress = GetClientIpAddress();
+            var clientIP = IPAddress.Parse(clientIpAddress);
             if (ConfigSettings.WhitelistIPs.Split(';').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIP)))
             {
                 return View();
             }
             else
             {
+                LogService.Info(clientIpAddress);
                 return RedirectToAction("AccessDenied", "Error");
             }
         }
