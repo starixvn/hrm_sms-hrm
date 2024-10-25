@@ -9,7 +9,7 @@ export default class AppContainer extends Component {
         super(props);
 
         this.state = {
-            time: new Date(),
+            time: new Date(document.getElementById('currentDateTime').value),
             records: [],
             fields: {
                 username: '',
@@ -34,7 +34,8 @@ export default class AppContainer extends Component {
     }
 
     tick = () => {
-        this.setState({ time: new Date() });
+        const time = this.state.time;
+        this.setState({ time: new Date(time.getTime() + 1000) });
     };
 
     getCheckInOutRecord = () => {
