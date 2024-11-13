@@ -27,10 +27,12 @@ export default class AppContainer extends Component {
     componentDidMount() {
         this.getCheckInOutRecord();
         this.ticker = setInterval(this.tick, 1000);
+        this.intervalId = setInterval(() => this.setState({ time: new Date() }), 50);
     }
 
     componentWillUnmount() {
         clearInterval(this.ticker);
+        clearInterval(this.intervalId);
     }
 
     tick = () => {
@@ -127,13 +129,57 @@ export default class AppContainer extends Component {
 
     render() {
         const { modalDialog, fields, records, time } = this.state;
+
+        const seconds = time.getSeconds() + time.getMilliseconds() / 1000;
+        const minutes = time.getMinutes() + seconds / 60;
+        const hours = (time.getHours() % 12) + minutes / 60;
+        const secondsDeg = (seconds / 60) * 360;
+        const minutesDeg = (minutes / 60) * 360;
+        const hoursDeg = (hours / 12) * 360;
         return (
             <div className='app-container'>
                 <div className='checkinout-flex'>
                     <div className='checkinout-form'>
                         <form>
                             <div className='checkinout-logo'>
-                                <div className='img' />
+                                <div className="clock">
+                                    <div className="hand hour-hand" style={{ transform: `rotate(${hoursDeg}deg)` }} />
+                                    <div className="hand minute-hand" style={{ transform: `rotate(${minutesDeg}deg)` }} />
+                                    <div className="hand second-hand" style={{ transform: `rotate(${secondsDeg}deg)` }} />
+                                    <div className="center-dot" />
+                                    <div className="center-dot-orange" />
+                                    <div className="hour-markers">
+                                        {[...Array(12)].map((_, i) => {
+                                            const rotation = i * 30;
+                                            return (
+                                                <div
+                                                    key={i}
+                                                    className="hour-marker"
+                                                    style={{
+                                                        '--rotation': `${rotation}deg`,
+                                                    }}
+                                                >
+                                                    <span style={{ transform: `rotate(-${rotation}deg)` }}>
+                                                        {i === 0 ? '12' : i}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="minute-markers">
+                                        {[...Array(60)].map((_, i) =>
+                                            i % 5 !== 0 ? (
+                                                <div
+                                                    key={i}
+                                                    className="minute-marker"
+                                                    style={{
+                                                        '--rotation': `${i * 6}deg`,
+                                                    }}
+                                                />
+                                            ) : null
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                             <p className='checkinout-datetime'>
                                 {time.toDateString()} {time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })}
@@ -159,7 +205,7 @@ export default class AppContainer extends Component {
                         </form>
                     </div>
                     <div className='checkinout-records'>
-                        <table className='table'>
+                        <table className='table-time'>
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -182,7 +228,11 @@ export default class AppContainer extends Component {
                                                 <td>{record.code}</td>
                                                 <td className='align-left'>{record.fullName}</td>
                                                 <td>{record.recordTime}</td>
-                                                <td>{record.inOutName}</td>
+                                                <td>
+                                                    <span className={`${record.inOutName === "In" ? "row-checkin" : "row-checkout"} row-checkinout`}>
+                                                        {record.inOutName}
+                                                    </span>
+                                                </td>
                                             </tr>
                                         );
                                     })
