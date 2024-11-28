@@ -20,16 +20,19 @@
         private readonly IBaseService baseService;
         private readonly IEmployeeService employeeService;
         private readonly IExportDisciplineSummaryPerYearService exportService;
+        private readonly ICommonDataService commonDataService;
 
         public DisciplineSummaryPerYearController(
             IUserControlSession userControlSession,
             IBaseService baseService,
             IEmployeeService employeeService,
-            IExportDisciplineSummaryPerYearService exportService) : base(userControlSession)
+            IExportDisciplineSummaryPerYearService exportService,
+            ICommonDataService commonDataService) : base(userControlSession)
         {
             this.baseService = baseService;
             this.employeeService = employeeService;
             this.exportService = exportService;
+            this.commonDataService = commonDataService;
         }
 
         public ActionResult Index(DisciplineSummaryPerYearViewModel model)
@@ -40,6 +43,7 @@
                 model.ToYear = DateTimeOffset.Now.Year;
                 model.FromYear = DateTimeOffset.Now.Year - DateRange;
             }
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
             return View("~/Views/Report/DisciplineSummaryPerYear/Index.cshtml", model);
         }
@@ -50,6 +54,8 @@
             IList<DisciplineSummaryPerYear> employees = GetDisciplineSummary(model);
             ViewBag.FromYear = model.FromYear;
             ViewBag.ToYear = model.ToYear;
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
+
             return PartialView("~/Views/Report/DisciplineSummaryPerYear/_Grid.cshtml", employees);
         }
 

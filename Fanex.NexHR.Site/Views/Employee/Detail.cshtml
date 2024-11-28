@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information";
     var hasPermission = (bool)ViewBag.HasPermission;
+    bool enableGroupDate = ViewBag.EnableGroupDate;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/employee.details.css" rel="stylesheet" />
@@ -162,15 +163,18 @@
                 <div class="plabel">@Labels.Roles:</div>
                 <div class="pcontent bold">@Model.Roles2String</div>
             </li>
-            <li class="list-group-item">
-                <div class="plabel">@Labels.GroupDate:</div>
-                <div class="pcontent bold">
-                    @if (Model.JoinedDate.HasValue)
-                    {
-                        @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
-                    }
-                </div>
-            </li>
+            @if (!enableGroupDate)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.GroupDate:</div>
+                    <div class="pcontent bold">
+                        @if (Model.JoinedDate.HasValue)
+                        {
+                            @Model.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                        }
+                    </div>
+                </li>
+            }
             <li class="list-group-item">
                 <div class="plabel">@Labels.CompanyDate:</div>
                 <div class="pcontent bold">
@@ -198,7 +202,7 @@
                     </div>
                 </li>
             }
-        </ul>
+            </ul>
     </div>
 </div>
 <div class="rightjob">
