@@ -109,6 +109,7 @@
                 ViewBag.PagerOption = pagerOption;
                 ViewBag.IsShowJobtitle = roleService.GetByUserId(userControlSession.UserId)
                     .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
+                ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
             }
 
             return PartialView("_ContactList", employees);
@@ -171,6 +172,7 @@
             }
 
             ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
             return PartialView("_ListEmployee", employees);
         }
@@ -188,6 +190,7 @@
             ViewBag.Fri = employeeShift.FriShiftName;
             ViewBag.Sat = employeeShift.SatShiftName;
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
             return View(model);
         }
@@ -276,6 +279,7 @@
                 employee.ActingEmpList = GetActingSupervisors(supervisors);
                 ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
                 ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+                ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
                 ComposeViewBagsForEditEmployee();
                 return View(employee);
@@ -314,6 +318,7 @@
             model.Disciplinarian = GetDisciplineSupervisors(supervisors);
             model.EmpShiftList = GetShiftMonitors(supervisors);
             model.ActingEmpList = GetActingSupervisors(supervisors);
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
             ComposeViewBagsForEditEmployee();
 
@@ -502,6 +507,7 @@
             Employee employee = employeeService.GetEmployeeById(id);
             IEnumerable<LogObjectDetail> logs = employeeLogService.GetLogDetailById(id);
             ViewBag.Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName);
+            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
 
             return View("ActivityLog", logs);
         }
