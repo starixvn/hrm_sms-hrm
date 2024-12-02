@@ -62,8 +62,9 @@
         [HttpGet]
         public ActionResult ExportExcel(DisciplineSummaryPerYearViewModel model)
         {
+            bool enableGroupDate = commonDataService.GetEnableGroupDate();
             IList<DisciplineSummaryPerYear> employees = GetDisciplineSummary(model);
-            byte[] bytes = exportService.Export(model.FromYear, model.ToYear, employees);
+            byte[] bytes = exportService.Export(model.FromYear, model.ToYear, employees, enableGroupDate);
             return File(bytes, MimeType.XLSX, "5_Years_Discipline_Summary.xlsx");
         }
 

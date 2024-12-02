@@ -19,10 +19,14 @@
         private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
         private const string EmployeeFullInfoTemplatePath = @"~\ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
         private readonly IEmployeeService employeeService;
+        private readonly ICommonDataService commonDataService;
 
-        public ExportExcelEmployeeInfoService(IEmployeeService employeeService)
+        public ExportExcelEmployeeInfoService(
+            IEmployeeService employeeService,
+            ICommonDataService commonDataService)
         {
             this.employeeService = employeeService;
+            this.commonDataService = commonDataService;
         }
 
         private enum BasicInfo
@@ -38,6 +42,9 @@
             string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+            bool enableGroupDate = commonDataService.GetEnableGroupDate();
+            const byte colGroupDate = 8;
+            const byte colLengthOfServiceGroupDate = 13;
 
             /// Fill report title.
             writer.CopyRows(0, 2);
@@ -47,7 +54,11 @@
             FillContentRowEmployeeBasicInfoReport(employees, ref writer);
             writer.SyncColumnsWidth((byte)BasicInfo.TotalColumns);
             writer.CreateFreezePane(0, (byte)BasicInfo.RowStartBody);
-
+            if (enableGroupDate)
+            {
+                writer.RemoveColumn(colGroupDate);
+                writer.RemoveColumn(colLengthOfServiceGroupDate);
+            }
             writer.Render();
         }
 
@@ -66,7 +77,6 @@
             FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
             writer.SyncColumnsWidth(43);
             writer.CreateFreezePane(0, 3);
-
             writer.Render();
         }
 
@@ -213,6 +223,9 @@
             string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Full Information";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+            bool enableGroupDate = commonDataService.GetEnableGroupDate();
+            const byte colGroupDate = 10;
+            const byte colLengthOfServiceGroupDate = 15;
 
             /// Fill report title.
             writer.CopyRows(0, 2);
@@ -222,7 +235,11 @@
             WriteFullProfileBody(writer, profiles);
             writer.SyncColumnsWidth(57);
             writer.CreateFreezePane(0, 4);
-
+            if (enableGroupDate)
+            {
+                writer.RemoveColumn(colGroupDate);
+                writer.RemoveColumn(colLengthOfServiceGroupDate);
+            }
             writer.Render();
         }
 
