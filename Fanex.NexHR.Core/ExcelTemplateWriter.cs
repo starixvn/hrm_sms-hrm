@@ -164,6 +164,11 @@
             return CreateRows(rowIndex, total);
         }
 
+        public void RemoveColumn(int colIndex)
+        {
+            _sheet.RemoveColumn(colIndex);
+        }
+
         private IRow CreateRow(int rowId)
         {
             return CreateRows(rowId, 1);

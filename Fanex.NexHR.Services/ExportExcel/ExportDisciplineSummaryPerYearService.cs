@@ -12,18 +12,20 @@
 
     public interface IExportDisciplineSummaryPerYearService
     {
-        byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees);
+        byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees, bool enableGroupDate);
     }
 
     public class ExportDisciplineSummaryPerYearService : IExportDisciplineSummaryPerYearService
     {
-        public byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees)
+        public byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees, bool enableGroupDate)
         {
             const byte LengthOfServiceColIndex = 9;
             const byte BodyRowIndex = 5;
             const byte TotalColumns = 14;
             const byte MinimumWidth = 5;
             const byte MaximumWidth = 50;
+            const byte columnGroupDate = 8;
+
             var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DisciplineSummaryPerYear.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -69,6 +71,11 @@
 
                     worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
                     worksheet.View.FreezePanes(BodyRowIndex, 1);
+
+                    if (enableGroupDate)
+                    {
+                        worksheet.DeleteColumn(columnGroupDate);
+                    }
 
                     return xlPackage.GetAsByteArray();
                 }
