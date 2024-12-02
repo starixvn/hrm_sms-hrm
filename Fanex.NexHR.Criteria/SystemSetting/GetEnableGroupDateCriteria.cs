@@ -4,7 +4,7 @@
 
     public class GetEnableGroupDateCriteria : CriteriaBase
     {
-        public override string GetSettingKey() => "Configure_GetEnableGroupDate";
+        public override string GetSettingKey() => "SystemConfigs_GetEnableGroupDate";
 
         public override bool IsValid() => true;
     }
