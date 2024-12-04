@@ -42,7 +42,7 @@
             string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-            bool enableGroupDate = commonDataService.GetEnableGroupDate();
+            bool enableGroupDate = commonDataService.IsEnableGroupDate();
             const byte colGroupDate = 8;
             const byte colLengthOfServiceGroupDate = 13;
 
@@ -223,7 +223,7 @@
             string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Full Information";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-            bool enableGroupDate = commonDataService.GetEnableGroupDate();
+            bool enableGroupDate = commonDataService.IsEnableGroupDate();
             const byte colGroupDate = 10;
             const byte colLengthOfServiceGroupDate = 15;
 

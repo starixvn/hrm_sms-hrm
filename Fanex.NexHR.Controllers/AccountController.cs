@@ -47,7 +47,7 @@
                 Employee = employeeService.GetEmployeeById(EmployeeSession.EmpId),
                 Logs = employeeLogService.GetLogDetailById(EmployeeSession.EmpId)
             };
-            ViewBag.EnableGroupDate = commonDataService.GetEnableGroupDate();
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             return View(viewModel);
         }
