@@ -31,7 +31,7 @@
 
         SystemSetting GetSystemSetting();
 
-        bool GetEnableGroupDate();
+        bool IsEnableGroupDate();
     }
 
     public class CommonDataService : ICommonDataService
@@ -148,9 +148,13 @@
             return baseService.GetDataEntity<SystemSetting>(criteria);
         }
 
-        public bool GetEnableGroupDate()
+        public bool IsEnableGroupDate()
         {
-            var criteria = new GetEnableGroupDateCriteria();
+            var criteria = new GetSystemConfigsByKeyCriteria
+            {
+                Key = "EnableGroupDate"
+            };
+
             return baseService.GetDataEntity<bool>(criteria);
         }
     }
