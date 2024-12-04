@@ -2013,4 +2013,7 @@
   <data name="ByGroupDate" xml:space="preserve">
     <value>By Group Date</value>
   </data>
+  <data name="ExpertGrade" xml:space="preserve">
+    <value>Expert Grade</value>
+  </data>
 </root>

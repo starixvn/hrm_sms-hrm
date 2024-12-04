@@ -59,6 +59,8 @@
 
         public int? TitleId { get; set; }
 
+        public int? JobLevelId { get; set; }
+
         [SpParam(Ignored = true)]
         public bool? EnableUser { get; set; }
 

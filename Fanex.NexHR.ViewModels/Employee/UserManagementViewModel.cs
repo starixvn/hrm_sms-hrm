@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NexHR.ViewModels
 {
+    using Fanex.NexHR.Models;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
@@ -21,6 +22,11 @@
         public IList<Models.Team> Groups { get; set; }
 
         public IList<SelectListItem> JobTitles { get; set; }
+
         public bool IsShowDropdownCategory { get; set; }
+
+        public IList<JobLevel> JobLevels { get; set; }
+
+        public int? JobLevelId { get; set; }
     }
 }
