@@ -126,6 +126,7 @@
                 Value = j.Id.ToString(),
                 Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
+            IList<JobLevel> jobLevels = jobLevelService.GetJobLevel().Where(jl => jl.Name.StartsWith("E")).ToList();
 
             var model = new UserManagementViewModel
             {
@@ -134,6 +135,7 @@
                 IsEnable = true,
                 IsLocal = GetCategory(),
                 JobTitles = jobTitles,
+                JobLevels = jobLevels,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage,
                 IsShowDropdownCategory = userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
@@ -156,6 +158,7 @@
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,
+                    JobLevelId = model.JobLevelId,
                     IsLocalUser = GetCategory(model.IsLocal),
                     PageNumber = model.CurrentPage,
                     PageSize = model.ItemsPerPage

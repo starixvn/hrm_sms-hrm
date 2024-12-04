@@ -32,7 +32,8 @@
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,
-                IsLocalUser = model.IsLocal
+                IsLocalUser = model.IsLocal,
+                JobLevelId = model.JobLevelId
             };
 
             IList<Employee> employees = employeeService.GetEmployees(criteria);
@@ -50,7 +51,8 @@
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,
-                IsLocalUser = model.IsLocal
+                IsLocalUser = model.IsLocal,
+                JobLevelId = model.JobLevelId
             };
 
             IList<EmployeeFullProfile> profiles = employeeService.GetEmployeeFullProfile(criteria);
