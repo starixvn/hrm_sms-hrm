@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{523F0EE0-6DA2-4A64-97BC-9BB0E1F4ED02}</ProjectGuid>
+    <ProjectGuid>{B2647DF7-9EBB-4BF5-9AC2-0D3DC4CD553A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HRM.Letstalk.Core</RootNamespace>
