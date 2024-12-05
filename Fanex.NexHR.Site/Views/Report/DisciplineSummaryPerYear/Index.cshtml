@@ -103,7 +103,7 @@
                 @{
                     var lengOfService = new List<SelectListItem>();
 
-                    if (!enableGroupDate)
+                    if (enableGroupDate)
                     {
                         lengOfService.Add(new SelectListItem { Text = "By Group Date", Value = "false" });
                     }

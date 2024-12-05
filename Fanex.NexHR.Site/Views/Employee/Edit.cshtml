@@ -379,19 +379,16 @@
                     <i class="icon-calendar fa fa-calendar"></i>
                 </div>
             </li>
-            @if (!enableGroupDate)
-            {
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.JoinedDate, Labels.GroupDate, new { @class = "control-label" })
-                    </div>
-                    <div class="calendar-form">
-                        @{ var joinedDate = Model.JoinedDate.HasValue ? Model.JoinedDate.ToDateMonthYearFormatedDate() : string.Empty; }
-                        @Html.TextBox("JoinedDate", joinedDate, new { @class = "datepicker form-control" })
-                        <i class="icon-calendar fa fa-calendar"></i>
-                    </div>
-                </li>
-            }
+            <li class="list-group-item form-group @(enableGroupDate ? "" : "hide-group-date")">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.JoinedDate, Labels.GroupDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{ var joinedDate = Model.JoinedDate.HasValue ? Model.JoinedDate.ToDateMonthYearFormatedDate() : string.Empty; }
+                    @Html.TextBox("JoinedDate", joinedDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.CompanyDate, Labels.CompanyDate, new { @class = "control-label" })
@@ -433,7 +430,8 @@
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.LengthOfService:</div>
             </li>
-            @if (!enableGroupDate) {
+            @if (enableGroupDate)
+            {
                 <li class="list-group-item form-group field-length-service">
                     <div class="label-form">@Labels.ByGroupDate</div>
                     <div>@ViewBag.LengthOfServiceByGroupDate</div>

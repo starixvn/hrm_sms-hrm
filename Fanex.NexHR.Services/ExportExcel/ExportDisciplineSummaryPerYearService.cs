@@ -72,7 +72,7 @@
                     worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
                     worksheet.View.FreezePanes(BodyRowIndex, 1);
 
-                    if (enableGroupDate)
+                    if (!enableGroupDate)
                     {
                         worksheet.DeleteColumn(columnGroupDate);
                     }

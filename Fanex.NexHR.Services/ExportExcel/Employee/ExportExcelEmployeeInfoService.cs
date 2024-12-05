@@ -44,7 +44,7 @@
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
             bool enableGroupDate = commonDataService.IsEnableGroupDate();
             const byte colGroupDate = 8;
-            const byte colLengthOfServiceGroupDate = 13;
+            const byte colLengthOfServiceGroupDate = 12;
 
             /// Fill report title.
             writer.CopyRows(0, 2);
@@ -54,7 +54,7 @@
             FillContentRowEmployeeBasicInfoReport(employees, ref writer);
             writer.SyncColumnsWidth((byte)BasicInfo.TotalColumns);
             writer.CreateFreezePane(0, (byte)BasicInfo.RowStartBody);
-            if (enableGroupDate)
+            if (!enableGroupDate)
             {
                 writer.RemoveColumn(colGroupDate);
                 writer.RemoveColumn(colLengthOfServiceGroupDate);
@@ -225,7 +225,7 @@
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
             bool enableGroupDate = commonDataService.IsEnableGroupDate();
             const byte colGroupDate = 10;
-            const byte colLengthOfServiceGroupDate = 15;
+            const byte colLengthOfServiceGroupDate = 14;
 
             /// Fill report title.
             writer.CopyRows(0, 2);
@@ -235,7 +235,7 @@
             WriteFullProfileBody(writer, profiles);
             writer.SyncColumnsWidth(57);
             writer.CreateFreezePane(0, 4);
-            if (enableGroupDate)
+            if (!enableGroupDate)
             {
                 writer.RemoveColumn(colGroupDate);
                 writer.RemoveColumn(colLengthOfServiceGroupDate);
