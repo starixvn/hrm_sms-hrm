@@ -27,6 +27,8 @@
 
         public int? JobLevelId { get; set; }
 
+        public int? ExpertGradeId { get; set; }
+
         public DateTime? PromotionDate { get; set; }
 
         public bool Enabled { get; set; }

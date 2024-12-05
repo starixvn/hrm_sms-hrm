@@ -371,6 +371,14 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
+                    @Html.LabelFor(model => model.ExpertGradeId, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.DropDownListFor(model => model.ExpertGradeId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select a Expert Grade--", new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">

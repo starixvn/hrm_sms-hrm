@@ -126,7 +126,6 @@
                 Value = j.Id.ToString(),
                 Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
             }).ToList();
-            IList<JobLevel> jobLevels = jobLevelService.GetJobLevel().Where(jl => jl.Name.StartsWith("E")).ToList();
 
             var model = new UserManagementViewModel
             {
@@ -135,7 +134,6 @@
                 IsEnable = true,
                 IsLocal = GetCategory(),
                 JobTitles = jobTitles,
-                JobLevels = jobLevels,
                 CurrentPage = Constants.CurrentPage,
                 ItemsPerPage = Constants.ItemsPerPage,
                 IsShowDropdownCategory = userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
@@ -158,7 +156,6 @@
                     EnableUser = model.IsEnable,
                     IsDeleteUser = model.IsDelete,
                     TitleId = model.JobTitleId,
-                    JobLevelId = model.JobLevelId,
                     IsLocalUser = GetCategory(model.IsLocal),
                     PageNumber = model.CurrentPage,
                     PageSize = model.ItemsPerPage
@@ -620,8 +617,10 @@
 
         private void ComposeViewBagsForEditEmployee()
         {
+            var jobLevels = jobLevelService.GetJobLevel();
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
-            ViewBag.JobLevel = jobLevelService.GetJobLevel();
+            ViewBag.JobLevel = jobLevels;
+            ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId);
         }
@@ -640,6 +639,7 @@
                 Email = model.Email,
                 JobTitleId = model.JobTitleId,
                 JobLevelId = model.JobLevelId,
+                ExpertGradeId = model.ExpertGradeId,
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,
