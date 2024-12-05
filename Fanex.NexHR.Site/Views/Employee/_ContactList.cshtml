@@ -80,7 +80,7 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            @if (!enableGroupDate)
+            @if (enableGroupDate)
             {
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
@@ -126,7 +126,7 @@
                     <td>
                         @employee.ExtensionNo
                     </td>
-                    @if (!enableGroupDate)
+                    @if (enableGroupDate)
                     {
                         <td>
                             @if (employee.JoinedDate.HasValue)

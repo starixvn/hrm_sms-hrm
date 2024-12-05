@@ -14,7 +14,7 @@
             <th rowspan="2">@Labels.FullName</th>
             <th rowspan="2">@Labels.NickName</th>
             <th rowspan="2">@Labels.Category</th>
-            @if (!enableGroupDate)
+            @if (enableGroupDate)
             {
                 <th rowspan="2">@Labels.GroupDate</th>
             }
@@ -43,7 +43,7 @@
                     <td class="align-left">@item.FullName</td>
                     <td>@item.Nickname</td>
                     <td>@(item.IsLocal ? Labels.Local : Labels.Expat)</td>
-                    @if (!enableGroupDate)
+                    @if (enableGroupDate)
                     {
                         <td>
                             @if (item.JoinedDate.HasValue)

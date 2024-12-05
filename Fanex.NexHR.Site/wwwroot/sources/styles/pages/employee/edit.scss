@@ -75,8 +75,12 @@
                     }
                 }
 
-                &.field-length-service{
+                &.field-length-service {
                     border: none;
+                }
+
+                &.hide-group-date {
+                    display: none;
                 }
             }
         }
