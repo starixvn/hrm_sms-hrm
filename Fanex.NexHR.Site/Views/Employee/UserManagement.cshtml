@@ -66,15 +66,6 @@
                 </div>
             </div>
         }
-        <div class="form-group form-group--m">
-            <div class="label-form">
-                <label class="control-label">@Labels.ExpertGrade</label>
-            </div>
-            <div class="select-form">
-                @Html.DropDownListFor(model => model.JobLevelId, new SelectList(Model.JobLevels, "Id", "Name"),
-                   "--All--", new { @class = "form-control" })
-            </div>
-        </div>
         <div class="form-group user-status" id="usertype">
             <input type="radio" id="enabled" checked="checked" />
             <label for="enabled">@Labels.ActiveUsers</label>

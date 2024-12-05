@@ -24,9 +24,5 @@
         public IList<SelectListItem> JobTitles { get; set; }
 
         public bool IsShowDropdownCategory { get; set; }
-
-        public IList<JobLevel> JobLevels { get; set; }
-
-        public int? JobLevelId { get; set; }
     }
 }
