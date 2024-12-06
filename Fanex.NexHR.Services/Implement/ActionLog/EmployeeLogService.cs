@@ -56,6 +56,7 @@
             new MappingFieldConfig { FieldName = "TeamDate", DisplayName = Labels.TeamDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
             new MappingFieldConfig { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
+            new MappingFieldConfig { FieldName = "ExpertGradeId", DisplayName = Labels.ExpertGrade },
             new MappingFieldConfig { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
             new MappingFieldConfig { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -158,6 +159,10 @@
                     break;
 
                 case "JobLevelId":
+                    MappingJobLevel(field);
+                    break;
+
+                case "ExpertGradeId":
                     MappingJobLevel(field);
                     break;
 
