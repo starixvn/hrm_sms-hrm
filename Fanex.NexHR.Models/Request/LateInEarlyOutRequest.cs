@@ -27,6 +27,12 @@
                     case (byte)LateInEarlyOutReason.ManagementAllow:
                         return Labels.ManagementAllow;
 
+                    case (byte)LateInEarlyOutReason.XmasNewYear:
+                        return Labels.XmasNewYear;
+
+                    case (byte)LateInEarlyOutReason.Wedding:
+                        return Labels.Wedding;
+
                     case (byte)LateInEarlyOutReason.Other:
                         return Labels.Other;
 

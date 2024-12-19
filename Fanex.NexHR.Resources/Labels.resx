@@ -2016,4 +2016,10 @@
   <data name="ExpertGrade" xml:space="preserve">
     <value>Expert Grade</value>
   </data>
+  <data name="Wedding" xml:space="preserve">
+    <value>Wedding</value>
+  </data>
+  <data name="XmasNewYear" xml:space="preserve">
+    <value>Xmas / New Year</value>
+  </data>
 </root>

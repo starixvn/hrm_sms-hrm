@@ -8,6 +8,12 @@
         ManagementAllow = 1,
 
         [StringValue("Other")]
-        Other
+        Other,
+
+        [StringValue("Xmas / New Year")]
+        XmasNewYear,
+
+        [StringValue("Wedding")]
+        Wedding
     }
 }

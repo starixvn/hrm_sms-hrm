@@ -58554,6 +58554,7 @@ $(document).ready(function () {
         $verifierId: $('#VerifierId'),
         $approverId: $('#ApproverId'),
         $minute: $('#Minute'),
+        $reasonId: $('#reasonId'),
         $remark: $('#Remark'),
         $actualLateIn: $('#actualLateIn'),
         $lateInHours: $('#lateInHours'),
@@ -58561,7 +58562,8 @@ $(document).ready(function () {
         $earlyOutHours: $('#earlyOutHours'),
         $btnSubmit: $('#btnSubmit')
     };
-    var requestTypeId = parseInt($('#RequestType').val(), 10);
+    var requestTypeId = parseInt($('#RequestType').val(), 10),
+        reasonId = parseInt(domElements.$reasonId.val(), 10);
     var showHideActualLateInEarlyOut = function showHideActualLateInEarlyOut() {
         if (requestTypeId === _constants.RequestType.LateIn) {
             domElements.$actualLateIn.show();
@@ -58600,6 +58602,7 @@ $(document).ready(function () {
             errorMessages = [];
         var employeeId = parseInt(domElements.$employeeId.val(), 10),
             minute = parseInt(domElements.$minute.val(), 10),
+            reasonId = parseInt(domElements.$reasonId.val(), 10),
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
         var files = document.getElementById('file').files,
@@ -58618,7 +58621,11 @@ $(document).ready(function () {
             }
         }
 
-        if (minute <= 0 || minute > 60) {
+        if (isNaN(minute)) {
+            errorMessages.push('Minute field is required.');
+        } else if ((minute <= 0 || minute > 120) && (reasonId === _constants.LateInEarlyOutReason.XmasNewYear || reasonId === _constants.LateInEarlyOutReason.Wedding)) {
+            errorMessages.push('Minute field must be between 1 and 120.');
+        } else if ((minute <= 0 || minute > 60) && reasonId === _constants.LateInEarlyOutReason.Other) {
             errorMessages.push('Minute field must be between 1 and 60.');
         }
 
@@ -58657,6 +58664,16 @@ $(document).ready(function () {
 
     domElements.$onDate.on('change', function () {
         getActualLateInEarlyOut();
+    });
+
+    domElements.$reasonId.on('change', function () {
+        var selectedReason = parseInt(domElements.$reasonId.val(), 10);
+        var minute = document.getElementById('Minute');
+        if (selectedReason === _constants.LateInEarlyOutReason.XmasNewYear || selectedReason === _constants.LateInEarlyOutReason.Wedding) {
+            minute.max = 120;
+        } else {
+            minute.max = 60;
+        }
     });
 
     domElements.$btnSubmit.on('click', function () {
@@ -59332,6 +59349,12 @@ var Messages = exports.Messages = {
     confirmDelete: 'Are you sure you want to delete this?',
     requireResignedDate: 'Please input the resigned date first!',
     hostileInput: 'You have input data that could be considered hostile. Please change data!'
+};
+var LateInEarlyOutReason = exports.LateInEarlyOutReason = {
+    ManagementAllow: 1,
+    Other: 2,
+    XmasNewYear: 3,
+    Wedding: 4
 };
 
 /***/ })

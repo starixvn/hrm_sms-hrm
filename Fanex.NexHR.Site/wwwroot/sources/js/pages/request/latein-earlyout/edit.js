@@ -8,7 +8,7 @@ import axios from 'axios';
 import {
     axiosError, initDatepicker, showValidationSummaryErrors, hideValidationSummaryErrors, toastOptions, resolveClientUrl
 } from '../../../shared/common.functions';
-import { RequestType } from '../../../shared/constants';
+import { RequestType, LateInEarlyOutReason} from '../../../shared/constants';
 
 $(document).ready(function () {
     let domElements = {
@@ -18,6 +18,7 @@ $(document).ready(function () {
         $verifierId: $('#VerifierId'),
         $approverId: $('#ApproverId'),
         $minute: $('#Minute'),
+        $reasonId: $('#reasonId'),
         $remark: $('#Remark'),
         $actualLateIn: $('#actualLateIn'),
         $lateInHours: $('#lateInHours'),
@@ -25,7 +26,8 @@ $(document).ready(function () {
         $earlyOutHours: $('#earlyOutHours'),
         $btnSubmit: $('#btnSubmit')
     };
-    const requestTypeId = parseInt($('#RequestType').val(), 10);
+    const requestTypeId = parseInt($('#RequestType').val(), 10),
+            reasonId = parseInt(domElements.$reasonId.val(), 10);
     let showHideActualLateInEarlyOut = function () {
         if (requestTypeId === RequestType.LateIn) {
             domElements.$actualLateIn.show();
@@ -64,6 +66,7 @@ $(document).ready(function () {
             errorMessages = [];
         const employeeId = parseInt(domElements.$employeeId.val(), 10),
             minute = parseInt(domElements.$minute.val(), 10),
+            reasonId = parseInt(domElements.$reasonId.val(), 10),
             approverId = domElements.$approverId.val(),
             verifierId = domElements.$verifierId.val();
         let files = document.getElementById('file').files,
@@ -82,7 +85,12 @@ $(document).ready(function () {
             }
         }
 
-        if (minute <= 0 || minute > 60) {
+        if (isNaN(minute)) {
+            errorMessages.push('Minute field is required.');
+        } else if ((minute <= 0 || minute > 120) &&
+            (reasonId === LateInEarlyOutReason.XmasNewYear || reasonId === LateInEarlyOutReason.Wedding)) {
+            errorMessages.push('Minute field must be between 1 and 120.');
+        } else if ((minute <= 0 || minute > 60) && (reasonId === LateInEarlyOutReason.Other)) {
             errorMessages.push('Minute field must be between 1 and 60.');
         }
 
@@ -121,6 +129,16 @@ $(document).ready(function () {
 
     domElements.$onDate.on('change', function () {
         getActualLateInEarlyOut();
+    });
+
+    domElements.$reasonId.on('change', function () {
+        const selectedReason = parseInt(domElements.$reasonId.val(), 10);
+        const minute = document.getElementById('Minute');
+        if (selectedReason === LateInEarlyOutReason.XmasNewYear || selectedReason === LateInEarlyOutReason.Wedding) {
+            minute.max = 120;
+        } else {
+            minute.max = 60;
+        }
     });
 
     domElements.$btnSubmit.on('click', function () {

@@ -56856,6 +56856,12 @@ var Messages = exports.Messages = {
     requireResignedDate: 'Please input the resigned date first!',
     hostileInput: 'You have input data that could be considered hostile. Please change data!'
 };
+var LateInEarlyOutReason = exports.LateInEarlyOutReason = {
+    ManagementAllow: 1,
+    Other: 2,
+    XmasNewYear: 3,
+    Wedding: 4
+};
 
 /***/ })
 

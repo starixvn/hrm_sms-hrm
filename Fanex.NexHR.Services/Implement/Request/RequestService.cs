@@ -122,6 +122,14 @@
                         reason = Labels.ManagementAllow;
                         break;
 
+                    case (byte)LateInEarlyOutReason.XmasNewYear:
+                        reason = Labels.XmasNewYear;
+                        break;
+
+                    case (byte)LateInEarlyOutReason.Wedding:
+                        reason = Labels.Wedding;
+                        break;
+
                     case (byte)LateInEarlyOutReason.Other:
                         reason = Labels.Other;
                         break;

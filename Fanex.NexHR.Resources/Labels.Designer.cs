@@ -5515,6 +5515,15 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Wedding.
+        /// </summary>
+        public static string Wedding {
+            get {
+                return ResourceManager.GetString("Wedding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Week.
         /// </summary>
         public static string Week {
@@ -5709,6 +5718,15 @@ namespace Fanex.NexHR.Resources {
         public static string WrittenWarning {
             get {
                 return ResourceManager.GetString("WrittenWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xmas / New Year.
+        /// </summary>
+        public static string XmasNewYear {
+            get {
+                return ResourceManager.GetString("XmasNewYear", resourceCulture);
             }
         }
         

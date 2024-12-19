@@ -9,8 +9,6 @@
 
     public class LateInEarlyOutRequestViewModel
     {
-        private const byte MaximumMinute = 60;
-
         public long RequestId { get; set; }
 
         [Required]
@@ -32,7 +30,6 @@
         public string Remark { get; set; }
 
         [Required]
-        [Range(1, MaximumMinute, ErrorMessage = "The Minute must be between 1 and 60")]
         public int Minute { get; set; }
 
         [Required]
