@@ -14,6 +14,7 @@ Original:
 
 Revisions:
 	- 03082023@Otis: skip discipline in case Management Allow
+	- 12182024@Lilac: skip discipline in case Xmas / New Year, Wedding
 Param's Explanation:
     @DisciplineXml:
         <Root>
@@ -28,6 +29,8 @@ BEGIN
 		,@ReasonId TINYINT
 		-- late in/early out reason
 		,@ManagementAllowReasonId TINYINT = 1
+		,@XmasNewYear TINYINT = 3
+		,@Wedding TINYINT = 4
 		-- request status
 		,@PendingStatusId TINYINT = 1
 		,@NotVerifiedStatusId TINYINT = 3
@@ -262,7 +265,7 @@ BEGIN
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 
 			-- update
 			UPDATE dis
@@ -280,7 +283,7 @@ BEGIN
 			FROM dbo.Discipline AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 
 			UPDATE dis
 			SET dis.IsIgnoredLateIn = CASE 
@@ -294,25 +297,25 @@ BEGIN
 			FROM dbo.DisciplineIgnore AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 
 			UPDATE dis
 			SET dis.IsOutOfControlLateIn = CASE 
 					WHEN tbl.DisciplineTypeId = 3
-						AND @ReasonId = @ManagementAllowReasonId
+						AND (@ReasonId = @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 						AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 				,dis.IsOutOfControlEarlyOut = CASE 
 					WHEN tbl.DisciplineTypeId = 4
-						AND @ReasonId = @ManagementAllowReasonId
+						AND (@ReasonId = @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 						AND IsIgnored = 1 THEN 1
 					ELSE 0
 					END
 			FROM dbo.DisciplineOutOfControl AS dis WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN @tblDiscipline AS tbl ON dis.WorkDate = tbl.WorkDate
 				AND dis.EmpId = tbl.EmpId
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 
 			-- insert
 			INSERT INTO dbo.Discipline (
@@ -338,7 +341,7 @@ BEGIN
 				,@ActorId
 				,@ModifiedDate
 			FROM @tblDiscipline AS tbl
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.Discipline AS dis WITH (NOLOCK)
@@ -363,7 +366,7 @@ BEGIN
 					ELSE 0
 					END
 			FROM @tblDiscipline AS tbl
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineIgnore AS dis WITH (NOLOCK)
@@ -382,7 +385,7 @@ BEGIN
 				,0
 				,0
 			FROM @tblDiscipline AS tbl
-			WHERE @ReasonId != @ManagementAllowReasonId
+			WHERE (@ReasonId != @ManagementAllowReasonId AND @ReasonId != @XmasNewYear AND @ReasonId != @Wedding)
 				AND NOT EXISTS (
 					SELECT 1
 					FROM dbo.DisciplineOutOfControl AS dis WITH (NOLOCK)
@@ -397,8 +400,3 @@ BEGIN
 			,@ErrMsg = N'Update discipline unsuccessfully.'
 	END CATCH
 END
-
-
-
-
-
