@@ -105,6 +105,7 @@ BEGIN
 		,e.PasswordReset
 		,e.PickupRemark
 		,e.JobTitleId
+		,e.ExpertGradeId
 		,e.JobLevelId
 		,lk.[Name] AS JobTitle
 		,ISNULL(e.GroupId, - 1) AS [TeamId]

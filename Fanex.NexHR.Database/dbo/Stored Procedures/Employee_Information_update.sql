@@ -8,6 +8,7 @@ CREATE PROCEDURE [dbo].[Employee_Information_update] @EmpId INT
 	,@Email VARCHAR(50) = NULL
 	,@JobTitleId INT = NULL
 	,@JobLevelId INT = NULL
+	,@ExpertGradeId INT = NULL
 	,@Enabled BIT
 	,@Phone VARCHAR(50) = NULL
 	,@Gender TINYINT = NULL
@@ -142,6 +143,7 @@ BEGIN
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
 				,JobLevelId AS '@JobLevelId'
+				,ExpertGradeId AS'@ExpertGradeId'
 				,[Enabled] AS '@Enabled'
 				,emp.isDeleted AS '@IsDeleted'
 				,Phone AS '@Phone'
@@ -211,6 +213,7 @@ BEGIN
 		,Email = REPLACE(@Email, ' ', '')
 		,JobTitleId = @JobTitleId
 		,JobLevelId = @JobLevelId
+		,ExpertGradeId = @ExpertGradeId
 		,[Enabled] = @Enabled
 		,Phone = @Phone
 		,Gender = @Gender
@@ -278,6 +281,7 @@ BEGIN
 				,Email AS '@Email'
 				,JobTitleId AS '@JobTitleId'
 				,JobLevelId AS '@JobLevelId'
+				,ExpertGradeId AS '@ExpertGradeId'
 				,[Enabled] AS '@Enabled'
 				,emp.isDeleted AS '@IsDeleted'
 				,Phone AS '@Phone'

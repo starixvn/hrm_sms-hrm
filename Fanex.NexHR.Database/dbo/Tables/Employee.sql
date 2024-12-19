@@ -52,6 +52,7 @@
     [UserId]           INT            NULL,
     [UC_ModifiedDate]  DATETIME       NULL,
     [UC_SyncDate]      DATETIME       NULL,
+	[ExpertGradeId]    INT            NULL,
     CONSTRAINT [PK_Employee] PRIMARY KEY CLUSTERED ([EmpId] ASC) ON [Employee]
 ) ON [Employee];
 
