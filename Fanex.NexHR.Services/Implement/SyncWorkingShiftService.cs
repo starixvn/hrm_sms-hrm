@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
     using Fanex.Logging;
     using Fanex.NexHR.Core;
@@ -67,7 +68,15 @@
         private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date)
         {
             var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-            var url = new Uri($"{ConfigSettings.SyncWorkingShiftUrl}/{date:yyyy-MM-dd}/{date:yyyy-MM-dd}");
+
+            var builder = new StringBuilder(ConfigSettings.SyncWorkingShift_Url);
+            builder.AppendFormat("?locationCode={0}&fromDate={1}&toDate={2}&timezone={3}",
+                ConfigSettings.SyncWorkingShift_LocationCode,
+                date.ToString("yyyy-MM-dd"),
+                date.ToString("yyyy-MM-dd"),
+                ConfigSettings.SyncWorkingShift_Timezone);
+
+            var url = new Uri(builder.ToString());
             var response = await _httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {

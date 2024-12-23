@@ -11,7 +11,11 @@
         public static bool IsDisabledSendMail => Convert.ToBoolean(ConfigurationManager.AppSettings["IsDisabledSendMail"]);
         public static byte SiteId => Convert.ToByte(ConfigurationManager.AppSettings["SiteId"]);
         public static string ApplicationDomain => ConfigurationManager.AppSettings["ApplicationDomain"];
-        public static string SyncWorkingShiftUrl => ConfigurationManager.AppSettings["SyncWorkingShiftUrl"];
+
+        public static string SyncWorkingShift_LocationCode => ConfigurationManager.AppSettings["SyncWorkingShift_LocationCode"];
+        public static string SyncWorkingShift_Timezone => ConfigurationManager.AppSettings["SyncWorkingShift_Timezone"];
+        public static string SyncWorkingShift_Url => ConfigurationManager.AppSettings["SyncWorkingShift_Url"];
+
         public static string WhitelistIPs => ConfigurationManager.AppSettings["WhitelistIPs"];
         public static bool EnableManualSyncWorkingShift
             => Convert.ToBoolean(ConfigurationManager.AppSettings["EnableManualSyncWorkingShift"]);
