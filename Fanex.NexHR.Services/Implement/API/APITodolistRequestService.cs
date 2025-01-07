@@ -268,7 +268,7 @@
             }
 
             var name = new StringBuilder();
-            name.AppendFormat("<div>You have a Keep In View Request of <strong>{0} ({1})</strong> {2}</div>",
+            name.AppendFormat("<div>You have a Compensation Leave Request of <strong>{0} ({1})</strong> {2}</div>",
                 request.FullName,
                 request.Nickname,
                 details);

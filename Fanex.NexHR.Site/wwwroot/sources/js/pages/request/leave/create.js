@@ -791,7 +791,7 @@ const LeaveRequest = (function ($) {
                 } else if (leaveTypeId === LeaveType.PublicHoliday) {
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
-                } else if (leaveTypeId === LeaveType.CompensationLeave) {
+                } else if (leaveTypeId === LeaveType.OffsetLeave) {
                     tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 13));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');

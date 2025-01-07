@@ -106,20 +106,20 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compensation Leave request from {0} {1} by {2}.
+        /// </summary>
+        public static string ApprovalNotificationCompensationLeaveSubject {
+            get {
+                return ResourceManager.GetString("ApprovalNotificationCompensationLeaveSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Early out request from {0} {1} by {2}.
         /// </summary>
         public static string ApprovalNotificationEarlyOutSubject {
             get {
                 return ResourceManager.GetString("ApprovalNotificationEarlyOutSubject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Keep in view request from {0} {1} by {2}.
-        /// </summary>
-        public static string ApprovalNotificationKeepInViewSubject {
-            get {
-                return ResourceManager.GetString("ApprovalNotificationKeepInViewSubject", resourceCulture);
             }
         }
         
@@ -304,11 +304,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep in view request from.
+        ///   Looks up a localized string similar to Compensation Leave request from.
         /// </summary>
-        public static string InsertedKeepInViewEmailSubject {
+        public static string InsertedCompensationLeaveEmailSubject {
             get {
-                return ResourceManager.GetString("InsertedKeepInViewEmailSubject", resourceCulture);
+                return ResourceManager.GetString("InsertedCompensationLeaveEmailSubject", resourceCulture);
             }
         }
         
@@ -349,7 +349,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep in view day(s) balance.
+        ///   Looks up a localized string similar to Compensation Leave day(s) balance.
         /// </summary>
         public static string KeepInViewBalance {
             get {
@@ -421,11 +421,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep in view request from {0} has been canceled.
+        ///   Looks up a localized string similar to Compensation Leave request from {0} has been canceled.
         /// </summary>
-        public static string MessageKeepInViewRequest {
+        public static string MessageCompensationLeaveRequest {
             get {
-                return ResourceManager.GetString("MessageKeepInViewRequest", resourceCulture);
+                return ResourceManager.GetString("MessageCompensationLeaveRequest", resourceCulture);
             }
         }
         
@@ -727,11 +727,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Updated] Keep in view request from.
+        ///   Looks up a localized string similar to [Updated] Compensation Leave request from.
         /// </summary>
-        public static string UpdatedKeepInViewEmailSubject {
+        public static string UpdatedCompensationLeaveEmailSubject {
             get {
-                return ResourceManager.GetString("UpdatedKeepInViewEmailSubject", resourceCulture);
+                return ResourceManager.GetString("UpdatedCompensationLeaveEmailSubject", resourceCulture);
             }
         }
         

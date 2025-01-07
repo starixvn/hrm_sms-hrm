@@ -23,7 +23,7 @@ export const LeaveType = {
     BereavementLeave: 21,
     UnpaidLeave: 25,
     BusinessDuringWorking: 26,
-    CompensationLeave: 27,
+    OffsetLeave: 27,
     UnpaidLeaveInsurance: 41,
     KeepInViewByHour: 48,
     HospitalizationLeave: 39

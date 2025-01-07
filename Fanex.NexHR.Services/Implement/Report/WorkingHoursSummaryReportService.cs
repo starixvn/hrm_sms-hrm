@@ -115,7 +115,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = item.AnnualLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.BusinessTrip;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.BereavementLeave;
-                worksheet.Cells[rowIndex, colIndex++].Value = item.CompensationLeave;
+                worksheet.Cells[rowIndex, colIndex++].Value = item.OffsetLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.WeddingLeave;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.SuspendWork;
                 worksheet.Cells[rowIndex, colIndex++].Value = item.HospitalizationLeave;

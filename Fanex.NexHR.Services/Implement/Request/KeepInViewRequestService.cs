@@ -101,7 +101,7 @@
 
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
-                    Messages.InsertedKeepInViewEmailSubject,
+                    Messages.InsertedCompensationLeaveEmailSubject,
                     request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
@@ -134,7 +134,7 @@
                 EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
-                    Messages.UpdatedKeepInViewEmailSubject,
+                    Messages.UpdatedCompensationLeaveEmailSubject,
                     request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate());
 
@@ -165,7 +165,7 @@
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
                 EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
-                email.Subject = string.Format(Messages.MessageKeepInViewRequest, request.Requester.Nickname);
+                email.Subject = string.Format(Messages.MessageCompensationLeaveRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,
@@ -194,7 +194,7 @@
                 byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 string commandMessage = requestMailService.GetCommandMessage(command);
                 EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
-                email.Subject = string.Format(Messages.ApprovalNotificationKeepInViewSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
+                email.Subject = string.Format(Messages.ApprovalNotificationCompensationLeaveSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
                     email.Body,

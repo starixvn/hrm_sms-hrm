@@ -82,7 +82,7 @@ function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDef
         } else if (dailySchedule.isOvertime) {
             shift.details = 'Overtime';
         } else if (dailySchedule.isKeepInView) {
-            shift.details = 'KIV';
+            shift.details = 'CL';
         }
     } else if (dailySchedule.isOffDay) {
         shift.class = 'offday';
@@ -94,7 +94,7 @@ function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDef
         } else if (dailySchedule.isOvertime) {
             shift.details = 'Overtime';
         } else if (dailySchedule.isKeepInView) {
-            shift.details = 'KIV';
+            shift.details = 'CL';
         }
     } else if (dailySchedule.isKeepInView) {
         shift.class = 'keepinviewday';
