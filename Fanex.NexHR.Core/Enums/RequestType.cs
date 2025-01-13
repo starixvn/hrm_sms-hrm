@@ -22,7 +22,7 @@
         [StringValue("Leave")]
         Leave = 6,
 
-        [StringValue("KeepInView")]
+        [StringValue("Compensation Leave")]
         KeepInView = 7,
 
         [StringValue("Overtime")]

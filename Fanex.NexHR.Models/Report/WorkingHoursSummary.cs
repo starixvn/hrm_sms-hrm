@@ -25,14 +25,14 @@
         public float AnnualLeave { get; set; }
         public float BusinessTrip { get; set; }
         public float BereavementLeave { get; set; }
-        public float CompensationLeave { get; set; }
+        public float OffsetLeave { get; set; }
         public float WeddingLeave { get; set; }
         public float SuspendWork { get; set; }
         public float HospitalizationLeave { get; set; }
         public float CompanyEvent { get; set; }
 
         public float TotalPayments => PaymentWorkingDays + AnnualLeave + BusinessTrip + BereavementLeave
-            + CompensationLeave + WeddingLeave + SuspendWork + HospitalizationLeave + CompanyEvent;
+            + OffsetLeave + WeddingLeave + SuspendWork + HospitalizationLeave + CompanyEvent;
 
         // unpaid leave
         public float UnpaidLeave { get; set; }

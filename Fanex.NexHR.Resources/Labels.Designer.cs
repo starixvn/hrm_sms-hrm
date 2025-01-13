@@ -871,6 +871,24 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compensation Leave.
+        /// </summary>
+        public static string CompensationLeave {
+            get {
+                return ResourceManager.GetString("CompensationLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compensation Leave Balance.
+        /// </summary>
+        public static string CompensationLeaveBalance {
+            get {
+                return ResourceManager.GetString("CompensationLeaveBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmed.
         /// </summary>
         public static string Confirmed {
@@ -1524,15 +1542,6 @@ namespace Fanex.NexHR.Resources {
         public static string EditHoliday {
             get {
                 return ResourceManager.GetString("EditHoliday", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Keep In View Request.
-        /// </summary>
-        public static string EditKeepInViewRequest {
-            get {
-                return ResourceManager.GetString("EditKeepInViewRequest", resourceCulture);
             }
         }
         
@@ -2428,56 +2437,11 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep in view.
-        /// </summary>
-        public static string KeepInView {
-            get {
-                return ResourceManager.GetString("KeepInView", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Keep In View Balance.
-        /// </summary>
-        public static string KeepInViewBalance {
-            get {
-                return ResourceManager.GetString("KeepInViewBalance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Keep In View Leave.
-        /// </summary>
-        public static string KeepInViewLeave {
-            get {
-                return ResourceManager.GetString("KeepInViewLeave", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Keyword.
         /// </summary>
         public static string Keyword {
             get {
                 return ResourceManager.GetString("Keyword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to KIV Balance.
-        /// </summary>
-        public static string KIVBalance {
-            get {
-                return ResourceManager.GetString("KIVBalance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to KIV Type.
-        /// </summary>
-        public static string KIVType {
-            get {
-                return ResourceManager.GetString("KIVType", resourceCulture);
             }
         }
         
@@ -3121,7 +3085,7 @@ namespace Fanex.NexHR.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My Keep In View Request(s).
+        ///   Looks up a localized string similar to My Compensation Leave Request(s).
         /// </summary>
         public static string MyKeepInViewRequest {
             get {
@@ -3270,15 +3234,6 @@ namespace Fanex.NexHR.Resources {
         public static string NewJobTitle {
             get {
                 return ResourceManager.GetString("NewJobTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New Keep In View Request.
-        /// </summary>
-        public static string NewKeepInViewRequest {
-            get {
-                return ResourceManager.GetString("NewKeepInViewRequest", resourceCulture);
             }
         }
         
@@ -4521,15 +4476,6 @@ namespace Fanex.NexHR.Resources {
         public static string ShortBereavementLeave {
             get {
                 return ResourceManager.GetString("ShortBereavementLeave", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CL.
-        /// </summary>
-        public static string ShortCompensationLeave {
-            get {
-                return ResourceManager.GetString("ShortCompensationLeave", resourceCulture);
             }
         }
         

@@ -145,7 +145,7 @@
                         new SelectListItem() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
                         new SelectListItem() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
                         new SelectListItem() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
-                        new SelectListItem() {Text = Labels.KeepInView, Value = ((int)RequestFilter.KeepInView).ToString()}
+                        new SelectListItem() {Text = Labels.CompensationLeave, Value = ((int)RequestFilter.KeepInView).ToString()}
                     };
                     @Html.DropDownListFor(model => model.RequestType, requestTypes, new { @class = "form-control" })
                 }

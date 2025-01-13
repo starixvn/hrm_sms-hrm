@@ -135,8 +135,8 @@
   <data name="ApprovalNotificationEarlyOutSubject" xml:space="preserve">
     <value>Early out request from {0} {1} by {2}</value>
   </data>
-  <data name="ApprovalNotificationKeepInViewSubject" xml:space="preserve">
-    <value>Keep in view request from {0} {1} by {2}</value>
+  <data name="ApprovalNotificationCompensationLeaveSubject" xml:space="preserve">
+    <value>Compensation Leave request from {0} {1} by {2}</value>
   </data>
   <data name="ApprovalNotificationLateInSubject" xml:space="preserve">
     <value>Late in request from {0} {1} by {2}</value>
@@ -195,8 +195,8 @@
   <data name="HasNotBeen" xml:space="preserve">
     <value>has not been {0}</value>
   </data>
-  <data name="InsertedKeepInViewEmailSubject" xml:space="preserve">
-    <value>Keep in view request from</value>
+  <data name="InsertedCompensationLeaveEmailSubject" xml:space="preserve">
+    <value>Compensation Leave request from</value>
   </data>
   <data name="InvalidInputData" xml:space="preserve">
     <value>Invalid input data</value>
@@ -211,7 +211,7 @@
     <value>job title</value>
   </data>
   <data name="KeepInViewBalance" xml:space="preserve">
-    <value>Keep in view day(s) balance</value>
+    <value>Compensation Leave day(s) balance</value>
   </data>
   <data name="LateInEarlyOutEmailSubject" xml:space="preserve">
     <value>Late in/early out request from</value>
@@ -228,8 +228,8 @@
   <data name="MessageCheckInOutRequest" xml:space="preserve">
     <value>{0} request from {1} has been canceled</value>
   </data>
-  <data name="MessageKeepInViewRequest" xml:space="preserve">
-    <value>Keep in view request from {0} has been canceled</value>
+  <data name="MessageCompensationLeaveRequest" xml:space="preserve">
+    <value>Compensation Leave request from {0} has been canceled</value>
   </data>
   <data name="MessageLateInEarlyOutRequest" xml:space="preserve">
     <value>{0} request from {1} has been canceled</value>
@@ -318,8 +318,8 @@
   <data name="UpdatedCheckInOutEmailSubject" xml:space="preserve">
     <value>[Updated] Check in/out request from</value>
   </data>
-  <data name="UpdatedKeepInViewEmailSubject" xml:space="preserve">
-    <value>[Updated] Keep in view request from</value>
+  <data name="UpdatedCompensationLeaveEmailSubject" xml:space="preserve">
+    <value>[Updated] Compensation Leave request from</value>
   </data>
   <data name="UpdatedLateInEarlyOutEmailSubject" xml:space="preserve">
     <value>[Updated] Late in/early out request from</value>

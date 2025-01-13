@@ -221,7 +221,7 @@
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
-                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.CompensationLeave).Code;
+                leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.OffsetLeave).Code;
                 excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
 
@@ -389,7 +389,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.BereavementLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value =
-                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompensationLeave));
+                    team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.OffsetLeave));
                 worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x =>
                     SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingLeave)
                     + SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.WeddingOfEmployeeChildren));

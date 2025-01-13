@@ -71,7 +71,7 @@
                         break;
 
                     case (byte)RequestType.KeepInView:
-                        requestTypeName = Labels.KeepInView;
+                        requestTypeName = Labels.CompensationLeave;
                         break;
 
                     case (byte)RequestType.Overtime:

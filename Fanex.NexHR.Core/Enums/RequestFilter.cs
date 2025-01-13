@@ -19,7 +19,7 @@
         [StringValue("Leave")]
         Leave = 4,
 
-        [StringValue("KeepInView")]
+        [StringValue("Compensation Leave")]
         KeepInView = 5
     }
 }

@@ -679,7 +679,7 @@
     <value>Approver</value>
   </data>
   <data name="MyKeepInViewRequest" xml:space="preserve">
-    <value>My Keep In View Request(s)</value>
+    <value>My Compensation Leave Request(s)</value>
   </data>
   <data name="ShiftManager" xml:space="preserve">
     <value>Shift Manager</value>
@@ -753,8 +753,8 @@
   <data name="NoInfo" xml:space="preserve">
     <value>No information available</value>
   </data>
-  <data name="KeepInView" xml:space="preserve">
-    <value>Keep in view</value>
+  <data name="CompensationLeave" xml:space="preserve">
+    <value>Compensation Leave</value>
   </data>
   <data name="HR" xml:space="preserve">
     <value>Human Resource Department</value>
@@ -992,9 +992,6 @@
   </data>
   <data name="AccumulationLeave" xml:space="preserve">
     <value>Per 5 Years Accumulation Leave</value>
-  </data>
-  <data name="KeepInViewLeave" xml:space="preserve">
-    <value>Keep In View Leave</value>
   </data>
   <data name="StandardLeave" xml:space="preserve">
     <value>Standard Leave</value>
@@ -1266,9 +1263,6 @@
   <data name="IDCardPlaceOfIssue" xml:space="preserve">
     <value>ID Card Place Of Issue</value>
   </data>
-  <data name="KIVBalance" xml:space="preserve">
-    <value>KIV Balance</value>
-  </data>
   <data name="LeaveBalance" xml:space="preserve">
     <value>Leave Balance</value>
   </data>
@@ -1392,8 +1386,8 @@
   <data name="Fri" xml:space="preserve">
     <value>Fri</value>
   </data>
-  <data name="KeepInViewBalance" xml:space="preserve">
-    <value>Keep In View Balance</value>
+  <data name="CompensationLeaveBalance" xml:space="preserve">
+    <value>Compensation Leave Balance</value>
   </data>
   <data name="Major" xml:space="preserve">
     <value>Major</value>
@@ -1575,12 +1569,6 @@
   <data name="ByHour" xml:space="preserve">
     <value>By Hour</value>
   </data>
-  <data name="KIVType" xml:space="preserve">
-    <value>KIV Type</value>
-  </data>
-  <data name="NewKeepInViewRequest" xml:space="preserve">
-    <value>New Keep In View Request</value>
-  </data>
   <data name="WorkingDaysMonth" xml:space="preserve">
     <value>Working Days/Month</value>
   </data>
@@ -1598,9 +1586,6 @@
   </data>
   <data name="ShortBereavementLeave" xml:space="preserve">
     <value>BL</value>
-  </data>
-  <data name="ShortCompensationLeave" xml:space="preserve">
-    <value>CL</value>
   </data>
   <data name="ShortWeddingLeave" xml:space="preserve">
     <value>WD</value>
@@ -1670,9 +1655,6 @@
   </data>
   <data name="Relationship" xml:space="preserve">
     <value>Relationship</value>
-  </data>
-  <data name="EditKeepInViewRequest" xml:space="preserve">
-    <value>Edit Keep In View Request</value>
   </data>
   <data name="LogDate" xml:space="preserve">
     <value>Log Date</value>

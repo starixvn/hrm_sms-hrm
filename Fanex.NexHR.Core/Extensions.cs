@@ -437,7 +437,7 @@
                     return Labels.Leave;
 
                 case (byte)RequestType.KeepInView:
-                    return Labels.KeepInView;
+                    return Labels.CompensationLeave;
 
                 case (byte)RequestType.Overtime:
                     return Labels.Overtime;

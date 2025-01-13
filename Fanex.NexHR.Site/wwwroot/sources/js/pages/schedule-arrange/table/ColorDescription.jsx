@@ -12,7 +12,7 @@ export default class ColorDescription extends PureComponent {
                     <MenuItem><span className="holiday" />Public Holiday</MenuItem>
                     <MenuItem><span className="offday" />Off Day</MenuItem>
                     <MenuItem><span className="offdayreplacement" />Off Replacement</MenuItem>
-                    <MenuItem><span className="keepinviewday" />Keep In View</MenuItem>
+                    <MenuItem><span className="keepinviewday" />Compensation Leave</MenuItem>
                     <MenuItem><span className="changeshift" />Change Shift</MenuItem>
                     <MenuItem><span className="overtime" />Overtime</MenuItem>
                     <MenuItem><span className="annualleave" />Annual Leave</MenuItem>

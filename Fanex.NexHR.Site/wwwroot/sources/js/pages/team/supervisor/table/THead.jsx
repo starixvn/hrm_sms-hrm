@@ -73,7 +73,7 @@ export default class THead extends PureComponent {
                     <th>Late In/Early Out</th>
                     <th>Check in/out</th>
                     <th>Overtime</th>
-                    <th>Keep in view</th>
+                    <th>Compensation Leave</th>
                 </tr>
             </thead>
         );

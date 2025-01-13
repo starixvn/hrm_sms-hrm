@@ -19,7 +19,7 @@
         [StringValue("Business Trip")]
         BusinessTrip = 9,
 
-        [StringValue("Keep in view (by Day)")]
+        [StringValue("Compensation Leave (by Day)")]
         KeepInViewByDay = 10,
 
         [StringValue("Maternity Leave")]
@@ -37,8 +37,8 @@
         [StringValue("Business during working")]
         BusinessDuringWorking = 26,
 
-        [StringValue("Compensation Leave")]
-        CompensationLeave = 27,
+        [StringValue("Offset Leave")]
+        OffsetLeave = 27,
 
         [StringValue("Wedding of Employee's Children")]
         WeddingOfEmployeeChildren = 34,
@@ -52,7 +52,7 @@
         [StringValue("Unpaid Leave (Insurance)")]
         UnpaidLeaveInsurance = 41,
 
-        [StringValue("Keep in view (by Hour)")]
+        [StringValue("Compensation Leave (by Hour)")]
         KeepInViewByHour = 48
     }
 }
