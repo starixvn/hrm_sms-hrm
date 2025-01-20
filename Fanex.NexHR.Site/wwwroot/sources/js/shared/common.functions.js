@@ -116,6 +116,9 @@ function alert(message, callback) {
         case 3:
             title = "CTS HRM";
             break;
+        default:
+            title = "HRM";
+            break;
     }
     const defaults = {
         title: title,
@@ -136,6 +139,7 @@ function alert(message, callback) {
             }
         ],
         minHeight: 50,
+        width: 680,
         dialogClass: 'modal-shadow'
     };
 
@@ -176,24 +180,23 @@ function axiosError(error) {
 
         switch (error.response.status) {
             case 401:
-                url = 'auth/login';
+                window.location = resolveClientUrl('auth/login');
                 break;
 
             case 404:
-                url = 'error/PageNotFound';
+                window.location = resolveClientUrl('error/PageNotFound');
                 break;
 
             case 403:
             case 405:
-                url = 'error/AccessDenied';
+                window.location = resolveClientUrl('error/AccessDenied');
                 break;
 
             case 500:
-                url = 'error/InternalError';
+                alert(error.response.data);
+                unblockUI();
                 break;
         }
-
-        window.location = resolveClientUrl(url);
     }
 }
 
