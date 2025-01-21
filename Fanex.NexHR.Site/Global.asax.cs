@@ -50,7 +50,6 @@
             AreaRegistration.RegisterAllAreas();
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             UserControlClientManager
@@ -64,25 +63,31 @@
             var ex = Server.GetLastError();
             if (ex.GetType() == typeof(UnauthorizedAccessException))
             {
-                var httpContext = HttpContext.Current;
-                if (httpContext != null)
-                {
-                    RequestContext requestContext = ((MvcHandler)httpContext.CurrentHandler).RequestContext;
-                    if (requestContext.HttpContext.Request.IsAjaxRequest())
-                    {
-                        httpContext.Response.Clear();
-                        httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        httpContext.Response.End();
-                    }
-                    else
-                    {
-                        httpContext.Response.Redirect("~/Auth/Login");
-                    }
-                }
+                HandleResponse(HttpStatusCode.Unauthorized, "~/Auth/Login");
             }
             else
             {
                 ExceptionHandler.Handle(ex, TraceEventType.Error);
+
+                HandleResponse(HttpStatusCode.InternalServerError, "~/Error/InternalError");
+            }
+        }
+
+        private static void HandleResponse(HttpStatusCode statusCode, string redirectUrl)
+        {
+            var httpContext = HttpContext.Current;
+            if (httpContext == null) return;
+
+            var requestContext = ((MvcHandler)httpContext.CurrentHandler).RequestContext;
+            if (requestContext.HttpContext.Request.IsAjaxRequest())
+            {
+                httpContext.Response.Clear();
+                httpContext.Response.StatusCode = (int)statusCode;
+                httpContext.Response.End();
+            }
+            else
+            {
+                httpContext.Response.Redirect(redirectUrl);
             }
         }
     }

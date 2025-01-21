@@ -180,23 +180,24 @@ function axiosError(error) {
 
         switch (error.response.status) {
             case 401:
-                window.location = resolveClientUrl('auth/login');
+                url = 'auth/login';
                 break;
 
             case 404:
-                window.location = resolveClientUrl('error/PageNotFound');
+                url = 'error/PageNotFound';
                 break;
 
             case 403:
             case 405:
-                window.location = resolveClientUrl('error/AccessDenied');
+                url = 'error/AccessDenied';
                 break;
 
             case 500:
-                alert(error.response.data);
-                unblockUI();
+                url = 'error/InternalError';
                 break;
         }
+
+        window.location = resolveClientUrl(url);
     }
 }
 

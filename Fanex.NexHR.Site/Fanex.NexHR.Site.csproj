@@ -206,7 +206,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\HangfireAuthorization.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
@@ -1033,11 +1032,9 @@
     <Content Include="Views\Unit\Edit.cshtml" />
     <Content Include="Views\Unit\Index.cshtml" />
     <Content Include="Views\Time\CheckInOut.cshtml" />
-    <None Include="WebConfigs\Web.HM_PROD.config" />
-    <Content Include="WebConfigs\Web.LOCAL.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="WebConfigs\Web.SMS_PROD.config" />
+    <Content Include="WebConfigs\Web.HM_PROD.config" />
+    <Content Include="WebConfigs\Web.LOCAL.config" />
+    <Content Include="WebConfigs\Web.SMS_PROD.config" />
     <Content Include="wwwroot\.babelrc" />
     <Content Include="wwwroot\dist\js\account.changepwd.js.map" />
     <Content Include="wwwroot\dist\js\account.edit.profile.js.map" />
