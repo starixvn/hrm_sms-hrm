@@ -2,34 +2,28 @@
 {
     using System;
     using System.Net;
+    using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
     using GO.UserControl.Client.Core;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class HRMAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
+    public class HRMAuthorizeAttribute : AuthorizeAttribute
     {
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false)
-                && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
-            {
-                var ucsession = UserControlClientManager.UserControlSession;
-                if (ucsession.UserId <= 0 || ucsession.JwtToken == null || ucsession.JwtToken.IsExpired)
-                {
-                    FormsAuthentication.SignOut();
+            var session = UserControlClientManager.UserControlSession;
+            if (session.UserId > 0 && session.JwtToken != null && !session.JwtToken.IsExpired) return;
 
-                    if (!filterContext.HttpContext.Request.IsAjaxRequest())
-                    {
-                        filterContext.Result = new RedirectResult(FormsAuthentication.LoginUrl);
-                    }
-                    else
-                    {
-                        var response = filterContext.HttpContext.Response;
-                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        response.Write("<center><b>Unauthorized</b></center>");
-                    }
-                }
+            if (filterContext.HttpContext.Request.IsAjaxRequest())
+            {
+                filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                filterContext.Result = new JsonResult { Data = (int)HttpStatusCode.Unauthorized, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
+            }
+            else
+            {
+                base.HandleUnauthorizedRequest(filterContext);
             }
         }
     }

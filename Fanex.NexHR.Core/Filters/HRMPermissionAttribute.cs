@@ -32,9 +32,8 @@
                 }
                 else
                 {
-                    var response = filterContext.HttpContext.Response;
-                    response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    response.Write("<center><b>Access denied!</b></center>");
+                    filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    filterContext.Result = new JsonResult { Data = (int)HttpStatusCode.Forbidden, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 }
             }
         }
