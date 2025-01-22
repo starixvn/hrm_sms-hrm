@@ -2,9 +2,7 @@
 {
     using System;
     using System.Net;
-    using System.Web;
     using System.Web.Mvc;
-    using System.Web.Security;
     using GO.UserControl.Client.Core;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
