@@ -58,6 +58,8 @@
 
         public int? JobLevelId { get; set; }
 
+        public int? ExpertGradeId { get; set; }
+
         public bool Enabled { get; set; }
 
         public bool IsDeleted { get; set; }

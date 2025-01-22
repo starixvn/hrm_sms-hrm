@@ -21,6 +21,7 @@
         private readonly IEmployeeLogService employeeLogService;
         private readonly ICryptoService cryptoService;
         private readonly IUserService userService;
+        private readonly ICommonDataService commonDataService;
 
         public AccountController(
             IUserControlSession userControlSession,
@@ -28,13 +29,15 @@
             IEmployeeService employeeService,
             IEmployeeLogService employeeLogService,
             ICryptoService cryptoService,
-            IUserService userService) : base(userControlSession)
+            IUserService userService,
+            ICommonDataService commonDataService) : base(userControlSession)
         {
             this.authService = authService;
             this.employeeService = employeeService;
             this.employeeLogService = employeeLogService;
             this.cryptoService = cryptoService;
             this.userService = userService;
+            this.commonDataService = commonDataService;
         }
 
         public ActionResult Index()
@@ -44,6 +47,7 @@
                 Employee = employeeService.GetEmployeeById(EmployeeSession.EmpId),
                 Logs = employeeLogService.GetLogDetailById(EmployeeSession.EmpId)
             };
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             return View(viewModel);
         }

@@ -30,7 +30,7 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Keyword,
-               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete="off" })
+               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -56,7 +56,7 @@
                 <div class="select-form">
                     @{
                         var category = new List<SelectListItem>
-                        {
+                                        {
                             new SelectListItem() {Text = "-- All --", Value = string.Empty},
                             new SelectListItem() {Text = @Labels.Expat, Value = "0"},
                             new SelectListItem() {Text = @Labels.Local, Value = "1"},
@@ -66,8 +66,6 @@
                 </div>
             </div>
         }
-    </div>
-    <div class="form-horizontal clearfix">
         <div class="form-group user-status" id="usertype">
             <input type="radio" id="enabled" checked="checked" />
             <label for="enabled">@Labels.ActiveUsers</label>
@@ -78,7 +76,8 @@
             <input type="radio" id="deleted" />
             <label for="deleted">@Labels.DeletedUsers</label>
         </div>
-
+    </div>
+    <div class="form-horizontal clearfix">
         <div class="form-group">
             <button id="query" type="button" class="btn btn-primary">@Labels.Submit</button>
             <button type="button" id="basicExcel" class="btn btn-excel">Excel - Basic Info</button>

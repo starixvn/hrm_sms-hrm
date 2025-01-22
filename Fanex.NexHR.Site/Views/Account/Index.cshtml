@@ -2,6 +2,7 @@
 @model AccountViewModel
 @{
     ViewBag.Title = Labels.MyProfile;
+    bool enableGroupDate = ViewBag.EnableGroupDate;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/account.index.css" rel="stylesheet" />
@@ -191,15 +192,18 @@
                 <div class="plabel">@Labels.Roles:</div>
                 <div class="pcontent bold">@Model.Employee.Roles2String</div>
             </li>
-            <li class="list-group-item">
-                <div class="plabel">@Labels.GroupDate:</div>
-                <div class="pcontent bold">
-                    @if (Model.Employee.JoinedDate.HasValue)
-                    {
-                        @Model.Employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
-                    }
-                </div>
-            </li>
+            @if (enableGroupDate)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.GroupDate:</div>
+                    <div class="pcontent bold">
+                        @if (Model.Employee.JoinedDate.HasValue)
+                        {
+                            @Model.Employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                        }
+                    </div>
+                </li>
+            }
             <li class="list-group-item">
                 <div class="plabel">@Labels.CompanyDate:</div>
                 <div class="pcontent bold">

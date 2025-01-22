@@ -4,6 +4,7 @@
 @model DisciplineSummaryPerYearViewModel
 @{
     ViewBag.Title = "5 Years Discipline Summary";
+    bool enableGroupDate = ViewBag.EnableGroupDate;
 }
 @section css{
     <link href="~/wwwroot/dist/styles/discipline.summary.per.year.css" rel="stylesheet" />
@@ -100,12 +101,16 @@
             </div>
             <div class="select-form">
                 @{
-                    var lengOfService = new List<SelectListItem>
-                                    {
-                        new SelectListItem() {Text = "By Group Date", Value = "false"},
-                        new SelectListItem() {Text = "By Company Date", Value = "true"}
-                    };
+                    var lengOfService = new List<SelectListItem>();
+
+                    if (enableGroupDate)
+                    {
+                        lengOfService.Add(new SelectListItem { Text = "By Group Date", Value = "false" });
+                    }
+
+                    lengOfService.Add(new SelectListItem { Text = "By Company Date", Value = "true" });
                 }
+
                 @Html.DropDownListFor(model => model.LengthOfService, lengOfService, new { @class = "category form-control" })
             </div>
         </div>

@@ -257,6 +257,7 @@
                 Email = param.Email,
                 JobTitleId = param.JobTitleId,
                 JobLevelId = param.JobLevelId,
+                ExpertGradeId = param.ExpertGradeId,
                 Enabled = param.Enabled,
                 Phone = param.Phone,
                 Gender = param.Gender,

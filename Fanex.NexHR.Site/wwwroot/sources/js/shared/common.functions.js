@@ -116,6 +116,9 @@ function alert(message, callback) {
         case 3:
             title = "CTS HRM";
             break;
+        default:
+            title = "HRM";
+            break;
     }
     const defaults = {
         title: title,
@@ -136,6 +139,7 @@ function alert(message, callback) {
             }
         ],
         minHeight: 50,
+        width: 680,
         dialogClass: 'modal-shadow'
     };
 

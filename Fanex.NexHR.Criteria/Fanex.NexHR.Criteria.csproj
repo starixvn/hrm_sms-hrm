@@ -316,6 +316,7 @@
     <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
     <Compile Include="SyncData\GetLastModifiedDateCriteria.cs" />
     <Compile Include="SyncData\ImportWorkingShiftCommand.cs" />
+    <Compile Include="SystemSetting\GetSystemConfigsByKeyCriteria.cs" />
     <Compile Include="SystemSetting\GetSystemSettingCriteria.cs" />
     <Compile Include="Time\GetCheckInOutOnlineRecordCriteria.cs" />
     <Compile Include="Time\GetPrivilegeCreateCheckInOutRecordCriteria.cs" />

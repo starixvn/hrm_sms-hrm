@@ -109,6 +109,7 @@
                 ViewBag.PagerOption = pagerOption;
                 ViewBag.IsShowJobtitle = roleService.GetByUserId(userControlSession.UserId)
                     .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
+                ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
             }
 
             return PartialView("_ContactList", employees);
@@ -171,6 +172,7 @@
             }
 
             ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             return PartialView("_ListEmployee", employees);
         }
@@ -188,6 +190,7 @@
             ViewBag.Fri = employeeShift.FriShiftName;
             ViewBag.Sat = employeeShift.SatShiftName;
             ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             return View(model);
         }
@@ -276,6 +279,7 @@
                 employee.ActingEmpList = GetActingSupervisors(supervisors);
                 ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
                 ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+                ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
                 ComposeViewBagsForEditEmployee();
                 return View(employee);
@@ -314,6 +318,7 @@
             model.Disciplinarian = GetDisciplineSupervisors(supervisors);
             model.EmpShiftList = GetShiftMonitors(supervisors);
             model.ActingEmpList = GetActingSupervisors(supervisors);
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             ComposeViewBagsForEditEmployee();
 
@@ -502,6 +507,7 @@
             Employee employee = employeeService.GetEmployeeById(id);
             IEnumerable<LogObjectDetail> logs = employeeLogService.GetLogDetailById(id);
             ViewBag.Employee = string.Format("{0} ({1})", employee.NickName, employee.FullName);
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
             return View("ActivityLog", logs);
         }
@@ -611,8 +617,10 @@
 
         private void ComposeViewBagsForEditEmployee()
         {
+            var jobLevels = jobLevelService.GetJobLevel();
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
-            ViewBag.JobLevel = jobLevelService.GetJobLevel();
+            ViewBag.JobLevel = jobLevels;
+            ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId);
         }
@@ -631,6 +639,7 @@
                 Email = model.Email,
                 JobTitleId = model.JobTitleId,
                 JobLevelId = model.JobLevelId,
+                ExpertGradeId = model.ExpertGradeId,
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,

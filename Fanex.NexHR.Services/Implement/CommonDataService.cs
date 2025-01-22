@@ -30,6 +30,8 @@
         IEnumerable<EntityBase<byte>> GetGender();
 
         SystemSetting GetSystemSetting();
+
+        bool IsEnableGroupDate();
     }
 
     public class CommonDataService : ICommonDataService
@@ -144,6 +146,16 @@
         {
             var criteria = new GetSystemSettingCriteria();
             return baseService.GetDataEntity<SystemSetting>(criteria);
+        }
+
+        public bool IsEnableGroupDate()
+        {
+            var criteria = new GetSystemConfigsByKeyCriteria
+            {
+                Key = "EnableGroupDate"
+            };
+
+            return baseService.GetDataEntity<bool>(criteria);
         }
     }
 }

@@ -556,6 +556,7 @@
     </Function>
     <Function Name="System Setting">
         <Setting Key="SystemSetting_Get" SpName="SystemSetting_Get" DbName="nexhrx" Plain="0" />
+        <Setting Key="SystemConfigs_GetByKey" SpName="SystemConfigs_GetByKey" DbName="nexhrx" Plain="0" />
     </Function>
     <Function Name="Meal Allowance Report">
         <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="nexhrx" Plain="0"></Setting>
