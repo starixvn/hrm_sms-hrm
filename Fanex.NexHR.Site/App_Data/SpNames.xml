@@ -267,9 +267,7 @@
         <Setting Key="Menu_Delete" SpName="Menu_Delete" DbName="nexhrx" Plain="0"></Setting>
     </Function>
     <Function Name="MailDeliver">
-        <Setting Key="MailRecorder_GetSetting" SpName="MailRecorder_GetSetting" DbName="DBMA.bodb_Maintenance.bodbAdminNet">
-            <Mapping DataField="SettingID" ObjectProperty="AppId" />
-        </Setting>
+        <Setting Key="MailRecorder_GetConfig" SpName="MailRecorder_GetConfig" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
         <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
         <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
         <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />

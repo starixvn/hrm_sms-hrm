@@ -29,7 +29,7 @@
             var isSucessfull = false;
             if (email != null && Utilities.IsValidEmail(email.MailTo))
             {
-                email.MailSetting = GetMailSettingById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
+                email.MailConfig = GetMailConfigById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
                 InsertMailRecord(email);
                 isSucessfull = Send(email);
             }
@@ -39,7 +39,7 @@
 
         private bool Send(MailRecord email)
         {
-            var isSucessfull = email.MailSetting.Port == 465 ? SendByMailKit(email) : SendByMailNet(email);
+            var isSucessfull = email.MailConfig.Port == 465 ? SendByMailKit(email) : SendByMailNet(email);
             return isSucessfull;
         }
 
@@ -50,10 +50,10 @@
 
             using (var mailclient = new MailKit.Net.Smtp.SmtpClient())
             {
-                mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
-                if (email.MailSetting.IsAuth)
+                mailclient.Connect(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
+                if (email.MailConfig.IsAuth)
                 {
-                    mailclient.Authenticate(email.MailSetting.Username, email.MailSetting.Password);
+                    mailclient.Authenticate(email.MailConfig.Username, email.MailConfig.Password);
                 }
 
                 try
@@ -65,22 +65,18 @@
                 catch (AuthenticationException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw;
                 }
                 catch (SmtpCommandException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw;
                 }
                 catch (SmtpProtocolException ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw;
                 }
                 catch (Exception ex)
                 {
                     HandleMailError(email, ex.Message, ex.StackTrace);
-                    throw;
                 }
 
                 mailclient.Disconnect(true);
@@ -96,7 +92,7 @@
             {
                 var msg = new MailMessage
                 {
-                    From = new MailAddress(email.MailSetting.Username)
+                    From = new MailAddress(email.MailConfig.Username)
                 };
                 if (!string.IsNullOrEmpty(email.MailTo))
                 {
@@ -113,12 +109,12 @@
 
                     var client = new System.Net.Mail.SmtpClient
                     {
-                        Port = email.MailSetting.Port,
-                        Host = email.MailSetting.Server
+                        Port = email.MailConfig.Port,
+                        Host = email.MailConfig.Server
                     };
-                    if (email.MailSetting.IsAuth)
+                    if (email.MailConfig.IsAuth)
                     {
-                        client.Credentials = new System.Net.NetworkCredential(email.MailSetting.Username, email.MailSetting.Password);
+                        client.Credentials = new NetworkCredential(email.MailConfig.Username, email.MailConfig.Password);
                         client.EnableSsl = true;
                     }
 
@@ -204,7 +200,7 @@
         private MimeMessage GetMessageContent(MailRecord email)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(string.Empty, email.MailSetting.Username));
+            message.From.Add(new MailboxAddress(string.Empty, email.MailConfig.Username));
             GetMailAddressFromString(email.MailTo, message.To);
             GetMailAddressFromString(email.MailCc, message.Cc);
             GetMailAddressFromString(email.MailBcc, message.Bcc);
@@ -226,22 +222,21 @@
             return message;
         }
 
-        private MailSetting GetMailSettingById(int appId)
+        private MailConfig GetMailConfigById(int appId)
         {
-            var criteria = new GetMailSettingByIdCriteria
+            var criteria = new GetMailConfigByIdCriteria
             {
-                SettingId = appId
+                AppId = appId
             };
 
-            var mailSetting = baseService.GetDataEntity<MailSetting>(criteria);
-            return mailSetting;
+            return baseService.GetDataEntity<MailConfig>(criteria);
         }
 
         private void InsertMailRecord(MailRecord email)
         {
             var criteria = new InsertMailRecordCriteria
             {
-                AppId = email.MailSetting.AppId,
+                AppId = email.MailConfig.AppId,
                 Subject = email.Subject,
                 Body = email.Body,
                 Attachments = string.Empty,
@@ -265,7 +260,7 @@
         {
             var criteria = new InsertMailErrorCriteria
             {
-                AppId = email.MailSetting.AppId,
+                AppId = email.MailConfig.AppId,
                 MailId = email.MailId,
                 Message = errorMessage,
                 StackTrace = stackTrace,
