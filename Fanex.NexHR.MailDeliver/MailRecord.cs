@@ -6,7 +6,7 @@
     {
         public long MailId { get; set; }
 
-        public MailSetting MailSetting { get; set; }
+        public MailConfig MailConfig { get; set; }
 
         public int Priority { get; set; }
 
