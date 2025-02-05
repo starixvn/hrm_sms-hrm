@@ -56,7 +56,7 @@
         [HRMPermission(Policy.Host, FunctionKey.EmployeeManagement)]
         public ActionResult ResetPassword(EditPassword model)
         {
-            model.Password = Encryptor.ComputeHash(authService.HashProvider, "123456");
+            model.Password = Encryptor.ComputeHash("123456");
             model.IsReset = true;
             var commandResult = employeeService.EditPassword(EmployeeSession.EmpId, model);
             if (commandResult.IsSuccessful)
@@ -95,7 +95,7 @@
                     var param = new EditPassword
                     {
                         EmployeeId = EmployeeSession.EmpId,
-                        Password = Encryptor.ComputeHash(authService.HashProvider, model.NewPassword)
+                        Password = Encryptor.ComputeHash(model.NewPassword)
                     };
                     var commandResult = employeeService.EditPassword(EmployeeSession.EmpId, param);
                     switch (commandResult.Code)

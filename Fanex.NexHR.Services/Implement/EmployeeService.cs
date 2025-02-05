@@ -27,21 +27,18 @@
         private readonly IUserControlSettings userControlSettings;
         private readonly IEmployeeRepository employeeRepository;
         private readonly IBaseService baseService;
-        private readonly IHRMAuthService authService;
         private readonly IRoleService roleService;
 
         public EmployeeService(
             IUserControlSettings userControlSettings,
             IEmployeeRepository employeeRepository,
             IBaseService baseService,
-            IHRMAuthService authService,
             IRoleService roleService)
         {
             this.userControlSettings = userControlSettings;
             this.employeeRepository = employeeRepository;
             this.roleService = roleService;
             this.baseService = baseService;
-            this.authService = authService;
         }
 
         public string GenerateEmployeeCode()
@@ -235,7 +232,7 @@
                 FullName = param.FullName,
                 Nickname = param.Nickname,
                 TeamId = param.TeamId,
-                Password = Encryptor.ComputeHash(authService.HashProvider, param.Code)
+                Password = Encryptor.ComputeHash(param.Code)
             };
             CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
             commandResult.OutputId = criteria.EmpId;
