@@ -212,7 +212,6 @@
     <Compile Include="Enums\DisciplineType.cs" />
     <Compile Include="Enums\EmployeeStatus.cs" />
     <Compile Include="Enums\Gender.cs" />
-    <Compile Include="Enums\HashProvider.cs" />
     <Compile Include="Enums\HolidayType.cs" />
     <Compile Include="Enums\HrStatus.cs" />
     <Compile Include="Enums\JobTitleCategory.cs" />

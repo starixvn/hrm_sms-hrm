@@ -17,8 +17,6 @@
             this.baseService = baseService;
         }
 
-        public HashProvider HashProvider => HashProvider.Sha1;
-
         public EmployeeSession GetByUserId(int userId)
         {
             var criteria = new GetEmployeeLoginByUserIdCriteria
@@ -40,7 +38,7 @@
                 return (short)ValidateUserStatus.Disabled;
             }
 
-            if (Encryptor.CompareStringToHash(HashProvider, password, employee.Password) ||
+            if (Encryptor.CompareStringToHash(password, employee.Password) ||
                 (ConfigSettings.AllowAdminLogin && password == Constants.PassWordAdmin))
             {
                 return (short)ValidateUserStatus.Success;

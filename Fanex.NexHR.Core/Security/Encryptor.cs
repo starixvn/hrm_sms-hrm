@@ -1,75 +1,46 @@
 ﻿namespace Fanex.NexHR.Core.Security
 {
-    using Fanex.NexHR.Core.Enums;
     using System;
     using System.Security.Cryptography;
     using System.Text;
 
     public static class Encryptor
     {
-        public static string ComputeHash(HashProvider hashAlgorithm, string plainText, int saltSize = 8)
+        public static string ComputeHash(string plainText, int saltSize = 8)
         {
-            byte[] salt = Random.RNGCrypto(saltSize);
-            return ComputeHash(hashAlgorithm, plainText, salt);
+            var saltBuffer = new byte[saltSize];
+            return ComputeHash(plainText, saltBuffer);
         }
 
-        public static bool CompareStringToHash(HashProvider hashAlgorithm, string plainText, string encrypt, int saltSize = 8)
+        public static bool CompareStringToHash(string plainText, string encrypt, int saltSize = 8)
         {
-            byte[] encryptBuffer = Convert.FromBase64String(encrypt);
-            int encryptLength = encryptBuffer.Length;
+            var encryptBuffer = Convert.FromBase64String(encrypt);
+            var encryptLength = encryptBuffer.Length;
 
-            byte[] saltBuffer = new byte[saltSize];
+            var saltBuffer = new byte[saltSize];
             Array.Copy(encryptBuffer, encryptLength - saltSize, saltBuffer, 0, saltSize);
 
-            string hash = ComputeHash(hashAlgorithm, plainText, saltBuffer);
+            var hash = ComputeHash(plainText, saltBuffer);
             return string.Equals(encrypt, hash);
         }
 
-        private static HashAlgorithm GetHashProvider(HashProvider hashAlgorithm)
+        private static string ComputeHash(string plainText, byte[] salt)
         {
-            HashAlgorithm hash;
-            switch (hashAlgorithm)
-            {
-                case HashProvider.Sha1:
-                    hash = new SHA1Managed();
-                    break;
+            var data = Encoding.UTF8.GetBytes(plainText);
+            var dataLength = data.Length;
 
-                case HashProvider.Sha256:
-                    hash = new SHA256Managed();
-                    break;
+            var saltLength = salt.Length;
 
-                case HashProvider.Sha384:
-                    hash = new SHA384Managed();
-                    break;
-
-                case HashProvider.Sha512:
-                    hash = new SHA512Managed();
-                    break;
-
-                default:
-                    hash = new MD5CryptoServiceProvider();
-                    break;
-            }
-
-            return hash;
-        }
-
-        private static string ComputeHash(HashProvider hashAlgorithm, string plainText, byte[] salt)
-        {
-            byte[] data = Encoding.UTF8.GetBytes(plainText);
-            int dataLength = data.Length;
-
-            int saltLength = salt.Length;
-
-            byte[] dataSalt = new byte[dataLength + saltLength];
+            var dataSalt = new byte[dataLength + saltLength];
 
             Array.Copy(data, dataSalt, dataLength);
             Array.Copy(salt, 0, dataSalt, dataLength, saltLength);
 
-            byte[] encrypt = GetHashProvider(hashAlgorithm).ComputeHash(dataSalt);
-            int encryptLength = encrypt.Length;
+            HashAlgorithm hash = new SHA1Managed();
+            var encrypt = hash.ComputeHash(dataSalt);
+            var encryptLength = encrypt.Length;
 
-            byte[] encryptSalt = new byte[encryptLength + saltLength];
+            var encryptSalt = new byte[encryptLength + saltLength];
             Array.Copy(encrypt, encryptSalt, encryptLength);
             Array.Copy(salt, 0, encryptSalt, encryptLength, saltLength);
 
