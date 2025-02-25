@@ -128,6 +128,7 @@
     <Compile Include="HospitalizationLeave\HospitalizationLeaveBalanceSummaryReport.cs" />
     <Compile Include="HospitalizationLeave\HospitalizationLeaveTransaction.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="ManagementLevel.cs" />
     <Compile Include="JobLevel.cs" />
     <Compile Include="LeaveSummary.cs" />
     <Compile Include="LeaveType.cs" />

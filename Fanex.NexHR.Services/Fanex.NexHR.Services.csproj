@@ -173,6 +173,7 @@
     <Compile Include="Implement\ExtensionNumberService.cs" />
     <Compile Include="Implement\HolidayService.cs" />
     <Compile Include="Implement\HRMAuthService.cs" />
+    <Compile Include="Implement\ManagementLevelService.cs" />
     <Compile Include="Implement\JobLevelService .cs" />
     <Compile Include="Implement\LetstalkService.cs" />
     <Compile Include="Implement\MemoService.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Interfaces\IExtensionNumberService.cs" />
     <Compile Include="Interfaces\IHolidayService.cs" />
     <Compile Include="Interfaces\IHRMAuthService.cs" />
+    <Compile Include="Interfaces\IManagementLevelService.cs" />
     <Compile Include="Interfaces\IJobLevelService.cs" />
     <Compile Include="Interfaces\ILetstalkService.cs" />
     <Compile Include="Interfaces\IMemoService.cs" />

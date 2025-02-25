@@ -155,6 +155,10 @@
     <Compile Include="HospitalizationLeave\InsertTransactionCriteria.cs" />
     <Compile Include="HospitalizationLeave\ResetMultipleTransactionCriteria.cs" />
     <Compile Include="HospitalizationLeave\UpdateTransactionCriteria.cs" />
+    <Compile Include="ManagementLevel\DeleteManagementLevelCriteria.cs" />
+    <Compile Include="ManagementLevel\GetManagementLevelCriteria.cs" />
+    <Compile Include="ManagementLevel\InsertManagementLevelCriteria.cs" />
+    <Compile Include="ManagementLevel\UpdateManagementLevelCriteria.cs" />
     <Compile Include="JobLevel\DeleteJobLevelCriteria.cs" />
     <Compile Include="JobLevel\GetJobLevelCriteria.cs" />
     <Compile Include="JobLevel\InsertJobLevelCriteria.cs" />
