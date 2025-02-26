@@ -2,10 +2,13 @@
 {
     using System;
     using System.Globalization;
+    using System.Linq;
+    using System.Net;
     using System.Text;
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NexHR.Core;
     using Fanex.NexHR.Core.Constants;
     using Fanex.NexHR.Core.Models;
@@ -15,6 +18,7 @@
     using GO.UserControl.Client.Core.Models.Auth;
     using GO.UserControl.Client.Core.Services;
     using GO.UserControl.Client.Core.Session;
+    using NetTools;
 
     public class AuthController : Controller
     {
@@ -44,7 +48,22 @@
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            if (ConfigSettings.WhitelistIPs.Equals("*"))
+            {
+                return View();
+            }
+
+            var clientIpAddress = GetClientIP();
+            var clientIP = IPAddress.Parse(clientIpAddress);
+            if (ConfigSettings.WhitelistIPs.Split(';').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIP)))
+            {
+                return View();
+            }
+            else
+            {
+                LogService.Info(clientIpAddress);
+                return RedirectToAction("AccessDenied", "Error");
+            }
         }
 
         [HttpPost]
