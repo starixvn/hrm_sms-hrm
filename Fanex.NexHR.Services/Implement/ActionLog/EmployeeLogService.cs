@@ -56,7 +56,7 @@
             new MappingFieldConfig { FieldName = "TeamDate", DisplayName = Labels.TeamDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
             new MappingFieldConfig { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
-            new MappingFieldConfig { FieldName = "ExpertGradeId", DisplayName = Labels.ExpertGrade },
+            new MappingFieldConfig { FieldName = "ManagementLevelId", DisplayName = Labels.ManagementLevel },
             new MappingFieldConfig { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
             new MappingFieldConfig { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
             new MappingFieldConfig { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -82,11 +82,13 @@
         private readonly ICommonDataService commonDataService;
         private readonly IActionLogService actionLogService;
         private readonly IJobLevelService jobLevelService;
+        private readonly IManagementLevelService managementLevelService;
         private readonly IRoleService roleService;
 
         private IEnumerable<Team> Teams { get; set; }
         private IEnumerable<LookupData> JobTitles { get; set; }
         private IEnumerable<JobLevel> JobLevel { get; set; }
+        private IEnumerable<ManagementLevel> ManagementLevel { get; set; }
         private IEnumerable<Country> Countries { get; set; }
         private IEnumerable<Role> SystemRoles { get; set; }
         private IEnumerable<EntityBase<byte>> Genders { get; set; }
@@ -97,12 +99,14 @@
             ICommonDataService commonDataService,
             IActionLogService actionLogService,
             IJobLevelService jobLevelService,
+            IManagementLevelService managementLevelService,
             IRoleService roleService)
         {
             this.userControlSession = userControlSession;
             this.commonDataService = commonDataService;
             this.actionLogService = actionLogService;
             this.jobLevelService = jobLevelService;
+            this.managementLevelService = managementLevelService;
             this.roleService = roleService;
         }
 
@@ -111,6 +115,7 @@
             Teams = commonDataService.GetAllTeam();
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             JobLevel = jobLevelService.GetJobLevel();
+            ManagementLevel = managementLevelService.GetManagementLevel();
             Countries = commonDataService.GetAllCountry();
             SystemRoles = roleService.GetBySiteId(userControlSession.SiteId);
             Genders = commonDataService.GetGender();
@@ -162,8 +167,8 @@
                     MappingJobLevel(field);
                     break;
 
-                case "ExpertGradeId":
-                    MappingJobLevel(field);
+                case "ManagementLevelId":
+                    MappingManagementLevel(field);
                     break;
 
                 case "Gender":
@@ -218,6 +223,15 @@
 
             int.TryParse(field.Value, out jobLevelId);
             field.Value = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
+        }
+
+        private void MappingManagementLevel(FieldValue field)
+        {
+            int.TryParse(field.OldValue, out int managementLevelId);
+            field.OldValue = ManagementLevel.FirstOrDefault(x => x.Id == managementLevelId)?.Name;
+
+            int.TryParse(field.Value, out managementLevelId);
+            field.Value = ManagementLevel.FirstOrDefault(x => x.Id == managementLevelId)?.Name;
         }
 
         private void MappingCountry(FieldValue field)

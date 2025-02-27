@@ -71,6 +71,7 @@ namespace Fanex.NexHR.Services.Extensions
             container.RegisterType<IShiftStatisticReportService, ShiftStatisticReportService>(TypeLifetime.Singleton);
             container.RegisterType<IDepartmentService, DepartmentService>(TypeLifetime.Singleton);
             container.RegisterType<IJobLevelService, JobLevelService>(TypeLifetime.Singleton);
+            container.RegisterType<IManagementLevelService, ManagementLevelService>(TypeLifetime.Singleton);
             container.RegisterType<IEmployeeWorkFromHomeService, EmployeeWorkFromHomeService>(TypeLifetime.Singleton);
             container.RegisterType<ISyncWorkingShiftService, SyncWorkingShiftService>(TypeLifetime.Singleton);
 

@@ -37,6 +37,7 @@
         private readonly IEmployeeLogService employeeLogService;
         private readonly ITeamService teamService;
         private readonly IJobLevelService jobLevelService;
+        private readonly IManagementLevelService managementLevelService;
         private readonly ICryptoService cryptoService;
         private readonly IUserService userService;
         private readonly IRoleService roleService;
@@ -50,6 +51,7 @@
             IEmployeeLogService employeeLogService,
             ITeamService teamService,
             IJobLevelService jobLevelService,
+            IManagementLevelService managementLevelService,
             ICryptoService cryptoService,
             IUserService userService,
             IRoleService roleService) : base(userControlSession)
@@ -62,6 +64,7 @@
             this.employeeLogService = employeeLogService;
             this.teamService = teamService;
             this.jobLevelService = jobLevelService;
+            this.managementLevelService = managementLevelService;
             this.cryptoService = cryptoService;
             this.userService = userService;
             this.roleService = roleService;
@@ -618,9 +621,10 @@
         private void ComposeViewBagsForEditEmployee()
         {
             var jobLevels = jobLevelService.GetJobLevel();
+            var managementLevels = managementLevelService.GetManagementLevel();
             ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             ViewBag.JobLevel = jobLevels;
-            ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();
+            ViewBag.Grades = managementLevels;
             ViewBag.Marriages = Utilities.Marriages;
             ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId);
         }
@@ -639,7 +643,7 @@
                 Email = model.Email,
                 JobTitleId = model.JobTitleId,
                 JobLevelId = model.JobLevelId,
-                ExpertGradeId = model.ExpertGradeId,
+                ManagementLevelId = model.ManagementLevelId,
                 Enabled = model.Enabled,
                 Phone = model.Phone,
                 Gender = model.Gender,

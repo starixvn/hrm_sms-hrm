@@ -371,10 +371,10 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.ExpertGradeId, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.ManagementLevelId, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @Html.DropDownListFor(model => model.ExpertGradeId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select an Expert Grade--", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select Management Level--", new { @class = "form-control" })
                 </div>
             </li>
             <li class="list-group-item form-group">
