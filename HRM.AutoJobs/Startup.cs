@@ -63,41 +63,9 @@
 
             services.AddSingleton(Configuration);
 
-            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
-            services.AddSingleton(appSettings);
-
-            var letstalkSettings = Configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
-            services.AddSingleton(letstalkSettings);
-
-            var jobSettings = Configuration.GetSection("JobSettings").Get<List<JobSetting>>();
-            services.AddSingleton(jobSettings);
-
-            services.AddSingleton<ILogger, Logger>();
-            services.AddSingleton<IDynamicRepository, DynamicRepository>();
-
-            services.AddSingleton<IBaseService, BaseService>();
-            services.AddSingleton<IBaseMailService, BaseMailService>();
-            services.AddSingleton<IHttpClientService, HttpClientService>();
-            services.AddSingleton<ISendNotificationService, SendNotificationService>();
-            services.AddSingleton<ILetstalkService, LetstalkService>();
-            services.AddSingleton<IScheduleArrangeService, ScheduleArrangeService>();
-            services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
-            services.AddSingleton<IHolidayService, HolidayService>();
-            services.AddSingleton<ITimeRecordService, TimeRecordService>();
-            services.AddSingleton<ISyncWorkingShiftService, SyncWorkingShiftService>();
-            services.AddSingleton<IPostnatalService, PostnatalService>();
-
-            // worker
-            services.AddHostedService<ImportTimeRecordWorker>();
-            services.AddHostedService<InsertHolidayInYearWorker>();
-
-            services.AddHostedService<PublicScheduleWorker>();
-            services.AddHostedService<InsertDefaultShiftWorker>();
-            services.AddHostedService<InsertWeeklyDefaultShiftWorker>();
-
-            services.AddHostedService<InsertALBalanceForNextYearWorker>();
-            services.AddHostedService<InsertALBalanceForNewEmployeeWorker>();
-            services.AddHostedService<RemindUsedALWorker>();
+            services.AddHttpClient();
+            AddDI(services);
+            AddWorker(services);
 
             services.AddControllers();
         }
@@ -123,6 +91,54 @@
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void AddDI(IServiceCollection services)
+        {
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
+
+            var letstalkSettings = Configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
+            services.AddSingleton(letstalkSettings);
+
+            var jobSettings = Configuration.GetSection("JobSettings").Get<List<JobSetting>>();
+            services.AddSingleton(jobSettings);
+
+            var userControlSettings = Configuration.GetSection("UserControlSettings").Get<UserControlSettings>();
+            services.AddSingleton(userControlSettings);
+
+            services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
+
+            services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IBaseMailService, BaseMailService>();
+            services.AddSingleton<IHttpClientService, HttpClientService>();
+            services.AddSingleton<ISendNotificationService, SendNotificationService>();
+            services.AddSingleton<ILetstalkService, LetstalkService>();
+            services.AddSingleton<IScheduleArrangeService, ScheduleArrangeService>();
+            services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
+            services.AddSingleton<IHolidayService, HolidayService>();
+            services.AddSingleton<ITimeRecordService, TimeRecordService>();
+            services.AddSingleton<ISyncWorkingShiftService, SyncWorkingShiftService>();
+            services.AddSingleton<IPostnatalService, PostnatalService>();
+
+            services.AddSingleton<IGroupReportService, GroupReportService>();
+        }
+
+        private static void AddWorker(IServiceCollection services)
+        {
+            services.AddHostedService<ImportTimeRecordWorker>();
+            services.AddHostedService<InsertHolidayInYearWorker>();
+
+            services.AddHostedService<PublicScheduleWorker>();
+            services.AddHostedService<InsertDefaultShiftWorker>();
+            services.AddHostedService<InsertWeeklyDefaultShiftWorker>();
+
+            services.AddHostedService<InsertALBalanceForNextYearWorker>();
+            services.AddHostedService<InsertALBalanceForNewEmployeeWorker>();
+            services.AddHostedService<RemindUsedALWorker>();
+
+            services.AddHostedService<SyncEmployeeInfoToGroupReportWorker>();
         }
     }
 }

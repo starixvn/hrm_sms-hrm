@@ -22,5 +22,6 @@
     <Function Name="Sync Data">
         <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="nexhrx" Plain="0" />
         <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="nexhrx" Plain="0" />
+        <Setting Key="HRM_SyncData_GroupReport_GetEmployeeInfo" SpName="HRM_SyncData_GroupReport_GetEmployeeInfo" DbName="nexhrx" Plain="0" />
     </Function>
 </Functions>
