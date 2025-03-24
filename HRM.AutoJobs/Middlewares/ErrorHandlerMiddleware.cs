@@ -7,17 +7,8 @@
     using Fanex.Logging.Extensions.Database;
     using Microsoft.AspNetCore.Http;
 
-    public class ErrorHandlerMiddleware
+    public class ErrorHandlerMiddleware(RequestDelegate next, ILogger logger)
     {
-        private readonly RequestDelegate next;
-        private readonly ILogger logger;
-
-        public ErrorHandlerMiddleware(RequestDelegate next, ILogger logger)
-        {
-            this.next = next;
-            this.logger = logger;
-        }
-
         public async Task Invoke(HttpContext context)
         {
             try

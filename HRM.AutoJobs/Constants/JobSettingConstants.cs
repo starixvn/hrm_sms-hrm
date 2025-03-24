@@ -3,6 +3,7 @@
     public static class JobSettingConstants
     {
         public const string ImportTimeRecord = "ImportTimeRecord";
+        public const string SyncTimeRecord = "SyncTimeRecord";
         public const string UpdateWorkingHourPerDay = "UpdateWorkingHourPerDay";
 
         public const string PublicSchedule = "PublicSchedule";

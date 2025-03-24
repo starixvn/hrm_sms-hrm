@@ -5,5 +5,7 @@
         public int AppMailId { get; set; }
         public bool EnableSendMail { get; set; }
         public string SyncWorkingShiftUrl { get; set; }
+        public string SyncTimeRecordUrl { get; set; }
+        public string SyncTimeRecordApiKey { get; set; }
     }
 }
