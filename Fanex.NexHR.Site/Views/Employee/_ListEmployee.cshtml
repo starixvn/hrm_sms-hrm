@@ -1,6 +1,4 @@
 ﻿@using Fanex.NexHR.Core
-@using Fanex.NexHR.Resources
-@using Fanex.NexHR.Models
 @model IList<Employee>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
@@ -84,15 +82,15 @@
         @if (Model != null && Model.Any())
         {
             var index = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage;
-            foreach (Employee employee in Model)
+            foreach (var employee in Model)
             {
                 index++;
                 var cssClass = employee.Enabled ? "" : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
-                    <td>@employee.Team.Section.Department.Code</td>
-                    <td>@employee.Team.Section.Code</td>
-                    <td>@employee.Team.Code</td>
+                    <td>@employee.Team.Section.Department.Name</td>
+                    <td>@employee.Team.Section.Name</td>
+                    <td>@employee.Team.Name</td>
                     <td>@employee.Code</td>
                     <td class="align-left">@employee.FullName</td>
                     <td>
